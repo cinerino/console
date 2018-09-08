@@ -118,7 +118,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table id="events-table" class="table table-bordered table-hover dataTable">
+                        <table id="orders-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
                                     <th>注文番号
@@ -134,100 +134,6 @@
                                     <th>割引</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <% orders.forEach(function(order){ %>
-                                    <tr>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <a href="/orders/<%= order.orderNumber %>">
-                                                        <%= order.orderNumber %>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <span class="text-muted">
-                                                        <%= order.confirmationNumber %>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%= moment(order.orderDate).format('YY-MM-DD hh:mm:ss') %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <span class="badge badge-danger">
-                                                        <%= order.orderStatus %>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <span class="badge badge-info">
-                                                        <%= order.customer.typeOf %>
-                                                    </span>
-                                                </li>
-                                                <% if (order.customer.memberOf !== undefined) { %>
-                                                    <li>
-                                                        <span class="badge badge-warning">
-                                                            <%= order.customer.memberOf.membershipNumber %>
-                                                        </span>
-                                                    </li>
-                                                    <% } %>
-                                                        <li>
-                                                            <%= order.customer.name %>
-                                                        </li>
-                                                        <li>
-                                                            <%= order.customer.email %>
-                                                        </li>
-                                                        <li>
-                                                            <%= order.customer.telephone %>
-                                                        </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <span class="badge badge-info">
-                                                        <%= order.seller.typeOf %>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <%= order.seller.name %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%= `${order.price} ${order.priceCurrency}` %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%- order.paymentMethods.map((p)=>p.paymentMethod).join(',') %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%- JSON.stringify(order.discounts, null, '    ').replace(/ /g, '&nbsp;').replace(/\n/g, '<br>') %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th>注文番号
@@ -268,9 +174,98 @@
 <!-- page script -->
 <script>
     $(function () {
-        $("#events-table").DataTable({
-            "order": [[0, 'asc']], // デフォルトは注文番号昇順
-            "ordering": true
+        $("#orders-table").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/orders?' * $('form').serialize(),
+                data: function (d) {
+                    d.limit = d.length;
+                    d.page = (d.start / d.length) + 1;
+                    d.name = d.search.value;
+                    d.format = 'datatable';
+                    // $('form').serializeArray().forEach(function (f) {
+                    //     d[f.name] = f.value;
+                    // });
+                }
+            },
+            order: [[1, 'asc']], // デフォルトは枝番号昇順
+            ordering: false,
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li><a href="/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
+                            + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
+                            + '</ul>';
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return data.orderDate;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li><span class="badge badge-danger">' + data.orderStatus + '</span></li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.customer.id + '</li>'
+                            + '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>'
+                            + '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
+                            + '<li>' + data.customer.name + '</li>'
+                            + '<li>' + data.customer.email + '</li>'
+                            + '<li>' + data.customer.telephone + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.seller.id + '</li>'
+                            + '<li><span class="badge badge-info">' + data.seller.typeOf + '</span></li>'
+                            + '<li>' + data.seller.name + '</li>'
+                            + '<li>' + data.seller.url + '</li>'
+                            + '<li>' + data.seller.telephone + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.price + ' ' + data.priceCurrency + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.paymentMethods.map((p) => p.paymentMethod).join(',') + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + JSON.stringify(data.discounts) + '</li>'
+                            + '</ul>';
+                    }
+                }
+            ]
         });
 
         //Date range picker

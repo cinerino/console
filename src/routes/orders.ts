@@ -33,6 +33,8 @@ ordersRouter.get(
                 cinerinoapi.factory.orderStatus.OrderReturned
             ];
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
+                limit: req.query.limit,
+                page: req.query.page,
                 sellerIds: (req.query.sellerIds !== undefined)
                     ? req.query.sellerIds
                     : searchMovieTheatersResult.data.map((m) => m.id),
@@ -47,7 +49,7 @@ ordersRouter.get(
                     : orderStatusChoices,
                 orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                     ? moment(req.query.orderDateRange.split(' - ')[0]).toDate()
-                    : moment().add(-1, 'day').toDate(),
+                    : moment().add(-1, 'month').toDate(),
                 orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                     ? moment(req.query.orderDateRange.split(' - ')[1]).toDate()
                     : new Date(),
@@ -55,17 +57,23 @@ ordersRouter.get(
                     ? (<string>req.query.confirmationNumbers).split(',').map((v) => v.trim())
                     : []
             };
-
-            debug('searching orders...', searchConditions);
             const searchOrdersResult = await orderService.search(searchConditions);
-            debug(searchOrdersResult.totalCount, 'orders found.');
-            res.render('orders/index', {
-                moment: moment,
-                movieTheaters: searchMovieTheatersResult.data,
-                searchConditions: searchConditions,
-                orders: searchOrdersResult.data,
-                orderStatusChoices: orderStatusChoices
-            });
+            if (req.query.format === 'datatable') {
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: searchOrdersResult.totalCount,
+                    recordsFiltered: searchOrdersResult.totalCount,
+                    data: searchOrdersResult.data
+                });
+            } else {
+                res.render('orders/index', {
+                    moment: moment,
+                    movieTheaters: searchMovieTheatersResult.data,
+                    searchConditions: searchConditions,
+                    orders: searchOrdersResult.data,
+                    orderStatusChoices: orderStatusChoices
+                });
+            }
         } catch (error) {
             next(error);
         }
