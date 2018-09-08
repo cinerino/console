@@ -8,7 +8,7 @@ import * as express from 'express';
 const debug = createDebug('cinerino-console:routes');
 const organizationsRouter = express.Router();
 /**
- * 劇場検索
+ * 販売者検索
  */
 organizationsRouter.get(
     '/movieTheater',
@@ -18,20 +18,33 @@ organizationsRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
+            const searchConditions: cinerinoapi.factory.organization.movieTheater.ISearchConditions = {
+                limit: req.query.limit,
+                page: req.query.page,
+                name: req.query.name
+            };
             debug('searching movie theaters...', req.query);
-            const searchMovieTheatersResult = await organizationService.searchMovieTheaters({
-            });
+            const searchMovieTheatersResult = await organizationService.searchMovieTheaters(searchConditions);
             debug('movie theaters found.', searchMovieTheatersResult.data);
-            res.render('organizations/movieTheater/index', {
-                query: req.query,
-                movieTheaters: searchMovieTheatersResult.data
-            });
+            if (req.query.format === 'datatable') {
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: searchMovieTheatersResult.totalCount,
+                    recordsFiltered: searchMovieTheatersResult.totalCount,
+                    data: searchMovieTheatersResult.data
+                });
+            } else {
+                res.render('organizations/movieTheater/index', {
+                    query: req.query,
+                    movieTheaters: searchMovieTheatersResult.data
+                });
+            }
         } catch (error) {
             next(error);
         }
     });
 /**
- * 劇場追加
+ * 販売者追加
  */
 organizationsRouter.all(
     '/movieTheater/new',
@@ -105,7 +118,7 @@ organizationsRouter.all(
         }
     });
 /**
- * 劇場編集
+ * 販売者編集
  */
 organizationsRouter.all(
     '/movieTheater/:id',

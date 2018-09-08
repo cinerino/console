@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
-- 劇場検索を追加。
+- 販売者検索を追加。
 - 注文検索を追加。
 - 上映イベント検索を追加。
 
