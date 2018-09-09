@@ -25,34 +25,43 @@ eventsRouter.get(
                 auth: req.user.authClient
             });
             const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
-
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
+                limit: req.query.limit,
+                page: req.query.page,
+                sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending },
                 superEvent: {
-                    locationBranchCodes: searchMovieTheatersResult.data.map((m) => m.location.branchCode)
+                    locationBranchCodes: (req.query.superEventLocationBranchCodes !== undefined)
+                        ? req.query.superEventLocationBranchCodes
+                        : searchMovieTheatersResult.data.map((m) => m.location.branchCode)
                 },
-                superEventLocationIds: searchMovieTheatersResult.data.map((m) => m.id),
                 startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                     ? moment(req.query.startRange.split(' - ')[0]).toDate()
                     : new Date(),
                 startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
                     ? moment(req.query.startRange.split(' - ')[1]).toDate()
-                    : moment().add(1, 'day').toDate(),
+                    : moment().add(1, 'month').toDate(),
                 ...req.query
             };
-
-            debug('searching events...', searchConditions);
             const searchScreeningEventsResult = await eventService.searchScreeningEvents(searchConditions);
-            debug(searchScreeningEventsResult.totalCount, 'events found.');
-            res.render('events/screeningEvent/index', {
-                movieTheaters: searchMovieTheatersResult.data,
-                searchConditions: searchConditions,
-                events: searchScreeningEventsResult.data
-            });
+            if (req.query.format === 'datatable') {
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: searchScreeningEventsResult.totalCount,
+                    recordsFiltered: searchScreeningEventsResult.totalCount,
+                    data: searchScreeningEventsResult.data
+                });
+            } else {
+                res.render('events/screeningEvent/index', {
+                    moment: moment,
+                    movieTheaters: searchMovieTheatersResult.data,
+                    searchConditions: searchConditions,
+                    events: searchScreeningEventsResult.data
+                });
+            }
         } catch (error) {
             next(error);
         }
     });
-
 /**
  * 上映イベント詳細
  */
@@ -109,5 +118,4 @@ eventsRouter.get(
             next(error);
         }
     });
-
 export default eventsRouter;

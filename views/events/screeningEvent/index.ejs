@@ -37,18 +37,21 @@
                     <!-- form start -->
                     <form role="form" method="get">
                         <div class="card-body">
-                            <!-- <div class="form-group">
+                            <div class="form-group">
                                 <label for="name">イベント名</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="イベント名" value="<%= searchConditions.name %>">
-                            </div> -->
+                            </div>
                             <div class="form-group">
                                 <label>開催地</label>
-                                <select multiple class="form-control" name="superEventLocationIds[]">
+                                <select multiple class="form-control" name="superEventLocationBranchCodes[]">
                                     <% movieTheaters.forEach(function (movieTheater) { %>
-                                        <option value="<%= movieTheater.id %>" <%=( searchConditions.superEventLocationIds.indexOf(movieTheater.id)>= 0) ? 'selected' : '' %>>
-                                            <%= movieTheater.name.ja %>
-                                        </option>
-                                        <% }) %>
+                                    <option value="<%= movieTheater.location.branchCode %>" <%=(
+                                        searchConditions.superEvent.locationBranchCodes.indexOf(movieTheater.location.branchCode)>=
+                                        0) ?
+                                        'selected' : '' %>>
+                                        <%= movieTheater.name.ja %>
+                                    </option>
+                                    <% }) %>
                                 </select>
                             </div>
 
@@ -61,7 +64,7 @@
                                             <i class="fa fa-calendar"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" name="startRange" id="reservation" value="<%= searchConditions.startRange %>">
+                                    <input type="text" class="form-control" name="startRange" id="reservation" value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDT00:00:00Z') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDT00:00:00Z') %>">
                                 </div>
                                 <!-- /.input group -->
                             </div>
@@ -97,65 +100,6 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <% events.forEach(function(event){ %>
-                                    <tr>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%= event.id %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%= event.superEvent.name.ja %>
-                                                </li>
-                                                <li>
-                                                    <%= event.superEvent.alternativeHeadline %>
-                                                </li>
-                                                <li>
-                                                    <%= event.name.ja %>
-                                                </li>
-                                                <li>
-                                                    <%= `${event.startDate}-${event.endDate}` %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%= event.superEvent.location.name.ja %>
-                                                </li>
-                                                <li>
-                                                    <%= event.location.name.ja %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <%= event.workPerformed.name %>
-                                                </li>
-                                                <li>
-                                                    <%= event.workPerformed.alternativeHeadline %>
-                                                </li>
-                                                <li>
-                                                    <%= event.workPerformed.duration %>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <a href="/events/screeningEvent/<%= event.id %>">詳細</a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
@@ -191,8 +135,66 @@
 <script>
     $(function () {
         $("#events-table").DataTable({
-            "order": [[1, 'asc']], // デフォルトは枝番号昇順
-            "ordering": true
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/events/screeningEvent?' * $('form').serialize(),
+                data: function (d) {
+                    d.limit = d.length;
+                    d.page = (d.start / d.length) + 1;
+                    // d.name = d.search.value;
+                    d.format = 'datatable';
+                }
+            },
+            order: [[1, 'asc']], // デフォルトは枝番号昇順
+            ordering: false,
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.id + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.superEvent.name.ja + '</li>'
+                            + '<li>' + data.superEvent.alternativeHeadline + '</li>'
+                            + '<li>' + data.name.ja + '</li>'
+                            + '<li>' + data.startDate + '-' + data.endDate + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.superEvent.location.name.ja + '</li>'
+                            + '<li>' + data.location.name.ja + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li>' + data.workPerformed.name + '</li>'
+                            + '<li>' + data.workPerformed.duration + '</li>'
+                            + '</ul>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<ul class="list-unstyled">'
+                            + '<li><a target="_blank" href="/events/screeningEvent/' + data.id + '">詳細</a>' + '</li>'
+                            + '</ul>';
+                    }
+                }
+            ]
         });
 
         //Date range picker
