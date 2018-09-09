@@ -178,17 +178,15 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/orders?' * $('form').serialize(),
+                url: '/orders?' + $('form').serialize(),
                 data: function (d) {
                     d.limit = d.length;
                     d.page = (d.start / d.length) + 1;
-                    d.name = d.search.value;
+                    // d.name = d.search.value;
                     d.format = 'datatable';
-                    // $('form').serializeArray().forEach(function (f) {
-                    //     d[f.name] = f.value;
-                    // });
                 }
             },
+            searching: false,
             order: [[1, 'asc']], // デフォルトは枝番号昇順
             ordering: false,
             columns: [

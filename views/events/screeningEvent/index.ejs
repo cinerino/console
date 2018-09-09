@@ -45,13 +45,11 @@
                                 <label>開催地</label>
                                 <select multiple class="form-control" name="superEventLocationBranchCodes[]">
                                     <% movieTheaters.forEach(function (movieTheater) { %>
-                                    <option value="<%= movieTheater.location.branchCode %>" <%=(
-                                        searchConditions.superEvent.locationBranchCodes.indexOf(movieTheater.location.branchCode)>=
-                                        0) ?
-                                        'selected' : '' %>>
-                                        <%= movieTheater.name.ja %>
-                                    </option>
-                                    <% }) %>
+                                        <option value="<%= movieTheater.location.branchCode %>" <%=( searchConditions.superEvent.locationBranchCodes.indexOf(movieTheater.location.branchCode)>=
+                                            0) ? 'selected' : '' %>>
+                                            <%= movieTheater.name.ja %>
+                                        </option>
+                                        <% }) %>
                                 </select>
                             </div>
 
@@ -146,6 +144,7 @@
                     d.format = 'datatable';
                 }
             },
+            searching: false,
             order: [[1, 'asc']], // デフォルトは枝番号昇順
             ordering: false,
             columns: [

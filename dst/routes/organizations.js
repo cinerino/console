@@ -11,10 +11,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 組織ルーター
  */
+const chevreapi = require("@chevre/api-nodejs-client");
 const cinerinoapi = require("@cinerino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const debug = createDebug('cinerino-console:routes');
+const chevreAuthClient = new chevreapi.auth.ClientCredentials({
+    domain: process.env.CHEVRE_AUTHORIZE_SERVER_DOMAIN,
+    clientId: process.env.CHEVRE_CLIENT_ID,
+    clientSecret: process.env.CHEVRE_CLIENT_SECRET,
+    scopes: [],
+    state: ''
+});
 const organizationsRouter = express.Router();
 /**
  * 販売者検索
@@ -30,10 +38,8 @@ organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, voi
             page: req.query.page,
             name: req.query.name
         };
-        debug('searching movie theaters...', req.query);
-        const searchMovieTheatersResult = yield organizationService.searchMovieTheaters(searchConditions);
-        debug('movie theaters found.', searchMovieTheatersResult.data);
         if (req.query.format === 'datatable') {
+            const searchMovieTheatersResult = yield organizationService.searchMovieTheaters(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchMovieTheatersResult.totalCount,
@@ -43,8 +49,7 @@ organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, voi
         }
         else {
             res.render('organizations/movieTheater/index', {
-                query: req.query,
-                movieTheaters: searchMovieTheatersResult.data
+                searchConditions: searchConditions
             });
         }
     }
@@ -55,68 +60,66 @@ organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, voi
 /**
  * 販売者追加
  */
-organizationsRouter.all('/movieTheater/new', (_, __, next) => __awaiter(this, void 0, void 0, function* () {
+organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         throw new Error('implementing...');
-        // let message;
-        // const organizationRepo = new cinerino.repository.Organization(cinerino.mongoose.connection);
-        // if (req.method === 'POST') {
-        //     try {
-        //         debug('creating...', req.body);
-        //         // COAから劇場情報抽出
-        //         const theaterFromCOA = await cinerino.COA.services.master.theater({ theaterCode: req.body.branchCode });
-        //         let movieTheater: cinerino.factory.organization.movieTheater.IOrganization = {
-        //             id: '',
-        //             typeOf: cinerino.factory.organizationType.MovieTheater,
-        //             identifier: `${cinerino.factory.organizationType.MovieTheater}-${req.body.branchCode}`,
-        //             name: {
-        //                 ja: theaterFromCOA.theaterName,
-        //                 en: theaterFromCOA.theaterNameEng
-        //             },
-        //             legalName: {
-        //                 ja: '',
-        //                 en: ''
-        //             },
-        //             branchCode: req.body.branchCode,
-        //             parentOrganization: {
-        //                 name: {
-        //                     ja: '佐々木興業株式会社',
-        //                     en: 'Cinema Sunshine Co., Ltd.'
-        //                 },
-        //                 identifier: cinerino.factory.organizationIdentifier.corporation.SasakiKogyo,
-        //                 typeOf: cinerino.factory.organizationType.Corporation
-        //             },
-        //             location: {
-        //                 typeOf: cinerino.factory.placeType.MovieTheater,
-        //                 branchCode: req.body.branchCode,
-        //                 name: {
-        //                     ja: theaterFromCOA.theaterName,
-        //                     en: theaterFromCOA.theaterNameEng
-        //                 }
-        //             },
-        //             telephone: theaterFromCOA.theaterTelNum,
-        //             url: req.body.url,
-        //             paymentAccepted: [],
-        //             gmoInfo: {
-        //                 siteId: <string>process.env.GMO_SITE_ID,
-        //                 shopId: req.body['gmoInfo.shopId'],
-        //                 shopPass: req.body['gmoInfo.shopPass']
-        //             }
-        //         };
-        //         debug('creating movie...');
-        //         const doc = await organizationRepo.organizationModel.create(movieTheater);
-        //         movieTheater = doc.toObject();
-        //         debug('movie theater created.');
-        //         req.flash('message', '劇場を作成しました。');
-        //         res.redirect(`/organizations/movieTheater/${movieTheater.id}`);
-        //         return;
-        //     } catch (error) {
-        //         message = error.message;
-        //     }
-        // }
-        // res.render('organizations/movieTheater/new', {
-        //     message: message
-        // });
+        // @ts-ignore: Unreachable code error
+        let message;
+        if (req.method === 'POST') {
+            try {
+                // Chevreから情報取得
+                const placeService = new chevreapi.service.Place({
+                    endpoint: process.env.CHEVRE_ENDPOINT,
+                    auth: chevreAuthClient
+                });
+                const movieTheaterFromChevre = yield placeService.findMovieTheaterByBranchCode({ branchCode: req.body.branchCode });
+                const movieTheater = {
+                    id: '',
+                    typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+                    identifier: `${cinerinoapi.factory.organizationType.MovieTheater}-${req.body.branchCode}`,
+                    name: movieTheaterFromChevre.name,
+                    legalName: movieTheaterFromChevre.name,
+                    parentOrganization: {
+                        name: {
+                            en: 'Motionpicture Co., Ltd.',
+                            ja: '株式会社モーションピクチャー'
+                        },
+                        identifier: 'Motionpicture',
+                        typeOf: cinerinoapi.factory.organizationType.Corporation
+                    },
+                    location: {
+                        typeOf: movieTheaterFromChevre.typeOf,
+                        branchCode: movieTheaterFromChevre.branchCode,
+                        name: movieTheaterFromChevre.name
+                    },
+                    telephone: movieTheaterFromChevre.telephone,
+                    url: req.body.url,
+                    paymentAccepted: [
+                        {
+                            paymentMethodType: cinerinoapi.factory.paymentMethodType.CreditCard,
+                            gmoInfo: {
+                                siteId: process.env.GMO_SITE_ID,
+                                shopId: req.body['gmoInfo.shopId'],
+                                shopPass: req.body['gmoInfo.shopPass']
+                            }
+                        }
+                    ]
+                };
+                debug('creating organization...', movieTheater);
+                // const doc = await organizationRepo.organizationModel.create(movieTheater);
+                // movieTheater = doc.toObject();
+                // req.flash('message', '劇場を作成しました。');
+                // res.redirect(`/organizations/movieTheater/${movieTheater.id}`);
+                res.redirect('/organizations/movieTheater/new');
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
+        res.render('organizations/movieTheater/new', {
+            message: message
+        });
     }
     catch (error) {
         next(error);
