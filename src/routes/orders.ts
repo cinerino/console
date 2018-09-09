@@ -57,8 +57,8 @@ ordersRouter.get(
                     ? (<string>req.query.confirmationNumbers).split(',').map((v) => v.trim())
                     : []
             };
-            const searchOrdersResult = await orderService.search(searchConditions);
             if (req.query.format === 'datatable') {
+                const searchOrdersResult = await orderService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
                     recordsTotal: searchOrdersResult.totalCount,
@@ -70,7 +70,6 @@ ordersRouter.get(
                     moment: moment,
                     movieTheaters: searchMovieTheatersResult.data,
                     searchConditions: searchConditions,
-                    orders: searchOrdersResult.data,
                     orderStatusChoices: orderStatusChoices
                 });
             }

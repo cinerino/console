@@ -105,7 +105,7 @@
                                 <%= event.location.name.ja %>
                             </dd>
                             <dd>
-                                <%= // screeningRoom.containsPlace[0].containsPlace.length %>席
+                                <%= event.maximumAttendeeCapacity %>席
                             </dd>
                             <dt>期間</dt>
                             <dd>
@@ -139,7 +139,6 @@
                 <div class="card">
                     <div class="card-header border-transparent">
                         <h3 class="card-title">注文履歴</h3>
-
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-widget="collapse">
                                 <i class="fa fa-minus"></i>
@@ -152,7 +151,7 @@
                     <!-- /.card-header -->
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table m-0">
+                            <table class="table m-0" id="orders">
                                 <thead>
                                     <tr>
                                         <th>Order Number</th>
@@ -162,35 +161,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% orders.forEach(function (order) { %>
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="/orders/<%= order.orderNumber %>">
-                                                    <%= order.orderNumber %>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <%= moment(order.orderDate).format('YY-MM-DD hh:mm:ss') %>
-                                            </td>
-                                            <td>
-                                                <%= order.acceptedOffers.map((o)=>o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') %>
-                                            </td>
-                                            <td>
-                                                <%
-                                                    let badge='badge-info';
-                                                    switch (order.orderStatus) {
-                                                        case 'OrderDelivered':
-                                                            badge = 'badge-danger';
-                                                            break;
-                                                        default:
-                                                    }
-                                                    %>
-                                                    <span class="badge <%= badge %>">
-                                                        <%= order.orderStatus %>
-                                                    </span>
-                                            </td>
-                                        </tr>
-                                        <% })  %>
                                 </tbody>
                             </table>
                         </div>
@@ -226,19 +196,59 @@
 
 <!-- page script -->
 <script>
+    var event = JSON.parse('<%- JSON.stringify(event) %>');
+    var orders = [];
+    var searchedAllOrders = false;
+    var limit = 100;
+    var page = 0;
+    var lineChart;
     $(function () {
-        var event = JSON.parse('<%- JSON.stringify(event) %>');
-        var screeningRoom = JSON.parse('<%- JSON.stringify(screeningRoom) %>');
-        var orders = JSON.parse('<%- JSON.stringify(orders) %>');
-
+        // 注文検索
+        console.log('searching orders...', page);
+        searchOrders(function () {
+            console.log('creating line chart...');
+            createLineChart();
+        });
+    });
+    function searchOrders(cb) {
+        page += 1;
+        $.getJSON(
+            '/events/screeningEvent/' + event.id + '/orders',
+            { limit: limit, page: page }
+        ).done(function (data) {
+            searchedAllOrders = (data.data.length < limit);
+            $.each(data.data, function (key, order) {
+                orders.push(order);
+                let badge = 'badge-info';
+                switch (order.orderStatus) {
+                    case 'OrderDelivered':
+                        badge = 'badge-danger';
+                        break;
+                    default:
+                }
+                $('<tr>').html(
+                    '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                    + '<td>' + order.orderDate + '</td>'
+                    + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
+                    + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
+                ).appendTo("#orders tbody");
+            });
+            if (!searchedAllOrders) {
+                searchOrders(cb);
+            } else {
+                cb();
+            }
+        }).fail(function () {
+            alert('注文履歴を取得できませんでした')
+        });
+    }
+    function createLineChart() {
         // 全座席数は
-        var numberOfSeats = screeningRoom.containsPlace[0].containsPlace.length;
-
+        var numberOfSeats = event.maximumAttendeeCapacity;
         // 売り出し日時は？
-        var reservationStartDate = moment(event.coaInfo.rsvStartDate + ' 00:00:00+09:00', 'YYYYMMDD HH:mm:ssZ').toDate();
+        var reservationStartDate = moment(event.startDate).add(-3, 'days').toDate();
         // 予約期間
         var reservationPeriodInMinutes = moment(event.endDate).diff(moment(reservationStartDate), 'hours');
-
         /**
          * ラインチャート作成
          */
@@ -267,7 +277,6 @@
                 },
             ]
         }
-
         //-------------
         //- LINE CHART -
         //--------------
@@ -358,10 +367,10 @@
                 ],
             }
         };
-        var lineChart = new Chart(lineChartCanvas, {
+        lineChart = new Chart(lineChartCanvas, {
             type: 'line',
             data: areaChartData,
             options: lineChartOptions
         });
-    });
+    }
 </script>

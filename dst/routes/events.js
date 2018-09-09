@@ -68,12 +68,29 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
  */
 eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        debug('req.query:', req.query);
         const eventService = new cinerinoapi.service.Event({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const organizationService = new cinerinoapi.service.Organization({
+        const event = yield eventService.findScreeningEventById({
+            id: req.params.id
+        });
+        res.render('events/screeningEvent/show', {
+            moment: moment,
+            event: event,
+            orders: []
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 上映イベントの注文検索
+ */
+eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const eventService = new cinerinoapi.service.Event({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
@@ -81,35 +98,21 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchMovieTheatersResult = yield organizationService.searchMovieTheaters({});
-        debug('searching events...');
         const event = yield eventService.findScreeningEventById({
             id: req.params.id
         });
-        debug('events found.', event);
-        // イベント開催の劇場取得
-        const movieTheater = searchMovieTheatersResult.data.find((o) => o.location.branchCode === event.superEvent.location.branchCode);
-        if (movieTheater === undefined) {
-            throw new Error('Movie Theater Not Found');
-        }
-        // const screeningRoom = movieTheater.containsPlace.find((p) => p.branchCode === event.location.branchCode);
-        // debug('searching orders by event...');
         // const reservationStartDate = moment(`${event.coaInfo.rsvStartDate} 00:00:00+09:00`, 'YYYYMMDD HH:mm:ssZ').toDate();
         const searchOrdersResult = yield orderService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { orderDate: cinerinoapi.factory.sortType.Ascending },
             // tslint:disable-next-line:no-magic-numbers
             orderDateFrom: moment(event.startDate).add(-3, 'months').toDate(),
             orderDateThrough: new Date(),
             reservedEventIds: [event.id]
         });
         debug(searchOrdersResult.totalCount, 'orders found.');
-        res.render('events/screeningEvent/show', {
-            moment: moment,
-            movieTheater: movieTheater,
-            screeningRoom: {},
-            movieTheaters: searchMovieTheatersResult.data,
-            event: event,
-            orders: searchOrdersResult.data
-        });
+        res.json(searchOrdersResult);
     }
     catch (error) {
         next(error);

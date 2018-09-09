@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - 販売者検索を追加。
 - 注文検索を追加。
 - 上映イベント検索を追加。
+- 上映イベントの注文履歴検索を追加。
 
 ### Changed
 

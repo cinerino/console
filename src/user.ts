@@ -6,13 +6,11 @@ const debug = createDebug('cinerino-console:user');
 
 /**
  * ユーザー設定インターフェース
- * @export
  */
 export interface IConfigurations {
     host: string;
     session: Express.Session;
 }
-
 export interface IProfile {
     sub: string;
     iss: string;
@@ -22,7 +20,6 @@ export interface IProfile {
     family_name: string;
     email: string;
 }
-
 /**
  * リクエストユーザー
  */
