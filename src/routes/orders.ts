@@ -82,6 +82,7 @@ ordersRouter.get(
  */
 ordersRouter.get(
     '/:orderNumber',
+    // tslint:disable-next-line:max-func-body-length
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
@@ -97,9 +98,105 @@ ordersRouter.get(
             if (order === undefined) {
                 throw new cinerinoapi.factory.errors.NotFound('Order');
             }
+            const actionsOnOrder = await orderService.searchActionsByOrderNumber({
+                orderNumber: order.orderNumber,
+                sort: { endDate: cinerinoapi.factory.sortType.Ascending }
+            });
+            // tslint:disable-next-line:cyclomatic-complexity
+            const timelines = actionsOnOrder.map((a) => {
+                let agent: any;
+                if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+                    agent = {
+                        id: a.agent.id,
+                        name: order.customer.name,
+                        url: '#'
+                    };
+                } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
+                    agent = {
+                        id: a.agent.id,
+                        name: order.seller.name,
+                        url: `/organizations/movieTheater/${a.agent.id}`
+                    };
+                }
+
+                let actionName: string;
+                switch (a.typeOf) {
+                    case cinerinoapi.factory.actionType.OrderAction:
+                        actionName = '注文';
+                        break;
+                    case cinerinoapi.factory.actionType.GiveAction:
+                        actionName = '付与';
+                        break;
+                    case cinerinoapi.factory.actionType.SendAction:
+                        if (a.object.typeOf === 'Order') {
+                            actionName = '配送';
+                        } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
+                            actionName = '送信';
+                        } else {
+                            actionName = '送信';
+                        }
+                        break;
+                    case cinerinoapi.factory.actionType.PayAction:
+                        actionName = '支払';
+                        break;
+                    case cinerinoapi.factory.actionType.ReturnAction:
+                        if (a.object.typeOf === 'Order') {
+                            actionName = '返品';
+                        } else {
+                            actionName = '返却';
+                        }
+                        break;
+                    case cinerinoapi.factory.actionType.RefundAction:
+                        actionName = '返金';
+                        break;
+                    default:
+                        actionName = a.typeOf;
+                }
+
+                let object: string;
+                switch (a.object.typeOf) {
+                    case 'Order':
+                        object = '注文';
+                        break;
+                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
+                        object = 'ポイント';
+                        break;
+                    case cinerinoapi.factory.actionType.SendAction:
+                        if (a.object.typeOf === 'Order') {
+                            object = '配送';
+                        } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
+                            object = '送信';
+                        } else {
+                            object = '送信';
+                        }
+                        break;
+                    case cinerinoapi.factory.creativeWorkType.EmailMessage:
+                        object = 'Eメール';
+                        break;
+                    case 'PaymentMethod':
+                        object = a.object.paymentMethod.typeOf;
+                        break;
+                    case cinerinoapi.factory.actionType.PayAction:
+                        object = a.object.object.paymentMethod.typeOf;
+                        break;
+                    default:
+                        object = a.object.typeOf;
+                }
+
+                return {
+                    action: a,
+                    agent,
+                    actionName,
+                    object,
+                    startDate: a.startDate,
+                    actionStatus: a.actionStatus,
+                    result: a.result
+                };
+            });
             res.render('orders/show', {
                 moment: moment,
-                order: order
+                order: order,
+                timelines: timelines
             });
         } catch (error) {
             next(error);
