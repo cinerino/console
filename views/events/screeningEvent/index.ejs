@@ -45,11 +45,12 @@
                                 <label>開催地</label>
                                 <select multiple class="form-control" name="superEventLocationBranchCodes[]">
                                     <% movieTheaters.forEach(function (movieTheater) { %>
-                                        <option value="<%= movieTheater.location.branchCode %>" <%=( searchConditions.superEvent.locationBranchCodes.indexOf(movieTheater.location.branchCode)>=
-                                            0) ? 'selected' : '' %>>
-                                            <%= movieTheater.name.ja %>
-                                        </option>
-                                        <% }) %>
+                                    <option value="<%= movieTheater.location.branchCode %>" <%=(
+                                        searchConditions.superEvent.locationBranchCodes.indexOf(movieTheater.location.branchCode)>=
+                                        0) ? 'selected' : '' %>>
+                                        <%= movieTheater.name.ja %>
+                                    </option>
+                                    <% }) %>
                                 </select>
                             </div>
 
@@ -69,7 +70,9 @@
                         </div>
 
                         <!-- /.card-body -->
-                        <div class="card-footer">
+                        <div class="card-footer clearfix">
+                            <button type="button" class="btn btn-primary importScreeningEvents">
+                                <i class="fa fa-plus"></i> 在庫仕入れ from Chevre</button>
                             <button type="submit" class="btn btn-secondary float-right">検索</button>
                         </div>
                     </form>
@@ -202,5 +205,29 @@
             // timePickerIncrement: 30,
             format: 'YYYY-MM-DDT00:00:00+0900'
         })
+
+        // 上映イベントインポート
+        $('button.importScreeningEvents').click(function () {
+            var message = '開催地: ' + $('select[name="superEventLocationBranchCodes[]"]').val().join(',')
+                + '\n開催日: ' + $('input[name="startRange"]').val()
+                + '\nの上映イベントをインポートしようとしています。'
+                + '\nよろしいですか？';
+            if (window.confirm(message)) {
+                $.ajax({
+                    url: '/events/screeningEvent/import',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $('form').serialize()
+                }).done(function (tasks) {
+                    console.log(tasks);
+                    alert('インポートを開始しました。');
+                }).fail(function (xhr) {
+                    var res = $.parseJSON(xhr.responseText);
+                    alert(res.error.message);
+                }).always(function () {
+                });
+            } else {
+            }
+        });
     });
 </script>

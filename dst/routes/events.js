@@ -14,7 +14,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cinerinoapi = require("@cinerino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
+// tslint:disable-next-line:no-submodule-imports
+const check_1 = require("express-validator/check");
+const http_status_1 = require("http-status");
 const moment = require("moment");
+const validator_1 = require("../middlewares/validator");
 const debug = createDebug('cinerino-console:routes:events');
 const eventsRouter = express.Router();
 /**
@@ -41,8 +45,8 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
                 : new Date(), startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[1]).toDate()
                 : moment().add(1, 'month').toDate() }, req.query);
-        const searchScreeningEventsResult = yield eventService.searchScreeningEvents(searchConditions);
         if (req.query.format === 'datatable') {
+            const searchScreeningEventsResult = yield eventService.searchScreeningEvents(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchScreeningEventsResult.totalCount,
@@ -54,10 +58,48 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
             res.render('events/screeningEvent/index', {
                 moment: moment,
                 movieTheaters: searchMovieTheatersResult.data,
-                searchConditions: searchConditions,
-                events: searchScreeningEventsResult.data
+                searchConditions: searchConditions
             });
         }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 上映イベントインポート
+ */
+eventsRouter.post('/screeningEvent/import', ...[
+    check_1.body('superEventLocationBranchCodes').not().isEmpty().withMessage((_, options) => `${options.path} is required`)
+        .isArray(),
+    check_1.body('startRange').not().isEmpty().withMessage((_, options) => `${options.path} is required`)
+], validator_1.default, (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const taskService = new cinerinoapi.service.Task({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const locationBranchCodes = req.body.superEventLocationBranchCodes;
+        const startFrom = moment(req.body.startRange.split(' - ')[0]).toDate();
+        const startThrough = moment(req.body.startRange.split(' - ')[1]).toDate();
+        const tasks = yield Promise.all(locationBranchCodes.map((locationBranchCode) => __awaiter(this, void 0, void 0, function* () {
+            const taskAttributes = {
+                name: cinerinoapi.factory.taskName.ImportScreeningEvents,
+                status: cinerinoapi.factory.taskStatus.Ready,
+                runsAt: new Date(),
+                remainingNumberOfTries: 1,
+                lastTriedAt: null,
+                numberOfTried: 0,
+                executionResults: [],
+                data: {
+                    locationBranchCode: locationBranchCode,
+                    importFrom: startFrom,
+                    importThrough: startThrough
+                }
+            };
+            return taskService.create(taskAttributes);
+        })));
+        res.status(http_status_1.CREATED).json(tasks);
     }
     catch (error) {
         next(error);
