@@ -109,32 +109,6 @@ organizationsRouter.all(
             } else if (req.method === 'POST') {
                 try {
                     attributes = await createAttributesFromBody({ body: req.body });
-                    // if (!Array.isArray(movieTheater.paymentAccepted)) {
-                    //     movieTheater.paymentAccepted = [];
-                    // }
-                    // update.paymentAccepted = movieTheater.paymentAccepted;
-                    // // ポイント決済を有効にする場合、口座未開設であれば開設する
-                    // if (update.pecorinoPaymentAccepted === 'on') {
-                    //     // tslint:disable-next-line:max-line-length
-                    //    if (movieTheater.paymentAccepted.find(
-                    //        (p) => p.paymentMethodType === cinerino.factory.paymentMethodType.Pecorino) === undefined
-                    //    ) {
-                    //         const account = await cinerino.service.account.open({
-                    //             name: movieTheater.name.ja
-                    //         })({
-                    //             accountNumber: new cinerino.repository.AccountNumber(redisClient),
-                    //             accountService: new cinerino.pecorinoapi.service.Account({
-                    //                 endpoint: <string>process.env.PECORINO_API_ENDPOINT,
-                    //                 auth: pecorinoAuthClient
-                    //             })
-                    //         });
-                    //         debug('account opened.');
-                    //         update.paymentAccepted.push({
-                    //             paymentMethodType: cinerino.factory.paymentMethodType.Pecorino,
-                    //             accountNumber: account.accountNumber
-                    //         });
-                    //     }
-                    // }
                     await organizationService.updateMovieTheaterById({ id: req.params.id, attributes: attributes });
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);
@@ -157,12 +131,52 @@ organizationsRouter.all(
 async function createAttributesFromBody(params: {
     body: any;
 }): Promise<cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType.MovieTheater>> {
+    debug(params);
     // Chevreから情報取得
     const placeService = new chevreapi.service.Place({
         endpoint: <string>process.env.CHEVRE_ENDPOINT,
         auth: chevreAuthClient
     });
     const movieTheaterFromChevre = await placeService.findMovieTheaterByBranchCode({ branchCode: params.body.branchCode });
+
+    const paymentAccepted: cinerinoapi.factory.organization.IPaymentAccepted<cinerinoapi.factory.paymentMethodType>[] = [
+        {
+            paymentMethodType: cinerinoapi.factory.paymentMethodType.CreditCard,
+            gmoInfo: {
+                siteId: <string>process.env.GMO_SITE_ID,
+                shopId: params.body.gmoInfo.shopId,
+                shopPass: params.body.gmoInfo.shopPass
+            }
+        }
+    ];
+    // if (!Array.isArray(movieTheater.paymentAccepted)) {
+    //     movieTheater.paymentAccepted = [];
+    // }
+    // コイン口座決済を有効にする場合、口座未開設であれば開設する
+    if (params.body.coinAccountPaymentAccepted === 'on') {
+        if (params.body.coinAccountPayment.accountNumber === '') {
+            // const account = await cinerinoapi.service.account.open({
+            //     name: movieTheater.name.ja
+            // })({
+            //     accountNumber: new cinerino.repository.AccountNumber(redisClient),
+            //     accountService: new cinerino.pecorinoapi.service.Account({
+            //         endpoint: <string>process.env.PECORINO_API_ENDPOINT,
+            //         auth: pecorinoAuthClient
+            //     })
+            // });
+            // debug('account opened.');
+            // update.paymentAccepted.push({
+            //     paymentMethodType: cinerino.factory.paymentMethodType.Pecorino,
+            //     accountNumber: account.accountNumber
+            // });
+        } else {
+            paymentAccepted.push({
+                paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
+                accountType: cinerinoapi.factory.accountType.Coin,
+                accountNumber: params.body.coinAccountPayment.accountNumber
+            });
+        }
+    }
 
     return {
         typeOf: cinerinoapi.factory.organizationType.MovieTheater,
@@ -183,16 +197,7 @@ async function createAttributesFromBody(params: {
         },
         telephone: movieTheaterFromChevre.telephone,
         url: params.body.url,
-        paymentAccepted: [
-            {
-                paymentMethodType: cinerinoapi.factory.paymentMethodType.CreditCard,
-                gmoInfo: {
-                    siteId: <string>process.env.GMO_SITE_ID,
-                    shopId: params.body['gmoInfo.shopId'],
-                    shopPass: params.body['gmoInfo.shopPass']
-                }
-            }
-        ]
+        paymentAccepted: paymentAccepted
     };
 }
 export default organizationsRouter;

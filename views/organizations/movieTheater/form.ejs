@@ -1,42 +1,52 @@
 <%
+let coinAccountPayment;
 let creditCardPayment;
 if (movieTheater !== undefined) {
+    coinAccountPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
     creditCardPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
 }
 %>
-    <div class="form-group">
-        <label for="branchCode">劇場枝番号</label>
-        <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="枝番号" value="<%= (movieTheater !== undefined) ?  movieTheater.location.branchCode : '' %>">
-    </div>
-    <div class="form-group">
-        <label for="url">name.ja</label>
-        <input disabled type="text" class="form-control" id="name.ja" name="name.ja" placeholder="name.ja" value="<%= (movieTheater !== undefined) ?  movieTheater.name.ja : '' %>">
-    </div>
-    <div class="form-group">
-        <label for="url">name.en</label>
-        <input disabled type="text" class="form-control" id="name.en" name="name.en" placeholder="name.en" value="<%= (movieTheater !== undefined) ?  movieTheater.name.en : '' %>">
-    </div>
-    <div class="form-group">
-        <label for="url">telephone</label>
-        <input disabled type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone" value="<%= (movieTheater !== undefined) ?  movieTheater.telephone : '' %>">
-    </div>
-    <div class="form-group">
-        <label for="gmoInfo.siteId">GMOサイトID</label>
-        <input type="text" class="form-control" id="gmoInfo.siteId" disabled placeholder="GMOサイトID" value="<%= process.env.GMO_SITE_ID %>">
-    </div>
-    <div class="form-group">
-        <label for="gmoInfo.shopId">GMOショップID</label>
-        <input type="text" class="form-control" id="gmoInfo.shopId" name="gmoInfo.shopId" placeholder="GMOショップID" value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopId : '' %>">
-    </div>
-    <div class="form-group">
-        <label for="gmoInfo.shopPass">GMOショップPASS</label>
-        <input type="password" class="form-control" id="gmoInfo.shopPass" name="gmoInfo.shopPass" placeholder="GMOショップPASS" value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopPass : '' %>">
-    </div>
-    <div class="form-group">
-        <label for="url">URL</label>
-        <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (movieTheater !== undefined) ?  movieTheater.url : '' %>">
-    </div>
-    <!-- <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="pecorinoPaymentAccepted" name="pecorinoPaymentAccepted" checked>
-        <label class="form-check-label" for="pecorinoPaymentAccepted">ポイント決済を許可(許可するとPecorino口座が開設されます)</label>
-    </div> -->
+<div class="form-group">
+    <label for="branchCode">劇場枝番号</label>
+    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="枝番号" value="<%= (movieTheater !== undefined) ?  movieTheater.location.branchCode : '' %>">
+</div>
+<div class="form-group">
+    <label for="name.ja">name.ja</label>
+    <input disabled type="text" class="form-control" id="name.ja" name="name.ja" placeholder="name.ja" value="<%= (movieTheater !== undefined) ?  movieTheater.name.ja : '' %>">
+</div>
+<div class="form-group">
+    <label for="name.en">name.en</label>
+    <input disabled type="text" class="form-control" id="name.en" name="name.en" placeholder="name.en" value="<%= (movieTheater !== undefined) ?  movieTheater.name.en : '' %>">
+</div>
+<div class="form-group">
+    <label for="telephone">telephone</label>
+    <input disabled type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone" value="<%= (movieTheater !== undefined) ?  movieTheater.telephone : '' %>">
+</div>
+<div class="form-group">
+    <label for="gmoInfo[siteId]">GMOサイトID</label>
+    <input type="text" class="form-control" id="gmoInfo[siteId]" disabled placeholder="GMOサイトID" value="<%= process.env.GMO_SITE_ID %>">
+</div>
+<div class="form-group">
+    <label for="gmoInfo[shopId]">GMOショップID</label>
+    <input type="text" class="form-control" id="gmoInfo[shopId]" name="gmoInfo[shopId]" placeholder="GMOショップID" value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopId : '' %>">
+</div>
+<div class="form-group">
+    <label for="gmoInfo[shopPass]">GMOショップPASS</label>
+    <input type="password" class="form-control" id="gmoInfo[shopPass]" name="gmoInfo[shopPass]" placeholder="GMOショップPASS"
+        value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopPass : '' %>">
+</div>
+<div class="form-group">
+    <label for="url">URL</label>
+    <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (movieTheater !== undefined) ?  movieTheater.url : '' %>">
+</div>
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="coinAccountPaymentAccepted" name="coinAccountPaymentAccepted"
+        <%=(coinAccountPayment !==undefined) ? ' checked' : '' %>>
+    <label class="form-check-label" for="coinAccountPaymentAccepted">コイン口座決済を許可(許可するとコイン口座が開設されます)</label>
+</div>
+<div class="form-group">
+    <label for="coinAccountPayment[accountNumber]"></label>
+    <input type="hidden" class="form-control" id="coinAccountPayment[accountNumber]" name="coinAccountPayment[accountNumber]"
+        placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
+    <input disabled type="text" class="form-control" placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
+</div>
