@@ -1,10 +1,11 @@
 /**
  * 注文ルーター
  */
-import * as cinerinoapi from '@cinerino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import * as moment from 'moment';
+
+import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
 const ordersRouter = express.Router();

@@ -1,7 +1,6 @@
 /**
  * 取引ルーター
  */
-// import * as cinerinoapi from '@cinerino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 // import * as moment from 'moment';

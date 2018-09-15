@@ -1,11 +1,12 @@
 /**
  * 組織ルーター
  */
-import * as chevreapi from '@chevre/api-nodejs-client';
-import * as cinerinoapi from '@cinerino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
+
+import * as chevreapi from '../chevreapi';
+import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
 const chevreAuthClient = new chevreapi.auth.ClientCredentials({

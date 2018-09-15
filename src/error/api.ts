@@ -1,4 +1,4 @@
-import { factory } from '@cinerino/api-nodejs-client';
+import { factory } from '../cinerinoapi';
 
 /**
  * APIError

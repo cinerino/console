@@ -11,7 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ホームルーター
  */
-// import * as cinerinoapi from '@cinerino/api-nodejs-client';
 // import * as createDebug from 'debug';
 const express = require("express");
 // import * as moment from 'moment';

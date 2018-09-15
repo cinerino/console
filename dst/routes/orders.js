@@ -11,10 +11,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 注文ルーター
  */
-const cinerinoapi = require("@cinerino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
+const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
 const ordersRouter = express.Router();
 /**

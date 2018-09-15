@@ -11,11 +11,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 組織ルーター
  */
-const chevreapi = require("@chevre/api-nodejs-client");
-const cinerinoapi = require("@cinerino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
+const chevreapi = require("../chevreapi");
+const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
 const chevreAuthClient = new chevreapi.auth.ClientCredentials({
     domain: process.env.CHEVRE_AUTHORIZE_SERVER_DOMAIN,

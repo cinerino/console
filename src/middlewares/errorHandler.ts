@@ -1,7 +1,6 @@
 /**
  * エラーハンドラーミドルウェア
  */
-import { factory } from '@cinerino/api-nodejs-client';
 import * as createDebug from 'debug';
 import { NextFunction, Request, Response } from 'express';
 import {
@@ -15,6 +14,7 @@ import {
     UNAUTHORIZED
 } from 'http-status';
 
+import { factory } from '../cinerinoapi';
 import { APIError } from '../error/api';
 // import logger from '../logger';
 

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 口座ルーター
  */
-// import * as cinerinoapi from '@cinerino/api-nodejs-client';
 // import * as createDebug from 'debug';
 const express = require("express");
 // const debug = createDebug('cinerino-console:routes:account');

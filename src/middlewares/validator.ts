@@ -1,12 +1,12 @@
 /**
  * バリデーターミドルウェア
  */
-import { factory } from '@cinerino/api-nodejs-client';
 import { NextFunction, Request, Response } from 'express';
 // tslint:disable-next-line:no-submodule-imports
 import { validationResult } from 'express-validator/check';
 import { BAD_REQUEST } from 'http-status';
 
+import { factory } from '../cinerinoapi';
 import { APIError } from '../error/api';
 
 export default async (req: Request, __: Response, next: NextFunction) => {

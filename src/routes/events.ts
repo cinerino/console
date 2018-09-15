@@ -1,7 +1,6 @@
 /**
  * イベントルーター
  */
-import * as cinerinoapi from '@cinerino/api-nodejs-client';
 import * as createDebug from 'debug';
 import * as express from 'express';
 // tslint:disable-next-line:no-submodule-imports
@@ -9,6 +8,7 @@ import { body } from 'express-validator/check';
 import { CREATED } from 'http-status';
 import * as moment from 'moment';
 
+import * as cinerinoapi from '../cinerinoapi';
 import validator from '../middlewares/validator';
 
 const debug = createDebug('cinerino-console:routes:events');

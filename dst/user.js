@@ -8,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const cinerinoapi = require("@cinerino/api-nodejs-client");
 const createDebug = require("debug");
 const jwt = require("jsonwebtoken");
+const cinerinoapi = require("./cinerinoapi");
 const debug = createDebug('cinerino-console:user');
 /**
  * リクエストユーザー

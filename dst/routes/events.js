@@ -11,13 +11,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * イベントルーター
  */
-const cinerinoapi = require("@cinerino/api-nodejs-client");
 const createDebug = require("debug");
 const express = require("express");
 // tslint:disable-next-line:no-submodule-imports
 const check_1 = require("express-validator/check");
 const http_status_1 = require("http-status");
 const moment = require("moment");
+const cinerinoapi = require("../cinerinoapi");
 const validator_1 = require("../middlewares/validator");
 const debug = createDebug('cinerino-console:routes:events');
 const eventsRouter = express.Router();
