@@ -1,25 +1,10 @@
 /**
  * 取引ルーター
  */
-import * as createDebug from 'debug';
 import * as express from 'express';
-// import * as moment from 'moment';
 
-const debug = createDebug('cinerino-console:routes:account');
+import placeOrderTransactionsRouter from './transactions/placeOrder';
+
 const transactionsRouter = express.Router();
-
-/**
- * 取引検索
- */
-transactionsRouter.get(
-    '/',
-    async (req, _, next) => {
-        try {
-            debug('searching transactions...', req.query);
-            throw new Error('Not implemented');
-        } catch (error) {
-            next(error);
-        }
-    });
-
+transactionsRouter.use('/placeOrder', placeOrderTransactionsRouter);
 export default transactionsRouter;
