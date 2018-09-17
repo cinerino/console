@@ -104,4 +104,155 @@ placeOrderTransactionsRouter.get('', (req, res, next) => __awaiter(this, void 0,
         next(error);
     }
 }));
+/**
+ * 取引詳細
+ */
+placeOrderTransactionsRouter.get('/:transactionId', 
+// tslint:disable-next-line:max-func-body-length
+(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchTransactionsResult = yield placeOrderService.search({
+            typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
+            ids: [req.params.transactionId]
+        });
+        const transaction = searchTransactionsResult.data.shift();
+        if (transaction === undefined) {
+            throw new cinerinoapi.factory.errors.NotFound('Transaction');
+        }
+        const actionsOnTransaction = yield placeOrderService.searchActionsByTransactionId({
+            transactionId: transaction.id,
+            sort: { endDate: cinerinoapi.factory.sortType.Ascending }
+        });
+        const timelines = [{
+                action: {},
+                agent: {
+                    id: transaction.agent.id,
+                    name: transaction.agent.id,
+                    url: '#'
+                },
+                actionName: '開始',
+                object: '取引',
+                startDate: transaction.startDate,
+                actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                result: undefined
+            }];
+        // tslint:disable-next-line:cyclomatic-complexity
+        timelines.push(...actionsOnTransaction.map((a) => {
+            let agent;
+            if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+                agent = {
+                    id: a.agent.id,
+                    name: a.agent.id,
+                    url: '#'
+                };
+            }
+            else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
+                agent = {
+                    id: a.agent.id,
+                    name: transaction.seller.name.ja,
+                    url: `/organizations/movieTheater/${a.agent.id}`
+                };
+            }
+            let actionName;
+            switch (a.typeOf) {
+                case cinerinoapi.factory.actionType.AuthorizeAction:
+                    actionName = '承認';
+                    break;
+                default:
+                    actionName = a.typeOf;
+            }
+            let object;
+            switch (a.object.typeOf) {
+                case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
+                    object = '座席予約';
+                    break;
+                case cinerinoapi.factory.action.authorize.paymentMethod.creditCard.ObjectType.CreditCard:
+                    object = 'クレジットカード決済';
+                    break;
+                case cinerinoapi.factory.action.authorize.paymentMethod.account.ObjectType.AccountPayment:
+                    object = '口座決済';
+                    break;
+                case cinerinoapi.factory.action.authorize.paymentMethod.mocoin.ObjectType.MocoinPayment:
+                    object = 'MoCoin決済';
+                    break;
+                case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
+                    object = 'ポイントインセンティブ';
+                    break;
+                default:
+                    object = a.object.typeOf;
+            }
+            return {
+                action: a,
+                agent,
+                actionName,
+                object,
+                startDate: a.startDate,
+                actionStatus: a.actionStatus,
+                result: a.result
+            };
+        }));
+        if (transaction.endDate !== undefined) {
+            switch (transaction.status) {
+                case cinerinoapi.factory.transactionStatusType.Canceled:
+                    timelines.push({
+                        action: {},
+                        agent: {
+                            id: transaction.agent.id,
+                            name: transaction.agent.id,
+                            url: '#'
+                        },
+                        actionName: '中止',
+                        object: '取引',
+                        startDate: transaction.endDate,
+                        actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                        result: undefined
+                    });
+                    break;
+                case cinerinoapi.factory.transactionStatusType.Confirmed:
+                    timelines.push({
+                        action: {},
+                        agent: {
+                            id: transaction.agent.id,
+                            name: transaction.agent.id,
+                            url: '#'
+                        },
+                        actionName: '確定',
+                        object: '取引',
+                        startDate: transaction.endDate,
+                        actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                        result: undefined
+                    });
+                    break;
+                case cinerinoapi.factory.transactionStatusType.Expired:
+                    timelines.push({
+                        action: {},
+                        agent: {
+                            id: '#',
+                            name: 'システム',
+                            url: '#'
+                        },
+                        actionName: '終了',
+                        object: '取引',
+                        startDate: transaction.endDate,
+                        actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                        result: undefined
+                    });
+                    break;
+                default:
+            }
+        }
+        res.render('transactions/placeOrder/show', {
+            moment: moment,
+            transaction: transaction,
+            timelines: timelines
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = placeOrderTransactionsRouter;

@@ -194,7 +194,7 @@
                     data: null,
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
-                            + '<li>' + data.id + '</li>'
+                            + '<li><a target="_blank" href="/transactions/placeOrder/' + data.id + '">' + data.id + '</a></li>'
                             + '<li><span class="badge badge-info">' + data.status + '</span></li>'
                             + '<li>' + data.startDate + '</li>'
                             + '<li>' + data.endDate + '</li>'
@@ -262,7 +262,7 @@
         });
 
         //Date range picker
-        $('#reservation').daterangepicker({
+        $('#startRange').daterangepicker({
             timePicker: false,
             // timePickerIncrement: 30,
             format: 'YYYY-MM-DDT00:00:00+0900'
