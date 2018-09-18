@@ -39,9 +39,9 @@
                             <h4>
                                 <i class="fa fa-film"></i>
                                 <%= order.seller.name %>
-                                    <small class="float-right">Date:
-                                        <%= moment(order.orderDate).format('D/M/YYYY') %>
-                                    </small>
+                                <small class="float-right">Date:
+                                    <%= moment(order.orderDate).format('D/M/YYYY') %>
+                                </small>
                             </h4>
                         </div>
                         <!-- /.col -->
@@ -56,10 +56,10 @@
                                 </strong>
                                 <br> Phone:
                                 <%= order.seller.telephone %>
-                                    <br> Email:
-                                    <%= order.seller.email %>
-                                        <br> Url:
-                                        <%= order.seller.url %>
+                                <br> Email:
+                                <%= order.seller.email %>
+                                <br> Url:
+                                <%= order.seller.url %>
                             </address>
                         </div>
                         <!-- /.col -->
@@ -68,12 +68,12 @@
                             <address>
                                 <strong>
                                     <%= order.customer.givenName %>
-                                        <%= order.customer.familyName %>
+                                    <%= order.customer.familyName %>
                                 </strong>
                                 <br> Phone:
                                 <%= order.customer.telephone %>
-                                    <br> Email:
-                                    <%= order.customer.email %>
+                                <br> Email:
+                                <%= order.customer.email %>
                             </address>
                         </div>
                         <!-- /.col -->
@@ -83,16 +83,16 @@
                                 <br> -->
                             <b>注文番号:</b>
                             <%= order.orderNumber %>
-                                <!-- <br>
+                            <!-- <br>
                                     <b>Payment Due:</b> 2/22/2014 -->
-                                <br>
-                                <b>確認番号:</b>
-                                <%= order.confirmationNumber %>
-                                    <!-- <br>
+                            <br>
+                            <b>確認番号:</b>
+                            <%= order.confirmationNumber %>
+                            <!-- <br>
                                         <b>Payment Due:</b> 2/22/2014 -->
-                                    <br>
-                                    <b>Payment Method ID:</b>
-                                    <%= (order.paymentMethods.length > 0) ? order.paymentMethods[0].paymentMethodId : '' %>
+                            <br>
+                            <b>Payment Method ID:</b>
+                            <%= (order.paymentMethods.length > 0) ? order.paymentMethods[0].paymentMethodId : '' %>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -115,48 +115,48 @@
                                 </thead>
                                 <tbody>
                                     <% order.acceptedOffers.forEach(function(acceptedOffer){ %>
-                                        <tr>
-                                            <td>
-                                                <%= (acceptedOffer.itemOffered.numSeats !== undefined) ? acceptedOffer.itemOffered.numSeats : 1 %>
-                                            </td>
-                                            <td>
-                                                <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
-                                                    <a target="_blank" href="/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
-                                                        <%= acceptedOffer.itemOffered.reservationFor.name.ja %>
-                                                            <br>
-                                                            <%= moment(acceptedOffer.itemOffered.reservationFor.startDate).format('YY-MM-DD hh:mm') %>
-                                                                -
-                                                                <%= moment(acceptedOffer.itemOffered.reservationFor.endDate).format('hh:mm') %>
-                                                                    <br>@
-                                                                    <%= acceptedOffer.itemOffered.reservationFor.superEvent.location.name.ja %>
-                                                                        <%= acceptedOffer.itemOffered.reservationFor.location.name.ja %>
-                                                    </a>
-                                                    <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
-                                                        <%= acceptedOffer.itemOffered.programName %>
-                                                            <% } %>
-                                            </td>
-                                            <td>
-                                                <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
-                                                    <%= acceptedOffer.itemOffered.reservedTicket.ticketToken %>
-                                                        <% } %>
-                                            </td>
-                                            <td>
-                                                <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
-                                                    <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatNumber %>
-                                                        <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
-                                                            <%= acceptedOffer.price %>
-                                                                <%= acceptedOffer.priceCurrency %>
-                                                                    per
-                                                                    <%= moment.duration(acceptedOffer.eligibleDuration.value, 'seconds').humanize() %>
-                                                                        <% } %>
-                                            </td>
-                                            <td>
-                                                <%= acceptedOffer.price %>
-                                                    <%= acceptedOffer.priceCurrency %>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <%= (acceptedOffer.itemOffered.numSeats !== undefined) ? acceptedOffer.itemOffered.numSeats : 1 %>
+                                        </td>
+                                        <td>
+                                            <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
+                                            <a target="_blank" href="/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
+                                                <%= acceptedOffer.itemOffered.reservationFor.name.ja %>
+                                                <br>
+                                                <%= moment(acceptedOffer.itemOffered.reservationFor.startDate).format('YY-MM-DD hh:mm') %>
+                                                -
+                                                <%= moment(acceptedOffer.itemOffered.reservationFor.endDate).format('hh:mm') %>
+                                                <br>@
+                                                <%= acceptedOffer.itemOffered.reservationFor.superEvent.location.name.ja %>
+                                                <%= acceptedOffer.itemOffered.reservationFor.location.name.ja %>
+                                            </a>
+                                            <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
+                                            <%= acceptedOffer.itemOffered.programName %>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
+                                            <%= acceptedOffer.itemOffered.reservedTicket.ticketToken %>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
+                                            <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatNumber %>
+                                            <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
+                                            <%= acceptedOffer.price %>
+                                            <%= acceptedOffer.priceCurrency %>
+                                            per
+                                            <%= moment.duration(acceptedOffer.eligibleDuration.value, 'seconds').humanize() %>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%= acceptedOffer.price %>
+                                            <%= acceptedOffer.priceCurrency %>
+                                        </td>
+                                    </tr>
 
-                                        <% }) %>
+                                    <% }) %>
                                 </tbody>
                             </table>
                         </div>
@@ -185,7 +185,7 @@
                                         <th style="width:50%">Subtotal:</th>
                                         <td>
                                             <%= order.price %>
-                                                <%= order.priceCurrency %>
+                                            <%= order.priceCurrency %>
                                         </td>
                                     </tr>
                                     <tr>
@@ -200,14 +200,14 @@
                                         <th>Discount:</th>
                                         <td>
                                             <%= order.discounts.reduce((a, b)=>a+b.discount,0) %>
-                                                <%= (order.discounts.length > 0) ? order.discounts[0].discountCurrency : 'JPY' %>
+                                            <%= (order.discounts.length > 0) ? order.discounts[0].discountCurrency : 'JPY' %>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Total:</th>
                                         <td>
                                             <%= order.price %>
-                                                <%= order.priceCurrency %>
+                                            <%= order.priceCurrency %>
                                         </td>
                                     </tr>
                                 </table>
@@ -258,47 +258,52 @@
                                 <ul class="timeline timeline-inverse">
                                     <!-- /.timeline-label -->
                                     <% timelines.forEach(function(timeline, index){ %>
-                                        <% if (index === 0) { %>
-                                            <!-- timeline time label -->
-                                            <li class="time-label">
-                                                <span class="bg-success">
-                                                    <%= moment(timeline.startDate).format('LL') %>
-                                                </span>
-                                            </li>
-                                            <% } %>
-                                                <!-- timeline item -->
-                                                <li>
-                                                    <i class="fa fa-envelope bg-primary"></i>
-                                                    <!-- <i class="fa fa-user bg-info"></i> -->
-                                                    <!-- <i class="fa fa-camera bg-purple"></i> -->
-                                                    <!-- <i class="fa fa-comments bg-warning"></i> -->
+                                    <% if (index === 0) { %>
+                                    <!-- timeline time label -->
+                                    <li class="time-label">
+                                        <span class="bg-success">
+                                            <%= moment(timeline.startDate).format('LL') %>
+                                        </span>
+                                    </li>
+                                    <% } %>
+                                    <!-- timeline item -->
+                                    <li>
+                                        <i class="fa fa-envelope bg-primary"></i>
+                                        <!-- <i class="fa fa-user bg-info"></i> -->
+                                        <!-- <i class="fa fa-camera bg-purple"></i> -->
+                                        <!-- <i class="fa fa-comments bg-warning"></i> -->
 
 
-                                                    <div class="timeline-item">
-                                                        <span class="time"><i class="fa fa-clock-o"></i> <%= moment(timeline.startDate).fromNow() %></span>
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i>
+                                                <%= moment(timeline.startDate).fromNow() %></span>
 
-                                                        <h3 class="timeline-header">
-                                                            <a href="<%= timeline.agent.url %>" target="_blank"><%= timeline.agent.name %></a> が
-                                                            <span><%= timeline.object %></span> を
-                                                            <span><%= timeline.actionName %></span> しました
-                                                        </h3>
+                                            <h3 class="timeline-header">
+                                                <a href="<%= timeline.agent.url %>" target="_blank">
+                                                    <%= timeline.agent.name %></a> が
+                                                <span>
+                                                    <%= timeline.object %></span> を
+                                                <span>
+                                                    <%= timeline.actionName %></span> しました
+                                            </h3>
 
-                                                        <div class="timeline-body">
-                                                            <span class="badge badge-info"><%= timeline.actionStatus %></span><br>
-                                                            <textarea class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
-                                                        </div>
-                                                        <div class="timeline-footer">
-                                                            <a href="#" class="btn btn-primary btn-sm" onclick="alert('<%= JSON.stringify(timeline.action) %>');">Read
-                                                                more
-                                                            </a>
-                                                            <!-- <a href="#" class="btn btn-danger btn-sm">Delete</a> -->
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <% }) %>
-                                                    <li>
-                                                        <i class="fa fa-clock-o bg-gray"></i>
-                                                    </li>
+                                            <div class="timeline-body">
+                                                <span class="badge badge-info">
+                                                    <%= timeline.actionStatus %></span><br>
+                                                <textarea class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+                                            </div>
+                                            <div class="timeline-footer">
+                                                <a href="#" class="btn btn-primary btn-sm" onclick="alert('<%= JSON.stringify(timeline.action) %>');">Read
+                                                    more
+                                                </a>
+                                                <!-- <a href="#" class="btn btn-danger btn-sm">Delete</a> -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% }) %>
+                                    <li>
+                                        <i class="fa fa-clock-o bg-gray"></i>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- /.tab-pane -->

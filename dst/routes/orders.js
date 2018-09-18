@@ -58,7 +58,7 @@ ordersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, functio
                 : moment().add(-1, 'month').toDate(),
             orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                 ? moment(req.query.orderDateRange.split(' - ')[1]).toDate()
-                : new Date(),
+                : moment().add(1, 'day').toDate(),
             confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
                 ? req.query.confirmationNumbers.split(',').map((v) => v.trim())
                 : []

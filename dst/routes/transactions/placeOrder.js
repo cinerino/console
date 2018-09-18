@@ -57,11 +57,13 @@ placeOrderTransactionsRouter.get('', (req, res, next) => __awaiter(this, void 0,
             endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom).toDate() : undefined,
             endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough).toDate() : undefined,
             agent: {
+                typeOf: cinerinoapi.factory.personType.Person,
                 ids: (req.query.agent !== undefined && req.query.agent.ids !== '')
                     ? req.query.agent.ids.split(',').map((v) => v.trim())
                     : []
             },
             seller: {
+                typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                 ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                     ? req.query.seller.ids
                     : searchMovieTheatersResult.data.map((m) => m.id)

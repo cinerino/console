@@ -42,21 +42,21 @@
                     <form role="form" method="post">
                         <div class="card-body">
                             <% if (messages.message) { %>
-                                <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5>
-                                        <i class="icon fa fa-check"></i> Congraturations!</h5>
-                                    <%= messages.message %>
-                                </div>
-                                <% } %>
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h5>
+                                    <i class="icon fa fa-check"></i> Congraturations!</h5>
+                                <%= messages.message %>
+                            </div>
+                            <% } %>
 
-                                    <% if (message) { %>
-                                        <div class="alert alert-warning alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <%- message.replace(/\n/g, '<br>') %>
-                                        </div>
-                                        <% } %>
-                                            <%- include('./form', {movieTheater: attributes, PaymentMethodType: PaymentMethodType}) %>
+                            <% if (message) { %>
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <%- message.replace(/\n/g, '<br>') %>
+                            </div>
+                            <% } %>
+                            <%- include('./form', {movieTheater: attributes, PaymentMethodType: PaymentMethodType}) %>
                         </div>
                         <!-- /.card-body -->
 
@@ -78,5 +78,5 @@
 <!-- /.content -->
 
 <!-- page script -->
-<script>
-</script>
+<!-- <script>
+</script> -->
