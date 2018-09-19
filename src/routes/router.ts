@@ -11,6 +11,7 @@ import eventsRouter from './events';
 import homeRouter from './home';
 import ordersRouter from './orders';
 import organizationsRouter from './organizations';
+import tasksRouter from './tasks';
 import transactionsRouter from './transactions';
 
 const router = express.Router();
@@ -29,6 +30,7 @@ router.use('/accounts', accountsRouter);
 router.use('/events', eventsRouter);
 router.use('/orders', ordersRouter);
 router.use('/organizations', organizationsRouter);
+router.use('/tasks', tasksRouter);
 router.use('/transactions', transactionsRouter);
 
 export default router;
