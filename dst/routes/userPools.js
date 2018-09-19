@@ -92,4 +92,40 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId',
         next(error);
     }
 }));
+/**
+ * クライアントの注文検索
+ */
+userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const orderService = new cinerinoapi.service.Order({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchOrdersResult = yield orderService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { orderDate: cinerinoapi.factory.sortType.Descending },
+            orderDateFrom: moment().add(-1, 'months').toDate(),
+            orderDateThrough: new Date(),
+            customer: {
+                typeOf: cinerinoapi.factory.personType.Person,
+                identifiers: [
+                    {
+                        name: 'tokenIssuer',
+                        value: `https://cognito-idp.ap-northeast-1.amazonaws.com/${req.params.userPoolId}`
+                    },
+                    {
+                        name: 'clientId',
+                        value: req.params.clientId
+                    }
+                ]
+            }
+        });
+        debug(searchOrdersResult.totalCount, 'orders found.');
+        res.json(searchOrdersResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = userPoolsRouter;
