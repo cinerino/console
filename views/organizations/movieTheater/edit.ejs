@@ -30,79 +30,234 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        <div class="row">
-            <!-- left column -->
-            <div class="col-md-12">
-                <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
-                    <!-- /.card-header -->
 
-                    <!-- form start -->
-                    <form role="form" method="post">
-                        <div class="card-body">
-                            <% if (messages.message) { %>
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h5>
-                                    <i class="icon fa fa-check"></i> Congraturations!</h5>
-                                <%= messages.message %>
-                            </div>
-                            <% } %>
-
-                            <% if (message) { %>
-                            <div class="alert alert-warning alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <%- message.replace(/\n/g, '<br>') %>
-                            </div>
-                            <% } %>
-                            <%- include('./form', {movieTheater: movieTheater, PaymentMethodType: PaymentMethodType}) %>
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">更新</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.card -->
-
-            </div>
-            <!--/.col (left) -->
+        <% if (messages.message) { %>
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5>
+                <i class="icon fa fa-check"></i> Congraturations!</h5>
+            <%= messages.message %>
         </div>
-        <!-- /.row -->
-        <div class="row">
-            <!-- left column -->
-            <div class="col-md-12">
-                <!-- general form elements -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">その他の操作</h3>
-                    </div>
-                    <!-- /.card-header -->
+        <% } %>
 
-                    <div class="card-body">
-                        <button type="button" class="delete btn btn-danger">削除する</button>
+        <% if (message) { %>
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <%- message.replace(/\n/g, '<br>') %>
+        </div>
+        <% } %>
+
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <!-- <div class="text-center">
+                                    <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg"
+                                        alt="User profile picture">
+                                </div> -->
+
+                        <h3 class="profile-username text-center">
+                            <%= movieTheater.name.ja %>
+                        </h3>
+
+                        <p class="text-muted text-center">
+                            <%= movieTheater.name.en %>
+                        </p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Orders</b> <a class="float-right" id="orderCount"></a>
+                            </li>
+                        </ul>
+
+                        <!-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
                     </div>
                     <!-- /.card-body -->
-                    <!-- <div class="card-footer">
-                        </div> -->
                 </div>
                 <!-- /.card -->
 
+                <!-- About Me Box -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">About</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <strong><i class="fa fa-file-text-o mr-1"></i> Location</strong>
+
+                        <p class="text-muted">
+                            <%= movieTheater.location.branchCode %>
+                            <%= movieTheater.location.name.ja %>
+                        </p>
+
+                        <hr>
+
+                        <strong><i class="fa fa-file-text-o mr-1"></i> Telephone</strong>
+
+                        <p class="text-muted">
+                            <%= movieTheater.telephone %>
+                        </p>
+
+                        <hr>
+
+                        <strong><i class="fa fa-file-text-o mr-1"></i> url</strong>
+
+                        <p class="text-muted">
+                            <a target="_blank" href="<%= movieTheater.url %>">
+                                <%= movieTheater.url %>
+                            </a>
+                        </p>
+
+                        <hr>
+
+                        <strong><i class="fa fa-file-text-o mr-1"></i> 対応決済方法</strong>
+
+                        <p class="text-muted">
+                            <%= movieTheater.paymentAccepted.map((payment)=>payment.paymentMethodType).join(', ') %>
+                        </p>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
             </div>
-            <!--/.col (left) -->
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">注文履歴</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#others" data-toggle="tab">その他の操作</a></li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="orders">
+                                <div class="table-responsive">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Order Number</th>
+                                                <th>Order Date</th>
+                                                <th>Item</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+
+                            <div class="tab-pane" id="jsonViewer">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(movieTheater, null, '\t') %></textarea>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="settings">
+                                <!-- form start -->
+                                <form role="form" method="post">
+                                    <div class="card-body">
+                                        <%- include('./form', {movieTheater: movieTheater, PaymentMethodType: PaymentMethodType}) %>
+                                    </div>
+                                    <!-- /.card-body -->
+
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary">更新</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="others">
+                                <!-- general form elements -->
+                                <div class="card card-primary">
+                                    <!-- <div class="card-header">
+                                        <h3 class="card-title">その他の操作</h3>
+                                    </div> -->
+                                    <!-- /.card-header -->
+
+                                    <div class="card-body">
+                                        <button type="button" class="delete btn btn-danger">削除する</button>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <!-- <div class="card-footer">
+                                        </div> -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- /.col -->
         </div>
         <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
+    </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
 
+<%
+const movieTheaterJson = JSON.stringify(movieTheater).replace(/"/g, '\\\"');
+%>
 <!-- page script -->
 <script>
+    var movieTheater = JSON.parse(" <%- movieTheaterJson %>");
+    var orders = [];
+    var searchedAllOrders = false;
+    var limit = 100;
+    var page = 0;
+    var lineChart;
+    $(function () {
+        // 注文検索
+        console.log('searching orders...', page);
+        searchOrders(function () {
+        });
+    });
+    function searchOrders(cb) {
+        page += 1;
+        $.getJSON(
+            '/organizations/movieTheater/' + movieTheater.id + '/orders',
+            { limit: limit, page: page }
+        ).done(function (data) {
+            searchedAllOrders = (data.data.length < limit);
+            $.each(data.data, function (key, order) {
+                orders.push(order);
+                let badge = 'badge-info';
+                switch (order.orderStatus) {
+                    case 'OrderDelivered':
+                        badge = 'badge-danger';
+                        break;
+                    default:
+                }
+                $('<tr>').html(
+                    '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                    + '<td>' + order.orderDate + '</td>'
+                    + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
+                    + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
+                ).appendTo("#orders tbody");
+
+                $('#orderCount').html(data.totalCount);
+            });
+            if (!searchedAllOrders) {
+                searchOrders(cb);
+            } else {
+                cb();
+            }
+        }).fail(function () {
+            alert('注文履歴を取得できませんでした')
+        });
+    }
+
     $(function () {
         $('button.delete').click(function () {
             if (window.confirm('元には戻せません。本当に削除しますか？')) {

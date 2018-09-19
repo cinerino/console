@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const createDebug = require("debug");
 const express = require("express");
 const http_status_1 = require("http-status");
+const moment = require("moment");
 const chevreapi = require("../chevreapi");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
@@ -203,4 +204,31 @@ function createAttributesFromBody(params) {
         };
     });
 }
+/**
+ * 劇場の注文検索
+ */
+organizationsRouter.get('/movieTheater/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const orderService = new cinerinoapi.service.Order({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchOrdersResult = yield orderService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { orderDate: cinerinoapi.factory.sortType.Descending },
+            orderDateFrom: moment().add(-1, 'months').toDate(),
+            orderDateThrough: new Date(),
+            seller: {
+                typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+                ids: [req.params.id]
+            }
+        });
+        debug(searchOrdersResult.totalCount, 'orders found.');
+        res.json(searchOrdersResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = organizationsRouter;

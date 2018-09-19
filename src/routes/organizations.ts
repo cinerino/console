@@ -4,6 +4,7 @@
 import * as createDebug from 'debug';
 import * as express from 'express';
 import { NO_CONTENT } from 'http-status';
+import * as moment from 'moment';
 
 import * as chevreapi from '../chevreapi';
 import * as cinerinoapi from '../cinerinoapi';
@@ -201,4 +202,33 @@ async function createAttributesFromBody(params: {
         paymentAccepted: paymentAccepted
     };
 }
+/**
+ * 劇場の注文検索
+ */
+organizationsRouter.get(
+    '/movieTheater/:id/orders',
+    async (req, res, next) => {
+        try {
+            const orderService = new cinerinoapi.service.Order({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchOrdersResult = await orderService.search({
+                limit: req.query.limit,
+                page: req.query.page,
+                sort: { orderDate: cinerinoapi.factory.sortType.Descending },
+                orderDateFrom: moment().add(-1, 'months').toDate(),
+                orderDateThrough: new Date(),
+                seller: {
+                    typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+                    ids: [req.params.id]
+                }
+            });
+            debug(searchOrdersResult.totalCount, 'orders found.');
+            res.json(searchOrdersResult);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 export default organizationsRouter;
