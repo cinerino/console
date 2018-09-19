@@ -213,7 +213,7 @@ const userPoolClientJson = JSON.stringify(userPoolClient).replace(/"/g, '\\\"');
                     + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
                 ).appendTo("#orders tbody");
 
-                $('#orderCount').html(data.totalCount);
+                $('#orderCount').html(data.totalCount.toString());
             });
             if (!searchedAllOrders) {
                 searchOrders(cb);

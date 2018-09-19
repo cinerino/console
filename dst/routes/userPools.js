@@ -111,10 +111,6 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) =>
                 typeOf: cinerinoapi.factory.personType.Person,
                 identifiers: [
                     {
-                        name: 'tokenIssuer',
-                        value: `https://cognito-idp.ap-northeast-1.amazonaws.com/${req.params.userPoolId}`
-                    },
-                    {
                         name: 'clientId',
                         value: req.params.clientId
                     }
