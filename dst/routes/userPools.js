@@ -9,11 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 注文ルーター
+ * ユーザープールルーター
  */
+const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
+const debug = createDebug('cinerino-console:routes');
 const userPoolsRouter = express.Router();
 userPoolsRouter.get('/:userPoolId', 
 // tslint:disable-next-line:max-func-body-length
@@ -32,6 +34,38 @@ userPoolsRouter.get('/:userPoolId',
             userPool: userPool,
             userPoolClients: searchUserPoolClientsResult.data
         });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * ユーザープールの注文検索
+ */
+userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const orderService = new cinerinoapi.service.Order({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchOrdersResult = yield orderService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { orderDate: cinerinoapi.factory.sortType.Descending },
+            orderDateFrom: moment().add(-1, 'months').toDate(),
+            orderDateThrough: new Date(),
+            customer: {
+                typeOf: cinerinoapi.factory.personType.Person,
+                identifiers: [
+                    {
+                        name: 'tokenIssuer',
+                        value: `https://cognito-idp.ap-northeast-1.amazonaws.com/${req.params.userPoolId}`
+                    }
+                ]
+            }
+        });
+        debug(searchOrdersResult.totalCount, 'orders found.');
+        res.json(searchOrdersResult);
     }
     catch (error) {
         next(error);

@@ -20,7 +20,9 @@ const ordersRouter = express.Router();
 /**
  * 注文検索
  */
-ordersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+ordersRouter.get('', 
+// tslint:disable-next-line:cyclomatic-complexity
+(req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         const orderService = new cinerinoapi.service.Order({
@@ -31,7 +33,14 @@ ordersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, functio
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
+        const userPoolService = new cinerinoapi.service.UserPool({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
         const searchMovieTheatersResult = yield organizationService.searchMovieTheaters({});
+        const searchUserPoolClientsResult = yield userPoolService.searchClients({
+            userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
+        });
         const orderStatusChoices = [
             cinerinoapi.factory.orderStatus.OrderDelivered,
             cinerinoapi.factory.orderStatus.OrderPickupAvailable,
@@ -41,12 +50,36 @@ ordersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, functio
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
-            sellerIds: (req.query.sellerIds !== undefined)
-                ? req.query.sellerIds
-                : searchMovieTheatersResult.data.map((m) => m.id),
-            customerMembershipNumbers: (req.query.customerMembershipNumbers !== undefined && req.query.customerMembershipNumbers !== '')
-                ? req.query.customerMembershipNumbers.split(',').map((v) => v.trim())
-                : [],
+            seller: {
+                typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+                ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
+                    ? req.query.seller.ids
+                    : searchMovieTheatersResult.data.map((m) => m.id)
+            },
+            customer: {
+                typeOf: cinerinoapi.factory.personType.Person,
+                ids: (req.query.customer !== undefined && req.query.customer.ids !== undefined && req.query.customer.ids !== '')
+                    ? req.query.customer.ids.split(',').map((v) => v.trim())
+                    : [],
+                membershipNumbers: (req.query.customer !== undefined
+                    && req.query.customer.membershipNumbers !== undefined
+                    && req.query.customer.membershipNumbers !== '')
+                    ? req.query.customer.membershipNumbers.split(',').map((v) => v.trim())
+                    : [],
+                identifiers: (req.query.customer !== undefined && Array.isArray(req.query.customer.userPoolClients))
+                    ? req.query.customer.userPoolClients.map((userPoolClient) => {
+                        return {
+                            name: 'clientId',
+                            value: userPoolClient
+                        };
+                    })
+                    : searchUserPoolClientsResult.data.map((userPoolClient) => {
+                        return {
+                            name: 'clientId',
+                            value: userPoolClient.ClientId
+                        };
+                    })
+            },
             orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                 ? req.query.orderNumbers.split(',').map((v) => v.trim())
                 : [],
@@ -76,6 +109,7 @@ ordersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, functio
             res.render('orders/index', {
                 moment: moment,
                 movieTheaters: searchMovieTheatersResult.data,
+                userPoolClients: searchUserPoolClientsResult.data,
                 searchConditions: searchConditions,
                 orderStatusChoices: orderStatusChoices
             });

@@ -80,6 +80,56 @@
             </div>
             <!-- ./col -->
             <div class="col-md-4">
+                <!-- TABLE: clients -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">クライアント</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <!-- <button type="button" class="btn btn-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button> -->
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% userPoolClients.forEach(function (userPoolClient) { %>
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="/userPools/<%= userPoolClient.UserPoolId %>/clients/<%= userPoolClient.ClientId %>">
+                                                <%= userPoolClient.ClientId %>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <%= userPoolClient.ClientName %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <!-- <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a> -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+
                 <!-- TABLE: LATEST ORDERS -->
                 <div class="card">
                     <div class="card-header border-transparent">
@@ -119,56 +169,6 @@
                     <!-- /.card-footer -->
                 </div>
                 <!-- /.card -->
-
-                <!-- TABLE: clients -->
-                <div class="card">
-                    <div class="card-header border-transparent">
-                        <h3 class="card-title">クライアント</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                            <!-- <button type="button" class="btn btn-tool" data-widget="remove">
-                                    <i class="fa fa-times"></i>
-                                </button> -->
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table m-0" id="orders">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% userPoolClients.forEach(function (userPoolClient) { %>
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="/userPools/<%= userPoolClient.UserPoolId %>/clients/<%= userPoolClient.ClientId %>">
-                                                <%= userPoolClient.ClientId %>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <%= userPoolClient.ClientName %>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-                        <!-- <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
-                            <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a> -->
-                    </div>
-                    <!-- /.card-footer -->
-                </div>
-                <!-- /.card -->
             </div>
             <!-- ./col -->
         </div>
@@ -188,3 +188,56 @@
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
 <!-- ChartJS 1.0.1 -->
 <script src="/node_modules/admin-lte/plugins/chart.js/Chart.min.js"></script>
+
+<%
+const userPoolJson = JSON.stringify(userPool).replace(/"/g, '\\\"');
+%>
+<!-- page script -->
+<script>
+    var userPool = JSON.parse(" <%- userPoolJson %>");
+    var orders = [];
+    var searchedAllOrders = false;
+    var limit = 100;
+    var page = 0;
+    var lineChart;
+    $(function () {
+        // 注文検索
+        console.log('searching orders...', page);
+        searchOrders(function () {
+            console.log('creating line chart...');
+            createLineChart();
+        });
+    });
+    function searchOrders(cb) {
+        page += 1;
+        $.getJSON(
+            '/userPools/' + userPool.Id + '/orders',
+            { limit: limit, page: page }
+        ).done(function (data) {
+            searchedAllOrders = (data.data.length < limit);
+            $.each(data.data, function (key, order) {
+                orders.push(order);
+                let badge = 'badge-info';
+                switch (order.orderStatus) {
+                    case 'OrderDelivered':
+                        badge = 'badge-danger';
+                        break;
+                    default:
+                }
+                $('<tr>').html(
+                    '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                    + '<td>' + order.orderDate + '</td>'
+                    + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
+                    + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
+                ).appendTo("#orders tbody");
+            });
+            if (!searchedAllOrders) {
+                searchOrders(cb);
+            } else {
+                cb();
+            }
+        }).fail(function () {
+            alert('注文履歴を取得できませんでした')
+        });
+    }
+</script>
