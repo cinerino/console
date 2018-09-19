@@ -111,7 +111,7 @@
                         <li class="nav-header">検索</li>
                         <li class="nav-item">
                             <a href="/organizations/movieTheater" class="nav-link">
-                                <i class="nav-icon fa fa-table"></i>
+                                <i class="nav-icon fa fa-building"></i>
                                 <p>
                                     販売者
                                     <span class="badge badge-info right"></span>
@@ -120,7 +120,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="/events/screeningEvent" class="nav-link">
-                                <i class="nav-icon fa fa-table"></i>
+                                <i class="nav-icon fa fa-film"></i>
                                 <p>
                                     上映イベント
                                     <span class="badge badge-info right"></span>
@@ -129,7 +129,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="/orders" class="nav-link">
-                                <i class="nav-icon fa fa-table"></i>
+                                <i class="nav-icon fa fa-shopping-cart"></i>
                                 <p>
                                     注文
                                     <span class="badge badge-info right"></span>
@@ -138,7 +138,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="/transactions/placeOrder" class="nav-link">
-                                <i class="nav-icon fa fa-table"></i>
+                                <i class="nav-icon fa fa-opencart"></i>
                                 <p>
                                     注文取引
                                     <span class="badge badge-info right"></span>
@@ -147,9 +147,18 @@
                         </li>
                         <li class="nav-item">
                             <a href="/tasks" class="nav-link">
-                                <i class="nav-icon fa fa-table"></i>
+                                <i class="nav-icon fa fa-tasks"></i>
                                 <p>
                                     タスク
+                                    <span class="badge badge-info right"></span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/userPools/<%= process.env.DEFAULT_COGNITO_USER_POOL_ID %>" class="nav-link">
+                                <i class="nav-icon fa fa-user"></i>
+                                <p>
+                                    ユーザープール
                                     <span class="badge badge-info right"></span>
                                 </p>
                             </a>

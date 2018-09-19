@@ -13,6 +13,7 @@ import ordersRouter from './orders';
 import organizationsRouter from './organizations';
 import tasksRouter from './tasks';
 import transactionsRouter from './transactions';
+import userPoolsRouter from './userPools';
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use('/orders', ordersRouter);
 router.use('/organizations', organizationsRouter);
 router.use('/tasks', tasksRouter);
 router.use('/transactions', transactionsRouter);
+router.use('/userPools', userPoolsRouter);
 
 export default router;

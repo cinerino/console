@@ -236,10 +236,11 @@
                 {
                     data: null,
                     render: function (data, type, row) {
+                        var userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
                         return '<ul class="list-unstyled">'
                             + '<li>' + data.object.clientUser.sub + '</li>'
-                            + '<li>' + data.object.clientUser.iss + '</li>'
-                            + '<li><a href="#">' + data.object.clientUser.client_id + '</a></li>'
+                            + '<li><a target="_blank" href="/userPools/' + userPoolId + '">' + data.object.clientUser.iss + '</a></li>'
+                            + '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + data.object.clientUser.client_id + '">' + data.object.clientUser.client_id + '</a></li>'
                             + '</ul>';
                     }
                 },
