@@ -15,6 +15,7 @@ const placeOrderTransactionsRouter = express.Router();
  */
 placeOrderTransactionsRouter.get(
     '',
+    // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
     async (req, res, next) => {
         try {
             debug('req.query:', req.query);
@@ -86,6 +87,15 @@ placeOrderTransactionsRouter.get(
                     recordsFiltered: searchScreeningEventsResult.totalCount,
                     data: searchScreeningEventsResult.data
                 });
+            } else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
+                const stream = <NodeJS.ReadableStream>await placeOrderService.downloadReport({
+                    ...searchConditions,
+                    format: cinerinoapi.factory.encodingFormat.Text.csv
+                });
+                const filename = 'TransactionReport';
+                res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
+                res.setHeader('Content-Type', 'text/csv; charset=UTF-8');
+                stream.pipe(res);
             } else {
                 res.render('transactions/placeOrder/index', {
                     moment: moment,
@@ -97,7 +107,8 @@ placeOrderTransactionsRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
 /**
  * 取引詳細
  */
@@ -250,5 +261,6 @@ placeOrderTransactionsRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
 export default placeOrderTransactionsRouter;

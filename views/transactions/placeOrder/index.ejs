@@ -111,7 +111,19 @@
 
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                            <div class="btn-group float-right">
+                                <button type="button" class="btn btn-info search">検索</button>
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                    <a class="dropdown-item search" href="#">検索</a>
+                                    <a class="dropdown-item downloadCSV" href="#">CSVダウンロード</a>
+                                    <!-- <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a> -->
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -266,6 +278,14 @@
             timePicker: false,
             // timePickerIncrement: 30,
             format: 'YYYY-MM-DDT00:00:00+0900'
+        });
+
+        $('.search').click(function () {
+            $('form').submit();
+        });
+        $('.downloadCSV').click(function () {
+            var url = '/transactions/placeOrder?' + $('form').serialize() + '&format=text/csv';
+            window.open(url, '_blank');
         });
     });
 </script>

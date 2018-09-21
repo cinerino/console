@@ -21,7 +21,9 @@ const placeOrderTransactionsRouter = express.Router();
 /**
  * 検索
  */
-placeOrderTransactionsRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+placeOrderTransactionsRouter.get('', 
+// tslint:disable-next-line:cyclomatic-complexity max-func-body-length
+(req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
@@ -92,6 +94,13 @@ placeOrderTransactionsRouter.get('', (req, res, next) => __awaiter(this, void 0,
                 recordsFiltered: searchScreeningEventsResult.totalCount,
                 data: searchScreeningEventsResult.data
             });
+        }
+        else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
+            const stream = yield placeOrderService.downloadReport(Object.assign({}, searchConditions, { format: cinerinoapi.factory.encodingFormat.Text.csv }));
+            const filename = 'TransactionReport';
+            res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
+            res.setHeader('Content-Type', 'text/csv; charset=UTF-8');
+            stream.pipe(res);
         }
         else {
             res.render('transactions/placeOrder/index', {
