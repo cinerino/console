@@ -98,4 +98,24 @@ dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(this, 
         next(error);
     }
 }));
+dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const orderService = new cinerinoapi.service.Order({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchOrdersResult = yield orderService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: (req.query.sort !== undefined) ? req.query.sort : { orderDate: cinerinoapi.factory.sortType.Descending },
+            // tslint:disable-next-line:no-magic-numbers
+            orderDateFrom: moment(req.query.orderDateFrom).toDate(),
+            orderDateThrough: moment(req.query.orderDateThrough).toDate()
+        });
+        res.json(searchOrdersResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = dashboardRouter;

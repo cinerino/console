@@ -5,23 +5,27 @@
 import * as express from 'express';
 // import * as moment from 'moment';
 
+import * as cinerinoapi from '../cinerinoapi';
 // const debug = createDebug('cinerino-console:routes');
 const homeRouter = express.Router();
 
 homeRouter.get(
     '/',
-    async (__, res, next) => {
+    async (req, res, next) => {
         try {
-            const orders: any[] = [];
+            const userPoolService = new cinerinoapi.service.UserPool({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const userPool = await userPoolService.findById({
+                userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
+            });
+            const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
 
             res.render('index', {
                 message: 'Welcome to Cinerino Console!',
-                orders: orders
-                // movieTheaters: movieTheaters,
-                // globalTelemetries: globalTelemetries,
-                // sellerTelemetries: sellerTelemetries,
-                // globalFlowTelemetries: globalFlowTelemetries,
-                // sellerFlowTelemetries: sellerFlowTelemetries
+                userPool: userPool,
+                userPoolClients: searchUserPoolClientsResult.data
             });
         } catch (error) {
             next(error);

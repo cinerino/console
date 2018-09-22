@@ -25,3 +25,4 @@
 | `API_CODE_VERIFIER`            | true     |                    | APIコード検証鍵              |
 | `USER_EXPIRES_IN_SECONDS`      | true     |                    | ログインユーザーセッション保持期間      |
 | `DEFAULT_COGNITO_USER_POOL_ID` | true     |                    | CognitoユーザープールID       |
+| `WAITER_ENDPOINT`              | true     |                    | WAITER Endpoint        |
