@@ -48,7 +48,16 @@ $(function () {
         startDate: moment().subtract(29, 'days'),
         endDate: moment()
     }, function (start, end) {
-        window.alert('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        searchSalesAmount(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            function (data) {
+                createLineChart(data);
+            }
+        );
     })
 
     // jvectormap data
@@ -180,10 +189,15 @@ $(function () {
     });
     countNewTransaction(function () {
     });
-    searchOrders(function () {
-        console.log('creating line chart...');
-        createLineChart();
-    });
+    searchSalesAmount(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        function (data) {
+            createLineChart(data);
+        }
+    );
     searchLatestOrders(function () {
     });
 
@@ -196,6 +210,19 @@ $(function () {
     }).fail(function () {
     });
 });
+function searchSalesAmount(params, cb) {
+    $.getJSON(
+        '/dashboard/telemetry/SalesAmount',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        cb(data);
+    }).fail(function () {
+        alert('売上集計を取得できませんでした')
+    });
+}
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
@@ -220,33 +247,13 @@ function searchOrders(cb) {
         alert('注文履歴を取得できませんでした')
     });
 }
-function createLineChart() {
-    // 注文を日ごとに集計
-    var datas = [];
-    var threeMonthsAgo = moment(moment().add(-1, 'months').format('YYYY-MM-DDT00:00:00Z'));
-    var days = moment().diff(threeMonthsAgo, 'days');
-    for (i = 0; i < days; i++) {
-        var from = moment(threeMonthsAgo).add(i, 'days');
-        var to = moment(threeMonthsAgo).add(i + 1, 'days');
-        var orders4day = orders.filter(function (order) {
-            var orderDate = moment(order.orderDate);
-            return (orderDate >= from && orderDate <= to);
-        });
-        var sales = orders4day.reduce(
-            function (a, b) { return a + b.price },
-            0
-        );
-        datas.push({
-            date: from.toDate(),
-            sales: sales
-        });
-    }
-    console.log('datas', datas);
+function createLineChart(datas) {
+    console.log('creating Chart...datas:', datas.length);
     var line = new Morris.Line({
         element: 'line-chart',
         resize: true,
         data: datas.map(function (data) {
-            return { y: moment(data.date).format('YYYY-MM-DD'), item1: data.sales }
+            return { y: moment(data.measureDate).toISOString(), item1: data.value }
         }),
         xkey: 'y',
         ykeys: ['item1'],
@@ -263,24 +270,24 @@ function createLineChart() {
         gridTextSize: 10
     })
 
-    var orderCountByClient = {};
-    orders.forEach(function (order) {
-        if (!Array.isArray(order.customer.identifier)) {
-            return;
-        }
-        var clientIdentifier = order.customer.identifier.find(function (i) { return i.name === 'clientId' });
-        if (clientIdentifier !== undefined) {
-            if (orderCountByClient[clientIdentifier.value] === undefined) {
-                orderCountByClient[clientIdentifier.value] = 0;
-            }
-            orderCountByClient[clientIdentifier.value] += 1;
-        }
-    });
-    console.log(orderCountByClient);
-    Object.keys(orderCountByClient).forEach(function (clientId) {
-        var ratio = (orderCountByClient[clientId] / orders.length * 100).toFixed(1);
-        $('input.orderCountRatioByClient.userPoolClient-' + clientId).val(ratio).trigger('change');
-    });
+    // var orderCountByClient = {};
+    // orders.forEach(function (order) {
+    //     if (!Array.isArray(order.customer.identifier)) {
+    //         return;
+    //     }
+    //     var clientIdentifier = order.customer.identifier.find(function (i) { return i.name === 'clientId' });
+    //     if (clientIdentifier !== undefined) {
+    //         if (orderCountByClient[clientIdentifier.value] === undefined) {
+    //             orderCountByClient[clientIdentifier.value] = 0;
+    //         }
+    //         orderCountByClient[clientIdentifier.value] += 1;
+    //     }
+    // });
+    // console.log(orderCountByClient);
+    // Object.keys(orderCountByClient).forEach(function (clientId) {
+    //     var ratio = (orderCountByClient[clientId] / orders.length * 100).toFixed(1);
+    //     $('input.orderCountRatioByClient.userPoolClient-' + clientId).val(ratio).trigger('change');
+    // });
     /* jQueryKnob */
     $('.knob').knob()
 }
