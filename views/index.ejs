@@ -180,11 +180,11 @@
             <!-- right col (We are only adding the ID to make the widgets sortable)-->
             <section class="col-lg-5 connectedSortable">
                 <!-- solid sales graph -->
-                <div class="card bg-info-gradient">
+                <div class="card bg-info-gradient" id="salesAmount">
                     <div class="card-header no-border">
                         <h3 class="card-title">
                             <i class="fa fa-th mr-1"></i>
-                            Sales Graph
+                            売上金額
                         </h3>
 
                         <div class="card-tools">
@@ -217,6 +217,36 @@
                             <% }) %>
                         </div>
                         <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+
+                <!-- solid sales graph -->
+                <div class="card bg-danger-gradient" id="numPlaceOrder">
+                    <div class="card-header no-border">
+                        <h3 class="card-title">
+                            <i class="fa fa-th mr-1"></i>
+                            注文取引数
+                        </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-danger btn-sm daterange" data-toggle="tooltip" title="Date range">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                            <button type="button" class="btn bg-danger btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn bg-danger btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart" id="numPlaceOrderChart" style="height: 250px;"></div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer bg-transparent">
                     </div>
                     <!-- /.card-footer -->
                 </div>

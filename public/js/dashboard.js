@@ -36,7 +36,7 @@ $(function () {
     // bootstrap WYSIHTML5 - text editor
     $('.textarea').wysihtml5()
 
-    $('.daterange').daterangepicker({
+    $('#salesAmount .daterange').daterangepicker({
         ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -57,6 +57,28 @@ $(function () {
             function (data) {
                 createLineChart(data);
             }
+        );
+    })
+
+    $('#numPlaceOrder .daterange').daterangepicker({
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment()
+    }, function (start, end) {
+        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        searchNumPlaceOrder(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            function () { }
         );
     })
 
@@ -198,6 +220,13 @@ $(function () {
             createLineChart(data);
         }
     );
+    searchNumPlaceOrder(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        function () { }
+    );
     searchLatestOrders(function () {
     });
 
@@ -221,6 +250,95 @@ function searchSalesAmount(params, cb) {
         cb(data);
     }).fail(function () {
         alert('売上集計を取得できませんでした')
+    });
+}
+function searchNumPlaceOrder(params, cb) {
+    var dataStarted;
+    var dataCanceled;
+    var dataExpired;
+    var dataConfirmed;
+    var next = function () {
+        if (dataStarted !== undefined
+            && dataCanceled !== undefined) {
+            new Morris.Line({
+                element: 'numPlaceOrderChart',
+                resize: true,
+                data: dataStarted.map(function (data, index) {
+                    return {
+                        y: moment(data.measureDate).toISOString(),
+                        started: data.value,
+                        canceled: dataCanceled[index].value,
+                        expired: dataExpired[index].value,
+                        confirmed: dataConfirmed[index].value
+                    }
+                }),
+                xkey: 'y',
+                ykeys: ['started', 'canceled', 'expired', 'confirmed'],
+                labels: ['started', 'canceled', 'expired', 'confirmed'],
+                lineColors: ['#efefef', '#efefef', '#efefef', '#efefef'],
+                lineWidth: 2,
+                hideHover: 'auto',
+                gridTextColor: '#fff',
+                gridStrokeWidth: 0.4,
+                pointSize: 4,
+                pointStrokeColors: ['#efefef', '#efefef', '#efefef', '#efefef'],
+                gridLineColor: '#efefef',
+                gridTextFamily: 'Open Sans',
+                gridTextSize: 10
+            });
+        }
+    }
+
+    $.getJSON(
+        '/dashboard/telemetry/NumPlaceOrderStarted',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        dataStarted = data;
+        next();
+    }).fail(function () {
+        alert('取引数を取得できませんでした')
+    });
+
+    $.getJSON(
+        '/dashboard/telemetry/NumPlaceOrderCanceled',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        dataCanceled = data;
+        next();
+    }).fail(function () {
+        alert('取引数を取得できませんでした')
+    });
+
+    $.getJSON(
+        '/dashboard/telemetry/NumPlaceOrderExpired',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        dataExpired = data;
+        next();
+    }).fail(function () {
+        alert('取引数を取得できませんでした')
+    });
+
+    $.getJSON(
+        '/dashboard/telemetry/NumPlaceOrderConfirmed',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        dataConfirmed = data;
+        next();
+    }).fail(function () {
+        alert('取引数を取得できませんでした')
     });
 }
 function searchOrders(cb) {
