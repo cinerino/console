@@ -4,13 +4,12 @@
 var WAITER_ENDPOINT = $('input[name="waiterEndpoint"]').val();
 var waiterDatasets = [];
 var waiterRules = [];
-var labels4issuedPassports = [];
 
 var orders = [];
 var searchedAllOrders = false;
 var limit = 100;
 var page = 0;
-var visitorsChart;
+var numVisitorsChart;
 
 $(function () {
     'use strict'
@@ -495,7 +494,7 @@ function countNewTransaction(cb) {
     });
 }
 function initializeVisitorsChart() {
-    waiterDatasets = waiterRules.map((rule, index) => {
+    waiterDatasets = waiterRules.map(function (rule, index) {
         return {
             scope: rule.scope,
             data: [],
@@ -503,110 +502,45 @@ function initializeVisitorsChart() {
             numberOfIssuedPassports: 0,
         };
     });
-    console.log('waiterDatasets:', waiterDatasets);
 
-    var mode = 'index';
-    var intersect = true;
-    var ticksStyle = {
-        fontColor: '#495057',
-        fontStyle: 'bold'
-    };
-
-    var $visitorsChart = $('#visitors-chart');
-    visitorsChart = new Chart($visitorsChart, {
-        data: {
-            labels: labels4issuedPassports,
-            datasets: waiterDatasets.map((dataset) => {
-                return {
-                    type: 'line',
-                    label: dataset.scope,
-                    data: dataset.data,
-                    backgroundColor: 'transparent',
-                    borderColor: '#007bff',
-                    fill: false,
-                    borderDash: [0, 0],
-                    // pointRadius: 8,
-                    pointHoverRadius: 10,
-                    pointBorderColor: '#007bff',
-                    pointBackgroundColor: '#007bff'
-                };
-            })
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                mode: mode,
-                intersect: intersect
-            },
-            hover: {
-                mode: mode,
-                intersect: intersect
-            },
-            legend: {
-                display: false
-            },
-            // legend: {
-            //     position: 'bottom',
-            //     labels: {
-            //         fontColor: '#495057',
-            //     },
-            // },
-            scales: {
-                yAxes: [
-                    {
-                        display: true,
-                        scaleLabel: {
-                            display: false
-                            // display: true,
-                            // labelString: '発行リクエスト数(個)',
-                        },
-                        gridLines: {
-                            display: true,
-                            lineWidth: '4px',
-                            color: 'rgba(0, 0, 0, .2)',
-                            zeroLineColor: 'transparent'
-                        },
-                        ticks: $.extend({
-                            beginAtZero: true,
-                            suggestedMax: 200
-                        }, ticksStyle)
-                    },
-                ],
-                xAxes: [
-                    {
-                        type: 'time',
-                        // time: {
-                        //     unit: 'seconds',
-                        //     tooltipFormat: 'hh:mm:ss',
-                        //     displayFormats: {
-                        //         seconds: 'hh:mm:ss',
-                        //     },
-                        // },
-                        display: true,
-                        scaleLabel: {
-                            display: false
-                            // labelString: '日時',
-                        },
-                        gridLines: {
-                            display: false
-                        },
-                        // gridLines: {
-                        //     display: true,
-                        //     color: '#495057',
-                        // },
-                        ticks: ticksStyle
-                    },
-                ]
-            }
-        }
+    numVisitorsChart = new Morris.Line({
+        element: 'visitorsChart',
+        resize: true,
+        data: [],
+        xkey: 'y',
+        ykeys: waiterRules.map(function (rule) {
+            return rule.scope
+        }),
+        labels: waiterRules.map(function (rule) {
+            return rule.scope
+        }),
+        lineColors: ['#efefef'],
+        lineWidth: 2,
+        hideHover: 'auto',
+        gridTextColor: '#fff',
+        gridStrokeWidth: 0.4,
+        pointSize: 4,
+        pointStrokeColors: ['#efefef'],
+        gridLineColor: '#efefef',
+        gridTextFamily: 'Open Sans',
+        gridTextSize: 10
     });
 }
 function updateWaiterChart() {
-    visitorsChart.data.labels = labels4issuedPassports;
-    visitorsChart.data.datasets.forEach((dataset, index) => {
-        dataset.data = waiterDatasets[index].data;
-    });
-    visitorsChart.update();
+    numVisitorsChart.setData(waiterDatasets[0].data.map(function (d, index) {
+        var data = {
+            y: moment(d.x).toISOString()
+        };
+        waiterRules.forEach(function (rule, ruleIndex) {
+            if (waiterDatasets[ruleIndex][index] !== undefined) {
+                data[rule.scope] = waiterDatasets[ruleIndex][index].y
+            } else {
+                data[rule.scope] = 0;
+            }
+        });
+
+        return data;
+    }));
 }
 function startMonitoringWaiter() {
     initializeVisitorsChart();
@@ -615,10 +549,6 @@ function startMonitoringWaiter() {
     setInterval(
         function () {
             const now = new Date();
-
-            labels4issuedPassports.push(now);
-            labels4issuedPassports = labels4issuedPassports.slice(-numberOfDatapoints);
-
             waiterDatasets.map((_, index) => {
                 // 時点での発行数データでチャートを更新
                 waiterDatasets[index].data.push({

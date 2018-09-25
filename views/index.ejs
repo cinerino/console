@@ -95,42 +95,29 @@
             <input type="hidden" name="waiterEndpoint" value="<%= process.env.WAITER_ENDPOINT %>">
             <!-- Left col -->
             <section class="col-lg-7 connectedSortable">
-                <div class="card">
+                <!-- solid sales graph -->
+                <div class="card bg-dark-gradient" id="visitors">
                     <div class="card-header no-border">
-                        <div class="d-flex justify-content-between">
-                            <h3 class="card-title">取引訪問者</h3>
-                            <!-- <a href="javascript:void(0);">View Report</a> -->
+                        <h3 class="card-title">
+                            取引訪問者数
+                        </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn bg-dark btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn bg-dark btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex">
-                            <!-- <p class="d-flex flex-column">
-                                <span class="text-bold text-lg">820</span>
-                                <span>Visitors Over Time</span>
-                            </p> -->
-                            <!-- <p class="ml-auto d-flex flex-column text-right">
-                                <span class="text-success">
-                                    <i class="fa fa-arrow-up"></i> 12.5%
-                                </span>
-                                <span class="text-muted">Since last week</span>
-                            </p> -->
-                        </div>
-                        <!-- /.d-flex -->
-
-                        <div class="position-relative mb-4">
-                            <canvas id="visitors-chart" height="200"></canvas>
-                        </div>
-
-                        <div class="d-flex flex-row justify-content-end">
-                            <!-- <span class="mr-2">
-                                <i class="fa fa-square text-primary"></i> This Week
-                            </span>
-
-                            <span>
-                                <i class="fa fa-square text-gray"></i> Last Week
-                            </span> -->
-                        </div>
+                        <div class="chart" id="visitorsChart" style="height: 250px;"></div>
                     </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer bg-transparent">
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
                 <!-- /.card -->
 
@@ -155,7 +142,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chart" id="numPlaceOrderChart" style="height: 300px;"></div>
+                        <div class="chart" id="numPlaceOrderChart" style="height: 250px;"></div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer bg-transparent">
