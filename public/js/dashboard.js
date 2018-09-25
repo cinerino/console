@@ -55,7 +55,7 @@ $(function () {
                 measureThrough: end.toDate()
             },
             function (data) {
-                createLineChart(data);
+                createSalesAmountChart(data);
             }
         );
     })
@@ -78,7 +78,7 @@ $(function () {
                 measureFrom: start.toDate(),
                 measureThrough: end.toDate()
             },
-            function () { }
+            createNumPlaceOrderChart
         );
     })
 
@@ -216,16 +216,14 @@ $(function () {
             measureFrom: moment().subtract(29, 'days').toDate(),
             measureThrough: moment().toDate()
         },
-        function (data) {
-            createLineChart(data);
-        }
+        createSalesAmountChart
     );
     searchNumPlaceOrder(
         {
             measureFrom: moment().subtract(29, 'days').toDate(),
             measureThrough: moment().toDate()
         },
-        function () { }
+        createNumPlaceOrderChart
     );
     searchLatestOrders(function () {
     });
@@ -259,33 +257,11 @@ function searchNumPlaceOrder(params, cb) {
     var dataConfirmed;
     var next = function () {
         if (dataStarted !== undefined
-            && dataCanceled !== undefined) {
-            new Morris.Line({
-                element: 'numPlaceOrderChart',
-                resize: true,
-                data: dataStarted.map(function (data, index) {
-                    return {
-                        y: moment(data.measureDate).toISOString(),
-                        started: data.value,
-                        canceled: dataCanceled[index].value,
-                        expired: dataExpired[index].value,
-                        confirmed: dataConfirmed[index].value
-                    }
-                }),
-                xkey: 'y',
-                ykeys: ['started', 'canceled', 'expired', 'confirmed'],
-                labels: ['started', 'canceled', 'expired', 'confirmed'],
-                lineColors: ['#efefef', '#efefef', '#efefef', '#efefef'],
-                lineWidth: 2,
-                hideHover: 'auto',
-                gridTextColor: '#fff',
-                gridStrokeWidth: 0.4,
-                pointSize: 4,
-                pointStrokeColors: ['#efefef', '#efefef', '#efefef', '#efefef'],
-                gridLineColor: '#efefef',
-                gridTextFamily: 'Open Sans',
-                gridTextSize: 10
-            });
+            && dataCanceled !== undefined
+            && dataExpired !== undefined
+            && dataConfirmed !== undefined
+        ) {
+            cb(dataStarted, dataCanceled, dataExpired, dataConfirmed);
         }
     }
 
@@ -365,17 +341,45 @@ function searchOrders(cb) {
         alert('注文履歴を取得できませんでした')
     });
 }
-function createLineChart(datas) {
-    console.log('creating Chart...datas:', datas.length);
-    var line = new Morris.Line({
-        element: 'line-chart',
+function createNumPlaceOrderChart(dataStarted, dataCanceled, dataExpired, dataConfirmed) {
+    new Morris.Line({
+        element: 'numPlaceOrderChart',
         resize: true,
-        data: datas.map(function (data) {
-            return { y: moment(data.measureDate).toISOString(), item1: data.value }
+        data: dataStarted.map(function (data, index) {
+            return {
+                y: moment(data.measureDate).toISOString(),
+                started: data.value,
+                canceled: dataCanceled[index].value,
+                expired: dataExpired[index].value,
+                confirmed: dataConfirmed[index].value
+            }
         }),
         xkey: 'y',
-        ykeys: ['item1'],
-        labels: ['Item 1'],
+        ykeys: ['started', 'canceled', 'expired', 'confirmed'],
+        labels: ['started', 'canceled', 'expired', 'confirmed'],
+        lineColors: ['#efefef', '#79f67d', '#e96c6c', '#79ccf5'],
+        lineWidth: 2,
+        hideHover: 'auto',
+        gridTextColor: '#fff',
+        gridStrokeWidth: 0.4,
+        pointSize: 4,
+        pointStrokeColors: ['#efefef', '#79f67d', '#e96c6c', '#79ccf5'],
+        gridLineColor: '#efefef',
+        gridTextFamily: 'Open Sans',
+        gridTextSize: 10
+    });
+}
+function createSalesAmountChart(datas) {
+    console.log('creating salesAmountChart...datas:', datas.length);
+    var line = new Morris.Line({
+        element: 'salesAmountChart',
+        resize: true,
+        data: datas.map(function (data) {
+            return { y: moment(data.measureDate).toISOString(), salesAmount: data.value }
+        }),
+        xkey: 'y',
+        ykeys: ['salesAmount'],
+        labels: ['売上金額'],
         lineColors: ['#efefef'],
         lineWidth: 2,
         hideHover: 'auto',
