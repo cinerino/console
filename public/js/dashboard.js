@@ -200,7 +200,7 @@ $(function () {
     })
 
     /* jQueryKnob */
-    $('.knob').knob();
+    // $('.knob').knob();
 
     countNewOrder(function () {
     });
@@ -216,6 +216,13 @@ $(function () {
             measureThrough: moment().toDate()
         },
         createSalesAmountChart
+    );
+    searchSalesAmountByClient(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        createSalesAmountByClientChart
     );
     searchNumPlaceOrder(
         {
@@ -240,6 +247,22 @@ function searchSalesAmount(params, cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
         '/dashboard/telemetry/SalesAmount',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        cb(data);
+    }).fail(function () {
+        alert('売上集計を取得できませんでした')
+    }).always(function () {
+        $('#salesAmount .overlay').hide();
+    });
+}
+function searchSalesAmountByClient(params, cb) {
+    $('#salesAmount .overlay').show();
+    $.getJSON(
+        '/dashboard/telemetry/SalesAmountByClient',
         {
             measureFrom: moment(params.measureFrom).toISOString(),
             measureThrough: moment(params.measureThrough).toISOString()
@@ -394,26 +417,31 @@ function createSalesAmountChart(datas) {
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
         gridTextSize: 10
-    })
+    });
+}
+function createSalesAmountByClientChart(datas) {
+    var salesAmountByClient = {};
+    datas.forEach((data) => {
+        const value = data.value;
+        Object.keys(value).forEach(function (clientId) {
+            if (salesAmountByClient[clientId] === undefined) {
+                salesAmountByClient[clientId] = 0;
+            }
+            salesAmountByClient[clientId] += value[clientId];
+        });
+    });
 
-    // var orderCountByClient = {};
-    // orders.forEach(function (order) {
-    //     if (!Array.isArray(order.customer.identifier)) {
-    //         return;
-    //     }
-    //     var clientIdentifier = order.customer.identifier.find(function (i) { return i.name === 'clientId' });
-    //     if (clientIdentifier !== undefined) {
-    //         if (orderCountByClient[clientIdentifier.value] === undefined) {
-    //             orderCountByClient[clientIdentifier.value] = 0;
-    //         }
-    //         orderCountByClient[clientIdentifier.value] += 1;
-    //     }
-    // });
-    // console.log(orderCountByClient);
-    // Object.keys(orderCountByClient).forEach(function (clientId) {
-    //     var ratio = (orderCountByClient[clientId] / orders.length * 100).toFixed(1);
-    //     $('input.orderCountRatioByClient.userPoolClient-' + clientId).val(ratio).trigger('change');
-    // });
+    var totalAmount = Object.keys(salesAmountByClient).reduce(
+        function (a, b) {
+            return a + salesAmountByClient[b];
+        },
+        0
+    );
+    console.log(totalAmount, salesAmountByClient);
+    Object.keys(salesAmountByClient).forEach(function (clientId) {
+        var ratio = (salesAmountByClient[clientId] / totalAmount * 100).toFixed(1);
+        $('input.orderCountRatioByClient.userPoolClient-' + clientId).val(ratio).trigger('change');
+    });
     /* jQueryKnob */
     $('.knob').knob()
 }
