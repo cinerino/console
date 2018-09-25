@@ -53,9 +53,14 @@ $(function () {
                 measureFrom: start.toDate(),
                 measureThrough: end.toDate()
             },
-            function (data) {
-                createSalesAmountChart(data);
-            }
+            createSalesAmountChart
+        );
+        searchSalesAmountByClient(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createSalesAmountByClientChart
         );
     })
 
@@ -200,7 +205,7 @@ $(function () {
     })
 
     /* jQueryKnob */
-    // $('.knob').knob();
+    $('.knob').knob();
 
     countNewOrder(function () {
     });
@@ -421,7 +426,7 @@ function createSalesAmountChart(datas) {
 }
 function createSalesAmountByClientChart(datas) {
     var salesAmountByClient = {};
-    datas.forEach((data) => {
+    datas.forEach(function (data) {
         const value = data.value;
         Object.keys(value).forEach(function (clientId) {
             if (salesAmountByClient[clientId] === undefined) {
@@ -437,13 +442,14 @@ function createSalesAmountByClientChart(datas) {
         },
         0
     );
-    console.log(totalAmount, salesAmountByClient);
-    Object.keys(salesAmountByClient).forEach(function (clientId) {
-        var ratio = (salesAmountByClient[clientId] / totalAmount * 100).toFixed(1);
-        $('input.orderCountRatioByClient.userPoolClient-' + clientId).val(ratio).trigger('change');
+    $('#salesAmount input.knob').map(function () {
+        var clientId = $(this).attr('data-clientId');
+        var ratio = 0;
+        if (salesAmountByClient[clientId] !== undefined) {
+            ratio = (salesAmountByClient[clientId] / totalAmount * 100).toFixed(1);
+        }
+        $(this).val(ratio).trigger('change');
     });
-    /* jQueryKnob */
-    $('.knob').knob()
 }
 function searchLatestOrders(cb) {
     $.getJSON(
@@ -468,7 +474,7 @@ function searchLatestOrders(cb) {
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + order.orderDate + '</td>'
-                + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
+                + '<td>' + order.acceptedOffers.map(function (o) { return o.itemOffered.reservedTicket.ticketedSeat.seatNumber }).join(',') + '</td>'
                 + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
             ).appendTo(".latestOrders tbody");
         });
@@ -577,7 +583,7 @@ function startMonitoringWaiter() {
     setInterval(
         function () {
             const now = new Date();
-            waiterDatasets.map((_, index) => {
+            waiterDatasets.map(function (_, index) {
                 // 時点での発行数データでチャートを更新
                 waiterDatasets[index].data.push({
                     x: now,
@@ -593,7 +599,7 @@ function startMonitoringWaiter() {
 
     setInterval(
         function () {
-            waiterDatasets.map((dataset, index) => {
+            waiterDatasets.map(function (dataset, index) {
                 $.getJSON(
                     WAITER_ENDPOINT + '/passports/' + dataset.scope + '/currentIssueUnit',
                     {}

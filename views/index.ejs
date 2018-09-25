@@ -227,7 +227,7 @@
                         <div class="row">
                             <% userPoolClients.forEach(function(userPoolClient) { %>
                             <div class="col-4 text-center">
-                                <input type="text" class="knob orderCountRatioByClient userPoolClient-<%= userPoolClient.ClientId %>"
+                                <input type="text" class="knob" data-clientId="<%= userPoolClient.ClientId %>"
                                     data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
                                 <div class="text-white">
                                     <%= userPoolClient.ClientName %>
