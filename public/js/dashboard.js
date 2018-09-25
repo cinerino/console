@@ -238,6 +238,7 @@ $(function () {
     });
 });
 function searchSalesAmount(params, cb) {
+    $('#salesAmount .overlay').show();
     $.getJSON(
         '/dashboard/telemetry/SalesAmount',
         {
@@ -248,9 +249,12 @@ function searchSalesAmount(params, cb) {
         cb(data);
     }).fail(function () {
         alert('売上集計を取得できませんでした')
+    }).always(function () {
+        $('#salesAmount .overlay').hide();
     });
 }
 function searchNumPlaceOrder(params, cb) {
+    $('#numPlaceOrder .overlay').show();
     var dataStarted;
     var dataCanceled;
     var dataExpired;
@@ -261,6 +265,7 @@ function searchNumPlaceOrder(params, cb) {
             && dataExpired !== undefined
             && dataConfirmed !== undefined
         ) {
+            $('#numPlaceOrder .overlay').hide();
             cb(dataStarted, dataCanceled, dataExpired, dataConfirmed);
         }
     }
