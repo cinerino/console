@@ -200,11 +200,76 @@
             <!-- right col (We are only adding the ID to make the widgets sortable)-->
             <section class="col-lg-5 connectedSortable">
                 <!-- solid sales graph -->
-                <div class="card bg-info-gradient" id="salesAmount">
+                <div class="card bg-primary-gradient" id="salesAmount">
                     <div class="card-header no-border">
                         <h3 class="card-title">
                             <i class="fa fa-th mr-1"></i>
                             売上金額
+                        </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-primary btn-sm daterange" data-toggle="tooltip" title="Date range">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                            <button type="button" class="btn bg-primary btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn bg-primary btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart" id="salesAmountChart" style="height: 250px;"></div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer bg-transparent">
+                        <p class="text-center">
+                            <strong>決済方法比較</strong>
+                        </p>
+                        <div class="row mb-5">
+                            <% Object.keys(PaymentMethodType).forEach(function(key) { %>
+                            <div class="col-4 text-center">
+                                <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
+                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#86c0ff">
+                                <div class="text-white">
+                                    <%= PaymentMethodType[key] %>
+                                </div>
+                            </div>
+                            <!-- ./col -->
+                            <% }) %>
+                        </div>
+                        <!-- /.row -->
+
+                        <p class="text-center">
+                            <strong>クライアント比較</strong>
+                        </p>
+                        <div class="row mb-5">
+                            <% userPoolClients.forEach(function(userPoolClient) { %>
+                            <div class="col-4 text-center">
+                                <input type="text" class="knob byClient" data-clientId="<%= userPoolClient.ClientId %>"
+                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#86c0ff">
+                                <div class="text-white">
+                                    <%= userPoolClient.ClientName %>
+                                </div>
+                            </div>
+                            <!-- ./col -->
+                            <% }) %>
+                        </div>
+                    </div>
+                    <!-- /.card-footer -->
+                    <div class="overlay">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+                <!-- solid sales graph -->
+                <div class="card bg-info-gradient" id="numOrderItems">
+                    <div class="card-header no-border">
+                        <h3 class="card-title">
+                            <i class="fa fa-th mr-1"></i>
+                            注文アイテム数
                         </h3>
 
                         <div class="card-tools">
@@ -220,14 +285,34 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chart" id="salesAmountChart" style="height: 250px;"></div>
+                        <div class="chart" id="numOrderItemsChart" style="height: 250px;"></div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer bg-transparent">
-                        <div class="row">
+                        <p class="text-center">
+                            <strong>決済方法比較</strong>
+                        </p>
+                        <div class="row mb-5">
+                            <% Object.keys(PaymentMethodType).forEach(function(key) { %>
+                            <div class="col-4 text-center">
+                                <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
+                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
+                                <div class="text-white">
+                                    <%= PaymentMethodType[key] %>
+                                </div>
+                            </div>
+                            <!-- ./col -->
+                            <% }) %>
+                        </div>
+                        <!-- /.row -->
+
+                        <p class="text-center">
+                            <strong>クライアント比較</strong>
+                        </p>
+                        <div class="row mb-5">
                             <% userPoolClients.forEach(function(userPoolClient) { %>
                             <div class="col-4 text-center">
-                                <input type="text" class="knob" data-clientId="<%= userPoolClient.ClientId %>"
+                                <input type="text" class="knob byClient" data-clientId="<%= userPoolClient.ClientId %>"
                                     data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
                                 <div class="text-white">
                                     <%= userPoolClient.ClientName %>

@@ -62,7 +62,50 @@ $(function () {
             },
             createSalesAmountByClientChart
         );
-    })
+        searchSalesAmountByPaymentMethod(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createSalesAmountByPaymentMethodChart
+        );
+    });
+
+    $('#numOrderItems .daterange').daterangepicker({
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment()
+    }, function (start, end) {
+        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        searchNumOrderItems(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createNumOrderItemsChart
+        );
+        searchNumOrderItemsByClient(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createNumOrderItemsByClientChart
+        );
+        searchNumOrderItemsByPaymentMethod(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createNumOrderItemsByPaymentMethodChart
+        );
+    });
 
     $('#numPlaceOrder .daterange').daterangepicker({
         ranges: {
@@ -84,7 +127,7 @@ $(function () {
             },
             createNumPlaceOrderChart
         );
-    })
+    });
 
     // jvectormap data
     var visitorsData = {
@@ -205,7 +248,10 @@ $(function () {
     })
 
     /* jQueryKnob */
-    $('.knob').knob();
+    $('#salesAmount .knob.byClient').knob();
+    $('#salesAmount .knob.byPaymentMethod').knob();
+    $('#numOrderItems .knob.byClient').knob();
+    $('#numOrderItems .knob.byPaymentMethod').knob();
 
     countNewOrder(function () {
     });
@@ -228,6 +274,34 @@ $(function () {
             measureThrough: moment().toDate()
         },
         createSalesAmountByClientChart
+    );
+    searchSalesAmountByPaymentMethod(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        createSalesAmountByPaymentMethodChart
+    );
+    searchNumOrderItems(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        createNumOrderItemsChart
+    );
+    searchNumOrderItemsByClient(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        createNumOrderItemsByClientChart
+    );
+    searchNumOrderItemsByPaymentMethod(
+        {
+            measureFrom: moment().subtract(29, 'days').toDate(),
+            measureThrough: moment().toDate()
+        },
+        createNumOrderItemsByPaymentMethodChart
     );
     searchNumPlaceOrder(
         {
@@ -278,6 +352,70 @@ function searchSalesAmountByClient(params, cb) {
         alert('売上集計を取得できませんでした')
     }).always(function () {
         $('#salesAmount .overlay').hide();
+    });
+}
+function searchSalesAmountByPaymentMethod(params, cb) {
+    $('#salesAmount .overlay').show();
+    $.getJSON(
+        '/dashboard/telemetry/SalesAmountByPaymentMethod',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        cb(data);
+    }).fail(function () {
+        alert('売上集計を取得できませんでした')
+    }).always(function () {
+        $('#salesAmount .overlay').hide();
+    });
+}
+function searchNumOrderItems(params, cb) {
+    $('#numOrderItems .overlay').show();
+    $.getJSON(
+        '/dashboard/telemetry/NumOrderItems',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        cb(data);
+    }).fail(function () {
+        alert('注文アイテム数集計を取得できませんでした')
+    }).always(function () {
+        $('#numOrderItems .overlay').hide();
+    });
+}
+function searchNumOrderItemsByClient(params, cb) {
+    $('#numOrderItems .overlay').show();
+    $.getJSON(
+        '/dashboard/telemetry/NumOrderItemsByClient',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        cb(data);
+    }).fail(function () {
+        alert('注文アイテム数集計を取得できませんでした')
+    }).always(function () {
+        $('#numOrderItems .overlay').hide();
+    });
+}
+function searchNumOrderItemsByPaymentMethod(params, cb) {
+    $('#numOrderItems .overlay').show();
+    $.getJSON(
+        '/dashboard/telemetry/NumOrderItemsByPaymentMethod',
+        {
+            measureFrom: moment(params.measureFrom).toISOString(),
+            measureThrough: moment(params.measureThrough).toISOString()
+        }
+    ).done(function (data) {
+        cb(data);
+    }).fail(function () {
+        alert('注文アイテム数集計を取得できませんでした')
+    }).always(function () {
+        $('#numOrderItems .overlay').hide();
     });
 }
 function searchNumPlaceOrder(params, cb) {
@@ -442,11 +580,115 @@ function createSalesAmountByClientChart(datas) {
         },
         0
     );
-    $('#salesAmount input.knob').map(function () {
+    $('#salesAmount input.knob.byClient').map(function () {
         var clientId = $(this).attr('data-clientId');
         var ratio = 0;
         if (salesAmountByClient[clientId] !== undefined) {
             ratio = (salesAmountByClient[clientId] / totalAmount * 100).toFixed(1);
+        }
+        $(this).val(ratio).trigger('change');
+    });
+}
+function createSalesAmountByPaymentMethodChart(datas) {
+    var salesAmountByPaymentMethod = {};
+    datas.forEach(function (data) {
+        const value = data.value;
+        Object.keys(value).forEach(function (paymentMethod) {
+            if (salesAmountByPaymentMethod[paymentMethod] === undefined) {
+                salesAmountByPaymentMethod[paymentMethod] = 0;
+            }
+            salesAmountByPaymentMethod[paymentMethod] += value[paymentMethod];
+        });
+    });
+
+    var totalAmount = Object.keys(salesAmountByPaymentMethod).reduce(
+        function (a, b) {
+            return a + salesAmountByPaymentMethod[b];
+        },
+        0
+    );
+    $('#salesAmount input.knob.byPaymentMethod').map(function () {
+        var paymentMethod = $(this).attr('data-paymentMethod');
+        var ratio = 0;
+        if (salesAmountByPaymentMethod[paymentMethod] !== undefined) {
+            ratio = (salesAmountByPaymentMethod[paymentMethod] / totalAmount * 100).toFixed(1);
+        }
+        $(this).val(ratio).trigger('change');
+    });
+}
+function createNumOrderItemsChart(datas) {
+    console.log('creating NumOrderItemsChart...datas:', datas.length);
+    var line = new Morris.Line({
+        element: 'numOrderItemsChart',
+        resize: true,
+        data: datas.map(function (data) {
+            return { y: moment(data.measureDate).toISOString(), numOrderItems: data.value }
+        }),
+        xkey: 'y',
+        ykeys: ['numOrderItems'],
+        labels: ['注文アイテム数'],
+        lineColors: ['#efefef'],
+        lineWidth: 2,
+        hideHover: 'auto',
+        gridTextColor: '#fff',
+        gridStrokeWidth: 0.4,
+        pointSize: 4,
+        pointStrokeColors: ['#efefef'],
+        gridLineColor: '#efefef',
+        gridTextFamily: 'Open Sans',
+        gridTextSize: 10
+    });
+}
+function createNumOrderItemsByClientChart(datas) {
+    var numOrderItemsByClient = {};
+    datas.forEach(function (data) {
+        const value = data.value;
+        Object.keys(value).forEach(function (clientId) {
+            if (numOrderItemsByClient[clientId] === undefined) {
+                numOrderItemsByClient[clientId] = 0;
+            }
+            numOrderItemsByClient[clientId] += value[clientId];
+        });
+    });
+
+    var totalNumOrderItems = Object.keys(numOrderItemsByClient).reduce(
+        function (a, b) {
+            return a + numOrderItemsByClient[b];
+        },
+        0
+    );
+    $('#numOrderItems input.knob.byClient').map(function () {
+        var clientId = $(this).attr('data-clientId');
+        var ratio = 0;
+        if (numOrderItemsByClient[clientId] !== undefined) {
+            ratio = (numOrderItemsByClient[clientId] / totalNumOrderItems * 100).toFixed(1);
+        }
+        $(this).val(ratio).trigger('change');
+    });
+}
+function createNumOrderItemsByPaymentMethodChart(datas) {
+    var numOrderItemsByPaymentMethod = {};
+    datas.forEach(function (data) {
+        const value = data.value;
+        Object.keys(value).forEach(function (paymentMethod) {
+            if (numOrderItemsByPaymentMethod[paymentMethod] === undefined) {
+                numOrderItemsByPaymentMethod[paymentMethod] = 0;
+            }
+            numOrderItemsByPaymentMethod[paymentMethod] += value[paymentMethod];
+        });
+    });
+
+    var totalNumOrderItems = Object.keys(numOrderItemsByPaymentMethod).reduce(
+        function (a, b) {
+            return a + numOrderItemsByPaymentMethod[b];
+        },
+        0
+    );
+    $('#numOrderItems input.knob.byPaymentMethod').map(function () {
+        var paymentMethod = $(this).attr('data-paymentMethod');
+        var ratio = 0;
+        if (numOrderItemsByPaymentMethod[paymentMethod] !== undefined) {
+            ratio = (numOrderItemsByPaymentMethod[paymentMethod] / totalNumOrderItems * 100).toFixed(1);
         }
         $(this).val(ratio).trigger('change');
     });

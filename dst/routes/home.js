@@ -30,7 +30,8 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
         res.render('index', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
-            userPoolClients: searchUserPoolClientsResult.data
+            userPoolClients: searchUserPoolClientsResult.data,
+            PaymentMethodType: cinerinoapi.factory.paymentMethodType
         });
     }
     catch (error) {
