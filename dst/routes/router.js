@@ -15,6 +15,7 @@ const organizations_1 = require("./organizations");
 const tasks_1 = require("./tasks");
 const transactions_1 = require("./transactions");
 const userPools_1 = require("./userPools");
+const waiter_1 = require("./waiter");
 const router = express.Router();
 // middleware that is specific to this router
 // router.use((req, res, next) => {
@@ -32,4 +33,5 @@ router.use('/organizations', organizations_1.default);
 router.use('/tasks', tasks_1.default);
 router.use('/transactions', transactions_1.default);
 router.use('/userPools', userPools_1.default);
+router.use('/waiter', waiter_1.default);
 exports.default = router;
