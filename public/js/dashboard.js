@@ -811,9 +811,12 @@ function updateWaiterChart() {
         var data = {
             y: moment(d.x).toISOString()
         };
-        waiterRules.forEach(function (rule, ruleIndex) {
-            if (waiterDatasets[ruleIndex][index] !== undefined) {
-                data[rule.scope] = waiterDatasets[ruleIndex][index].y
+        waiterRules.forEach(function (rule) {
+            var dataset4scope = waiterDatasets.find(function (dataset) {
+                return dataset.scope === rule.scope;
+            });
+            if (dataset4scope !== undefined) {
+                data[rule.scope] = dataset4scope.data[index].y
             } else {
                 data[rule.scope] = 0;
             }
