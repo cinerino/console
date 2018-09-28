@@ -583,7 +583,7 @@ function createSalesAmountByClientChart(datas) {
     $('#salesAmount input.knob.byClient').map(function () {
         var clientId = $(this).attr('data-clientId');
         var ratio = 0;
-        if (salesAmountByClient[clientId] !== undefined) {
+        if (salesAmountByClient[clientId] !== undefined && totalAmount > 0) {
             ratio = (salesAmountByClient[clientId] / totalAmount * 100).toFixed(1);
         }
         $(this).val(ratio).trigger('change');
@@ -610,7 +610,7 @@ function createSalesAmountByPaymentMethodChart(datas) {
     $('#salesAmount input.knob.byPaymentMethod').map(function () {
         var paymentMethod = $(this).attr('data-paymentMethod');
         var ratio = 0;
-        if (salesAmountByPaymentMethod[paymentMethod] !== undefined) {
+        if (salesAmountByPaymentMethod[paymentMethod] !== undefined && totalAmount > 0) {
             ratio = (salesAmountByPaymentMethod[paymentMethod] / totalAmount * 100).toFixed(1);
         }
         $(this).val(ratio).trigger('change');
@@ -660,7 +660,7 @@ function createNumOrderItemsByClientChart(datas) {
     $('#numOrderItems input.knob.byClient').map(function () {
         var clientId = $(this).attr('data-clientId');
         var ratio = 0;
-        if (numOrderItemsByClient[clientId] !== undefined) {
+        if (numOrderItemsByClient[clientId] !== undefined && totalNumOrderItems > 0) {
             ratio = (numOrderItemsByClient[clientId] / totalNumOrderItems * 100).toFixed(1);
         }
         $(this).val(ratio).trigger('change');
@@ -687,7 +687,7 @@ function createNumOrderItemsByPaymentMethodChart(datas) {
     $('#numOrderItems input.knob.byPaymentMethod').map(function () {
         var paymentMethod = $(this).attr('data-paymentMethod');
         var ratio = 0;
-        if (numOrderItemsByPaymentMethod[paymentMethod] !== undefined) {
+        if (numOrderItemsByPaymentMethod[paymentMethod] !== undefined && totalNumOrderItems > 0) {
             ratio = (numOrderItemsByPaymentMethod[paymentMethod] / totalNumOrderItems * 100).toFixed(1);
         }
         $(this).val(ratio).trigger('change');
@@ -770,11 +770,11 @@ function countNewTransaction(cb) {
     });
 }
 function initializeVisitorsChart() {
-    waiterDatasets = waiterRules.map(function (rule, index) {
+    var colorChoices = ['#efefef', '#79f67d', '#e96c6c', '#79ccf5'];
+    waiterDatasets = waiterRules.map(function (rule) {
         return {
             scope: rule.scope,
             data: [],
-            // color: colorChoices[index],
             numberOfIssuedPassports: 0,
         };
     });
@@ -790,13 +790,17 @@ function initializeVisitorsChart() {
         labels: waiterRules.map(function (rule) {
             return rule.scope
         }),
-        lineColors: ['#efefef'],
+        lineColors: waiterRules.map(function (rule, index) {
+            return colorChoices[index % waiterRules.length];
+        }),
         lineWidth: 2,
         hideHover: 'auto',
         gridTextColor: '#fff',
         gridStrokeWidth: 0.4,
         pointSize: 4,
-        pointStrokeColors: ['#efefef'],
+        pointStrokeColors: waiterRules.map(function (rule, index) {
+            return colorChoices[index % waiterRules.length];
+        }),
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
         gridTextSize: 10

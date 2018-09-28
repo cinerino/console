@@ -58,8 +58,10 @@ dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(this, vo
         ];
         const searchExitResult = yield placeOrderService.search(searchConditions);
         res.json({
-            // tslint:disable-next-line:no-magic-numbers
-            rate: Math.floor(searchExitResult.totalCount / searchResult.totalCount * 100)
+            rate: (searchResult.totalCount > 0)
+                // tslint:disable-next-line:no-magic-numbers
+                ? Math.floor(searchExitResult.totalCount / searchResult.totalCount * 100)
+                : 0
         });
     }
     catch (error) {
