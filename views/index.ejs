@@ -232,37 +232,67 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer bg-transparent">
-                        <p class="text-center">
-                            <strong>決済方法比較</strong>
-                        </p>
-                        <div class="row mb-5">
-                            <% Object.keys(PaymentMethodType).forEach(function(key) { %>
-                            <div class="col-4 text-center">
-                                <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
-                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#86c0ff">
-                                <div class="text-white">
-                                    <%= PaymentMethodType[key] %>
-                                </div>
-                            </div>
-                            <!-- ./col -->
-                            <% }) %>
+                        <div class="row mb-2">
+                            <ul class="nav nav-pills ml-auto mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link bg-transparent active show" href="#salesAmountByPaymentMethod"
+                                        data-toggle="tab">決済方法</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link bg-transparent" href="#salesAmountByClient" data-toggle="tab">クライアント</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link bg-transparent" href="#salesAmountBySeller" data-toggle="tab">販売者</a>
+                                </li>
+                            </ul>
                         </div>
-                        <!-- /.row -->
-
-                        <p class="text-center">
-                            <strong>クライアント比較</strong>
-                        </p>
-                        <div class="row mb-5">
-                            <% userPoolClients.forEach(function(userPoolClient) { %>
-                            <div class="col-4 text-center">
-                                <input type="text" class="knob byClient" data-clientId="<%= userPoolClient.ClientId %>"
-                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#86c0ff">
-                                <div class="text-white">
-                                    <%= userPoolClient.ClientName %>
+                        <div class="tab-content p-0">
+                            <!-- Morris chart - Sales -->
+                            <div class="chart tab-pane active show" id="salesAmountByPaymentMethod">
+                                <div class="row">
+                                    <% Object.keys(PaymentMethodType).forEach(function(key) { %>
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
+                                            data-readonly="true" value="0" data-width="60" data-height="60"
+                                            data-fgColor="#86c0ff">
+                                        <div class="text-white">
+                                            <%= PaymentMethodType[key] %>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <% }) %>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <% }) %>
+                            <div class="chart tab-pane" id="salesAmountByClient">
+                                <div class="row">
+                                    <% userPoolClients.forEach(function(userPoolClient) { %>
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob byClient" data-clientId="<%= userPoolClient.ClientId %>"
+                                            data-readonly="true" value="0" data-width="60" data-height="60"
+                                            data-fgColor="#86c0ff">
+                                        <div class="text-white">
+                                            <%= userPoolClient.ClientName %>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <% }) %>
+                                </div>
+                            </div>
+                            <div class="chart tab-pane" id="salesAmountBySeller">
+                                <div class="row">
+                                    <% sellers.forEach(function(seller) { %>
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob bySeller" data-sellerId="<%= seller.id %>"
+                                            data-readonly="true" value="0" data-width="60" data-height="60"
+                                            data-fgColor="#86c0ff">
+                                        <div class="text-white">
+                                            <%= seller.name.ja %>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <% }) %>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- /.card-footer -->
@@ -297,39 +327,71 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer bg-transparent">
-                        <p class="text-center">
-                            <strong>決済方法比較</strong>
-                        </p>
-                        <div class="row mb-5">
-                            <% Object.keys(PaymentMethodType).forEach(function(key) { %>
-                            <div class="col-4 text-center">
-                                <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
-                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
-                                <div class="text-white">
-                                    <%= PaymentMethodType[key] %>
-                                </div>
-                            </div>
-                            <!-- ./col -->
-                            <% }) %>
+                        <div class="row mb-2">
+                            <ul class="nav nav-pills ml-auto mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link bg-transparent active show" href="#numOrderItemsByPaymentMethod"
+                                        data-toggle="tab">決済方法</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link bg-transparent" href="#numOrderItemsByClient" data-toggle="tab">クライアント</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link bg-transparent" href="#numOrderItemsBySeller" data-toggle="tab">販売者</a>
+                                </li>
+                            </ul>
                         </div>
-                        <!-- /.row -->
-
-                        <p class="text-center">
-                            <strong>クライアント比較</strong>
-                        </p>
-                        <div class="row mb-5">
-                            <% userPoolClients.forEach(function(userPoolClient) { %>
-                            <div class="col-4 text-center">
-                                <input type="text" class="knob byClient" data-clientId="<%= userPoolClient.ClientId %>"
-                                    data-readonly="true" value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
-                                <div class="text-white">
-                                    <%= userPoolClient.ClientName %>
+                        <div class="tab-content p-0">
+                            <!-- Morris chart - Sales -->
+                            <div class="chart tab-pane active show" id="numOrderItemsByPaymentMethod">
+                                <div class="row">
+                                    <% Object.keys(PaymentMethodType).forEach(function(key) { %>
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
+                                            data-readonly="true" value="0" data-width="60" data-height="60"
+                                            data-fgColor="#39CCCC">
+                                        <div class="text-white">
+                                            <%= PaymentMethodType[key] %>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <% }) %>
                                 </div>
+                                <!-- /.row -->
                             </div>
-                            <!-- ./col -->
-                            <% }) %>
+                            <div class="chart tab-pane" id="numOrderItemsByClient">
+                                <div class="row">
+                                    <% userPoolClients.forEach(function(userPoolClient) { %>
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob byClient" data-clientId="<%= userPoolClient.ClientId %>"
+                                            data-readonly="true" value="0" data-width="60" data-height="60"
+                                            data-fgColor="#39CCCC">
+                                        <div class="text-white">
+                                            <%= userPoolClient.ClientName %>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <% }) %>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <div class="chart tab-pane" id="numOrderItemsBySeller">
+                                <div class="row">
+                                    <% sellers.forEach(function(seller) { %>
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob bySeller" data-sellerId="<%= seller.id %>"
+                                            data-readonly="true" value="0" data-width="60" data-height="60"
+                                            data-fgColor="#39CCCC">
+                                        <div class="text-white">
+                                            <%= seller.name.ja %>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <% }) %>
+                                </div>
+                                <!-- /.row -->
+                            </div>
                         </div>
-                        <!-- /.row -->
                     </div>
                     <!-- /.card-footer -->
                     <div class="overlay">

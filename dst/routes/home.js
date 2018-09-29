@@ -23,15 +23,21 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
+        const organizationService = new cinerinoapi.service.Organization({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
         const userPool = yield userPoolService.findById({
             userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
         });
         const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
+        const searchMovieTheatersResult = yield organizationService.searchMovieTheaters({});
         res.render('index', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
             userPoolClients: searchUserPoolClientsResult.data,
-            PaymentMethodType: cinerinoapi.factory.paymentMethodType
+            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            sellers: searchMovieTheatersResult.data
         });
     }
     catch (error) {
