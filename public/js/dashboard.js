@@ -69,6 +69,13 @@ $(function () {
             },
             createSalesAmountByPaymentMethodChart
         );
+        searchSalesAmountBySeller(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createSalesAmountBySellerChart
+        );
     });
 
     $('#numOrderItems .daterange').daterangepicker({
@@ -104,6 +111,13 @@ $(function () {
                 measureThrough: end.toDate()
             },
             createNumOrderItemsByPaymentMethodChart
+        );
+        searchNumOrderItemsBySeller(
+            {
+                measureFrom: start.toDate(),
+                measureThrough: end.toDate()
+            },
+            createNumOrderItemsBySellerChart
         );
     });
 
