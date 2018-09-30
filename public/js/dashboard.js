@@ -363,7 +363,7 @@ function searchSalesAmount(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('売上集計を取得できませんでした')
+        console.error('売上集計を取得できませんでした')
     }).always(function () {
         $('#salesAmount .overlay').hide();
     });
@@ -379,7 +379,7 @@ function searchSalesAmountByClient(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('売上集計を取得できませんでした')
+        console.error('売上集計を取得できませんでした')
     }).always(function () {
         $('#salesAmount .overlay').hide();
     });
@@ -395,7 +395,7 @@ function searchSalesAmountByPaymentMethod(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('売上集計を取得できませんでした')
+        console.error('売上集計を取得できませんでした')
     }).always(function () {
         $('#salesAmount .overlay').hide();
     });
@@ -411,7 +411,7 @@ function searchSalesAmountBySeller(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('売上集計を取得できませんでした')
+        console.error('売上集計を取得できませんでした')
     }).always(function () {
         $('#salesAmount .overlay').hide();
     });
@@ -427,7 +427,7 @@ function searchNumOrderItems(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('注文アイテム数集計を取得できませんでした')
+        console.error('注文アイテム数集計を取得できませんでした')
     }).always(function () {
         $('#numOrderItems .overlay').hide();
     });
@@ -443,7 +443,7 @@ function searchNumOrderItemsByClient(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('注文アイテム数集計を取得できませんでした')
+        console.error('注文アイテム数集計を取得できませんでした')
     }).always(function () {
         $('#numOrderItems .overlay').hide();
     });
@@ -459,7 +459,7 @@ function searchNumOrderItemsByPaymentMethod(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('注文アイテム数集計を取得できませんでした')
+        console.error('注文アイテム数集計を取得できませんでした')
     }).always(function () {
         $('#numOrderItems .overlay').hide();
     });
@@ -475,7 +475,7 @@ function searchNumOrderItemsBySeller(params, cb) {
     ).done(function (data) {
         cb(data);
     }).fail(function () {
-        alert('注文アイテム数集計を取得できませんでした')
+        console.error('注文アイテム数集計を取得できませんでした')
     }).always(function () {
         $('#numOrderItems .overlay').hide();
     });
@@ -492,7 +492,7 @@ function searchNumPlaceOrder(params, cb) {
         cb(data);
         $('#numPlaceOrder .overlay').hide();
     }).fail(function () {
-        alert('取引数を取得できませんでした')
+        console.error('取引数を取得できませんでした')
     });
 }
 function searchOrders(cb) {
@@ -516,7 +516,7 @@ function searchOrders(cb) {
             cb();
         }
     }).fail(function () {
-        alert('注文履歴を取得できませんでした')
+        console.error('注文履歴を取得できませんでした')
     });
 }
 function createNumPlaceOrderChart(datas) {
@@ -785,7 +785,7 @@ function searchLatestOrders(cb) {
         });
         cb();
     }).fail(function () {
-        alert('最近の注文を取得できませんでした')
+        console.error('最近の注文を取得できませんでした')
     });
 }
 function countNewOrder(cb) {
@@ -796,7 +796,7 @@ function countNewOrder(cb) {
         $('#newOrderCount').html(data.totalCount.toString());
         cb();
     }).fail(function () {
-        alert('新規注文数を取得できませんでした')
+        console.error('新規注文数を取得できませんでした')
     });
 }
 function aggregateExitRate(cb) {
@@ -807,7 +807,7 @@ function aggregateExitRate(cb) {
         $('#exitRate').html(data.rate.toString() + '<sup style="font-size: 20px">%</sup>');
         cb();
     }).fail(function () {
-        alert('離脱率を取得できませんでした')
+        console.error('離脱率を取得できませんでした')
     });
 }
 function countNewUser(cb) {
@@ -818,7 +818,7 @@ function countNewUser(cb) {
         $('#newUserCount').html(data.totalCount.toString());
         cb();
     }).fail(function () {
-        alert('新規ユーザー数を取得できませんでした')
+        console.error('新規ユーザー数を取得できませんでした')
     });
 }
 function countNewTransaction(cb) {
@@ -829,7 +829,7 @@ function countNewTransaction(cb) {
         $('#newTransactionCount').html(data.totalCount.toString());
         cb();
     }).fail(function () {
-        alert('新規取引数を取得できませんでした')
+        console.error('新規取引数を取得できませんでした')
     });
 }
 function initializeVisitorsChart() {

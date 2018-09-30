@@ -98,7 +98,6 @@
                                     <th>イベント</th>
                                     <th>場所</th>
                                     <th>作品</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -107,7 +106,6 @@
                                     <th>イベント</th>
                                     <th>場所</th>
                                     <th>作品</th>
-                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -154,8 +152,20 @@
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li>' + data.id + '</li>'
+                        var thumbnailImageUrl = (data.workPerformed.thumbnailUrl !== undefined)
+                            ? data.workPerformed.thumbnailUrl
+                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrhpsOJOcLBwc1SPD9sWlinildy4S05-I2Wf6z2wRXnSxbmtRz';
+
+                        return '<ul class="products-list">'
+                            + '<li class="item">'
+                            + '<div class="product-img">'
+                            + '<img src="' + thumbnailImageUrl + '" alt="Product Image" class="img-size-50">'
+                            + '</div>'
+                            + '<div class="product-info">'
+                            + '<a target="_blank" href="/events/screeningEvent/' + data.id + '">' + data.id + '</a>'
+                            + '</div>'
+                            + '</li>'
+                            // + '<li><a target="_blank" href="/events/screeningEvent/' + data.id + '">' + data.id + '</a></li>'
                             + '</ul>';
                     }
                 },
@@ -166,7 +176,7 @@
                             + '<li>' + data.superEvent.name.ja + '</li>'
                             + '<li>' + data.superEvent.alternativeHeadline + '</li>'
                             + '<li>' + data.name.ja + '</li>'
-                            + '<li>' + data.startDate + '-' + data.endDate + '</li>'
+                            + '<li>' + data.startDate + ' - ' + data.endDate + '</li>'
                             + '</ul>';
                     }
                 },
@@ -184,15 +194,7 @@
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
                             + '<li>' + data.workPerformed.name + '</li>'
-                            + '<li>' + data.workPerformed.duration + '</li>'
-                            + '</ul>';
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="/events/screeningEvent/' + data.id + '">詳細</a>' + '</li>'
+                            + '<li>' + moment.duration(data.workPerformed.duration).asMinutes() + ' minutes</li>'
                             + '</ul>';
                     }
                 }

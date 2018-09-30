@@ -118,6 +118,7 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void
             id: req.params.id
         });
         res.render('events/screeningEvent/show', {
+            message: '',
             moment: moment,
             event: event,
             orders: []

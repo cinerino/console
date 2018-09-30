@@ -3,9 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">販売者編集[
-                    <%= movieTheater.name.ja %>]
-                </h1>
+                <h1 class="m-0 text-dark">販売者詳細</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -16,7 +14,7 @@
                     <li class="breadcrumb-item">
                         <a href="/organizations/movieTheater">販売者検索</a>
                     </li>
-                    <li class="breadcrumb-item active">販売者編集</li>
+                    <li class="breadcrumb-item active">販売者詳細</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -229,6 +227,7 @@ const movieTheaterJson = JSON.stringify(movieTheater).replace(/"/g, '\\\"');
             '/organizations/movieTheater/' + movieTheater.id + '/orders',
             { limit: limit, page: page }
         ).done(function (data) {
+            $('#orderCount').html(data.totalCount.toString());
             searchedAllOrders = (data.data.length < limit);
             $.each(data.data, function (key, order) {
                 orders.push(order);
@@ -245,8 +244,6 @@ const movieTheaterJson = JSON.stringify(movieTheater).replace(/"/g, '\\\"');
                     + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
                     + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
                 ).appendTo("#orders tbody");
-
-                $('#orderCount').html(data.totalCount.toString());
             });
             if (!searchedAllOrders) {
                 searchOrders(cb);
@@ -254,7 +251,7 @@ const movieTheaterJson = JSON.stringify(movieTheater).replace(/"/g, '\\\"');
                 cb();
             }
         }).fail(function () {
-            alert('注文履歴を取得できませんでした')
+            console.error('注文履歴を取得できませんでした')
         });
     }
 

@@ -196,6 +196,7 @@ const userPoolClientJson = JSON.stringify(userPoolClient).replace(/"/g, '\\\"');
             '/userPools/' + userPoolClient.UserPoolId + '/clients/' + userPoolClient.ClientId + '/orders',
             { limit: limit, page: page }
         ).done(function (data) {
+            $('#orderCount').html(data.totalCount.toString());
             searchedAllOrders = (data.data.length < limit);
             $.each(data.data, function (key, order) {
                 orders.push(order);
@@ -212,8 +213,6 @@ const userPoolClientJson = JSON.stringify(userPoolClient).replace(/"/g, '\\\"');
                     + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
                     + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
                 ).appendTo("#orders tbody");
-
-                $('#orderCount').html(data.totalCount.toString());
             });
             if (!searchedAllOrders) {
                 searchOrders(cb);

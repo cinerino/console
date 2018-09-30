@@ -124,6 +124,7 @@ eventsRouter.get(
                 id: req.params.id
             });
             res.render('events/screeningEvent/show', {
+                message: '',
                 moment: moment,
                 event: event,
                 orders: []
