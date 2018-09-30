@@ -3,6 +3,7 @@
  */
 import * as createDebug from 'debug';
 import * as express from 'express';
+import { ACCEPTED, CREATED } from 'http-status';
 import * as moment from 'moment';
 
 import * as cinerinoapi from '../cinerinoapi';
@@ -110,7 +111,8 @@ ordersRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
 /**
  * 注文詳細
  */
@@ -236,5 +238,91 @@ ordersRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
+/**
+ * 注文返品
+ */
+ordersRouter.post(
+    '/:orderNumber/return',
+    async (req, res, next) => {
+        try {
+            const returnOrderService = new cinerinoapi.service.transaction.ReturnOrder({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const returnOrderTransaction = await returnOrderService.start({
+                expires: moment().add(1, 'minutes').toDate(),
+                object: {
+                    order: {
+                        orderNumber: req.params.orderNumber
+                    }
+                }
+            });
+            await returnOrderService.confirm({ transactionId: returnOrderTransaction.id });
+            res.status(ACCEPTED).end();
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+/**
+ * 注文配送メール送信
+ */
+ordersRouter.post(
+    '/:orderNumber/sendEmailMessage',
+    async (req, res, next) => {
+        try {
+            const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const taskService = new cinerinoapi.service.Task({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchTransactionsResult = await placeOrderService.search({
+                limit: 1,
+                typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
+                result: { order: { orderNumbers: [req.params.orderNumber] } }
+            });
+            if (searchTransactionsResult.totalCount === 0) {
+                throw new cinerinoapi.factory.errors.NotFound('Order');
+            }
+            const placeOrderTransaction = searchTransactionsResult.data[0];
+            const potentialActions = placeOrderTransaction.potentialActions;
+            if (potentialActions === undefined) {
+                throw new cinerinoapi.factory.errors.NotFound('Transactino potentialActions');
+            }
+            const orderPotentialActions = potentialActions.order.potentialActions;
+            if (orderPotentialActions === undefined) {
+                throw new cinerinoapi.factory.errors.NotFound('Order potentialActions');
+            }
+            const sendOrderPotentialActions = orderPotentialActions.sendOrder.potentialActions;
+            if (sendOrderPotentialActions === undefined) {
+                throw new cinerinoapi.factory.errors.NotFound('SendOrder potentialActions');
+            }
+            const sendEmailMessageActionAttributes = sendOrderPotentialActions.sendEmailMessage;
+            if (sendEmailMessageActionAttributes === undefined) {
+                throw new cinerinoapi.factory.errors.NotFound('SendEmailMessage actionAttributes');
+            }
+            const taskAttributes: cinerinoapi.factory.task.IAttributes<cinerinoapi.factory.taskName.SendEmailMessage> = {
+                name: cinerinoapi.factory.taskName.SendEmailMessage,
+                status: cinerinoapi.factory.taskStatus.Ready,
+                runsAt: new Date(),
+                remainingNumberOfTries: 3,
+                lastTriedAt: null,
+                numberOfTried: 0,
+                executionResults: [],
+                data: {
+                    actionAttributes: sendEmailMessageActionAttributes
+                }
+            };
+            const task = await taskService.create(taskAttributes);
+            res.status(CREATED).json(task);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 export default ordersRouter;

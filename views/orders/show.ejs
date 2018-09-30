@@ -222,9 +222,19 @@
                         <div class="col-12">
                             <a href="javascript:void(0)" onclick="window.print(); return false;" class="btn btn-default">
                                 <i class="fa fa-print"></i> Print</a>
-                            <!-- <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                                    <i class="fa fa-download"></i> Generate PDF
-                                </button> -->
+                            <% if (order.orderStatus === 'OrderDelivered') { %>
+                            <button type="button" class="btn btn-danger float-right returnOrder">
+                                <i class="fa fa-undo"></i> 返品
+                            </button>
+                            <button type="button" class="btn btn-warning float-right sendEmailMessage" style="margin-right: 5px;">
+                                <i class="fa fa-envelope"></i> 配送メール送信
+                            </button>
+                            <% } %>
+                            <% if (order.orderStatus === 'OrderReturned') { %>
+                            <button type="button" class="btn btn-default float-right disabled">
+                                <i class="fa fa-undo"></i> 返品済
+                            </button>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -248,7 +258,7 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Timeline</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#activity" data-toggle="tab">activity</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -325,8 +335,10 @@
                             </div>
                             <!-- /.tab-pane -->
 
-                            <div class="tab-pane" id="activity">
-
+                            <div class="tab-pane" id="jsonViewer">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(order, null, '\t') %></textarea>
+                                </div>
                             </div>
                             <!-- /.tab-pane -->
                         </div>
@@ -387,9 +399,4 @@
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
 <!-- ChartJS 1.0.1 -->
 <script src="/node_modules/admin-lte/plugins/chart.js/Chart.min.js"></script>
-
-<!-- page script -->
-<script>
-    $(function () {
-    });
-</script>
+<script src="/js/order/show.js"></script>

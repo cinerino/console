@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const createDebug = require("debug");
 const express = require("express");
+const http_status_1 = require("http-status");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
@@ -243,6 +244,87 @@ ordersRouter.get('/:orderNumber',
             timelines: timelines,
             ActionStatusType: cinerinoapi.factory.actionStatusType
         });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 注文返品
+ */
+ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const returnOrderService = new cinerinoapi.service.transaction.ReturnOrder({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const returnOrderTransaction = yield returnOrderService.start({
+            expires: moment().add(1, 'minutes').toDate(),
+            object: {
+                order: {
+                    orderNumber: req.params.orderNumber
+                }
+            }
+        });
+        yield returnOrderService.confirm({ transactionId: returnOrderTransaction.id });
+        res.status(http_status_1.ACCEPTED).end();
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 注文配送メール送信
+ */
+ordersRouter.post('/:orderNumber/sendEmailMessage', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const taskService = new cinerinoapi.service.Task({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchTransactionsResult = yield placeOrderService.search({
+            limit: 1,
+            typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
+            result: { order: { orderNumbers: [req.params.orderNumber] } }
+        });
+        if (searchTransactionsResult.totalCount === 0) {
+            throw new cinerinoapi.factory.errors.NotFound('Order');
+        }
+        const placeOrderTransaction = searchTransactionsResult.data[0];
+        const potentialActions = placeOrderTransaction.potentialActions;
+        if (potentialActions === undefined) {
+            throw new cinerinoapi.factory.errors.NotFound('Transactino potentialActions');
+        }
+        const orderPotentialActions = potentialActions.order.potentialActions;
+        if (orderPotentialActions === undefined) {
+            throw new cinerinoapi.factory.errors.NotFound('Order potentialActions');
+        }
+        const sendOrderPotentialActions = orderPotentialActions.sendOrder.potentialActions;
+        if (sendOrderPotentialActions === undefined) {
+            throw new cinerinoapi.factory.errors.NotFound('SendOrder potentialActions');
+        }
+        const sendEmailMessageActionAttributes = sendOrderPotentialActions.sendEmailMessage;
+        if (sendEmailMessageActionAttributes === undefined) {
+            throw new cinerinoapi.factory.errors.NotFound('SendEmailMessage actionAttributes');
+        }
+        const taskAttributes = {
+            name: cinerinoapi.factory.taskName.SendEmailMessage,
+            status: cinerinoapi.factory.taskStatus.Ready,
+            runsAt: new Date(),
+            remainingNumberOfTries: 3,
+            lastTriedAt: null,
+            numberOfTried: 0,
+            executionResults: [],
+            data: {
+                actionAttributes: sendEmailMessageActionAttributes
+            }
+        };
+        const task = yield taskService.create(taskAttributes);
+        res.status(http_status_1.CREATED).json(task);
     }
     catch (error) {
         next(error);
