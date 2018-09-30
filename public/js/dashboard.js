@@ -769,18 +769,11 @@ function searchLatestOrders(cb) {
     ).done(function (data) {
         $.each(data.data, function (_, order) {
             orders.push(order);
-            let badge = 'badge-info';
-            switch (order.orderStatus) {
-                case 'OrderDelivered':
-                    badge = 'badge-danger';
-                    break;
-                default:
-            }
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + order.orderDate + '</td>'
                 + '<td>' + order.acceptedOffers.map(function (o) { return o.itemOffered.reservedTicket.ticketedSeat.seatNumber }).join(',') + '</td>'
-                + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
+                + '<td>' + '<span class="badge ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
             ).appendTo(".latestOrders tbody");
         });
         cb();

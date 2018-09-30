@@ -171,24 +171,7 @@
                                             </h3>
 
                                             <div class="timeline-body">
-                                                <%
-                                                let badge = 'badge-primary';
-                                                switch (timeline.actionStatus) {
-                                                    case ActionStatusType.ActiveActionStatus:
-                                                        break;
-                                                    case ActionStatusType.CanceledActionStatus:
-                                                        badge = 'badge-warning';
-                                                        break;
-                                                    case ActionStatusType.CompletedActionStatus:
-                                                    badge = 'badge-success';
-                                                        break;
-                                                    case ActionStatusType.FailedActionStatus:
-                                                        badge = 'badge-danger';
-                                                        break;
-                                                    default:
-                                                }
-                                                %>
-                                                <span class="badge <%= badge %>">
+                                                <span class="badge <%= timeline.actionStatus %>">
                                                     <%= timeline.actionStatus %></span>
                                             </div>
                                             <div class="timeline-footer">

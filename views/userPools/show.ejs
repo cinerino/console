@@ -214,18 +214,11 @@ const userPoolJson = JSON.stringify(userPool).replace(/"/g, '\\\"');
             searchedAllOrders = (data.data.length < limit);
             $.each(data.data, function (key, order) {
                 orders.push(order);
-                let badge = 'badge-info';
-                switch (order.orderStatus) {
-                    case 'OrderDelivered':
-                        badge = 'badge-danger';
-                        break;
-                    default:
-                }
                 $('<tr>').html(
                     '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                     + '<td>' + order.orderDate + '</td>'
                     + '<td>' + order.acceptedOffers.map((o) => o.itemOffered.reservedTicket.ticketedSeat.seatNumber).join(',') + '</td>'
-                    + '<td>' + '<span class="badge ' + badge + '">' + order.orderStatus + '</span>' + '</td>'
+                    + '<td>' + '<span class="badge ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
                 ).appendTo("#orders tbody");
             });
             if (!searchedAllOrders) {
