@@ -259,7 +259,8 @@ placeOrderTransactionsRouter.get('/:transactionId',
         res.render('transactions/placeOrder/show', {
             moment: moment,
             transaction: transaction,
-            timelines: timelines
+            timelines: timelines,
+            ActionStatusType: cinerinoapi.factory.actionStatusType
         });
     }
     catch (error) {

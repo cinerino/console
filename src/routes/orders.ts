@@ -230,7 +230,8 @@ ordersRouter.get(
             res.render('orders/show', {
                 moment: moment,
                 order: order,
-                timelines: timelines
+                timelines: timelines,
+                ActionStatusType: cinerinoapi.factory.actionStatusType
             });
         } catch (error) {
             next(error);

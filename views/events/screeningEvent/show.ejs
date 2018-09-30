@@ -1,3 +1,8 @@
+<%
+const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
+? event.workPerformed.thumbnailUrl
+: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrhpsOJOcLBwc1SPD9sWlinildy4S05-I2Wf6z2wRXnSxbmtRz';
+%>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -47,16 +52,10 @@
 
         <div class="row">
             <div class="col-md-3">
-
                 <!-- Profile Image -->
-                <div class="card card-primary card-outline">
+                <div class="card card-dark card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <%
-                            const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
-                            ? event.workPerformed.thumbnailUrl
-                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrhpsOJOcLBwc1SPD9sWlinildy4S05-I2Wf6z2wRXnSxbmtRz';
-                            %>
                             <img class="profile-user-img img-fluid img-circle" src="<%= thumbnailImageUrl %>" alt="Thumbnail">
                         </div>
 
@@ -81,7 +80,7 @@
                 <!-- /.card -->
 
                 <!-- About Me Box -->
-                <div class="card card-primary">
+                <div class="card card-dark">
                     <div class="card-header">
                         <h3 class="card-title">About</h3>
                     </div>
@@ -144,7 +143,7 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="active tab-pane" id="remainingAttendeeCapacity">
-                                <div class="card bg-primary-gradient">
+                                <div class="card bg-dark-gradient">
                                     <div class="card-header no-border">
                                         <h3 class="card-title">
                                         </h3>

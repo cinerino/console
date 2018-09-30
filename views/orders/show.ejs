@@ -288,15 +288,32 @@
                                             </h3>
 
                                             <div class="timeline-body">
-                                                <span class="badge badge-info">
-                                                    <%= timeline.actionStatus %></span><br>
-                                                <textarea class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+                                                <%
+                                                let badge = 'badge-primary';
+                                                switch (timeline.actionStatus) {
+                                                    case ActionStatusType.ActiveActionStatus:
+                                                        break;
+                                                    case ActionStatusType.CanceledActionStatus:
+                                                        badge = 'badge-warning';
+                                                        break;
+                                                    case ActionStatusType.CompletedActionStatus:
+                                                    badge = 'badge-success';
+                                                        break;
+                                                    case ActionStatusType.FailedActionStatus:
+                                                        badge = 'badge-danger';
+                                                        break;
+                                                    default:
+                                                }
+                                                %>
+                                                <span class="badge <%= badge %>">
+                                                    <%= timeline.actionStatus %></span>
                                             </div>
                                             <div class="timeline-footer">
-                                                <a href="#" class="btn btn-primary btn-sm" onclick="alert('<%= JSON.stringify(timeline.action) %>');">Read
-                                                    more
-                                                </a>
-                                                <!-- <a href="#" class="btn btn-danger btn-sm">Delete</a> -->
+                                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                                    data-target="#modal-action-<%= timeline.action.id %>">Read more</a>
+                                                <a href="#" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                    data-target="#modal-actionResult-<%= timeline.action.id %>">See
+                                                    results</a>
                                             </div>
                                         </div>
                                     </li>
@@ -319,17 +336,52 @@
                 <!-- /.nav-tabs-custom -->
             </div>
             <!-- ./col -->
-
-
-
-            <div class="col-md-12">
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+<% timelines.forEach(function(timeline, index){ %>
+<div class="modal" id="modal-action-<%= timeline.action.id %>" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <textarea rows="40" class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.action, null, '\t') %></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal" id="modal-actionResult-<%= timeline.action.id %>" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Action Result</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <textarea rows="40" class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<% }) %>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
