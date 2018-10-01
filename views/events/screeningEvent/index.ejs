@@ -222,7 +222,7 @@
                     data: $('form').serialize()
                 }).done(function (tasks) {
                     console.log(tasks);
-                    alert('インポートを開始しました。');
+                    alert('インポートを開始しました');
                 }).fail(function (xhr) {
                     var res = $.parseJSON(xhr.responseText);
                     alert(res.error.message);

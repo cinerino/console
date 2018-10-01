@@ -46,3 +46,13 @@
 .badge.FailedActionStatus {
     @extend .badge-danger;
 }
+
+.badge.CreditCard {
+    @extend .badge-primary;
+}
+.badge.Account {
+    @extend .badge-success;
+}
+.badge.Cash {
+    @extend .badge-secondary;
+}

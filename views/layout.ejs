@@ -9,7 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/default.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="/node_modules/admin-lte/plugins/font-awesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="/node_modules/admin-lte/plugins/font-awesome/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
@@ -101,7 +103,7 @@
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="/" class="nav-link">
-                                <i class="nav-icon fa fa-dashboard"></i>
+                                <i class="nav-icon fa fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
                                     <span class="badge badge-info right"></span>
@@ -111,7 +113,7 @@
                         <li class="nav-header">検索</li>
                         <li class="nav-item">
                             <a href="/organizations/movieTheater" class="nav-link">
-                                <i class="nav-icon fa fa-building"></i>
+                                <i class="nav-icon fa fa-store"></i>
                                 <p>
                                     販売者
                                     <span class="badge badge-info right"></span>
@@ -138,7 +140,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="/transactions/placeOrder" class="nav-link">
-                                <i class="nav-icon fa fa-opencart"></i>
+                                <i class="nav-icon fa fa-table"></i>
                                 <p>
                                     注文取引
                                     <span class="badge badge-info right"></span>
@@ -165,7 +167,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="/waiter/rules" class="nav-link">
-                                <i class="nav-icon fa fa-hand-stop-o"></i>
+                                <i class="nav-icon fa fa-passport"></i>
                                 <p>
                                     入場制限規則
                                     <span class="badge badge-info right"></span>
@@ -175,7 +177,7 @@
                         <li class="nav-header">アカウント</li>
                         <li class="nav-item">
                             <a href="<%= user.generateLogoutUrl() %>" class="nav-link">
-                                <i class="nav-icon fa fa-edit"></i>
+                                <i class="nav-icon fa fa-sign-out-alt"></i>
                                 <p>
                                     ログアウト
                                     <span class="badge badge-info right"></span>

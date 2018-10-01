@@ -3365,26 +3365,26 @@ input[type="button"].btn-block {
   padding-left: 0.6em;
   border-radius: 10rem; }
 
-.badge-primary, .badge.InProgress, .badge.Running, .badge.ActiveActionStatus {
+.badge-primary, .badge.InProgress, .badge.Running, .badge.ActiveActionStatus, .badge.CreditCard {
   color: #fff;
   background-color: #007bff; }
-  .badge-primary[href]:hover, .badge.InProgress[href]:hover, .badge.Running[href]:hover, .badge.ActiveActionStatus[href]:hover, .badge-primary[href]:focus, .badge.InProgress[href]:focus, .badge.Running[href]:focus, .badge.ActiveActionStatus[href]:focus {
+  .badge-primary[href]:hover, .badge.InProgress[href]:hover, .badge.Running[href]:hover, .badge.ActiveActionStatus[href]:hover, .badge.CreditCard[href]:hover, .badge-primary[href]:focus, .badge.InProgress[href]:focus, .badge.Running[href]:focus, .badge.ActiveActionStatus[href]:focus, .badge.CreditCard[href]:focus {
     color: #fff;
     text-decoration: none;
     background-color: #0062cc; }
 
-.badge-secondary {
+.badge-secondary, .badge.Cash {
   color: #fff;
   background-color: #6c757d; }
-  .badge-secondary[href]:hover, .badge-secondary[href]:focus {
+  .badge-secondary[href]:hover, .badge.Cash[href]:hover, .badge-secondary[href]:focus, .badge.Cash[href]:focus {
     color: #fff;
     text-decoration: none;
     background-color: #545b62; }
 
-.badge-success, .badge.OrderDelivered, .badge.Confirmed, .badge.Executed, .badge.CompletedActionStatus {
+.badge-success, .badge.OrderDelivered, .badge.Confirmed, .badge.Executed, .badge.CompletedActionStatus, .badge.Account {
   color: #fff;
   background-color: #28a745; }
-  .badge-success[href]:hover, .badge.OrderDelivered[href]:hover, .badge.Confirmed[href]:hover, .badge.Executed[href]:hover, .badge.CompletedActionStatus[href]:hover, .badge-success[href]:focus, .badge.OrderDelivered[href]:focus, .badge.Confirmed[href]:focus, .badge.Executed[href]:focus, .badge.CompletedActionStatus[href]:focus {
+  .badge-success[href]:hover, .badge.OrderDelivered[href]:hover, .badge.Confirmed[href]:hover, .badge.Executed[href]:hover, .badge.CompletedActionStatus[href]:hover, .badge.Account[href]:hover, .badge-success[href]:focus, .badge.OrderDelivered[href]:focus, .badge.Confirmed[href]:focus, .badge.Executed[href]:focus, .badge.CompletedActionStatus[href]:focus, .badge.Account[href]:focus {
     color: #fff;
     text-decoration: none;
     background-color: #1e7e34; }

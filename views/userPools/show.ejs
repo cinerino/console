@@ -31,7 +31,7 @@
             <div class="col-md-3">
 
                 <!-- Profile Image -->
-                <div class="card card-primary card-outline">
+                <div class="card card-dark card-outline">
                     <div class="card-body box-profile">
                         <!-- <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg"
@@ -59,22 +59,19 @@
                 <!-- /.card -->
 
                 <!-- About Me Box -->
-                <div class="card card-primary">
+                <div class="card card-dark">
                     <div class="card-header">
                         <h3 class="card-title">About</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <strong><i class="fa fa-file-text-o mr-1"></i> Arn</strong>
-
+                        <strong><i class="fa fa-link mr-1"></i> ARN</strong>
                         <p class="text-muted">
                             <%= userPool.Arn %>
                         </p>
-
                         <hr>
 
-                        <strong><i class="fa fa-file-text-o mr-1"></i> 作成日時</strong>
-
+                        <strong><i class="fa fa-clock mr-1"></i> 作成日時</strong>
                         <p class="text-muted">
                             <%= userPool.CreationDate %>
                         </p>
@@ -227,7 +224,7 @@ const userPoolJson = JSON.stringify(userPool).replace(/"/g, '\\\"');
                 cb();
             }
         }).fail(function () {
-            alert('注文履歴を取得できませんでした')
+            console.error('注文履歴を取得できませんでした')
         });
     }
 </script>

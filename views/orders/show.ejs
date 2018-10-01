@@ -285,8 +285,8 @@
 
 
                                         <div class="timeline-item">
-                                            <span class="time"><i class="fa fa-clock-o"></i>
-                                                <%= moment(timeline.startDate).fromNow() %></span>
+                                            <span class="time"><i class="fa fa-clock"></i>
+                                                <%= moment(timeline.startDate).toISOString() %></span>
 
                                             <h3 class="timeline-header">
                                                 <a href="<%= timeline.agent.url %>" target="_blank">
@@ -312,7 +312,7 @@
                                     </li>
                                     <% }) %>
                                     <li>
-                                        <i class="fa fa-clock-o bg-gray"></i>
+                                        <i class="fa fa-clock bg-gray"></i>
                                     </li>
                                 </ul>
                             </div>

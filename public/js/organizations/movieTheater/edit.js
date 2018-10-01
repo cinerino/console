@@ -44,10 +44,10 @@ $(function () {
                 url: '/organizations/movieTheater/<%= movieTheater.id %>',
                 type: 'DELETE'
             }).done(function () {
-                alert('削除しました。');
+                alert('削除しました');
                 location.href = '/organizations/movieTheater';
             }).fail(function () {
-                alert('error');
+                alert('削除できませんでした');
             }).always(function () {
             });
         } else {
