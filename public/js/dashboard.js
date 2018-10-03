@@ -2,6 +2,8 @@
  * ダッシュボードを表現するためのjs
  **/
 var WAITER_ENDPOINT = $('input[name="waiterEndpoint"]').val();
+var TELEMETRY_API_ENDPOINT = $('input[name="telemetryEndpoint"]').val();
+var PROJECT_ID = $('input[name="projectId"]').val();
 var waiterDatasets = [];
 var waiterRules = [];
 
@@ -242,7 +244,8 @@ function updateNumOrderItemsChart() {
 function searchSalesAmount(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/SalesAmount',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmount',
+        // '/dashboard/telemetry/SalesAmount',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -258,7 +261,8 @@ function searchSalesAmount(cb) {
 function searchSalesAmountByClient(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/SalesAmountByClient',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmountByClient',
+        // '/dashboard/telemetry/SalesAmountByClient',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -274,7 +278,8 @@ function searchSalesAmountByClient(cb) {
 function searchSalesAmountByPaymentMethod(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/SalesAmountByPaymentMethod',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmountByPaymentMethod',
+        // '/dashboard/telemetry/SalesAmountByPaymentMethod',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -290,7 +295,8 @@ function searchSalesAmountByPaymentMethod(cb) {
 function searchSalesAmountBySeller(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/SalesAmountBySeller',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmountBySeller',
+        // '/dashboard/telemetry/SalesAmountBySeller',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -306,7 +312,8 @@ function searchSalesAmountBySeller(cb) {
 function searchNumOrderItems(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/NumOrderItems',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItems',
+        // '/dashboard/telemetry/NumOrderItems',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -322,7 +329,8 @@ function searchNumOrderItems(cb) {
 function searchNumOrderItemsByClient(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/NumOrderItemsByClient',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItemsByClient',
+        // '/dashboard/telemetry/NumOrderItemsByClient',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -338,7 +346,8 @@ function searchNumOrderItemsByClient(cb) {
 function searchNumOrderItemsByPaymentMethod(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/NumOrderItemsByPaymentMethod',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItemsByPaymentMethod',
+        // '/dashboard/telemetry/NumOrderItemsByPaymentMethod',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -354,7 +363,8 @@ function searchNumOrderItemsByPaymentMethod(cb) {
 function searchNumOrderItemsBySeller(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/NumOrderItemsBySeller',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItemsBySeller',
+        // '/dashboard/telemetry/NumOrderItemsBySeller',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -370,7 +380,8 @@ function searchNumOrderItemsBySeller(cb) {
 function searchNumPlaceOrder(cb) {
     $('#numPlaceOrder .overlay').show();
     $.getJSON(
-        '/dashboard/telemetry/NumPlaceOrderByStatus',
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumPlaceOrderByStatus',
+        // '/dashboard/telemetry/NumPlaceOrderByStatus',
         {
             measureFrom: $('#numPlaceOrder .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numPlaceOrder .daterange').data('daterangepicker').endDate.toISOString()

@@ -122,23 +122,4 @@ dashboardRouter.get(
         }
     }
 );
-dashboardRouter.get(
-    '/telemetry/:telemetryType',
-    async (req, res, next) => {
-        try {
-            const telemetryService = new cinerinoapi.service.Telemetry({
-                endpoint: <string>process.env.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const result = await telemetryService.search({
-                telemetryType: req.params.telemetryType,
-                measureFrom: moment(req.query.measureFrom).toDate(),
-                measureThrough: moment(req.query.measureThrough).toDate()
-            });
-            res.json(result);
-        } catch (error) {
-            next(error);
-        }
-    }
-);
 export default dashboardRouter;

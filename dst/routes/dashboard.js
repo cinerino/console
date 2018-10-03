@@ -120,21 +120,4 @@ dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 
         next(error);
     }
 }));
-dashboardRouter.get('/telemetry/:telemetryType', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    try {
-        const telemetryService = new cinerinoapi.service.Telemetry({
-            endpoint: process.env.API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const result = yield telemetryService.search({
-            telemetryType: req.params.telemetryType,
-            measureFrom: moment(req.query.measureFrom).toDate(),
-            measureThrough: moment(req.query.measureThrough).toDate()
-        });
-        res.json(result);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
 exports.default = dashboardRouter;

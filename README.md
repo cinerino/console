@@ -26,3 +26,5 @@
 | `USER_EXPIRES_IN_SECONDS`      | true     |                    | ログインユーザーセッション保持期間      |
 | `DEFAULT_COGNITO_USER_POOL_ID` | true     |                    | CognitoユーザープールID       |
 | `WAITER_ENDPOINT`              | true     |                    | WAITER Endpoint        |
+| `TELEMETRY_API_ENDPOINT`       | true     |                    | Telemetry API Endpoint |
+| `PROJECT_ID`                   | true     |                    | Cinerino Project ID    |
