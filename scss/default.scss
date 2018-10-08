@@ -7,6 +7,9 @@
 .badge.OrderDelivered {
     @extend .badge-success;
 }
+.badge.OrderProcessing {
+    @extend .badge-info;
+}
 .badge.OrderReturned {
     @extend .badge-danger;
 }
@@ -55,4 +58,21 @@
 }
 .badge.Cash {
     @extend .badge-secondary;
+}
+.badge.Pecorino {
+    @extend .badge-secondary;
+}
+.badge.Mocoin {
+    @extend .badge-secondary;
+}
+
+.badge.Point {
+    @extend .badge-primary;
+}
+
+.badge.Opened {
+    @extend .badge-success;
+}
+.badge.Closed {
+    @extend .badge-danger;
 }

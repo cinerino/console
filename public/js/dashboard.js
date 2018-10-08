@@ -56,6 +56,22 @@ $(function () {
         updateSalesAmountChart();
     });
 
+    $('#numTransactions2salesAmount .daterange').daterangepicker({
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: initialChartStartDate,
+        endDate: initialChartEndDate
+    }, function (start, end) {
+        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        updateNumTransactions2salesAmountChart();
+    });
+
     $('#numOrderItems .daterange').daterangepicker({
         ranges: {
             'Today': [moment(), moment()],
@@ -166,8 +182,8 @@ $(function () {
 
     // Fix for charts under tabs
     $('.box ul.nav a').on('shown.bs.tab', function () {
-        area.redraw()
-        donut.redraw()
+        // area.redraw()
+        // donut.redraw()
         // line.redraw()
     })
 
@@ -206,40 +222,26 @@ function updateCharts() {
     countNewTransaction(function () {
     });
     updateSalesAmountChart();
+    updateNumTransactions2salesAmountChart();
     updateNumOrderItemsChart();
     searchLatestOrders(function () {
     });
 }
 function updateSalesAmountChart() {
-    searchSalesAmount(
-        createSalesAmountChart
-    );
-    searchSalesAmountByClient(
-        createSalesAmountByClientChart
-    );
-    searchSalesAmountByPaymentMethod(
-        createSalesAmountByPaymentMethodChart
-    );
-    searchSalesAmountBySeller(
-        createSalesAmountBySellerChart
-    );
+    searchSalesAmount(createSalesAmountChart);
+    searchSalesAmountByClient(createSalesAmountByClientChart);
+    searchSalesAmountByPaymentMethod(createSalesAmountByPaymentMethodChart);
+    searchSalesAmountBySeller(createSalesAmountBySellerChart);
+}
+function updateNumTransactions2salesAmountChart() {
+    searchNumStartedTransactionsByType(createSalesAmountNumTransactionsChart);
 }
 function updateNumOrderItemsChart() {
-    searchNumOrderItems(
-        createNumOrderItemsChart
-    );
-    searchNumOrderItemsByClient(
-        createNumOrderItemsByClientChart
-    );
-    searchNumOrderItemsByPaymentMethod(
-        createNumOrderItemsByPaymentMethodChart
-    );
-    searchNumOrderItemsBySeller(
-        createNumOrderItemsBySellerChart
-    );
-    searchNumPlaceOrder(
-        createNumPlaceOrderChart
-    );
+    searchNumOrderItems(createNumOrderItemsChart);
+    searchNumOrderItemsByClient(createNumOrderItemsByClientChart);
+    searchNumOrderItemsByPaymentMethod(createNumOrderItemsByPaymentMethodChart);
+    searchNumOrderItemsBySeller(createNumOrderItemsBySellerChart);
+    searchNumPlaceOrder(createNumPlaceOrderChart);
 }
 function searchSalesAmount(cb) {
     $('#salesAmount .overlay').show();
@@ -256,6 +258,49 @@ function searchSalesAmount(cb) {
         console.error('売上集計を取得できませんでした')
     }).always(function () {
         $('#salesAmount .overlay').hide();
+    });
+}
+function searchNumStartedTransactionsByType(cb) {
+    $('#numTransactions2salesAmount .overlay').show();
+
+    var datasSalesAmount;
+    var datasNumStartedTransactions;
+    var next = function () {
+        if (datasSalesAmount !== undefined && datasNumStartedTransactions !== undefined) {
+            cb(datasSalesAmount, datasNumStartedTransactions);
+        }
+    }
+
+    $.getJSON(
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmount',
+        // '/dashboard/telemetry/SalesAmount',
+        {
+            measureFrom: $('#numTransactions2salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
+            measureThrough: $('#numTransactions2salesAmount .daterange').data('daterangepicker').endDate.toISOString()
+        }
+    ).done(function (data) {
+        datasSalesAmount = data;
+        next();
+    }).fail(function () {
+        console.error('売上集計を取得できませんでした')
+    }).always(function () {
+        $('#numTransactions2salesAmount .overlay').hide();
+    });
+
+    $.getJSON(
+        TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumStartedTransactionsByType',
+        // '/dashboard/telemetry/SalesAmount',
+        {
+            measureFrom: $('#numTransactions2salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
+            measureThrough: $('#numTransactions2salesAmount .daterange').data('daterangepicker').endDate.toISOString()
+        }
+    ).done(function (data) {
+        datasNumStartedTransactions = data;
+        next();
+    }).fail(function () {
+        console.error('取引タイプごとの開始取引数を取得できませんでした')
+    }).always(function () {
+        $('#numTransactions2salesAmount .overlay').hide();
     });
 }
 function searchSalesAmountByClient(cb) {
@@ -440,11 +485,12 @@ function createNumPlaceOrderChart(datas) {
         hideHover: 'auto',
         gridTextColor: '#fff',
         gridStrokeWidth: 0.4,
-        pointSize: 4,
+        pointSize: 0,
         pointStrokeColors: ['#fad684', '#e96c6c', '#79f67d'],
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
-        gridTextSize: 10
+        gridTextSize: 10,
+        smooth: false
     });
 }
 function createSalesAmountChart(datas) {
@@ -457,17 +503,18 @@ function createSalesAmountChart(datas) {
         }),
         xkey: 'y',
         ykeys: ['salesAmount'],
-        labels: ['売上金額'],
+        labels: ['売上高'],
         lineColors: ['#efefef'],
         lineWidth: 2,
         hideHover: 'auto',
         gridTextColor: '#fff',
         gridStrokeWidth: 0.4,
-        pointSize: 4,
+        pointSize: 0,
         pointStrokeColors: ['#efefef'],
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
-        gridTextSize: 10
+        gridTextSize: 10,
+        smooth: false
     });
 }
 function createSalesAmountByClientChart(datas) {
@@ -567,11 +614,12 @@ function createNumOrderItemsChart(datas) {
         hideHover: 'auto',
         gridTextColor: '#fff',
         gridStrokeWidth: 0.4,
-        pointSize: 4,
+        pointSize: 0,
         pointStrokeColors: ['#efefef'],
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
-        gridTextSize: 10
+        gridTextSize: 10,
+        smooth: false
     });
 }
 function createNumOrderItemsByClientChart(datas) {
@@ -655,6 +703,80 @@ function createNumOrderItemsBySellerChart(datas) {
         $(this).val(ratio).trigger('change');
     });
 }
+function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStartedTransactionsByType) {
+    console.log('creating SalesAmountNumTransactionsChart...', datasSalesAmount.length, datasNumStartedTransactionsByType.length);
+    // 売上散布チャート
+    var chartDate = datasSalesAmount.map(function (dataSalesAmount) {
+        var dataNumStartedTransactions = datasNumStartedTransactionsByType.find(function (data) {
+            return data.measureDate === dataSalesAmount.measureDate;
+        });
+        var x = (dataNumStartedTransactions !== undefined)
+            ? (dataNumStartedTransactions.value.PlaceOrder !== undefined) ? dataNumStartedTransactions.value.PlaceOrder : 0
+            : 0;
+
+        return {
+            x: x,
+            y: dataSalesAmount.value
+        };
+    });
+
+    new Chart($('#numTransactions2salesAmountChart'), {
+        type: 'scatter',
+        data: {
+            // labels: ['12時間前', '9時間前', '6時間前', '3時間前', '0時間前'],
+            datasets: [
+                {
+                    data: chartDate,
+                    backgroundColor: 'transparent',
+                    borderColor: '#DAA8F5',
+                    borderWidth: 1,
+                    pointRadius: 2,
+                    pointBorderColor: '#DAA8F5',
+                    pointBackgroundColor: '#DAA8F5',
+                    fill: false
+                },
+            ]
+        },
+        options: {
+            pointDot: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true,
+                        lineWidth: 1,
+                        color: '#555c62',
+                        zeroLineColor: '#555c62',
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: '#a1a6a9'
+                    }
+                }],
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom',
+                    // type: 'time',
+                    // time: {
+                    //     unit: 'hour',
+                    //     stepSize: 1
+                    // },
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        fontColor: '#a1a6a9'
+                    }
+                }]
+            }
+        }
+    });
+}
 function searchLatestOrders(cb) {
     $.getJSON(
         '/dashboard/orders',
@@ -666,12 +788,18 @@ function searchLatestOrders(cb) {
             orderDateThrough: moment().toISOString()
         }
     ).done(function (data) {
+        $('.latestOrders tbody').html('');
+        orders = data.data;
         $.each(data.data, function (_, order) {
-            orders.push(order);
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + order.orderDate + '</td>'
-                + '<td>' + order.acceptedOffers.map(function (o) { return o.itemOffered.reservedTicket.ticketedSeat.seatNumber }).join(',') + '</td>'
+                + '<td>' + order.acceptedOffers.map(function (o) {
+                    if (o.itemOffered.reservedTicket !== undefined) {
+                        return o.itemOffered.reservedTicket.ticketedSeat.seatNumber
+                    }
+                    return o.itemOffered.typeOf;
+                }).join(',') + '</td>'
                 + '<td>' + '<span class="badge ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
             ).appendTo(".latestOrders tbody");
         });
@@ -725,7 +853,7 @@ function countNewTransaction(cb) {
     });
 }
 function initializeVisitorsChart() {
-    var colorChoices = ['#efefef', '#79f67d', '#e96c6c', '#79ccf5'];
+    var colorChoices = ['#daa8f5', '#3399FF', '#fad684', '#79f67d', '#79ccf5', '#e96c6c', '#efefef'];
     waiterDatasets = waiterRules.map(function (rule) {
         return {
             scope: rule.scope,
@@ -745,20 +873,21 @@ function initializeVisitorsChart() {
         labels: waiterRules.map(function (rule) {
             return rule.scope
         }),
-        lineColors: waiterRules.map(function (rule, index) {
-            return colorChoices[index % waiterRules.length];
+        lineColors: waiterRules.map(function (_, index) {
+            return colorChoices[index % colorChoices.length];
         }),
         lineWidth: 2,
         hideHover: 'auto',
         gridTextColor: '#fff',
         gridStrokeWidth: 0.4,
-        pointSize: 4,
-        pointStrokeColors: waiterRules.map(function (rule, index) {
-            return colorChoices[index % waiterRules.length];
+        pointSize: 0,
+        pointStrokeColors: waiterRules.map(function (_, index) {
+            return colorChoices[index % colorChoices.length];
         }),
         gridLineColor: '#efefef',
         gridTextFamily: 'Open Sans',
-        gridTextSize: 10
+        gridTextSize: 10,
+        smooth: false
     });
 }
 function updateWaiterChart() {
