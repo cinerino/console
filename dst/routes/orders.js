@@ -148,10 +148,13 @@ ordersRouter.get('/:orderNumber',
         const timelines = actionsOnOrder.map((a) => {
             let agent;
             if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+                const url = (a.agent.memberOf !== undefined)
+                    ? `/people/${a.agent.id}`
+                    : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
                 agent = {
                     id: a.agent.id,
                     name: order.customer.name,
-                    url: '#'
+                    url: url
                 };
             }
             else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {

@@ -133,12 +133,15 @@ placeOrderTransactionsRouter.get(
                 transactionId: transaction.id,
                 sort: { endDate: cinerinoapi.factory.sortType.Ascending }
             });
+            const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
+                ? `/people/${transaction.agent.id}`
+                : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${transaction.agent.id}`;
             const timelines = [{
                 action: {},
                 agent: {
                     id: transaction.agent.id,
                     name: transaction.agent.id,
-                    url: '#'
+                    url: transactionAgentUrl
                 },
                 actionName: '開始',
                 object: '取引',
@@ -150,10 +153,13 @@ placeOrderTransactionsRouter.get(
             timelines.push(...actionsOnTransaction.map((a) => {
                 let agent: any;
                 if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+                    const url = (a.agent.memberOf !== undefined)
+                        ? `/people/${a.agent.id}`
+                        : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
                     agent = {
                         id: a.agent.id,
                         name: a.agent.id,
-                        url: '#'
+                        url: url
                     };
                 } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
                     agent = {
@@ -211,7 +217,7 @@ placeOrderTransactionsRouter.get(
                             agent: {
                                 id: transaction.agent.id,
                                 name: transaction.agent.id,
-                                url: '#'
+                                url: transactionAgentUrl
                             },
                             actionName: '中止',
                             object: '取引',
@@ -226,7 +232,7 @@ placeOrderTransactionsRouter.get(
                             agent: {
                                 id: transaction.agent.id,
                                 name: transaction.agent.id,
-                                url: '#'
+                                url: transactionAgentUrl
                             },
                             actionName: '確定',
                             object: '取引',
