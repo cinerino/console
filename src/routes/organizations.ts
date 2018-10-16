@@ -10,13 +10,6 @@ import * as chevreapi from '../chevreapi';
 import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
-const chevreAuthClient = new chevreapi.auth.ClientCredentials({
-    domain: <string>process.env.CHEVRE_AUTHORIZE_SERVER_DOMAIN,
-    clientId: <string>process.env.CHEVRE_CLIENT_ID,
-    clientSecret: <string>process.env.CHEVRE_CLIENT_SECRET,
-    scopes: [],
-    state: ''
-});
 const organizationsRouter = express.Router();
 /**
  * 販売者検索
@@ -63,7 +56,7 @@ organizationsRouter.all(
             let attributes: cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType.MovieTheater> | undefined;
             if (req.method === 'POST') {
                 try {
-                    attributes = await createAttributesFromBody({ body: req.body });
+                    attributes = await createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
                     debug('creating organization...', attributes);
                     const organizationService = new cinerinoapi.service.Organization({
                         endpoint: <string>process.env.API_ENDPOINT,
@@ -110,7 +103,7 @@ organizationsRouter.all(
                 return;
             } else if (req.method === 'POST') {
                 try {
-                    attributes = await createAttributesFromBody({ body: req.body });
+                    attributes = await createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
                     await organizationService.updateMovieTheaterById({ id: req.params.id, attributes: attributes });
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);
@@ -132,12 +125,13 @@ organizationsRouter.all(
 );
 async function createAttributesFromBody(params: {
     body: any;
+    authClient: any;
 }): Promise<cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType.MovieTheater>> {
     debug(params);
     // Chevreから情報取得
     const placeService = new chevreapi.service.Place({
         endpoint: <string>process.env.CHEVRE_ENDPOINT,
-        auth: chevreAuthClient
+        auth: params.authClient
     });
     const movieTheaterFromChevre = await placeService.findMovieTheaterByBranchCode({ branchCode: params.body.branchCode });
 
@@ -151,6 +145,15 @@ async function createAttributesFromBody(params: {
             }
         }
     ];
+
+    // ムビチケ決済を有効にする場合
+    if (params.body.movieTicketPaymentAccepted === 'on') {
+        paymentAccepted.push({
+            paymentMethodType: cinerinoapi.factory.paymentMethodType.MovieTicket,
+            movieTicketInfo: params.body.movieTicketInfo
+        });
+    }
+
     // if (!Array.isArray(movieTheater.paymentAccepted)) {
     //     movieTheater.paymentAccepted = [];
     // }

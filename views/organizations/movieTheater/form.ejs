@@ -1,9 +1,11 @@
 <%
 let coinAccountPayment;
 let creditCardPayment;
+let movieTicketPayment;
 if (movieTheater !== undefined) {
     coinAccountPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
     creditCardPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
+    movieTicketPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.MovieTicket);
 }
 %>
 <div class="form-group">
@@ -23,6 +25,11 @@ if (movieTheater !== undefined) {
     <input disabled type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone" value="<%= (movieTheater !== undefined) ?  movieTheater.telephone : '' %>">
 </div>
 <div class="form-group">
+    <label for="url">URL</label>
+    <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (movieTheater !== undefined) ?  movieTheater.url : '' %>">
+</div>
+<hr>
+<div class="form-group">
     <label for="gmoInfo[siteId]">GMOサイトID</label>
     <input type="text" class="form-control" id="gmoInfo[siteId]" disabled placeholder="GMOサイトID" value="<%= process.env.GMO_SITE_ID %>">
 </div>
@@ -35,10 +42,22 @@ if (movieTheater !== undefined) {
     <input type="password" class="form-control" id="gmoInfo[shopPass]" name="gmoInfo[shopPass]" placeholder="GMOショップPASS"
         value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopPass : '' %>">
 </div>
-<div class="form-group">
-    <label for="url">URL</label>
-    <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (movieTheater !== undefined) ?  movieTheater.url : '' %>">
+<hr>
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="movieTicketPaymentAccepted" name="movieTicketPaymentAccepted"
+        <%=(movieTicketPayment !==　undefined) ? ' checked' : '' %>>
+    <label class="form-check-label" for="movieTicketPaymentAccepted">ムビチケ決済を許可</label>
 </div>
+<div class="form-group">
+    <label for="gmoInfo[siteId]">ムビチケ興行会社コード</label>
+    <input type="text" class="form-control" id="movieTicketInfo[kgygishCd]" disabled placeholder="ムビチケ興行会社コード" value="<%= process.env.MVTK_COMPANY_CODE %>">
+</div>
+<div class="form-group">
+    <label for="gmoInfo[shopId]">ムビチケサイトコード</label>
+    <input type="text" class="form-control" id="movieTicketInfo[stCd]" name="movieTicketInfo[stCd]" placeholder="ムビチケサイトコード"
+        value="<%= (movieTicketPayment !== undefined) ? movieTicketPayment.movieTicketInfo.stCd : '' %>">
+</div>
+<hr>
 <div class="form-check">
     <input type="checkbox" class="form-check-input" id="coinAccountPaymentAccepted" name="coinAccountPaymentAccepted"
         <%=(coinAccountPayment !==undefined) ? ' checked' : '' %>>

@@ -18,13 +18,6 @@ const moment = require("moment");
 const chevreapi = require("../chevreapi");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
-const chevreAuthClient = new chevreapi.auth.ClientCredentials({
-    domain: process.env.CHEVRE_AUTHORIZE_SERVER_DOMAIN,
-    clientId: process.env.CHEVRE_CLIENT_ID,
-    clientSecret: process.env.CHEVRE_CLIENT_SECRET,
-    scopes: [],
-    state: ''
-});
 const organizationsRouter = express.Router();
 /**
  * 販売者検索
@@ -68,7 +61,7 @@ organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this,
         let attributes;
         if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ body: req.body });
+                attributes = yield createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
                 debug('creating organization...', attributes);
                 const organizationService = new cinerinoapi.service.Organization({
                     endpoint: process.env.API_ENDPOINT,
@@ -113,7 +106,7 @@ organizationsRouter.all('/movieTheater/:id', (req, res, next) => __awaiter(this,
         }
         else if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ body: req.body });
+                attributes = yield createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
                 yield organizationService.updateMovieTheaterById({ id: req.params.id, attributes: attributes });
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
@@ -139,7 +132,7 @@ function createAttributesFromBody(params) {
         // Chevreから情報取得
         const placeService = new chevreapi.service.Place({
             endpoint: process.env.CHEVRE_ENDPOINT,
-            auth: chevreAuthClient
+            auth: params.authClient
         });
         const movieTheaterFromChevre = yield placeService.findMovieTheaterByBranchCode({ branchCode: params.body.branchCode });
         const paymentAccepted = [
@@ -152,6 +145,13 @@ function createAttributesFromBody(params) {
                 }
             }
         ];
+        // ムビチケ決済を有効にする場合
+        if (params.body.movieTicketPaymentAccepted === 'on') {
+            paymentAccepted.push({
+                paymentMethodType: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                movieTicketInfo: params.body.movieTicketInfo
+            });
+        }
         // if (!Array.isArray(movieTheater.paymentAccepted)) {
         //     movieTheater.paymentAccepted = [];
         // }
