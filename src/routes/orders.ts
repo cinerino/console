@@ -135,6 +135,18 @@ ordersRouter.get(
                             }
                         }
                     }
+                },
+                paymentMethods: {
+                    typeOfs: (req.query.paymentMethods !== undefined
+                        && req.query.paymentMethods.typeOfs !== undefined)
+                        ? req.query.paymentMethods.typeOfs
+                        : Object.keys(cinerinoapi.factory.paymentMethodType)
+                            .map((key) => (<any>cinerinoapi.factory.paymentMethodType)[key]),
+                    paymentMethodIds: (req.query.paymentMethods !== undefined
+                        && req.query.paymentMethods.paymentMethodIds !== undefined
+                        && req.query.paymentMethods.paymentMethodIds !== '')
+                        ? (<string>req.query.paymentMethods.paymentMethodIds).split(',').map((v) => v.trim())
+                        : []
                 }
             };
             if (req.query.format === 'datatable') {
@@ -152,7 +164,8 @@ ordersRouter.get(
                     userPoolClients: searchUserPoolClientsResult.data,
                     adminUserPoolClients: searchAdminUserPoolClientsResult.data,
                     searchConditions: searchConditions,
-                    orderStatusChoices: orderStatusChoices
+                    orderStatusChoices: orderStatusChoices,
+                    PaymentMethodType: cinerinoapi.factory.paymentMethodType
                 });
             }
         } catch (error) {

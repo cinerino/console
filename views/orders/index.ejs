@@ -136,6 +136,25 @@
                                             <% }) %>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>決済方法</label>
+                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]">
+                                            <% Object.keys(PaymentMethodType).forEach(function (key) { %>
+                                            <% var selected = searchConditions.paymentMethods.typeOfs.indexOf(PaymentMethodType[key]) >= 0; %>
+                                            <option value="<%= PaymentMethodType[key] %>" <% if (selected) { %>
+                                                selected
+                                                <% } %>>
+                                                <%= PaymentMethodType[key] %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="orderNumbers">決済ID</label>
+                                        <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
+                                            name="paymentMethods[paymentMethodIds]" placeholder="カンマ区切りで、GMO取引ID、口座番号など"
+                                            value="<%= searchConditions.paymentMethods.paymentMethodIds.join(',') %>">
+                                    </div>
                                 </div>
 
                                 <div class="col-md-4">
