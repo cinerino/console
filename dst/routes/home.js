@@ -31,11 +31,17 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
             userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
         });
         const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
+        const adminUserPool = yield userPoolService.findById({
+            userPoolId: process.env.ADMIN_COGNITO_USER_POOL_ID
+        });
+        const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: adminUserPool.Id });
         const searchMovieTheatersResult = yield organizationService.searchMovieTheaters({});
         res.render('index', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
             userPoolClients: searchUserPoolClientsResult.data,
+            adminUserPool: adminUserPool,
+            adminUserPoolClients: searchAdminUserPoolClientsResult.data,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             sellers: searchMovieTheatersResult.data
         });

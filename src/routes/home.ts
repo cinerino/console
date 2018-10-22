@@ -21,16 +21,24 @@ homeRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
+
             const userPool = await userPoolService.findById({
                 userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
             });
             const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
+            const adminUserPool = await userPoolService.findById({
+                userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
+            });
+            const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
+
             const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
 
             res.render('index', {
                 message: 'Welcome to Cinerino Console!',
                 userPool: userPool,
                 userPoolClients: searchUserPoolClientsResult.data,
+                adminUserPool: adminUserPool,
+                adminUserPoolClients: searchAdminUserPoolClientsResult.data,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 sellers: searchMovieTheatersResult.data
             });

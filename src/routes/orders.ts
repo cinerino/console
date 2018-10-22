@@ -36,6 +36,9 @@ ordersRouter.get(
             const searchUserPoolClientsResult = await userPoolService.searchClients({
                 userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
             });
+            const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
+                userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
+            });
 
             const orderStatusChoices = [
                 cinerinoapi.factory.orderStatus.OrderDelivered,
@@ -69,12 +72,20 @@ ordersRouter.get(
                                 value: userPoolClient
                             };
                         })
-                        : searchUserPoolClientsResult.data.map((userPoolClient) => {
-                            return {
-                                name: 'clientId',
-                                value: <string>userPoolClient.ClientId
-                            };
-                        }),
+                        : [
+                            ...searchUserPoolClientsResult.data.map((userPoolClient) => {
+                                return {
+                                    name: 'clientId',
+                                    value: <string>userPoolClient.ClientId
+                                };
+                            }),
+                            ...searchAdminUserPoolClientsResult.data.map((userPoolClient) => {
+                                return {
+                                    name: 'clientId',
+                                    value: <string>userPoolClient.ClientId
+                                };
+                            })
+                        ],
                     telephone: (req.query.customer !== undefined) ? req.query.customer.telephone : undefined
                 },
                 orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
@@ -139,6 +150,7 @@ ordersRouter.get(
                     moment: moment,
                     movieTheaters: searchMovieTheatersResult.data,
                     userPoolClients: searchUserPoolClientsResult.data,
+                    adminUserPoolClients: searchAdminUserPoolClientsResult.data,
                     searchConditions: searchConditions,
                     orderStatusChoices: orderStatusChoices
                 });

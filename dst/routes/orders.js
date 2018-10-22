@@ -43,6 +43,9 @@ ordersRouter.get('',
         const searchUserPoolClientsResult = yield userPoolService.searchClients({
             userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
         });
+        const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({
+            userPoolId: process.env.ADMIN_COGNITO_USER_POOL_ID
+        });
         const orderStatusChoices = [
             cinerinoapi.factory.orderStatus.OrderDelivered,
             cinerinoapi.factory.orderStatus.OrderPickupAvailable,
@@ -75,12 +78,20 @@ ordersRouter.get('',
                             value: userPoolClient
                         };
                     })
-                    : searchUserPoolClientsResult.data.map((userPoolClient) => {
-                        return {
-                            name: 'clientId',
-                            value: userPoolClient.ClientId
-                        };
-                    }),
+                    : [
+                        ...searchUserPoolClientsResult.data.map((userPoolClient) => {
+                            return {
+                                name: 'clientId',
+                                value: userPoolClient.ClientId
+                            };
+                        }),
+                        ...searchAdminUserPoolClientsResult.data.map((userPoolClient) => {
+                            return {
+                                name: 'clientId',
+                                value: userPoolClient.ClientId
+                            };
+                        })
+                    ],
                 telephone: (req.query.customer !== undefined) ? req.query.customer.telephone : undefined
             },
             orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
@@ -146,6 +157,7 @@ ordersRouter.get('',
                 moment: moment,
                 movieTheaters: searchMovieTheatersResult.data,
                 userPoolClients: searchUserPoolClientsResult.data,
+                adminUserPoolClients: searchAdminUserPoolClientsResult.data,
                 searchConditions: searchConditions,
                 orderStatusChoices: orderStatusChoices
             });

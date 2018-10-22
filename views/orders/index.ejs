@@ -67,6 +67,19 @@
                                             <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
                                                 selected
                                                 <% } %>>
+                                                Customer -
+                                                <%= userPoolClient.ClientName %>
+                                            </option>
+                                            <% }) %>
+
+                                            <% adminUserPoolClients.forEach(function (userPoolClient) { %>
+                                            <% 
+                                            var selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
+                                            %>
+                                            <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
+                                                selected
+                                                <% } %>>
+                                                Admin -
                                                 <%= userPoolClient.ClientName %>
                                             </option>
                                             <% }) %>

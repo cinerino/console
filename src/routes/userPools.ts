@@ -23,7 +23,7 @@ userPoolsRouter.get(
                 const userPools = [
                     {
                         id: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID,
-                        name: '会員ユーザープール'
+                        name: 'Customerユーザープール'
                     },
                     {
                         id: <string>process.env.ADMIN_COGNITO_USER_POOL_ID,
