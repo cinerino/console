@@ -41,7 +41,7 @@
                     <form role="form" method="get">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="customer[membershipNumbers]">購入者会員番号</label>
                                         <input type="text" class="form-control" id="customer[membershipNumbers]" name="customer[membershipNumbers]"
@@ -51,6 +51,11 @@
                                         <label for="customer[ids]">購入者ID</label>
                                         <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
                                             placeholder="購入者ID" value="<%= searchConditions.customer.ids.join(',') %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customer[ids]">購入者TEL</label>
+                                        <input type="text" class="form-control" id="customer[telephone]" name="customer[telephone]"
+                                            placeholder="購入者TEL" value="<%= searchConditions.customer.telephone %>">
                                     </div>
                                     <div class="form-group">
                                         <label>購入クライアント</label>
@@ -80,7 +85,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="confirmationNumbers">確認番号</label>
                                         <input type="text" class="form-control" id="confirmationNumbers" name="confirmationNumbers"
@@ -116,6 +122,28 @@
                                             </option>
                                             <% }) %>
                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationFor][ids]">上映イベントID</label>
+                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][reservationFor][ids]"
+                                            name="acceptedOffers[itemOffered][reservationFor][ids]" placeholder="予約イベントID"
+                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">上映イベントシリーズID</label>
+                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
+                                            name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
+                                            placeholder="上映イベントシリーズID" value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">作品コード</label>
+                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
+                                            name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
+                                            placeholder="作品コード" value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') %>">
                                     </div>
                                 </div>
                             </div>

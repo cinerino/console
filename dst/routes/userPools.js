@@ -17,6 +17,43 @@ const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
 const userPoolsRouter = express.Router();
+/**
+ * ユーザープール検索
+ */
+userPoolsRouter.get('', 
+// tslint:disable-next-line:cyclomatic-complexity
+// tslint:disable-next-line:cyclomatic-complexity max-func-body-length
+(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        debug('req.query:', req.query);
+        if (req.query.format === 'datatable') {
+            const userPools = [
+                {
+                    id: process.env.DEFAULT_COGNITO_USER_POOL_ID,
+                    name: '会員ユーザープール'
+                },
+                {
+                    id: process.env.ADMIN_COGNITO_USER_POOL_ID,
+                    name: 'Adminユーザープール'
+                }
+            ];
+            res.json({
+                draw: req.query.draw,
+                recordsTotal: userPools.length,
+                recordsFiltered: userPools.length,
+                data: userPools
+            });
+        }
+        else {
+            res.render('userPools/index', {
+                moment: moment
+            });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 userPoolsRouter.get('/:userPoolId', 
 // tslint:disable-next-line:max-func-body-length
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {

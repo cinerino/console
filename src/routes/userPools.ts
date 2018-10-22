@@ -9,6 +9,43 @@ import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
 const userPoolsRouter = express.Router();
+/**
+ * ユーザープール検索
+ */
+userPoolsRouter.get(
+    '',
+    // tslint:disable-next-line:cyclomatic-complexity
+    // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
+    async (req, res, next) => {
+        try {
+            debug('req.query:', req.query);
+            if (req.query.format === 'datatable') {
+                const userPools = [
+                    {
+                        id: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID,
+                        name: '会員ユーザープール'
+                    },
+                    {
+                        id: <string>process.env.ADMIN_COGNITO_USER_POOL_ID,
+                        name: 'Adminユーザープール'
+                    }
+                ];
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: userPools.length,
+                    recordsFiltered: userPools.length,
+                    data: userPools
+                });
+            } else {
+                res.render('userPools/index', {
+                    moment: moment
+                });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 userPoolsRouter.get(
     '/:userPoolId',
     // tslint:disable-next-line:max-func-body-length

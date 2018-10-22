@@ -16,6 +16,7 @@ const ordersRouter = express.Router();
 ordersRouter.get(
     '',
     // tslint:disable-next-line:cyclomatic-complexity
+    // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
     async (req, res, next) => {
         try {
             debug('req.query:', req.query);
@@ -73,7 +74,8 @@ ordersRouter.get(
                                 name: 'clientId',
                                 value: <string>userPoolClient.ClientId
                             };
-                        })
+                        }),
+                    telephone: (req.query.customer !== undefined) ? req.query.customer.telephone : undefined
                 },
                 orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                     ? (<string>req.query.orderNumbers).split(',').map((v) => v.trim())
@@ -89,7 +91,40 @@ ordersRouter.get(
                     : moment().add(1, 'day').toDate(),
                 confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
                     ? (<string>req.query.confirmationNumbers).split(',').map((v) => v.trim())
-                    : []
+                    : [],
+                acceptedOffers: {
+                    itemOffered: {
+                        reservationFor: {
+                            ids: (req.query.acceptedOffers !== undefined
+                                && req.query.acceptedOffers.itemOffered !== undefined
+                                && req.query.acceptedOffers.itemOffered.reservationFor !== undefined
+                                && req.query.acceptedOffers.itemOffered.reservationFor.ids !== '')
+                                ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.ids).split(',').map((v) => v.trim())
+                                : [],
+                            superEvent: {
+                                ids: (req.query.acceptedOffers !== undefined
+                                    && req.query.acceptedOffers.itemOffered !== undefined
+                                    && req.query.acceptedOffers.itemOffered.reservationFor !== undefined
+                                    && req.query.acceptedOffers.itemOffered.reservationFor.superEvent !== undefined
+                                    && req.query.acceptedOffers.itemOffered.reservationFor.superEvent.ids !== '')
+                                    ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.superEvent.ids)
+                                        .split(',').map((v) => v.trim())
+                                    : [],
+                                workPerformed: {
+                                    identifiers: (req.query.acceptedOffers !== undefined
+                                        && req.query.acceptedOffers.itemOffered !== undefined
+                                        && req.query.acceptedOffers.itemOffered.reservationFor !== undefined
+                                        && req.query.acceptedOffers.itemOffered.reservationFor.superEvent !== undefined
+                                        && req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed !== undefined
+                                        && req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers !== '')
+                                        ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)
+                                            .split(',').map((v) => v.trim())
+                                        : []
+                                }
+                            }
+                        }
+                    }
+                }
             };
             if (req.query.format === 'datatable') {
                 const searchOrdersResult = await orderService.search(searchConditions);

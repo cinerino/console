@@ -183,13 +183,13 @@ placeOrderTransactionsRouter.get(
                     case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
                         object = '座席予約';
                         break;
-                    case cinerinoapi.factory.action.authorize.paymentMethod.creditCard.ObjectType.CreditCard:
+                    case cinerinoapi.factory.paymentMethodType.CreditCard:
                         object = 'クレジットカード決済';
                         break;
-                    case cinerinoapi.factory.action.authorize.paymentMethod.account.ObjectType.AccountPayment:
+                    case cinerinoapi.factory.paymentMethodType.Account:
                         object = '口座決済';
                         break;
-                    case cinerinoapi.factory.action.authorize.paymentMethod.mocoin.ObjectType.MocoinPayment:
+                    case cinerinoapi.factory.paymentMethodType.Mocoin:
                         object = 'MoCoin決済';
                         break;
                     case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:

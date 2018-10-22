@@ -152,7 +152,11 @@ eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(thi
             // tslint:disable-next-line:no-magic-numbers
             orderDateFrom: moment(event.startDate).add(-3, 'months').toDate(),
             orderDateThrough: new Date(),
-            reservedEventIds: [event.id]
+            acceptedOffers: {
+                itemOffered: {
+                    reservationFor: { ids: [event.id] }
+                }
+            }
         });
         debug(searchOrdersResult.totalCount, 'orders found.');
         res.json(searchOrdersResult);
