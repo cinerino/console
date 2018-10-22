@@ -70,3 +70,87 @@ if (movieTheater !== undefined) {
         placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
     <input disabled type="text" class="form-control" placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
 </div>
+<hr>
+
+<% movieTheater.hasPOS.forEach((pos, index) => { %>
+<div class="row removeclass<%= index %>">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="hasPOS[<%= index %>][id]">POSクライアントID</label>
+            <input type="text" class="form-control" id="hasPOS[<%= index %>][id]" name="hasPOS[<%= index %>][id]"
+                placeholder="POS ID" value="<%= pos.id %>">
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="hasPOS[<%= index %>][name]">POS名</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="hasPOS[<%= index %>][name]" name="hasPOS[<%= index %>][name]"
+                    placeholder="POS Name" value="<%= pos.name %>">
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-danger" onclick="removePOS('<%= index %>');"><i class="fa fa-minus"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<% }) %>
+
+<div id="hasPOS">
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="hasPOS[<%= movieTheater.hasPOS.length %>][id]">POSクライアントID</label>
+            <input type="text" class="form-control" id="hasPOS[<%= movieTheater.hasPOS.length %>][id]" name="hasPOS[<%= movieTheater.hasPOS.length %>][id]"
+                placeholder="POS ID" value="">
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="hasPOS[<%= movieTheater.hasPOS.length %>][name]">POS名</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="hasPOS[<%= movieTheater.hasPOS.length %>][name]" name="hasPOS[<%= movieTheater.hasPOS.length %>][name]"
+                    placeholder="POS Name" value="">
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-info" onclick="addPOS();"><i class="fa fa-plus"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var numPOS = Number('<%= movieTheater.hasPOS.length %>');
+    function addPOS() {
+        numPOS++;
+        var objTo = document.getElementById('hasPOS');
+        var divtest = document.createElement("div");
+        divtest.setAttribute("class", "row removeclass" + numPOS);
+        var rdiv = 'removeclass' + numPOS;
+        divtest.innerHTML = '<div class="col-md-6">'
+            + '<div class="form-group">'
+            + '<label for="hasPOS[' + numPOS + '][id]">POSクライアントID</label>'
+            + '<input type="text" class="form-control" id="hasPOS[' + numPOS + '][id]" name="hasPOS[' + numPOS + '][id]" placeholder="POS ID" value="" >'
+            + '</div>'
+            + '</div>'
+            + '<div class="col-md-6">'
+            + '<div class="form-group">'
+            + '<label for="hasPOS[' + numPOS + '][name]">POS名</label>'
+            + '<div class="input-group">'
+            + '<input type="text" class="form-control" id="hasPOS[' + numPOS + '][name]" name="hasPOS[' + numPOS + '][name]" placeholder="POS Name" value="" >'
+            + '<span class="input-group-append">'
+            + '<button type="button" class="btn btn-danger" onclick="removePOS(' + numPOS + ');"><i class="fa fa-minus"></i></button>'
+            + '</span>'
+            + '</div>'
+            + '</div>'
+            + '</div>';
+        objTo.appendChild(divtest)
+    }
+    function removePOS(index) {
+        $('.removeclass' + index).remove();
+    }
+</script>

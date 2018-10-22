@@ -183,6 +183,19 @@ async function createAttributesFromBody(params: {
         }
     }
 
+    const hasPOS: cinerinoapi.factory.organization.IPOS[] = [];
+    if (Array.isArray(params.body.hasPOS)) {
+        params.body.hasPOS.forEach((pos: any) => {
+            if (pos.id !== '') {
+                hasPOS.push({
+                    typeOf: 'POS',
+                    id: pos.id,
+                    name: pos.name
+                });
+            }
+        });
+    }
+
     return {
         typeOf: cinerinoapi.factory.organizationType.MovieTheater,
         name: movieTheaterFromChevre.name,
@@ -202,7 +215,8 @@ async function createAttributesFromBody(params: {
         },
         telephone: movieTheaterFromChevre.telephone,
         url: params.body.url,
-        paymentAccepted: paymentAccepted
+        paymentAccepted: paymentAccepted,
+        hasPOS: hasPOS
     };
 }
 /**
