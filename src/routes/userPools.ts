@@ -46,6 +46,7 @@ userPoolsRouter.get(
         }
     }
 );
+
 userPoolsRouter.get(
     '/:userPoolId',
     // tslint:disable-next-line:max-func-body-length
@@ -69,6 +70,7 @@ userPoolsRouter.get(
         }
     }
 );
+
 /**
  * ユーザープールの注文検索
  */
@@ -103,6 +105,7 @@ userPoolsRouter.get(
         }
     }
 );
+
 userPoolsRouter.get(
     '/:userPoolId/clients/:clientId',
     // tslint:disable-next-line:max-func-body-length
@@ -125,6 +128,7 @@ userPoolsRouter.get(
         }
     }
 );
+
 /**
  * クライアントの注文検索
  */
@@ -159,4 +163,26 @@ userPoolsRouter.get(
         }
     }
 );
+
+userPoolsRouter.get(
+    '/:userPoolId/people/:personId',
+    // tslint:disable-next-line:max-func-body-length
+    async (req, res, next) => {
+        try {
+            switch (req.params.userPoolId) {
+                case process.env.DEFAULT_COGNITO_USER_POOL_ID:
+                    res.redirect(`/people/${req.params.personId}`);
+                    break;
+                case process.env.ADMIN_COGNITO_USER_POOL_ID:
+                    res.redirect(`/admin/${req.params.personId}`);
+                    break;
+                default:
+                    throw new Error('Unknown userPool');
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 export default userPoolsRouter;

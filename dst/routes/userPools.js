@@ -161,4 +161,23 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) =>
         next(error);
     }
 }));
+userPoolsRouter.get('/:userPoolId/people/:personId', 
+// tslint:disable-next-line:max-func-body-length
+(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        switch (req.params.userPoolId) {
+            case process.env.DEFAULT_COGNITO_USER_POOL_ID:
+                res.redirect(`/people/${req.params.personId}`);
+                break;
+            case process.env.ADMIN_COGNITO_USER_POOL_ID:
+                res.redirect(`/admin/${req.params.personId}`);
+                break;
+            default:
+                throw new Error('Unknown userPool');
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = userPoolsRouter;

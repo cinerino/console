@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">販売者詳細</h1>
+                <h1 class="m-0 text-dark">会員詳細</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -12,9 +12,9 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/organizations/movieTheater">販売者検索</a>
+                        <a href="/people">会員検索</a>
                     </li>
-                    <li class="breadcrumb-item active">販売者詳細</li>
+                    <li class="breadcrumb-item active">会員詳細</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -28,7 +28,6 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-
         <% if (messages.message) { %>
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -57,11 +56,12 @@
                                 </div> -->
 
                         <h3 class="profile-username text-center">
-                            <%= movieTheater.name.ja %>
+                            <%= person.givenName %>
+                            <%= person.familyName %>
                         </h3>
 
                         <p class="text-muted text-center">
-                            <%= movieTheater.name.en %>
+                            <%= person.memberOf.membershipNumber %>
                         </p>
 
                         <ul class="list-group list-group-unbordered mb-3">
@@ -83,47 +83,40 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
-                        <p class="text-muted">
-                            <%= movieTheater.location.branchCode %>
-                            <%= movieTheater.location.name.ja %>
-                        </p>
-                        <hr>
-
                         <strong><i class="fa fa-phone mr-1"></i> Telephone</strong>
                         <p class="text-muted">
-                            <%= movieTheater.telephone %>
+                            <%= person.telephone %>
                         </p>
                         <hr>
 
-                        <strong><i class="fa fa-link mr-1"></i> url</strong>
+                        <strong><i class="fa fa-envelope mr-1"></i> Email</strong>
                         <p class="text-muted">
-                            <a target="_blank" href="<%= movieTheater.url %>">
-                                <%= movieTheater.url %>
-                            </a>
+                            <%= person.email %>
                         </p>
                         <hr>
 
-                        <strong><i class="fa fa-shopping-cart mr-1"></i> 対応決済方法</strong>
+                        <strong><i class="fa fa-credit-card mr-1"></i> クレジットカード</strong>
                         <p class="text-muted">
-                            <% movieTheater.paymentAccepted.forEach((payment) => { %>
-                            <span class="badge <%= payment.paymentMethodType %>">
-                                <%= payment.paymentMethodType %>
-                            </span>
+                            <% creditCards.forEach((creditCard) => { %>
+                            <%= creditCard.holderName %><br>
+                            <%= creditCard.cardNo %><br>
                             <% }) %>
                         </p>
                         <hr>
 
-                        <strong><i class="fa fa-piggy-bank mr-1"></i> 口座</strong>
+                        <strong><i class="fa fa-piggy-bank mr-1"></i> コイン口座</strong>
                         <p class="text-muted">
-                            <% const coinAccounts = movieTheater.paymentAccepted.filter((p) => p.paymentMethodType === 'Account') %>
-                            <% coinAccounts.forEach((account) => { %>
+                            <% coinAccounts.forEach((ownershipInfo) => { %>
+                            <% const account = ownershipInfo.typeOfGood %>
                             <span class="badge <%= account.accountType %>">
                                 <%= account.accountType %>
                             </span>
                             <a target="_blank" href="<%= process.env.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
                                 <%= account.accountNumber %>
                             </a>
+                            <span class="badge <%= account.status %>">
+                                <%= account.status %>
+                            </span>
                             <br>
                             <% }) %>
                         </p>
@@ -164,8 +157,17 @@
                             </div>
 
                             <div class="tab-pane" id="jsonViewer">
+                                <h4>Person</h4>
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(movieTheater, null, '\t') %></textarea>
+                                    <textarea class="form-control person" rows="20" placeholder="" disabled=""><%= JSON.stringify(person, null, '\t') %></textarea>
+                                </div>
+                                <h4>クレジットカード</h4>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(creditCards, null, '\t') %></textarea>
+                                </div>
+                                <h4>コイン口座</h4>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(coinAccounts, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -173,14 +175,6 @@
                             <div class="tab-pane" id="settings">
                                 <!-- form start -->
                                 <form role="form" method="post">
-                                    <div class="card-body">
-                                        <%- include('./form', {movieTheater: movieTheater, PaymentMethodType: PaymentMethodType}) %>
-                                    </div>
-                                    <!-- /.card-body -->
-
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">更新</button>
-                                    </div>
                                 </form>
                             </div>
                             <!-- /.tab-pane -->
@@ -193,9 +187,9 @@
                                     </div> -->
                                     <!-- /.card-header -->
 
-                                    <div class="card-body">
+                                    <!-- <div class="card-body">
                                         <button type="button" class="delete btn btn-danger">削除する</button>
-                                    </div>
+                                    </div> -->
                                     <!-- /.card-body -->
                                     <!-- <div class="card-footer">
                                         </div> -->
@@ -216,4 +210,4 @@
 </section>
 <!-- /.content -->
 
-<script src="/js/organizations/movieTheater/edit.js"></script>
+<script src="/js/people/show.js"></script>
