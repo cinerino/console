@@ -116,13 +116,15 @@ organizationsRouter.all(
             res.render('organizations/movieTheater/edit', {
                 message: message,
                 movieTheater: movieTheater,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType
+                PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                PlaceType: cinerinoapi.factory.placeType
             });
         } catch (error) {
             next(error);
         }
     }
 );
+// tslint:disable-next-line:max-func-body-length
 async function createAttributesFromBody(params: {
     body: any;
     authClient: any;
@@ -196,6 +198,19 @@ async function createAttributesFromBody(params: {
         });
     }
 
+    const areaServed: cinerinoapi.factory.organization.movieTheater.IAreaServed[] = [];
+    if (Array.isArray(params.body.areaServed)) {
+        params.body.areaServed.forEach((area: any) => {
+            if (area.id !== '') {
+                areaServed.push({
+                    typeOf: area.typeOf,
+                    id: area.id,
+                    name: area.name
+                });
+            }
+        });
+    }
+
     return {
         typeOf: cinerinoapi.factory.organizationType.MovieTheater,
         name: movieTheaterFromChevre.name,
@@ -216,7 +231,8 @@ async function createAttributesFromBody(params: {
         telephone: movieTheaterFromChevre.telephone,
         url: params.body.url,
         paymentAccepted: paymentAccepted,
-        hasPOS: hasPOS
+        hasPOS: hasPOS,
+        areaServed: areaServed
     };
 }
 /**

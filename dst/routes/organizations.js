@@ -119,13 +119,15 @@ organizationsRouter.all('/movieTheater/:id', (req, res, next) => __awaiter(this,
         res.render('organizations/movieTheater/edit', {
             message: message,
             movieTheater: movieTheater,
-            PaymentMethodType: cinerinoapi.factory.paymentMethodType
+            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            PlaceType: cinerinoapi.factory.placeType
         });
     }
     catch (error) {
         next(error);
     }
 }));
+// tslint:disable-next-line:max-func-body-length
 function createAttributesFromBody(params) {
     return __awaiter(this, void 0, void 0, function* () {
         debug(params);
@@ -193,6 +195,18 @@ function createAttributesFromBody(params) {
                 }
             });
         }
+        const areaServed = [];
+        if (Array.isArray(params.body.areaServed)) {
+            params.body.areaServed.forEach((area) => {
+                if (area.id !== '') {
+                    areaServed.push({
+                        typeOf: area.typeOf,
+                        id: area.id,
+                        name: area.name
+                    });
+                }
+            });
+        }
         return {
             typeOf: cinerinoapi.factory.organizationType.MovieTheater,
             name: movieTheaterFromChevre.name,
@@ -213,7 +227,8 @@ function createAttributesFromBody(params) {
             telephone: movieTheaterFromChevre.telephone,
             url: params.body.url,
             paymentAccepted: paymentAccepted,
-            hasPOS: hasPOS
+            hasPOS: hasPOS,
+            areaServed: areaServed
         };
     });
 }

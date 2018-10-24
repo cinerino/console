@@ -73,7 +73,7 @@ if (movieTheater !== undefined) {
 <hr>
 
 <% movieTheater.hasPOS.forEach((pos, index) => { %>
-<div class="row removeclass<%= index %>">
+<div class="row hasPOS-<%= index %>">
     <div class="col-md-6">
         <div class="form-group">
             <label for="hasPOS[<%= index %>][id]">POSクライアントID</label>
@@ -123,15 +123,99 @@ if (movieTheater !== undefined) {
     </div>
 </div>
 
+<hr>
+
+<% movieTheater.areaServed.forEach((area, index) => { %>
+<div class="row areaServed-<%= index %>">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="areaServed[<%= index %>][typeOf]">店舗タイプ</label>
+            <select class="form-control" name="areaServed[<%= index %>][typeOf]">
+                <option value="<%= PlaceType.Online %>" <% if (area.typeOf===PlaceType.Online) { %> selected
+                    <% } %>>
+                    <%= PlaceType.Online %>
+                </option>
+                <option value="<%= PlaceType.Store %>" <% if (area.typeOf===PlaceType.Store) { %> selected
+                    <% } %>>
+                    <%= PlaceType.Store %>
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="areaServed[<%= index %>][id]">店舗ID</label>
+            <input type="text" class="form-control" id="areaServed[<%= index %>][id]" name="areaServed[<%= index %>][id]"
+                placeholder="店舗ID" value="<%= area.id %>">
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="areaServed[<%= index %>][name]">店舗名</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="areaServed[<%= index %>][name]" name="areaServed[<%= index %>][name]"
+                    placeholder="店舗名" value="<%= area.name %>">
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-danger" onclick="removeAreaServed('<%= index %>');"><i class="fa fa-minus"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<% }) %>
+
+<div id="areaServed">
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="areaServed[<%= movieTheater.areaServed.length %>][typeOf]">店舗タイプ</label>
+            <select class="form-control" name="areaServed[<%= movieTheater.areaServed.length %>][typeOf]">
+                <option value="<%= PlaceType.Online %>">
+                    <%= PlaceType.Online %>
+                </option>
+                <option value="<%= PlaceType.Store %>">
+                    <%= PlaceType.Store %>
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="areaServed[<%= movieTheater.areaServed.length %>][id]">店舗ID</label>
+            <input type="text" class="form-control" id="areaServed[<%= movieTheater.areaServed.length %>][id]" name="areaServed[<%= movieTheater.areaServed.length %>][id]"
+                placeholder="店舗ID" value="">
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="areaServed[<%= movieTheater.areaServed.length %>][name]">店舗名</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="areaServed[<%= movieTheater.areaServed.length %>][name]"
+                    name="areaServed[<%= movieTheater.areaServed.length %>][name]" placeholder="店舗名" value="">
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-info" onclick="addAreaServed();"><i class="fa fa-plus"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var numPOS = Number('<%= movieTheater.hasPOS.length %>');
     function addPOS() {
-        numPOS++;
+        numPOS += 1;
         var objTo = document.getElementById('hasPOS');
         var divtest = document.createElement("div");
-        divtest.setAttribute("class", "row removeclass" + numPOS);
-        var rdiv = 'removeclass' + numPOS;
-        divtest.innerHTML = '<div class="col-md-6">'
+        divtest.setAttribute("class", "row hasPOS-" + numPOS);
+        var rdiv = 'hasPOS-' + numPOS;
+        divtest.innerHTML = ''
+            + '<div class="col-md-6">'
             + '<div class="form-group">'
             + '<label for="hasPOS[' + numPOS + '][id]">POSクライアントID</label>'
             + '<input type="text" class="form-control" id="hasPOS[' + numPOS + '][id]" name="hasPOS[' + numPOS + '][id]" placeholder="POS ID" value="" >'
@@ -151,6 +235,52 @@ if (movieTheater !== undefined) {
         objTo.appendChild(divtest)
     }
     function removePOS(index) {
-        $('.removeclass' + index).remove();
+        numPOS -= 1;
+        $('.hasPOS-' + index).remove();
+    }
+
+    var numAreaServed = Number('<%= movieTheater.areaServed.length %>');
+    function addAreaServed() {
+        numAreaServed += 1;
+        var objTo = document.getElementById('areaServed');
+        var divtest = document.createElement("div");
+        divtest.setAttribute("class", "row areaServed-" + numAreaServed);
+        var rdiv = 'areaServed-' + numAreaServed;
+        divtest.innerHTML = ''
+            + '<div class="col-md-4">'
+            + '<div class="form-group">'
+            + '<label for="areaServed[' + numAreaServed + '][typeOf]">店舗タイプ</label>'
+            + '<select class="form-control" name="areaServed[' + numAreaServed + '][typeOf]">'
+            + '<option value="<%= PlaceType.Online %>">'
+            + '<%= PlaceType.Online %>'
+            + '</option>'
+            + '<option value="<%= PlaceType.Store %>">'
+            + '<%= PlaceType.Store %>'
+            + '</option>'
+            + '</select>'
+            + '</div>'
+            + '</div>'
+            + '<div class="col-md-4">'
+            + '<div class="form-group">'
+            + '<label for="areaServed[' + numAreaServed + '][id]">店舗ID</label>'
+            + '<input type="text" class="form-control" id="areaServed[' + numAreaServed + '][id]" name="areaServed[' + numAreaServed + '][id]" placeholder="店舗ID" value="" >'
+            + '</div>'
+            + '</div>'
+            + '<div class="col-md-4">'
+            + '<div class="form-group">'
+            + '<label for="areaServed[' + numAreaServed + '][name]">店舗名</label>'
+            + '<div class="input-group">'
+            + '<input type="text" class="form-control" id="areaServed[' + numAreaServed + '][name]" name="areaServed[' + numAreaServed + '][name]" placeholder="店舗名" value="" >'
+            + '<span class="input-group-append">'
+            + '<button type="button" class="btn btn-danger" onclick="removeAreaServed(' + numAreaServed + ');"><i class="fa fa-minus"></i></button>'
+            + '</span>'
+            + '</div>'
+            + '</div>'
+            + '</div>';
+        objTo.appendChild(divtest)
+    }
+    function removeAreaServed(index) {
+        numAreaServed -= 1;
+        $('.areaServed-' + index).remove();
     }
 </script>
