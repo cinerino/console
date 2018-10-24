@@ -54,6 +54,10 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
+                        + data.areaServed.map(function (area) {
+                            return '<li><span class="badge badge-info">' + area.typeOf + '</span></li>'
+                                + '<li>' + JSON.stringify(area, null, '\t') + '</li>';
+                        }).join('')
                         + '</ul>';
                 }
             }
