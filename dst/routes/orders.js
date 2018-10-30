@@ -204,7 +204,7 @@ ordersRouter.get('/:orderNumber',
             orderNumber: order.orderNumber,
             sort: { endDate: cinerinoapi.factory.sortType.Ascending }
         });
-        // tslint:disable-next-line:cyclomatic-complexity
+        // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
         const timelines = actionsOnOrder.map((a) => {
             let agent;
             if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
@@ -261,35 +261,49 @@ ordersRouter.get('/:orderNumber',
                     actionName = a.typeOf;
             }
             let object;
-            switch (a.object.typeOf) {
-                case 'Order':
-                    object = '注文';
-                    break;
-                case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                    object = 'ポイント';
-                    break;
-                case cinerinoapi.factory.actionType.SendAction:
-                    if (a.object.typeOf === 'Order') {
-                        object = '配送';
-                    }
-                    else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                        object = '送信';
-                    }
-                    else {
-                        object = '送信';
-                    }
-                    break;
-                case cinerinoapi.factory.creativeWorkType.EmailMessage:
-                    object = 'Eメール';
-                    break;
-                case 'PaymentMethod':
-                    object = a.object.paymentMethod.typeOf;
-                    break;
-                case cinerinoapi.factory.actionType.PayAction:
-                    object = a.object.object.paymentMethod.typeOf;
-                    break;
-                default:
-                    object = a.object.typeOf;
+            if (Array.isArray(a.object)) {
+                switch (a.object[0].typeOf) {
+                    case 'PaymentMethod':
+                        object = a.object[0].paymentMethod.name;
+                        break;
+                    case cinerinoapi.factory.actionType.PayAction:
+                        object = a.object[0].object.paymentMethod.typeOf;
+                        break;
+                    default:
+                        object = a.object[0].typeOf;
+                }
+            }
+            else {
+                switch (a.object.typeOf) {
+                    case 'Order':
+                        object = '注文';
+                        break;
+                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
+                        object = 'ポイント';
+                        break;
+                    case cinerinoapi.factory.actionType.SendAction:
+                        if (a.object.typeOf === 'Order') {
+                            object = '配送';
+                        }
+                        else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
+                            object = '送信';
+                        }
+                        else {
+                            object = '送信';
+                        }
+                        break;
+                    case cinerinoapi.factory.creativeWorkType.EmailMessage:
+                        object = 'Eメール';
+                        break;
+                    case 'PaymentMethod':
+                        object = a.object.object[0].paymentMethod.name;
+                        break;
+                    case cinerinoapi.factory.actionType.PayAction:
+                        object = a.object.object[0].paymentMethod.typeOf;
+                        break;
+                    default:
+                        object = a.object.typeOf;
+                }
             }
             return {
                 action: a,
@@ -317,7 +331,7 @@ ordersRouter.get('/:orderNumber',
  */
 ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const returnOrderService = new cinerinoapi.service.transaction.ReturnOrder({
+        const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
@@ -329,7 +343,7 @@ ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(this, vo
                 }
             }
         });
-        yield returnOrderService.confirm({ transactionId: returnOrderTransaction.id });
+        yield returnOrderService.confirm(returnOrderTransaction);
         res.status(http_status_1.ACCEPTED).end();
     }
     catch (error) {

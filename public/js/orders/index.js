@@ -90,6 +90,7 @@ $(function () {
                     return '<ul class="list-unstyled">'
                         + data.paymentMethods.map(function (payment) {
                             return '<li><span class="badge ' + payment.typeOf + '">' + payment.typeOf + '</span></li>'
+                                + '<li><span>' + payment.paymentMethodId + '</span></li>';
                         }).join('')
                         + '</ul>';
                 }

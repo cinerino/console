@@ -193,9 +193,6 @@ placeOrderTransactionsRouter.get('/:transactionId',
                 case cinerinoapi.factory.paymentMethodType.Account:
                     object = '口座決済';
                     break;
-                case cinerinoapi.factory.paymentMethodType.Mocoin:
-                    object = 'MoCoin決済';
-                    break;
                 case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
                     object = 'ポイントインセンティブ';
                     break;

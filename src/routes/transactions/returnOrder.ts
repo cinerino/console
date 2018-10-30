@@ -19,7 +19,7 @@ returnOrderTransactionsRouter.get(
     async (req, res, next) => {
         try {
             debug('req.query:', req.query);
-            const returnOrderService = new cinerinoapi.service.transaction.ReturnOrder({
+            const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
@@ -116,7 +116,7 @@ returnOrderTransactionsRouter.get(
     // tslint:disable-next-line:max-func-body-length
     async (req, res, next) => {
         try {
-            const returnOrderService = new cinerinoapi.service.transaction.ReturnOrder({
+            const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
