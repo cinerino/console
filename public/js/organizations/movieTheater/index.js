@@ -44,7 +44,7 @@ $(function () {
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
                         + data.paymentAccepted.map(function (payment) {
-                            return '<li><span class="badge ' + payment.paymentMethodType + '">' + payment.paymentMethodType + '</span></li>'
+                            return '<li><span class="badge badge-info ' + payment.paymentMethodType + '">' + payment.paymentMethodType + '</span></li>'
                                 + '<li>' + JSON.stringify(payment, null, '\t') + '</li>';
                         }).join('')
                         + '</ul>';

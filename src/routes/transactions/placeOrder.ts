@@ -130,7 +130,7 @@ placeOrderTransactionsRouter.get(
                 throw new cinerinoapi.factory.errors.NotFound('Transaction');
             }
             const actionsOnTransaction = await placeOrderService.searchActionsByTransactionId({
-                transactionId: transaction.id,
+                id: transaction.id,
                 sort: { endDate: cinerinoapi.factory.sortType.Ascending }
             });
             const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
