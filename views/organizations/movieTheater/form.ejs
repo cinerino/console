@@ -2,10 +2,14 @@
 let coinAccountPayment;
 let creditCardPayment;
 let movieTicketPayment;
+let hasPOS = [];
+let areaServed = [];
 if (movieTheater !== undefined) {
     coinAccountPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
     creditCardPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
     movieTicketPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.MovieTicket);
+    hasPOS = movieTheater.hasPOS;
+    areaServed = movieTheater.areaServed;
 }
 %>
 <div class="form-group">
@@ -72,7 +76,7 @@ if (movieTheater !== undefined) {
 </div>
 <hr>
 
-<% movieTheater.hasPOS.forEach((pos, index) => { %>
+<% hasPOS.forEach((pos, index) => { %>
 <div class="row hasPOS-<%= index %>">
     <div class="col-md-6">
         <div class="form-group">
@@ -103,17 +107,17 @@ if (movieTheater !== undefined) {
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="hasPOS[<%= movieTheater.hasPOS.length %>][id]">POSクライアントID</label>
-            <input type="text" class="form-control" id="hasPOS[<%= movieTheater.hasPOS.length %>][id]" name="hasPOS[<%= movieTheater.hasPOS.length %>][id]"
+            <label for="hasPOS[<%= hasPOS.length %>][id]">POSクライアントID</label>
+            <input type="text" class="form-control" id="hasPOS[<%= hasPOS.length %>][id]" name="hasPOS[<%= hasPOS.length %>][id]"
                 placeholder="POS ID" value="">
         </div>
     </div>
 
     <div class="col-md-6">
         <div class="form-group">
-            <label for="hasPOS[<%= movieTheater.hasPOS.length %>][name]">POS名</label>
+            <label for="hasPOS[<%= hasPOS.length %>][name]">POS名</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="hasPOS[<%= movieTheater.hasPOS.length %>][name]" name="hasPOS[<%= movieTheater.hasPOS.length %>][name]"
+                <input type="text" class="form-control" id="hasPOS[<%= hasPOS.length %>][name]" name="hasPOS[<%= hasPOS.length %>][name]"
                     placeholder="POS Name" value="">
                 <span class="input-group-append">
                     <button type="button" class="btn btn-info" onclick="addPOS();"><i class="fa fa-plus"></i></button>
@@ -125,7 +129,7 @@ if (movieTheater !== undefined) {
 
 <hr>
 
-<% movieTheater.areaServed.forEach((area, index) => { %>
+<% areaServed.forEach((area, index) => { %>
 <div class="row areaServed-<%= index %>">
     <div class="col-md-4">
         <div class="form-group">
@@ -172,8 +176,8 @@ if (movieTheater !== undefined) {
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            <label for="areaServed[<%= movieTheater.areaServed.length %>][typeOf]">店舗タイプ</label>
-            <select class="form-control" name="areaServed[<%= movieTheater.areaServed.length %>][typeOf]">
+            <label for="areaServed[<%= areaServed.length %>][typeOf]">店舗タイプ</label>
+            <select class="form-control" name="areaServed[<%= areaServed.length %>][typeOf]">
                 <option value="<%= PlaceType.Online %>">
                     <%= PlaceType.Online %>
                 </option>
@@ -186,18 +190,18 @@ if (movieTheater !== undefined) {
 
     <div class="col-md-4">
         <div class="form-group">
-            <label for="areaServed[<%= movieTheater.areaServed.length %>][id]">店舗ID</label>
-            <input type="text" class="form-control" id="areaServed[<%= movieTheater.areaServed.length %>][id]" name="areaServed[<%= movieTheater.areaServed.length %>][id]"
+            <label for="areaServed[<%= areaServed.length %>][id]">店舗ID</label>
+            <input type="text" class="form-control" id="areaServed[<%= areaServed.length %>][id]" name="areaServed[<%= areaServed.length %>][id]"
                 placeholder="店舗ID" value="">
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="form-group">
-            <label for="areaServed[<%= movieTheater.areaServed.length %>][name]">店舗名</label>
+            <label for="areaServed[<%= areaServed.length %>][name]">店舗名</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="areaServed[<%= movieTheater.areaServed.length %>][name]"
-                    name="areaServed[<%= movieTheater.areaServed.length %>][name]" placeholder="店舗名" value="">
+                <input type="text" class="form-control" id="areaServed[<%= areaServed.length %>][name]" name="areaServed[<%= areaServed.length %>][name]"
+                    placeholder="店舗名" value="">
                 <span class="input-group-append">
                     <button type="button" class="btn btn-info" onclick="addAreaServed();"><i class="fa fa-plus"></i></button>
                 </span>
@@ -207,7 +211,7 @@ if (movieTheater !== undefined) {
 </div>
 
 <script>
-    var numPOS = Number('<%= movieTheater.hasPOS.length %>');
+    var numPOS = Number('<%= hasPOS.length %>');
     function addPOS() {
         numPOS += 1;
         var objTo = document.getElementById('hasPOS');
@@ -239,7 +243,7 @@ if (movieTheater !== undefined) {
         $('.hasPOS-' + index).remove();
     }
 
-    var numAreaServed = Number('<%= movieTheater.areaServed.length %>');
+    var numAreaServed = Number('<%= areaServed.length %>');
     function addAreaServed() {
         numAreaServed += 1;
         var objTo = document.getElementById('areaServed');

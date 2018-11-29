@@ -80,7 +80,8 @@ organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this,
         res.render('organizations/movieTheater/new', {
             message: message,
             attributes: attributes,
-            PaymentMethodType: cinerinoapi.factory.paymentMethodType
+            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            PlaceType: cinerinoapi.factory.placeType
         });
     }
     catch (error) {

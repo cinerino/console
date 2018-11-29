@@ -75,7 +75,8 @@ organizationsRouter.all(
             res.render('organizations/movieTheater/new', {
                 message: message,
                 attributes: attributes,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType
+                PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                PlaceType: cinerinoapi.factory.placeType
             });
         } catch (error) {
             next(error);
