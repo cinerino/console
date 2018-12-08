@@ -374,6 +374,9 @@ ordersRouter.post(
             if (orderPotentialActions === undefined) {
                 throw new cinerinoapi.factory.errors.NotFound('Order potentialActions');
             }
+            if (orderPotentialActions.sendOrder === undefined) {
+                throw new cinerinoapi.factory.errors.NotFound('SendOrder actionAttributes');
+            }
             const sendOrderPotentialActions = orderPotentialActions.sendOrder.potentialActions;
             if (sendOrderPotentialActions === undefined) {
                 throw new cinerinoapi.factory.errors.NotFound('SendOrder potentialActions');
