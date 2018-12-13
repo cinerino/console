@@ -62,7 +62,10 @@
                                         <select multiple class="form-control" name="customer[userPoolClients][]">
                                             <% userPoolClients.forEach(function (userPoolClient) { %>
                                             <% 
-                                            var selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
+                                            var selected = false;
+                                            if (searchConditions.customer !== undefined && searchConditions.customer.identifiers !== undefined) {
+                                                selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
+                                            }
                                             %>
                                             <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
                                                 selected
@@ -74,7 +77,10 @@
 
                                             <% adminUserPoolClients.forEach(function (userPoolClient) { %>
                                             <% 
-                                            var selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
+                                            var selected = false;
+                                            if (searchConditions.customer !== undefined && searchConditions.customer.identifiers !== undefined) {
+                                                selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
+                                            }
                                             %>
                                             <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
                                                 selected
@@ -140,7 +146,12 @@
                                         <label>決済方法</label>
                                         <select multiple class="form-control" name="paymentMethods[typeOfs][]">
                                             <% Object.keys(PaymentMethodType).forEach(function (key) { %>
-                                            <% var selected = searchConditions.paymentMethods.typeOfs.indexOf(PaymentMethodType[key]) >= 0; %>
+                                            <%
+                                            var selected = false;
+                                            if (searchConditions.paymentMethods !== undefined && searchConditions.paymentMethods.typeOfs !== undefined) {
+                                                selected = searchConditions.paymentMethods.typeOfs.indexOf(PaymentMethodType[key]) >= 0;
+                                            }
+                                            %>
                                             <option value="<%= PaymentMethodType[key] %>" <% if (selected) { %>
                                                 selected
                                                 <% } %>>

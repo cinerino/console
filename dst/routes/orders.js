@@ -78,20 +78,21 @@ ordersRouter.get('',
                             value: userPoolClient
                         };
                     })
-                    : [
-                        ...searchUserPoolClientsResult.data.map((userPoolClient) => {
-                            return {
-                                name: 'clientId',
-                                value: userPoolClient.ClientId
-                            };
-                        }),
-                        ...searchAdminUserPoolClientsResult.data.map((userPoolClient) => {
-                            return {
-                                name: 'clientId',
-                                value: userPoolClient.ClientId
-                            };
-                        })
-                    ],
+                    : undefined,
+                // : [
+                //     ...searchUserPoolClientsResult.data.map((userPoolClient) => {
+                //         return {
+                //             name: 'clientId',
+                //             value: <string>userPoolClient.ClientId
+                //         };
+                //     }),
+                //     ...searchAdminUserPoolClientsResult.data.map((userPoolClient) => {
+                //         return {
+                //             name: 'clientId',
+                //             value: <string>userPoolClient.ClientId
+                //         };
+                //     })
+                // ],
                 telephone: (req.query.customer !== undefined) ? req.query.customer.telephone : undefined
             },
             orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
@@ -146,8 +147,9 @@ ordersRouter.get('',
                 typeOfs: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.typeOfs !== undefined)
                     ? req.query.paymentMethods.typeOfs
-                    : Object.keys(cinerinoapi.factory.paymentMethodType)
-                        .map((key) => cinerinoapi.factory.paymentMethodType[key]),
+                    : undefined,
+                // : Object.keys(cinerinoapi.factory.paymentMethodType)
+                //     .map((key) => (<any>cinerinoapi.factory.paymentMethodType)[key]),
                 paymentMethodIds: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== '')
