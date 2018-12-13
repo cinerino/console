@@ -107,7 +107,7 @@
                         <strong><i class="fa fa-shopping-cart mr-1"></i> 対応決済方法</strong>
                         <p class="text-muted">
                             <% movieTheater.paymentAccepted.forEach((payment) => { %>
-                            <span class="badge <%= payment.paymentMethodType %>">
+                            <span class="badge badge-info <%= payment.paymentMethodType %>">
                                 <%= payment.paymentMethodType %>
                             </span>
                             <% }) %>

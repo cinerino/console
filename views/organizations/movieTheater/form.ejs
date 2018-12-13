@@ -2,12 +2,16 @@
 let coinAccountPayment;
 let creditCardPayment;
 let movieTicketPayment;
+let cashPayment;
+let emoneyPayment;
 let hasPOS = [];
 let areaServed = [];
 if (movieTheater !== undefined) {
     coinAccountPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
     creditCardPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
     movieTicketPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.MovieTicket);
+    cashPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Cash);
+    emoneyPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.EMoney);
     hasPOS = movieTheater.hasPOS;
     areaServed = movieTheater.areaServed;
 }
@@ -74,8 +78,24 @@ if (movieTheater !== undefined) {
         placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
     <input disabled type="text" class="form-control" placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
 </div>
-<hr>
 
+<hr>
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="cashPaymentAccepted" name="cashPaymentAccepted" <%=(cashPayment
+        !==　undefined) ? ' checked' : '' %>>
+    <label class="form-check-label" for="cashPaymentAccepted">
+        <%= PaymentMethodType.Cash %>決済を許可</label>
+</div>
+
+<hr>
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="emoneyPaymentAccepted" name="emoneyPaymentAccepted" <%=(emoneyPayment
+        !==　undefined) ? ' checked' : '' %>>
+    <label class="form-check-label" for="emoneyPaymentAccepted">
+        <%= PaymentMethodType.EMoney %>決済を許可</label>
+</div>
+
+<hr>
 <% hasPOS.forEach((pos, index) => { %>
 <div class="row hasPOS-<%= index %>">
     <div class="col-md-6">

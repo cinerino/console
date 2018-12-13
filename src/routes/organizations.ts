@@ -186,6 +186,20 @@ async function createAttributesFromBody(params: {
         }
     }
 
+    // 現金決済を有効にする場合
+    if (params.body.cashPaymentAccepted === 'on') {
+        paymentAccepted.push({
+            paymentMethodType: cinerinoapi.factory.paymentMethodType.Cash
+        });
+    }
+
+    // 電子マネー決済を有効にする場合
+    if (params.body.emoneyPaymentAccepted === 'on') {
+        paymentAccepted.push({
+            paymentMethodType: cinerinoapi.factory.paymentMethodType.EMoney
+        });
+    }
+
     const hasPOS: cinerinoapi.factory.organization.IPOS[] = [];
     if (Array.isArray(params.body.hasPOS)) {
         params.body.hasPOS.forEach((pos: any) => {
