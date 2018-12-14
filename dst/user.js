@@ -57,7 +57,7 @@ class User {
         return __awaiter(this, void 0, void 0, function* () {
             // 認証情報を取得できればログイン成功
             const credentials = yield this.authClient.getToken(code, process.env.API_CODE_VERIFIER);
-            debug('credentials published', credentials);
+            debug('credentials published');
             if (credentials.access_token === undefined) {
                 throw new Error('Access token is required for credentials.');
             }

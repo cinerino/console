@@ -78,7 +78,7 @@ export default class User {
     public async signIn(code: string) {
         // 認証情報を取得できればログイン成功
         const credentials = await this.authClient.getToken(code, <string>process.env.API_CODE_VERIFIER);
-        debug('credentials published', credentials);
+        debug('credentials published');
 
         if (credentials.access_token === undefined) {
             throw new Error('Access token is required for credentials.');

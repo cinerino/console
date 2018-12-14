@@ -3,7 +3,7 @@
  */
 // import * as createDebug from 'debug';
 import * as express from 'express';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 
 import * as cinerinoapi from '../cinerinoapi';
 
@@ -20,18 +20,18 @@ dashboardRouter.get(
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
                 limit: 1,
                 page: 1,
-                orderDateFrom: moment().add(-1, 'day').toDate(),
-                orderDateThrough: moment().toDate()
+                orderDateFrom: moment().tz('Asia/Tokyo').startOf('day').toDate()
             };
-            const searchResult = await orderService.search(searchConditions);
+            const { totalCount } = await orderService.search(searchConditions);
             res.json({
-                totalCount: searchResult.totalCount
+                totalCount: totalCount
             });
         } catch (error) {
             next(error);
         }
     }
 );
+
 dashboardRouter.get(
     '/aggregateExitRate',
     async (req, res, next) => {
@@ -44,8 +44,7 @@ dashboardRouter.get(
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 limit: 1,
                 page: 1,
-                startFrom: moment().add(-1, 'day').toDate(),
-                startThrough: moment().toDate()
+                startFrom: moment().tz('Asia/Tokyo').startOf('day').toDate()
             };
             const searchResult = await placeOrderService.search(searchConditions);
             searchConditions.statuses = [
@@ -64,10 +63,13 @@ dashboardRouter.get(
         }
     }
 );
+
 dashboardRouter.get(
     '/countNewUser',
     async (_, res, next) => {
         try {
+            // 未実装
+
             res.json({
                 totalCount: 0
             });
@@ -76,6 +78,7 @@ dashboardRouter.get(
         }
     }
 );
+
 dashboardRouter.get(
     '/countNewTransaction',
     async (req, res, next) => {
@@ -88,8 +91,7 @@ dashboardRouter.get(
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 limit: 1,
                 page: 1,
-                startFrom: moment().add(-1, 'day').toDate(),
-                startThrough: moment().toDate()
+                startFrom: moment().tz('Asia/Tokyo').startOf('day').toDate()
             };
             const searchResult = await placeOrderService.search(searchConditions);
             res.json({
@@ -100,6 +102,7 @@ dashboardRouter.get(
         }
     }
 );
+
 dashboardRouter.get(
     '/orders',
     async (req, res, next) => {
@@ -112,7 +115,6 @@ dashboardRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: (req.query.sort !== undefined) ? req.query.sort : { orderDate: cinerinoapi.factory.sortType.Descending },
-                // tslint:disable-next-line:no-magic-numbers
                 orderDateFrom: moment(req.query.orderDateFrom).toDate(),
                 orderDateThrough: moment(req.query.orderDateThrough).toDate()
             });
@@ -122,4 +124,5 @@ dashboardRouter.get(
         }
     }
 );
+
 export default dashboardRouter;
