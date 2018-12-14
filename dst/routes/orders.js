@@ -148,8 +148,7 @@ ordersRouter.get('',
                     && req.query.paymentMethods.typeOfs !== undefined)
                     ? req.query.paymentMethods.typeOfs
                     : undefined,
-                // : Object.keys(cinerinoapi.factory.paymentMethodType)
-                //     .map((key) => (<any>cinerinoapi.factory.paymentMethodType)[key]),
+                // : Object.values(cinerinoapi.factory.paymentMethodType),
                 paymentMethodIds: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== '')

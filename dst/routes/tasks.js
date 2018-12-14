@@ -27,7 +27,7 @@ tasksRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const taskNameChoices = Object.keys(cinerinoapi.factory.taskName).map((name) => cinerinoapi.factory.taskName[name]);
+        const taskNameChoices = Object.values(cinerinoapi.factory.taskName);
         const taskStatusChoices = [
             cinerinoapi.factory.taskStatus.Aborted,
             cinerinoapi.factory.taskStatus.Executed,

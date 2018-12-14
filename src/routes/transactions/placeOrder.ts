@@ -77,8 +77,13 @@ placeOrderTransactionsRouter.get(
                             ? (<string>req.query.result.order.orderNumbers).split(',').map((v) => v.trim())
                             : []
                     }
-                }
+                },
+                tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)
+                    ? req.query.tasksExportationStatuses
+                    : Object.values(cinerinoapi.factory.transactionTasksExportationStatus)
             };
+            debug('searchConditions:', searchConditions);
+
             if (req.query.format === 'datatable') {
                 const searchScreeningEventsResult = await placeOrderService.search(searchConditions);
                 res.json({
@@ -101,6 +106,7 @@ placeOrderTransactionsRouter.get(
                     moment: moment,
                     movieTheaters: searchMovieTheatersResult.data,
                     transactionStatusChoices: transactionStatusChoices,
+                    TransactionTasksExportationStatus: cinerinoapi.factory.transactionTasksExportationStatus,
                     searchConditions: searchConditions
                 });
             }

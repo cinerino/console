@@ -105,6 +105,18 @@
                                             <% }) %>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>タスクエクスポートステータス</label>
+                                        <select multiple class="form-control" name="tasksExportationStatuses[]">
+                                            <% Object.values(TransactionTasksExportationStatus).forEach(function (status) { %>
+                                            <% var selected = searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
+                                            <option value="<%= status %>" <% if (selected) { %> selected
+                                                <% } %>>
+                                                <%= status %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,6 +161,7 @@
                                     <th>販売者</th>
                                     <th>ユーザー主体<br>トークン発行者<br>クライアント</th>
                                     <th>結果</th>
+                                    <th>タスクエクスポート</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -158,6 +171,7 @@
                                     <th>販売者</th>
                                     <th>ユーザー主体<br>トークン発行者<br>クライアント</th>
                                     <th>結果</th>
+                                    <th>タスクエクスポート</th>
                                 </tr>
                             </tfoot>
                         </table>

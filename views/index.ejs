@@ -277,13 +277,13 @@
                             <!-- Morris chart - Sales -->
                             <div class="chart tab-pane active show" id="salesAmountByPaymentMethod">
                                 <div class="row">
-                                    <% Object.keys(PaymentMethodType).forEach(function(key) { %>
+                                    <% Object.values(PaymentMethodType).forEach(function(paymentMethod) { %>
                                     <div class="col-4 text-center">
-                                        <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
+                                        <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= paymentMethod %>"
                                             data-readonly="true" value="0" data-width="60" data-height="60"
                                             data-fgColor="#86c0ff">
                                         <div class="text-white">
-                                            <%= PaymentMethodType[key] %>
+                                            <%= paymentMethod %>
                                         </div>
                                     </div>
                                     <!-- ./col -->
@@ -394,13 +394,13 @@
                             <!-- Morris chart - Sales -->
                             <div class="chart tab-pane active show" id="numOrderItemsByPaymentMethod">
                                 <div class="row">
-                                    <% Object.keys(PaymentMethodType).forEach(function(key) { %>
+                                    <% Object.values(PaymentMethodType).forEach(function(paymentMethod) { %>
                                     <div class="col-4 text-center">
-                                        <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= PaymentMethodType[key] %>"
+                                        <input type="text" class="knob byPaymentMethod" data-paymentMethod="<%= paymentMethod %>"
                                             data-readonly="true" value="0" data-width="60" data-height="60"
                                             data-fgColor="#39CCCC">
                                         <div class="text-white">
-                                            <%= PaymentMethodType[key] %>
+                                            <%= paymentMethod %>
                                         </div>
                                     </div>
                                     <!-- ./col -->

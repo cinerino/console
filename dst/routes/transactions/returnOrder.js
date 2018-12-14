@@ -74,7 +74,10 @@ returnOrderTransactionsRouter.get('',
                 order: {
                     orderNumbers: []
                 }
-            }
+            },
+            tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)
+                ? req.query.tasksExportationStatuses
+                : Object.values(cinerinoapi.factory.transactionTasksExportationStatus)
             // result: {
             //     order: {
             //         orderNumbers: (req.query.result !== undefined
@@ -108,6 +111,7 @@ returnOrderTransactionsRouter.get('',
                 moment: moment,
                 movieTheaters: searchMovieTheatersResult.data,
                 transactionStatusChoices: transactionStatusChoices,
+                TransactionTasksExportationStatus: cinerinoapi.factory.transactionTasksExportationStatus,
                 searchConditions: searchConditions
             });
         }

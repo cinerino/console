@@ -32,7 +32,7 @@ $(function () {
                 render: function (data, type, row) {
                     var userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
                     var html = '<ul class="list-unstyled">'
-                        + '<li>' + data.agent.typeOf + '</li>';
+                        + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>';
 
                     if (data.agent.memberOf !== undefined) {
                         html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>'
@@ -55,7 +55,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li>' + data.seller.typeOf + '</li>'
+                        + '<li><span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span></li>'
                         + '<li><a target="_blank" href="/organizations/' + data.seller.typeOf + '/' + data.seller.id + '">' + data.seller.name.ja + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
                         + '<li>' + data.seller.url + '</li>'
@@ -91,6 +91,15 @@ $(function () {
                             + '<li>No Result</li>'
                             + '</ul>';
                     }
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span></li>'
+                        + '<li>' + data.tasksExportedAt + '</li>'
+                        + '</ul>';
                 }
             }
         ]
