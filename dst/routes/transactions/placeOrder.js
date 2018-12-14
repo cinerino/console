@@ -60,9 +60,9 @@ placeOrderTransactionsRouter.get('',
             endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough).toDate() : undefined,
             agent: {
                 typeOf: cinerinoapi.factory.personType.Person,
-                ids: (req.query.agent !== undefined && req.query.agent.ids !== '')
+                ids: (req.query.agent !== undefined && req.query.agent.ids !== undefined && req.query.agent.ids !== '')
                     ? req.query.agent.ids.split(',').map((v) => v.trim())
-                    : []
+                    : undefined
             },
             seller: {
                 typeOf: cinerinoapi.factory.organizationType.MovieTheater,
@@ -73,7 +73,16 @@ placeOrderTransactionsRouter.get('',
             object: {
                 customerContact: (req.query.object !== undefined
                     && req.query.object.customerContact !== undefined)
-                    ? req.query.object.customerContact
+                    ? {
+                        givenName: (req.query.object.customerContact.givenName !== '')
+                            ? req.query.object.customerContact.givenName : undefined,
+                        familyName: (req.query.object.customerContact.familyName !== '')
+                            ? req.query.object.customerContact.familyName : undefined,
+                        telephone: (req.query.object.customerContact.telephone !== '')
+                            ? req.query.object.customerContact.telephone : undefined,
+                        email: (req.query.object.customerContact.email !== '')
+                            ? req.query.object.customerContact.email : undefined
+                    }
                     : {}
             },
             result: {
@@ -82,7 +91,7 @@ placeOrderTransactionsRouter.get('',
                         && req.query.result.order !== undefined
                         && req.query.result.order.orderNumbers !== '')
                         ? req.query.result.order.orderNumbers.split(',').map((v) => v.trim())
-                        : []
+                        : undefined
                 }
             },
             tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)

@@ -61,6 +61,20 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    if (data.object !== undefined) {
+                        return '<ul class="list-unstyled">'
+                            + '<li><a target="_blank" href="/orders/' + data.object.order.orderNumber + '">' + data.object.order.orderNumber + '</a></li>'
+                            + '</ul>';
+                    } else {
+                        return '<ul class="list-unstyled">'
+                            + '<li>No Object</li>'
+                            + '</ul>';
+                    }
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span></li>'
                         + '<li>' + data.tasksExportedAt + '</li>'

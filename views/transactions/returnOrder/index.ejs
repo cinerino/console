@@ -42,7 +42,7 @@
                                     <div class="form-group">
                                         <label for="object[order][orderNumbers]">注文番号</label>
                                         <input type="text" class="form-control" id="object[order][orderNumbers]" name="object[order][orderNumbers]"
-                                            placeholder="注文番号" value="<%= searchConditions.object.order.orderNumbers.join(',') %>">
+                                            placeholder="注文番号" value="<%= (Array.isArray(searchConditions.object.order.orderNumbers)) ? searchConditions.object.order.orderNumbers.join(',') : '' %>">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -126,6 +126,7 @@
                                     <th>ID<br>Status<br>Start<br>End<br>Expires</th>
                                     <th>処理者</th>
                                     <th>販売者</th>
+                                    <th>対象</th>
                                     <th>タスクエクスポート</th>
                                 </tr>
                             </thead>
@@ -134,6 +135,7 @@
                                     <th>ID<br>Status<br>Start<br>End<br>Expires</th>
                                     <th>処理者</th>
                                     <th>販売者</th>
+                                    <th>対象</th>
                                     <th>タスクエクスポート</th>
                                 </tr>
                             </tfoot>

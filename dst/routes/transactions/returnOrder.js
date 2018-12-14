@@ -62,31 +62,20 @@ returnOrderTransactionsRouter.get('',
                 typeOf: cinerinoapi.factory.personType.Person,
                 ids: (req.query.agent !== undefined && req.query.agent.ids !== '')
                     ? req.query.agent.ids.split(',').map((v) => v.trim())
-                    : []
+                    : undefined
             },
-            // seller: {
-            //     typeOf: cinerinoapi.factory.organizationType.MovieTheater,
-            //     ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
-            //         ? req.query.seller.ids
-            //         : searchMovieTheatersResult.data.map((m) => m.id)
-            // },
             object: {
                 order: {
-                    orderNumbers: []
+                    orderNumbers: (req.query.object !== undefined
+                        && req.query.object.order !== undefined
+                        && req.query.object.order.orderNumbers !== '')
+                        ? req.query.object.order.orderNumbers.split(',').map((v) => v.trim())
+                        : undefined
                 }
             },
             tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)
                 ? req.query.tasksExportationStatuses
                 : Object.values(cinerinoapi.factory.transactionTasksExportationStatus)
-            // result: {
-            //     order: {
-            //         orderNumbers: (req.query.result !== undefined
-            //             && req.query.result.order !== undefined
-            //             && req.query.result.order.orderNumbers !== '')
-            //             ? (<string>req.query.result.order.orderNumbers).split(',').map((v) => v.trim())
-            //             : []
-            //     }
-            // }
         };
         if (req.query.format === 'datatable') {
             const searchScreeningEventsResult = yield returnOrderService.search(searchConditions);
