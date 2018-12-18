@@ -799,7 +799,7 @@ function searchLatestOrders(cb) {
                         return o.itemOffered.reservedTicket.ticketedSeat.seatNumber
                     }
                     return o.itemOffered.typeOf;
-                }).join('&nbsp;') + '</td>'
+                }).join('<br>') + '</td>'
                 + '<td>' + order.paymentMethods.map(function (paymentMethod) {
                     return '<span class="badge badge-secondary ' + paymentMethod.typeOf + '">' + paymentMethod.typeOf + '</span>';
                 }).join('&nbsp;') + '</td>'

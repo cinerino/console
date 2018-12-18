@@ -22,23 +22,37 @@ homeRouter.get(
                 auth: req.user.authClient
             });
 
-            const userPool = await userPoolService.findById({
-                userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
-            });
-            const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
-            const adminUserPool = await userPoolService.findById({
-                userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
-            });
-            const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
+            let userPool: cinerinoapi.factory.cognito.UserPoolType | null = null;
+            let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            let adminUserPool: cinerinoapi.factory.cognito.UserPoolType | null = null;
+            let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+
+            try {
+                userPool = await userPoolService.findById({
+                    userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
+                });
+
+                const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
+                userPoolClients = searchUserPoolClientsResult.data;
+
+                adminUserPool = await userPoolService.findById({
+                    userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
+                });
+
+                const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
+                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+            } catch (error) {
+                // no op
+            }
 
             const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
 
             res.render('index', {
                 message: 'Welcome to Cinerino Console!',
                 userPool: userPool,
-                userPoolClients: searchUserPoolClientsResult.data,
+                userPoolClients: userPoolClients,
                 adminUserPool: adminUserPool,
-                adminUserPoolClients: searchAdminUserPoolClientsResult.data,
+                adminUserPoolClients: adminUserPoolClients,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 sellers: searchMovieTheatersResult.data
             });

@@ -33,12 +33,21 @@ ordersRouter.get(
                 auth: req.user.authClient
             });
             const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
-            const searchUserPoolClientsResult = await userPoolService.searchClients({
-                userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
-            });
-            const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
-                userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
-            });
+
+            let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            try {
+                const searchUserPoolClientsResult = await userPoolService.searchClients({
+                    userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
+                });
+                const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
+                    userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
+                });
+                userPoolClients = searchUserPoolClientsResult.data;
+                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+            } catch (error) {
+                // no op
+            }
 
             const orderStatusChoices = [
                 cinerinoapi.factory.orderStatus.OrderDelivered,
@@ -50,21 +59,21 @@ ordersRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 seller: {
-                    typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+                    // typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                     ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                         ? req.query.seller.ids
-                        : searchMovieTheatersResult.data.map((m) => m.id)
+                        : undefined
                 },
                 customer: {
-                    typeOf: cinerinoapi.factory.personType.Person,
+                    // typeOf: cinerinoapi.factory.personType.Person,
                     ids: (req.query.customer !== undefined && req.query.customer.ids !== undefined && req.query.customer.ids !== '')
                         ? (<string>req.query.customer.ids).split(',').map((v) => v.trim())
-                        : [],
+                        : undefined,
                     membershipNumbers: (req.query.customer !== undefined
                         && req.query.customer.membershipNumbers !== undefined
                         && req.query.customer.membershipNumbers !== '')
                         ? (<string>req.query.customer.membershipNumbers).split(',').map((v) => v.trim())
-                        : [],
+                        : undefined,
                     identifiers: (req.query.customer !== undefined && Array.isArray(req.query.customer.userPoolClients))
                         ? req.query.customer.userPoolClients.map((userPoolClient: string) => {
                             return {
@@ -87,7 +96,9 @@ ordersRouter.get(
                     //         };
                     //     })
                     // ],
-                    telephone: (req.query.customer !== undefined) ? req.query.customer.telephone : undefined
+                    telephone: (req.query.customer !== undefined && req.query.customer.telephone !== '')
+                        ? req.query.customer.telephone
+                        : undefined
                 },
                 orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                     ? (<string>req.query.orderNumbers).split(',').map((v) => v.trim())
@@ -151,7 +162,19 @@ ordersRouter.get(
                 }
             };
             if (req.query.format === 'datatable') {
-                const searchOrdersResult = await orderService.search(searchConditions);
+                const searchOrdersResult = await orderService.search({
+                    limit: searchConditions.limit,
+                    page: searchConditions.page,
+                    orderDateFrom: searchConditions.orderDateFrom,
+                    orderDateThrough: searchConditions.orderDateThrough,
+                    seller: searchConditions.seller,
+                    customer: searchConditions.customer,
+                    orderNumbers: searchConditions.orderNumbers,
+                    orderStatuses: searchConditions.orderStatuses,
+                    confirmationNumbers: searchConditions.confirmationNumbers,
+                    acceptedOffers: searchConditions.acceptedOffers,
+                    paymentMethods: searchConditions.paymentMethods
+                });
                 res.json({
                     draw: req.query.draw,
                     recordsTotal: searchOrdersResult.totalCount,
@@ -162,8 +185,8 @@ ordersRouter.get(
                 res.render('orders/index', {
                     moment: moment,
                     movieTheaters: searchMovieTheatersResult.data,
-                    userPoolClients: searchUserPoolClientsResult.data,
-                    adminUserPoolClients: searchAdminUserPoolClientsResult.data,
+                    userPoolClients: userPoolClients,
+                    adminUserPoolClients: adminUserPoolClients,
                     searchConditions: searchConditions,
                     orderStatusChoices: orderStatusChoices,
                     PaymentMethodType: cinerinoapi.factory.paymentMethodType

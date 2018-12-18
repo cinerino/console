@@ -45,12 +45,12 @@
                                     <div class="form-group">
                                         <label for="customer[membershipNumbers]">購入者会員番号</label>
                                         <input type="text" class="form-control" id="customer[membershipNumbers]" name="customer[membershipNumbers]"
-                                            placeholder="購入者会員番号" value="<%= searchConditions.customer.membershipNumbers.join(',') %>">
+                                            placeholder="購入者会員番号" value="<%= (Array.isArray(searchConditions.customer.membershipNumbers)) ? searchConditions.customer.membershipNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者ID</label>
                                         <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
-                                            placeholder="購入者ID" value="<%= searchConditions.customer.ids.join(',') %>">
+                                            placeholder="購入者ID" value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者TEL</label>
@@ -95,7 +95,10 @@
                                         <label>販売者</label>
                                         <select multiple class="form-control" name="seller[ids][]">
                                             <% movieTheaters.forEach(function (movieTheater) { %>
-                                            <% var selected = searchConditions.seller.ids.indexOf( movieTheater.id) >= 0; %>
+                                            <% 
+                                            var selected = false;
+                                            selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf( movieTheater.id) >= 0;
+                                             %>
                                             <option value="<%= movieTheater.id %>" <% if (selected) { %> selected
                                                 <% } %>>
                                                 <%= movieTheater.name.ja %>

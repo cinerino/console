@@ -31,12 +31,16 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.location.typeOf + '</li>'
-                        + '<li>' + data.location.branchCode + '</li>'
-                        + '<li>' + data.location.name.ja + '</li>'
-                        + '<li>' + data.location.name.en + '</li>'
-                        + '</ul>';
+                    var html = '<ul class="list-unstyled">';
+                    if (data.location !== undefined && data.location !== null) {
+                        html += '<li>' + data.location.typeOf + '</li>'
+                            + '<li>' + data.location.branchCode + '</li>'
+                            + '<li>' + data.location.name.ja + '</li>'
+                            + '<li>' + data.location.name.en + '</li>';
+                    }
+                    html += '</ul>';
+
+                    return html;
                 }
             },
             {
