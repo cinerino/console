@@ -102,6 +102,15 @@ ordersRouter.get('',
                 //         };
                 //     })
                 // ],
+                givenName: (req.query.customer !== undefined && req.query.customer.givenName !== '')
+                    ? req.query.customer.givenName
+                    : undefined,
+                familyName: (req.query.customer !== undefined && req.query.customer.familyName !== '')
+                    ? req.query.customer.familyName
+                    : undefined,
+                email: (req.query.customer !== undefined && req.query.customer.email !== '')
+                    ? req.query.customer.email
+                    : undefined,
                 telephone: (req.query.customer !== undefined && req.query.customer.telephone !== '')
                     ? req.query.customer.telephone
                     : undefined
