@@ -30,7 +30,11 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    var userPoolId = '';
+                    if (data.object.clientUser !== undefined) {
+                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    }
+
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>';
 
@@ -49,7 +53,11 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var seller = data.object.order.seller;
+                    var seller = {};
+                    if (data.object.order !== undefined) {
+                        seller = data.object.order.seller;
+                    }
+
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + seller.typeOf + '">' + seller.typeOf + '</span></li>'
                         + '<li><a target="_blank" href="/organizations/' + seller.typeOf + '/' + seller.id + '">' + seller.name + '</a></li>'
@@ -61,7 +69,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    if (data.object !== undefined) {
+                    if (data.object !== undefined && data.object.order !== undefined) {
                         return '<ul class="list-unstyled">'
                             + '<li><a target="_blank" href="/orders/' + data.object.order.orderNumber + '">' + data.object.order.orderNumber + '</a></li>'
                             + '</ul>';
