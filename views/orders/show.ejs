@@ -122,6 +122,7 @@
                                         </td>
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
+                                            <% if (acceptedOffer.itemOffered.reservationFor !== undefined) { %>
                                             <a target="_blank" href="/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
                                                 <%= acceptedOffer.itemOffered.reservationFor.name.ja %>
                                                 <br>
@@ -132,18 +133,21 @@
                                                 <%= acceptedOffer.itemOffered.reservationFor.superEvent.location.name.ja %>
                                                 <%= acceptedOffer.itemOffered.reservationFor.location.name.ja %>
                                             </a>
+                                            <% } %>
                                             <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
                                             <%= acceptedOffer.itemOffered.programName %>
                                             <% } %>
                                         </td>
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
-                                            <%= acceptedOffer.itemOffered.reservedTicket.ticketToken %>
+                                            <%= (acceptedOffer.itemOffered.reservedTicket !== undefined) ? acceptedOffer.itemOffered.reservedTicket.ticketToken : '' %>
                                             <% } %>
                                         </td>
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
+                                            <% if (acceptedOffer.itemOffered.reservedTicket!==undefined) { %>
                                             <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatNumber %>
+                                            <% } %>
                                             <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
                                             <%= acceptedOffer.price %>
                                             <%= acceptedOffer.priceCurrency %>

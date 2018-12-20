@@ -227,117 +227,126 @@ ordersRouter.get(
             if (order === undefined) {
                 throw new cinerinoapi.factory.errors.NotFound('Order');
             }
-            const actionsOnOrder = await orderService.searchActionsByOrderNumber({
-                orderNumber: order.orderNumber,
-                sort: { endDate: cinerinoapi.factory.sortType.Ascending }
-            });
-            // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
-            const timelines = actionsOnOrder.map((a) => {
-                let agent: any;
-                if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
-                    const url = (a.agent.memberOf !== undefined)
-                        ? `/people/${a.agent.id}`
-                        : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
-                    agent = {
-                        id: a.agent.id,
-                        name: order.customer.name,
-                        url: url
-                    };
-                } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
-                    agent = {
-                        id: a.agent.id,
-                        name: order.seller.name,
-                        url: `/organizations/movieTheater/${a.agent.id}`
-                    };
-                }
 
-                let actionName: string;
-                switch (a.typeOf) {
-                    case cinerinoapi.factory.actionType.OrderAction:
-                        actionName = '注文';
-                        break;
-                    case cinerinoapi.factory.actionType.GiveAction:
-                        actionName = '付与';
-                        break;
-                    case cinerinoapi.factory.actionType.SendAction:
-                        if (a.object.typeOf === 'Order') {
-                            actionName = '配送';
-                        } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                            actionName = '送信';
-                        } else {
-                            actionName = '送信';
-                        }
-                        break;
-                    case cinerinoapi.factory.actionType.PayAction:
-                        actionName = '支払';
-                        break;
-                    case cinerinoapi.factory.actionType.ReturnAction:
-                        if (a.object.typeOf === 'Order') {
-                            actionName = '返品';
-                        } else {
-                            actionName = '返却';
-                        }
-                        break;
-                    case cinerinoapi.factory.actionType.RefundAction:
-                        actionName = '返金';
-                        break;
-                    default:
-                        actionName = a.typeOf;
-                }
+            let actionsOnOrder: any[] = [];
+            let timelines: any[] = [];
+            try {
+                actionsOnOrder = await orderService.searchActionsByOrderNumber({
+                    orderNumber: order.orderNumber,
+                    sort: { endDate: cinerinoapi.factory.sortType.Ascending }
+                });
 
-                let object: string;
-                if (Array.isArray(a.object)) {
-                    switch (a.object[0].typeOf) {
-                        case 'PaymentMethod':
-                            object = a.object[0].paymentMethod.name;
-                            break;
-                        case cinerinoapi.factory.actionType.PayAction:
-                            object = a.object[0].object.paymentMethod.typeOf;
-                            break;
-                        default:
-                            object = a.object[0].typeOf;
+                // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
+                timelines = actionsOnOrder.map((a) => {
+                    let agent: any;
+                    if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+                        const url = (a.agent.memberOf !== undefined)
+                            ? `/people/${a.agent.id}`
+                            : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
+                        agent = {
+                            id: a.agent.id,
+                            name: order.customer.name,
+                            url: url
+                        };
+                    } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
+                        agent = {
+                            id: a.agent.id,
+                            name: order.seller.name,
+                            url: `/organizations/movieTheater/${a.agent.id}`
+                        };
                     }
-                } else {
-                    switch (a.object.typeOf) {
-                        case 'Order':
-                            object = '注文';
+
+                    let actionName: string;
+                    switch (a.typeOf) {
+                        case cinerinoapi.factory.actionType.OrderAction:
+                            actionName = '注文';
                             break;
-                        case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                            object = 'ポイント';
+                        case cinerinoapi.factory.actionType.GiveAction:
+                            actionName = '付与';
                             break;
                         case cinerinoapi.factory.actionType.SendAction:
                             if (a.object.typeOf === 'Order') {
-                                object = '配送';
+                                actionName = '配送';
                             } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                                object = '送信';
+                                actionName = '送信';
                             } else {
-                                object = '送信';
+                                actionName = '送信';
                             }
                             break;
-                        case cinerinoapi.factory.creativeWorkType.EmailMessage:
-                            object = 'Eメール';
-                            break;
-                        case 'PaymentMethod':
-                            object = a.object.object[0].paymentMethod.name;
-                            break;
                         case cinerinoapi.factory.actionType.PayAction:
-                            object = a.object.object[0].paymentMethod.typeOf;
+                            actionName = '支払';
+                            break;
+                        case cinerinoapi.factory.actionType.ReturnAction:
+                            if (a.object.typeOf === 'Order') {
+                                actionName = '返品';
+                            } else {
+                                actionName = '返却';
+                            }
+                            break;
+                        case cinerinoapi.factory.actionType.RefundAction:
+                            actionName = '返金';
                             break;
                         default:
-                            object = a.object.typeOf;
+                            actionName = a.typeOf;
                     }
-                }
 
-                return {
-                    action: a,
-                    agent,
-                    actionName,
-                    object,
-                    startDate: a.startDate,
-                    actionStatus: a.actionStatus,
-                    result: a.result
-                };
-            });
+                    let object: string;
+                    if (Array.isArray(a.object)) {
+                        switch (a.object[0].typeOf) {
+                            case 'PaymentMethod':
+                                object = a.object[0].paymentMethod.name;
+                                break;
+                            case cinerinoapi.factory.actionType.PayAction:
+                                object = a.object[0].object.paymentMethod.typeOf;
+                                break;
+                            default:
+                                object = a.object[0].typeOf;
+                        }
+                    } else {
+                        switch (a.object.typeOf) {
+                            case 'Order':
+                                object = '注文';
+                                break;
+                            case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
+                                object = 'ポイント';
+                                break;
+                            case cinerinoapi.factory.actionType.SendAction:
+                                if (a.object.typeOf === 'Order') {
+                                    object = '配送';
+                                } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
+                                    object = '送信';
+                                } else {
+                                    object = '送信';
+                                }
+                                break;
+                            case cinerinoapi.factory.creativeWorkType.EmailMessage:
+                                object = 'Eメール';
+                                break;
+                            case 'PaymentMethod':
+                                object = a.object.object[0].paymentMethod.name;
+                                break;
+                            case cinerinoapi.factory.actionType.PayAction:
+                                object = a.object.object[0].paymentMethod.typeOf;
+                                break;
+                            default:
+                                object = a.object.typeOf;
+                        }
+                    }
+
+                    return {
+                        action: a,
+                        agent,
+                        actionName,
+                        object,
+                        startDate: a.startDate,
+                        actionStatus: a.actionStatus,
+                        result: a.result
+                    };
+                });
+            } catch (error) {
+                // no op
+            }
+
             res.render('orders/show', {
                 moment: moment,
                 order: order,

@@ -148,10 +148,16 @@ placeOrderTransactionsRouter.get('/:transactionId',
         if (transaction === undefined) {
             throw new cinerinoapi.factory.errors.NotFound('Transaction');
         }
-        const actionsOnTransaction = yield placeOrderService.searchActionsByTransactionId({
-            id: transaction.id,
-            sort: { endDate: cinerinoapi.factory.sortType.Ascending }
-        });
+        let actionsOnTransaction = [];
+        try {
+            actionsOnTransaction = yield placeOrderService.searchActionsByTransactionId({
+                id: transaction.id,
+                sort: { endDate: cinerinoapi.factory.sortType.Ascending }
+            });
+        }
+        catch (error) {
+            // no op
+        }
         const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
             ? `/people/${transaction.agent.id}`
             : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${transaction.agent.id}`;
