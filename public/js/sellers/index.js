@@ -1,9 +1,9 @@
 $(function () {
-    $("#movieTheaters-table").DataTable({
+    $("#sellers-table").DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/organizations/movieTheater?' + $('form').serialize(),
+            url: '/sellers?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -19,8 +19,8 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a href="/organizations/movieTheater/' + data.id + '">' + data.id + '</a></li>'
-                        + '<li>' + data.typeOf + '</li>'
+                        + '<li><a href="/sellers/' + data.id + '">' + data.id + '</a></li>'
+                        + '<li><span class="badge badge-info ' + data.typeOf + '">' + data.typeOf + '</span></li>'
                         + '<li>' + data.name.ja + '</li>'
                         + '<li>' + data.name.en + '</li>'
                         + '<li>' + data.telephone + '</li>'
@@ -33,7 +33,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
                     if (data.location !== undefined && data.location !== null) {
-                        html += '<li>' + data.location.typeOf + '</li>'
+                        html += '<li><span class="badge badge-info ' + data.location.typeOf + '">' + data.location.typeOf + '</span></li>'
                             + '<li>' + data.location.branchCode + '</li>'
                             + '<li>' + data.location.name.ja + '</li>'
                             + '<li>' + data.location.name.en + '</li>';

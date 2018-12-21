@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 組織ルーター
+ * 販売者ルーター
  */
 const createDebug = require("debug");
 const express = require("express");
@@ -18,13 +18,13 @@ const moment = require("moment");
 const chevreapi = require("../chevreapi");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
-const organizationsRouter = express.Router();
+const sellersRouter = express.Router();
 /**
  * 販売者検索
  */
-organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const organizationService = new cinerinoapi.service.Organization({
+        const sellerService = new cinerinoapi.service.Seller({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
@@ -34,7 +34,7 @@ organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, voi
             name: req.query.name
         };
         if (req.query.format === 'datatable') {
-            const searchMovieTheatersResult = yield organizationService.searchMovieTheaters(searchConditions);
+            const searchMovieTheatersResult = yield sellerService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchMovieTheatersResult.totalCount,
@@ -43,7 +43,7 @@ organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, voi
             });
         }
         else {
-            res.render('organizations/movieTheater/index', {
+            res.render('sellers/index', {
                 searchConditions: searchConditions
             });
         }
@@ -55,7 +55,7 @@ organizationsRouter.get('/movieTheater', (req, res, next) => __awaiter(this, voi
 /**
  * 販売者追加
  */
-organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         let message;
         let attributes;
@@ -63,13 +63,13 @@ organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this,
             try {
                 attributes = yield createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
                 debug('creating organization...', attributes);
-                const organizationService = new cinerinoapi.service.Organization({
+                const sellerService = new cinerinoapi.service.Seller({
                     endpoint: process.env.API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                const movieTheater = yield organizationService.openMovieTheater(attributes);
+                const seller = yield sellerService.create(attributes);
                 req.flash('message', '販売者を作成しました');
-                res.redirect(`/organizations/movieTheater/${movieTheater.id}`);
+                res.redirect(`/sellers/${seller.id}`);
                 return;
             }
             catch (error) {
@@ -77,10 +77,11 @@ organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this,
                 message = error.message;
             }
         }
-        res.render('organizations/movieTheater/new', {
+        res.render('sellers/new', {
             message: message,
             attributes: attributes,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            OrganizationType: cinerinoapi.factory.organizationType,
             PlaceType: cinerinoapi.factory.placeType
         });
     }
@@ -91,24 +92,24 @@ organizationsRouter.all('/movieTheater/new', (req, res, next) => __awaiter(this,
 /**
  * 販売者編集
  */
-organizationsRouter.all('/movieTheater/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         let message;
         let attributes;
-        const organizationService = new cinerinoapi.service.Organization({
+        const sellerService = new cinerinoapi.service.Seller({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const movieTheater = yield organizationService.findMovieTheaterById({ id: req.params.id });
+        const seller = yield sellerService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
-            yield organizationService.deleteMovieTheaterById({ id: req.params.id });
+            yield sellerService.deleteById({ id: req.params.id });
             res.status(http_status_1.NO_CONTENT).end();
             return;
         }
         else if (req.method === 'POST') {
             try {
                 attributes = yield createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
-                yield organizationService.updateMovieTheaterById({ id: req.params.id, attributes: attributes });
+                yield sellerService.update({ id: req.params.id, attributes: attributes });
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
                 return;
@@ -117,10 +118,11 @@ organizationsRouter.all('/movieTheater/:id', (req, res, next) => __awaiter(this,
                 message = error.message;
             }
         }
-        res.render('organizations/movieTheater/edit', {
+        res.render('sellers/edit', {
             message: message,
-            movieTheater: movieTheater,
+            seller: seller,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            OrganizationType: cinerinoapi.factory.organizationType,
             PlaceType: cinerinoapi.factory.placeType
         });
     }
@@ -131,7 +133,6 @@ organizationsRouter.all('/movieTheater/:id', (req, res, next) => __awaiter(this,
 // tslint:disable-next-line:max-func-body-length
 function createAttributesFromBody(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        debug(params);
         // Chevreから情報取得
         const placeService = new chevreapi.service.Place({
             endpoint: process.env.CHEVRE_ENDPOINT,
@@ -221,7 +222,7 @@ function createAttributesFromBody(params) {
             });
         }
         return {
-            typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+            typeOf: params.body.typeOf,
             name: movieTheaterFromChevre.name,
             legalName: movieTheaterFromChevre.name,
             parentOrganization: {
@@ -248,7 +249,7 @@ function createAttributesFromBody(params) {
 /**
  * 劇場の注文検索
  */
-organizationsRouter.get('/movieTheater/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: process.env.API_ENDPOINT,
@@ -272,4 +273,4 @@ organizationsRouter.get('/movieTheater/:id/orders', (req, res, next) => __awaite
         next(error);
     }
 }));
-exports.default = organizationsRouter;
+exports.default = sellersRouter;

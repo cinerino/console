@@ -1,5 +1,5 @@
 /**
- * 組織ルーター
+ * 販売者ルーター
  */
 import * as createDebug from 'debug';
 import * as express from 'express';
@@ -10,25 +10,26 @@ import * as chevreapi from '../chevreapi';
 import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
-const organizationsRouter = express.Router();
+const sellersRouter = express.Router();
+
 /**
  * 販売者検索
  */
-organizationsRouter.get(
-    '/movieTheater',
+sellersRouter.get(
+    '',
     async (req, res, next) => {
         try {
-            const organizationService = new cinerinoapi.service.Organization({
+            const sellerService = new cinerinoapi.service.Seller({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchConditions: cinerinoapi.factory.organization.movieTheater.ISearchConditions = {
+            const searchConditions: cinerinoapi.factory.organization.ISearchConditions<cinerinoapi.factory.organizationType> = {
                 limit: req.query.limit,
                 page: req.query.page,
                 name: req.query.name
             };
             if (req.query.format === 'datatable') {
-                const searchMovieTheatersResult = await organizationService.searchMovieTheaters(searchConditions);
+                const searchMovieTheatersResult = await sellerService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
                     recordsTotal: searchMovieTheatersResult.totalCount,
@@ -36,7 +37,7 @@ organizationsRouter.get(
                     data: searchMovieTheatersResult.data
                 });
             } else {
-                res.render('organizations/movieTheater/index', {
+                res.render('sellers/index', {
                     searchConditions: searchConditions
                 });
             }
@@ -45,26 +46,27 @@ organizationsRouter.get(
         }
     }
 );
+
 /**
  * 販売者追加
  */
-organizationsRouter.all(
-    '/movieTheater/new',
+sellersRouter.all(
+    '/new',
     async (req, res, next) => {
         try {
             let message;
-            let attributes: cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType.MovieTheater> | undefined;
+            let attributes: cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType> | undefined;
             if (req.method === 'POST') {
                 try {
                     attributes = await createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
                     debug('creating organization...', attributes);
-                    const organizationService = new cinerinoapi.service.Organization({
+                    const sellerService = new cinerinoapi.service.Seller({
                         endpoint: <string>process.env.API_ENDPOINT,
                         auth: req.user.authClient
                     });
-                    const movieTheater = await organizationService.openMovieTheater(attributes);
+                    const seller = await sellerService.create<cinerinoapi.factory.organizationType>(attributes);
                     req.flash('message', '販売者を作成しました');
-                    res.redirect(`/organizations/movieTheater/${movieTheater.id}`);
+                    res.redirect(`/sellers/${seller.id}`);
 
                     return;
                 } catch (error) {
@@ -72,10 +74,12 @@ organizationsRouter.all(
                     message = error.message;
                 }
             }
-            res.render('organizations/movieTheater/new', {
+
+            res.render('sellers/new', {
                 message: message,
                 attributes: attributes,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                OrganizationType: cinerinoapi.factory.organizationType,
                 PlaceType: cinerinoapi.factory.placeType
             });
         } catch (error) {
@@ -83,29 +87,30 @@ organizationsRouter.all(
         }
     }
 );
+
 /**
  * 販売者編集
  */
-organizationsRouter.all(
-    '/movieTheater/:id',
+sellersRouter.all(
+    '/:id',
     async (req, res, next) => {
         try {
             let message;
-            let attributes: cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType.MovieTheater> | undefined;
-            const organizationService = new cinerinoapi.service.Organization({
+            let attributes: cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType> | undefined;
+            const sellerService = new cinerinoapi.service.Seller({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const movieTheater = await organizationService.findMovieTheaterById({ id: req.params.id });
+            const seller = await sellerService.findById({ id: req.params.id });
             if (req.method === 'DELETE') {
-                await organizationService.deleteMovieTheaterById({ id: req.params.id });
+                await sellerService.deleteById({ id: req.params.id });
                 res.status(NO_CONTENT).end();
 
                 return;
             } else if (req.method === 'POST') {
                 try {
                     attributes = await createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
-                    await organizationService.updateMovieTheaterById({ id: req.params.id, attributes: attributes });
+                    await sellerService.update({ id: req.params.id, attributes: attributes });
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);
 
@@ -114,10 +119,11 @@ organizationsRouter.all(
                     message = error.message;
                 }
             }
-            res.render('organizations/movieTheater/edit', {
+            res.render('sellers/edit', {
                 message: message,
-                movieTheater: movieTheater,
+                seller: seller,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                OrganizationType: cinerinoapi.factory.organizationType,
                 PlaceType: cinerinoapi.factory.placeType
             });
         } catch (error) {
@@ -125,12 +131,12 @@ organizationsRouter.all(
         }
     }
 );
+
 // tslint:disable-next-line:max-func-body-length
 async function createAttributesFromBody(params: {
     body: any;
     authClient: any;
-}): Promise<cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType.MovieTheater>> {
-    debug(params);
+}): Promise<cinerinoapi.factory.organization.IAttributes<cinerinoapi.factory.organizationType>> {
     // Chevreから情報取得
     const placeService = new chevreapi.service.Place({
         endpoint: <string>process.env.CHEVRE_ENDPOINT,
@@ -213,7 +219,7 @@ async function createAttributesFromBody(params: {
         });
     }
 
-    const areaServed: cinerinoapi.factory.organization.movieTheater.IAreaServed[] = [];
+    const areaServed: cinerinoapi.factory.organization.IAreaServed<typeof params.body.typeOf>[] = [];
     if (Array.isArray(params.body.areaServed)) {
         params.body.areaServed.forEach((area: any) => {
             if (area.id !== '') {
@@ -227,7 +233,7 @@ async function createAttributesFromBody(params: {
     }
 
     return {
-        typeOf: cinerinoapi.factory.organizationType.MovieTheater,
+        typeOf: params.body.typeOf,
         name: movieTheaterFromChevre.name,
         legalName: movieTheaterFromChevre.name,
         parentOrganization: {
@@ -250,11 +256,12 @@ async function createAttributesFromBody(params: {
         areaServed: areaServed
     };
 }
+
 /**
  * 劇場の注文検索
  */
-organizationsRouter.get(
-    '/movieTheater/:id/orders',
+sellersRouter.get(
+    '/:id/orders',
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
@@ -279,4 +286,5 @@ organizationsRouter.get(
         }
     }
 );
-export default organizationsRouter;
+
+export default sellersRouter;

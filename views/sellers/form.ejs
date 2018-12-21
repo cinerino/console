@@ -6,35 +6,53 @@ let cashPayment;
 let emoneyPayment;
 let hasPOS = [];
 let areaServed = [];
-if (movieTheater !== undefined) {
-    coinAccountPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
-    creditCardPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
-    movieTicketPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.MovieTicket);
-    cashPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Cash);
-    emoneyPayment = movieTheater.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.EMoney);
-    hasPOS = movieTheater.hasPOS;
-    areaServed = movieTheater.areaServed;
+if (seller !== undefined) {
+    coinAccountPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
+    creditCardPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
+    movieTicketPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.MovieTicket);
+    cashPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Cash);
+    emoneyPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.EMoney);
+    hasPOS = seller.hasPOS;
+    areaServed = seller.areaServed;
 }
 %>
 <div class="form-group">
+    <label>組織タイプ</label>
+    <select class="form-control" name="typeOf">
+        <% Object.values(OrganizationType).forEach(function (organizationType) { %>
+        <%
+        var selected = false;
+        if (seller !== undefined) {
+            selected = seller.typeOf === organizationType;
+        }
+        %>
+        <option value="<%= organizationType %>" <% if (selected) { %>
+            selected
+            <% } %>>
+            <%= organizationType %>
+        </option>
+        <% }) %>
+    </select>
+</div>
+<div class="form-group">
     <label for="branchCode">劇場枝番号</label>
-    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="枝番号" value="<%= (movieTheater !== undefined) ?  movieTheater.location.branchCode : '' %>">
+    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="枝番号" value="<%= (seller !== undefined) ?  seller.location.branchCode : '' %>">
 </div>
 <div class="form-group">
     <label for="name.ja">name.ja</label>
-    <input disabled type="text" class="form-control" id="name.ja" name="name.ja" placeholder="name.ja" value="<%= (movieTheater !== undefined) ?  movieTheater.name.ja : '' %>">
+    <input disabled type="text" class="form-control" id="name.ja" name="name.ja" placeholder="name.ja" value="<%= (seller !== undefined) ?  seller.name.ja : '' %>">
 </div>
 <div class="form-group">
     <label for="name.en">name.en</label>
-    <input disabled type="text" class="form-control" id="name.en" name="name.en" placeholder="name.en" value="<%= (movieTheater !== undefined) ?  movieTheater.name.en : '' %>">
+    <input disabled type="text" class="form-control" id="name.en" name="name.en" placeholder="name.en" value="<%= (seller !== undefined) ?  seller.name.en : '' %>">
 </div>
 <div class="form-group">
     <label for="telephone">telephone</label>
-    <input disabled type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone" value="<%= (movieTheater !== undefined) ?  movieTheater.telephone : '' %>">
+    <input disabled type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone" value="<%= (seller !== undefined) ?  seller.telephone : '' %>">
 </div>
 <div class="form-group">
     <label for="url">URL</label>
-    <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (movieTheater !== undefined) ?  movieTheater.url : '' %>">
+    <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (seller !== undefined) ?  seller.url : '' %>">
 </div>
 <hr>
 <div class="form-group">

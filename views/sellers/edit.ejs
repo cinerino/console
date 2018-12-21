@@ -12,7 +12,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/organizations/movieTheater">販売者検索</a>
+                        <a href="/sellers">販売者検索</a>
                     </li>
                     <li class="breadcrumb-item active">販売者詳細</li>
                 </ol>
@@ -57,11 +57,11 @@
                                 </div> -->
 
                         <h3 class="profile-username text-center">
-                            <%= movieTheater.name.ja %>
+                            <%= seller.name.ja %>
                         </h3>
 
                         <p class="text-muted text-center">
-                            <%= movieTheater.name.en %>
+                            <%= seller.name.en %>
                         </p>
 
                         <ul class="list-group list-group-unbordered mb-3">
@@ -85,28 +85,28 @@
                     <div class="card-body">
                         <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
                         <p class="text-muted">
-                            <%= movieTheater.location.branchCode %>
-                            <%= movieTheater.location.name.ja %>
+                            <%= seller.location.branchCode %>
+                            <%= seller.location.name.ja %>
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-phone mr-1"></i> Telephone</strong>
                         <p class="text-muted">
-                            <%= movieTheater.telephone %>
+                            <%= seller.telephone %>
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-link mr-1"></i> url</strong>
                         <p class="text-muted">
-                            <a target="_blank" href="<%= movieTheater.url %>">
-                                <%= movieTheater.url %>
+                            <a target="_blank" href="<%= seller.url %>">
+                                <%= seller.url %>
                             </a>
                         </p>
                         <hr>
 
                         <strong><i class="fa fa-shopping-cart mr-1"></i> 対応決済方法</strong>
                         <p class="text-muted">
-                            <% movieTheater.paymentAccepted.forEach((payment) => { %>
+                            <% seller.paymentAccepted.forEach((payment) => { %>
                             <span class="badge badge-info <%= payment.paymentMethodType %>">
                                 <%= payment.paymentMethodType %>
                             </span>
@@ -116,7 +116,7 @@
 
                         <strong><i class="fa fa-piggy-bank mr-1"></i> 口座</strong>
                         <p class="text-muted">
-                            <% const coinAccounts = movieTheater.paymentAccepted.filter((p) => p.paymentMethodType === 'Account') %>
+                            <% const coinAccounts = seller.paymentAccepted.filter((p) => p.paymentMethodType === 'Account') %>
                             <% coinAccounts.forEach((account) => { %>
                             <span class="badge <%= account.accountType %>">
                                 <%= account.accountType %>
@@ -166,7 +166,7 @@
 
                             <div class="tab-pane" id="jsonViewer">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(movieTheater, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(seller, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -175,7 +175,7 @@
                                 <!-- form start -->
                                 <form role="form" method="post">
                                     <div class="card-body">
-                                        <%- include('./form', {movieTheater: movieTheater, PaymentMethodType: PaymentMethodType}) %>
+                                        <%- include('./form', {seller: seller, PaymentMethodType: PaymentMethodType}) %>
                                     </div>
                                     <!-- /.card-body -->
 
@@ -217,4 +217,4 @@
 </section>
 <!-- /.content -->
 
-<script src="/js/organizations/movieTheater/edit.js"></script>
+<script src="/js/sellers/edit.js"></script>

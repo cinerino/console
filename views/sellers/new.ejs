@@ -12,7 +12,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/organizations/movieTheater">販売者検索</a>
+                        <a href="/sellers">販売者検索</a>
                     </li>
                     <li class="breadcrumb-item active">販売者作成</li>
                 </ol>
@@ -56,13 +56,13 @@
                                 <%- message.replace(/\n/g, '<br>') %>
                             </div>
                             <% } %>
-                            <%- include('./form', {movieTheater: attributes, PaymentMethodType: PaymentMethodType}) %>
+                            <%- include('./form', {seller: attributes, PaymentMethodType: PaymentMethodType}) %>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">作成</button>
-                            <button type="button" class="btn btn-secondary float-right" onclick="location.href='/organizations/movieTheater'">キャンセル</button>
+                            <button type="button" class="btn btn-secondary float-right" onclick="location.href='/sellers'">キャンセル</button>
                         </div>
                     </form>
                 </div>
