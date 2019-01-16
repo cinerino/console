@@ -16,10 +16,12 @@
 | `REDIS_HOST`                   | true     |                    | Redis Cache connection             |
 | `REDIS_PORT`                   | true     |                    | Redis Cache connection             |
 | `REDIS_KEY`                    | true     |                    | Redis Cache connection             |
+| `REDIS_TLS_SERVERNAME`         | false    |                    | Redis Cache Connection             |
 | `GMO_ENDPOINT`                 | true     |                    | GMO APIエンドポイント              |
 | `GMO_SITE_ID`                  | true     |                    | GMO サイトID                       |
 | `MVTK_COMPANY_CODE`            | true     |                    | ムビチケ興行会社コード             |
 | `CHEVRE_ENDPOINT`              | true     |                    | ChevreAPIエンドポイント            |
+| `CHEVRE_BACKEND_ENDPOINT`      | true     |                    | Chevreマスタ管理エンドポイント     |
 | `API_ENDPOINT`                 | true     |                    | APIエンドポイント                  |
 | `API_AUTHORIZE_SERVER_DOMAIN`  | true     |                    | API認可サーバードメイン            |
 | `API_CLIENT_ID`                | true     |                    | APIクライアントID                  |

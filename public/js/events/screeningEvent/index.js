@@ -98,4 +98,10 @@ $(function () {
         } else {
         }
     });
+
+    // イベント管理
+    $('button.updateEvents').click(function () {
+        var url = $('input[name="chevreBackendEndpoint"]').val()
+        window.open(url);
+    });
 });
