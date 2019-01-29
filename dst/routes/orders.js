@@ -31,7 +31,7 @@ ordersRouter.get('',
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const organizationService = new cinerinoapi.service.Organization({
+        const sellerService = new cinerinoapi.service.Seller({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
@@ -39,7 +39,7 @@ ordersRouter.get('',
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchMovieTheatersResult = yield organizationService.searchMovieTheaters({});
+        const searchSellersResult = yield sellerService.search({});
         let userPoolClients = [];
         let adminUserPoolClients = [];
         try {
@@ -200,7 +200,7 @@ ordersRouter.get('',
         else {
             res.render('orders/index', {
                 moment: moment,
-                movieTheaters: searchMovieTheatersResult.data,
+                movieTheaters: searchSellersResult.data,
                 userPoolClients: userPoolClients,
                 adminUserPoolClients: adminUserPoolClients,
                 searchConditions: searchConditions,

@@ -30,7 +30,10 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    var userPoolId = '';
+                    if (data.object.clientUser !== undefined) {
+                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    }
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>';
 
@@ -65,10 +68,17 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    var userPoolId = '';
+                    var iss = '';
+                    var clientId = '';
+                    if (data.object.clientUser !== undefined) {
+                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                        iss = data.object.clientUser.iss;
+                        clientId = data.object.clientUser.client_id;
+                    }
                     var html = '<ul class="list-unstyled">'
-                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '">' + data.object.clientUser.iss + '</a></li>'
-                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + data.object.clientUser.client_id + '">' + data.object.clientUser.client_id + '</a></li>';
+                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '">' + iss + '</a></li>'
+                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
 
                     if (data.agent.memberOf !== undefined) {
                         html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>';

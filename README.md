@@ -20,6 +20,8 @@
 | `GMO_ENDPOINT`                 | true     |                    | GMO APIエンドポイント              |
 | `GMO_SITE_ID`                  | true     |                    | GMO サイトID                       |
 | `MVTK_COMPANY_CODE`            | true     |                    | ムビチケ興行会社コード             |
+| `COA_ENDPOINT`                 | true     |                    | COAエンドポイント                  |
+| `COA_REFRESH_TOKEN`            | true     |                    | COAリフレッシュトークン            |
 | `CHEVRE_ENDPOINT`              | true     |                    | ChevreAPIエンドポイント            |
 | `CHEVRE_BACKEND_ENDPOINT`      | true     |                    | Chevreマスタ管理エンドポイント     |
 | `API_ENDPOINT`                 | true     |                    | APIエンドポイント                  |
@@ -33,4 +35,5 @@
 | `WAITER_ENDPOINT`              | true     |                    | WAITER Endpoint                    |
 | `TELEMETRY_API_ENDPOINT`       | true     |                    | Telemetry API Endpoint             |
 | `PROJECT_ID`                   | true     |                    | Cinerino Project ID                |
+| `PROJECT_ORGANIZATION`         | true     |                    | プロジェクト組織(jsonで定義)       |
 | `PECORINO_CONSOLE_ENDPOINT`    | true     |                    | Pecorino Console Endpoint          |

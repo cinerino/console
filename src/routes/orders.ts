@@ -24,7 +24,7 @@ ordersRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const organizationService = new cinerinoapi.service.Organization({
+            const sellerService = new cinerinoapi.service.Seller({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
@@ -32,7 +32,8 @@ ordersRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
+
+            const searchSellersResult = await sellerService.search({});
 
             let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
@@ -193,7 +194,7 @@ ordersRouter.get(
             } else {
                 res.render('orders/index', {
                     moment: moment,
-                    movieTheaters: searchMovieTheatersResult.data,
+                    movieTheaters: searchSellersResult.data,
                     userPoolClients: userPoolClients,
                     adminUserPoolClients: adminUserPoolClients,
                     searchConditions: searchConditions,

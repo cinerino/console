@@ -23,11 +23,12 @@ placeOrderTransactionsRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const organizationService = new cinerinoapi.service.Organization({
+            const sellerService = new cinerinoapi.service.Seller({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
+
+            const searchSellersResult = await sellerService.search({});
             const transactionStatusChoices = [
                 cinerinoapi.factory.transactionStatusType.Canceled,
                 cinerinoapi.factory.transactionStatusType.Confirmed,
@@ -61,7 +62,7 @@ placeOrderTransactionsRouter.get(
                     // typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                     ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                         ? req.query.seller.ids
-                        : searchMovieTheatersResult.data.map((m) => m.id)
+                        : searchSellersResult.data.map((m) => m.id)
                 },
                 object: {
                     customerContact: (req.query.object !== undefined
@@ -113,7 +114,7 @@ placeOrderTransactionsRouter.get(
             } else {
                 res.render('transactions/placeOrder/index', {
                     moment: moment,
-                    movieTheaters: searchMovieTheatersResult.data,
+                    movieTheaters: searchSellersResult.data,
                     transactionStatusChoices: transactionStatusChoices,
                     TransactionTasksExportationStatus: cinerinoapi.factory.transactionTasksExportationStatus,
                     searchConditions: searchConditions

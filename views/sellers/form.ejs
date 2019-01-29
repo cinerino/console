@@ -1,5 +1,6 @@
 <%
 let coinAccountPayment;
+let pointAccountPayment;
 let creditCardPayment;
 let movieTicketPayment;
 let cashPayment;
@@ -7,13 +8,14 @@ let emoneyPayment;
 let hasPOS = [];
 let areaServed = [];
 if (seller !== undefined) {
-    coinAccountPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account);
+    coinAccountPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account && p.accountType === 'Coin');
+    pointAccountPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Account && p.accountType === 'Point');
     creditCardPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.CreditCard);
     movieTicketPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.MovieTicket);
     cashPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.Cash);
     emoneyPayment = seller.paymentAccepted.find((p)=>p.paymentMethodType === PaymentMethodType.EMoney);
-    hasPOS = seller.hasPOS;
-    areaServed = seller.areaServed;
+    hasPOS = (Array.isArray(seller.hasPOS)) ? seller.hasPOS : [];
+    areaServed = (Array.isArray(seller.areaServed)) ? seller.areaServed : [];
 }
 %>
 <div class="form-group">
@@ -35,8 +37,26 @@ if (seller !== undefined) {
     </select>
 </div>
 <div class="form-group">
-    <label for="branchCode">劇場枝番号</label>
-    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="枝番号" value="<%= (seller !== undefined) ?  seller.location.branchCode : '' %>">
+    <label for="branchCode">販売イベント供給サービス</label>
+    <select class="form-control" name="makesOffer[offeredThrough][identifier]">
+        <% Object.values(WebAPIIdentifier).forEach(function (identifier) { %>
+        <%
+        var selected = false;
+        if (seller !== undefined && Array.isArray(seller.makesOffer) && seller.makesOffer.length > 0) {
+            selected = seller.makesOffer[0].offeredThrough.identifier === identifier;
+        }
+        %>
+        <option value="<%= identifier %>" <% if (selected) { %>
+            selected
+            <% } %>>
+            <%= identifier %>
+        </option>
+        <% }) %>
+    </select>
+</div>
+<div class="form-group">
+    <label for="branchCode">販売イベント劇場枝番号</label>
+    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="販売イベント劇場枝番号" value="<%= (seller !== undefined) ?  seller.location.branchCode : '' %>">
 </div>
 <div class="form-group">
     <label for="name.ja">name.ja</label>
@@ -84,6 +104,7 @@ if (seller !== undefined) {
     <input type="text" class="form-control" id="movieTicketInfo[stCd]" name="movieTicketInfo[stCd]" placeholder="ムビチケサイトコード"
         value="<%= (movieTicketPayment !== undefined) ? movieTicketPayment.movieTicketInfo.stCd : '' %>">
 </div>
+
 <hr>
 <div class="form-check">
     <input type="checkbox" class="form-check-input" id="coinAccountPaymentAccepted" name="coinAccountPaymentAccepted"
@@ -95,6 +116,19 @@ if (seller !== undefined) {
     <input type="hidden" class="form-control" id="coinAccountPayment[accountNumber]" name="coinAccountPayment[accountNumber]"
         placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
     <input disabled type="text" class="form-control" placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
+</div>
+
+<hr>
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="pointAccountPaymentAccepted" name="pointAccountPaymentAccepted"
+        <%=(pointAccountPayment !==undefined) ? ' checked' : '' %>>
+    <label class="form-check-label" for="pointAccountPaymentAccepted">ポイント口座決済を許可(許可するとポイント口座が開設されます)</label>
+</div>
+<div class="form-group">
+    <label for="pointAccountPayment[accountNumber]"></label>
+    <input type="hidden" class="form-control" id="pointAccountPayment[accountNumber]" name="pointAccountPayment[accountNumber]"
+        placeholder="コイン口座番号" value="<%= (pointAccountPayment !== undefined) ? pointAccountPayment.accountNumber : '' %>">
+    <input disabled type="text" class="form-control" placeholder="ポイント口座番号" value="<%= (pointAccountPayment !== undefined) ? pointAccountPayment.accountNumber : '' %>">
 </div>
 
 <hr>

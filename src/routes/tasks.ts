@@ -39,7 +39,7 @@ tasksRouter.get(
                     : taskStatusChoices,
                 runsFrom: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                     ? moment(req.query.runsRange.split(' - ')[0]).toDate()
-                    : moment().add(-1, 'month').toDate(),
+                    : moment().add(-1, 'day').toDate(),
                 runsThrough: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                     ? moment(req.query.runsRange.split(' - ')[1]).toDate()
                     : moment().add(1, 'day').toDate()

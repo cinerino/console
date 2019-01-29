@@ -57,12 +57,17 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + data.areaServed.map(function (area) {
+                    var html = '<ul class="list-unstyled">';
+                    if (Array.isArray(data.areaServed)) {
+                        html += data.areaServed.map(function (area) {
                             return '<li><span class="badge badge-info">' + area.typeOf + '</span></li>'
                                 + '<li>' + JSON.stringify(area, null, '\t') + '</li>';
                         }).join('')
-                        + '</ul>';
+
+                    }
+                    html += '</ul>';
+
+                    return html;
                 }
             }
         ]

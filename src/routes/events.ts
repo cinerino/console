@@ -25,11 +25,12 @@ eventsRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const organizationService = new cinerinoapi.service.Organization({
+            const sellerService = new cinerinoapi.service.Seller({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
+
+            const searchSellersResult = await sellerService.search({});
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
@@ -37,7 +38,7 @@ eventsRouter.get(
                 superEvent: {
                     locationBranchCodes: (req.query.superEventLocationBranchCodes !== undefined)
                         ? req.query.superEventLocationBranchCodes
-                        : searchMovieTheatersResult.data.map((m) => m.location.branchCode)
+                        : searchSellersResult.data.map((m) => m.location.branchCode)
                 },
                 startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                     ? moment(req.query.startRange.split(' - ')[0]).toDate()
@@ -58,7 +59,7 @@ eventsRouter.get(
             } else {
                 res.render('events/screeningEvent/index', {
                     moment: moment,
-                    movieTheaters: searchMovieTheatersResult.data,
+                    movieTheaters: searchSellersResult.data,
                     searchConditions: searchConditions
                 });
             }
