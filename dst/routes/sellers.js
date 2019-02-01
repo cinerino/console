@@ -106,7 +106,8 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
         const seller = yield sellerService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
             yield sellerService.deleteById({ id: req.params.id });
-            res.status(http_status_1.NO_CONTENT).end();
+            res.status(http_status_1.NO_CONTENT)
+                .end();
             return;
         }
         else if (req.method === 'POST') {
@@ -329,7 +330,9 @@ sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, voi
             limit: req.query.limit,
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-            orderDateFrom: moment().add(-1, 'months').toDate(),
+            orderDateFrom: moment()
+                .add(-1, 'months')
+                .toDate(),
             orderDateThrough: new Date(),
             seller: {
                 typeOf: cinerinoapi.factory.organizationType.MovieTheater,

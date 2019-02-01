@@ -22,9 +22,9 @@ homeRouter.get(
                 auth: req.user.authClient
             });
 
-            let userPool: cinerinoapi.factory.cognito.UserPoolType | null = null;
+            let userPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
             let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
-            let adminUserPool: cinerinoapi.factory.cognito.UserPoolType | null = null;
+            let adminUserPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
             let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
 
             try {

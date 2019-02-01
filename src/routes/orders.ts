@@ -68,12 +68,14 @@ ordersRouter.get(
                 customer: {
                     // typeOf: cinerinoapi.factory.personType.Person,
                     ids: (req.query.customer !== undefined && req.query.customer.ids !== undefined && req.query.customer.ids !== '')
-                        ? (<string>req.query.customer.ids).split(',').map((v) => v.trim())
+                        ? (<string>req.query.customer.ids).split(',')
+                            .map((v) => v.trim())
                         : undefined,
                     membershipNumbers: (req.query.customer !== undefined
                         && req.query.customer.membershipNumbers !== undefined
                         && req.query.customer.membershipNumbers !== '')
-                        ? (<string>req.query.customer.membershipNumbers).split(',').map((v) => v.trim())
+                        ? (<string>req.query.customer.membershipNumbers).split(',')
+                            .map((v) => v.trim())
                         : undefined,
                     identifiers: (req.query.customer !== undefined && Array.isArray(req.query.customer.userPoolClients))
                         ? req.query.customer.userPoolClients.map((userPoolClient: string) => {
@@ -111,19 +113,27 @@ ordersRouter.get(
                         : undefined
                 },
                 orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
-                    ? (<string>req.query.orderNumbers).split(',').map((v) => v.trim())
+                    ? (<string>req.query.orderNumbers).split(',')
+                        .map((v) => v.trim())
                     : [],
                 orderStatuses: (req.query.orderStatuses !== undefined)
                     ? req.query.orderStatuses
                     : orderStatusChoices,
                 orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
-                    ? moment(req.query.orderDateRange.split(' - ')[0]).toDate()
-                    : moment().add(-1, 'month').toDate(),
+                    ? moment(req.query.orderDateRange.split(' - ')[0])
+                        .toDate()
+                    : moment()
+                        .add(-1, 'month')
+                        .toDate(),
                 orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
-                    ? moment(req.query.orderDateRange.split(' - ')[1]).toDate()
-                    : moment().add(1, 'day').toDate(),
+                    ? moment(req.query.orderDateRange.split(' - ')[1])
+                        .toDate()
+                    : moment()
+                        .add(1, 'day')
+                        .toDate(),
                 confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
-                    ? (<string>req.query.confirmationNumbers).split(',').map((v) => v.trim())
+                    ? (<string>req.query.confirmationNumbers).split(',')
+                        .map((v) => v.trim())
                     : [],
                 acceptedOffers: {
                     itemOffered: {
@@ -132,7 +142,8 @@ ordersRouter.get(
                                 && req.query.acceptedOffers.itemOffered !== undefined
                                 && req.query.acceptedOffers.itemOffered.reservationFor !== undefined
                                 && req.query.acceptedOffers.itemOffered.reservationFor.ids !== '')
-                                ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.ids).split(',').map((v) => v.trim())
+                                ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.ids).split(',')
+                                    .map((v) => v.trim())
                                 : [],
                             superEvent: {
                                 ids: (req.query.acceptedOffers !== undefined
@@ -141,7 +152,8 @@ ordersRouter.get(
                                     && req.query.acceptedOffers.itemOffered.reservationFor.superEvent !== undefined
                                     && req.query.acceptedOffers.itemOffered.reservationFor.superEvent.ids !== '')
                                     ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.superEvent.ids)
-                                        .split(',').map((v) => v.trim())
+                                        .split(',')
+                                        .map((v) => v.trim())
                                     : [],
                                 workPerformed: {
                                     identifiers: (req.query.acceptedOffers !== undefined
@@ -151,7 +163,8 @@ ordersRouter.get(
                                         && req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed !== undefined
                                         && req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers !== '')
                                         ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)
-                                            .split(',').map((v) => v.trim())
+                                            .split(',')
+                                            .map((v) => v.trim())
                                         : []
                                 }
                             }
@@ -167,7 +180,8 @@ ordersRouter.get(
                     paymentMethodIds: (req.query.paymentMethods !== undefined
                         && req.query.paymentMethods.paymentMethodIds !== undefined
                         && req.query.paymentMethods.paymentMethodIds !== '')
-                        ? (<string>req.query.paymentMethods.paymentMethodIds).split(',').map((v) => v.trim())
+                        ? (<string>req.query.paymentMethods.paymentMethodIds).split(',')
+                            .map((v) => v.trim())
                         : []
                 }
             };
@@ -221,7 +235,8 @@ ordersRouter.get(
             });
             const searchOrdersResult = await orderService.search({
                 orderNumbers: [req.params.orderNumber],
-                orderDateFrom: moment('2017-04-20T00:00:00+09:00').toDate(),
+                orderDateFrom: moment('2017-04-20T00:00:00+09:00')
+                    .toDate(),
                 orderDateThrough: new Date()
             });
             const order = searchOrdersResult.data.shift();
@@ -371,7 +386,9 @@ ordersRouter.post(
                 auth: req.user.authClient
             });
             const returnOrderTransaction = await returnOrderService.start({
-                expires: moment().add(1, 'minutes').toDate(),
+                expires: moment()
+                    .add(1, 'minutes')
+                    .toDate(),
                 object: {
                     order: {
                         orderNumber: req.params.orderNumber
@@ -379,7 +396,8 @@ ordersRouter.post(
                 }
             });
             await returnOrderService.confirm(returnOrderTransaction);
-            res.status(ACCEPTED).end();
+            res.status(ACCEPTED)
+                .end();
         } catch (error) {
             next(error);
         }
@@ -433,6 +451,7 @@ ordersRouter.post(
                 status: cinerinoapi.factory.taskStatus.Ready,
                 runsAt: new Date(),
                 remainingNumberOfTries: 3,
+                // tslint:disable-next-line:no-null-keyword
                 lastTriedAt: null,
                 numberOfTried: 0,
                 executionResults: [],
@@ -441,7 +460,8 @@ ordersRouter.post(
                 }
             };
             const task = await taskService.create(taskAttributes);
-            res.status(CREATED).json(task);
+            res.status(CREATED)
+                .json(task);
         } catch (error) {
             next(error);
         }

@@ -25,4 +25,14 @@ pecorinoRouter.get('/accounts/coin', (_, res, next) => __awaiter(this, void 0, v
         next(error);
     }
 }));
+pecorinoRouter.get('/accounts/point', (_, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        res.render('pecorino/accounts/point/index', {
+            moment: moment
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = pecorinoRouter;

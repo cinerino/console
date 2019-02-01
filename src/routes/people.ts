@@ -106,7 +106,9 @@ peopleRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-                orderDateFrom: moment().add(-1, 'months').toDate(),
+                orderDateFrom: moment()
+                    .add(-1, 'months')
+                    .toDate(),
                 orderDateThrough: new Date(),
                 customer: {
                     typeOf: cinerinoapi.factory.personType.Person,

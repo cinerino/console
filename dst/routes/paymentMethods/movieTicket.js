@@ -30,10 +30,12 @@ movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(this, void 
             page: req.query.page,
             sort: { identifier: cinerinoapi.factory.sortType.Ascending },
             identifiers: (req.query.identifiers !== undefined && req.query.identifiers !== '')
-                ? req.query.identifiers.split(',').map((v) => v.trim())
+                ? req.query.identifiers.split(',')
+                    .map((v) => v.trim())
                 : undefined,
             serviceTypes: (req.query.serviceTypes !== undefined && req.query.serviceTypes !== '')
-                ? req.query.serviceTypes.split(',').map((v) => v.trim())
+                ? req.query.serviceTypes.split(',')
+                    .map((v) => v.trim())
                 : undefined
         };
         if (req.query.format === 'datatable') {

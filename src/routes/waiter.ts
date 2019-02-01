@@ -17,7 +17,8 @@ waiterRouter.get(
                 const rules = await request.get(
                     `${process.env.WAITER_ENDPOINT}/projects/${process.env.PROJECT_ID}/rules`,
                     { json: true }
-                ).promise();
+                )
+                    .promise();
                 res.json({
                     draw: req.query.draw,
                     recordsTotal: rules.length,

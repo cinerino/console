@@ -39,12 +39,18 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
         const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending }, superEvent: {
                 locationBranchCodes: (req.query.superEventLocationBranchCodes !== undefined)
                     ? req.query.superEventLocationBranchCodes
-                    : searchSellersResult.data.map((m) => m.location.branchCode)
+                    : searchSellersResult.data
+                        .filter((seller) => seller.location !== undefined && seller.location.branchCode !== undefined)
+                        .map((m) => m.location.branchCode)
             }, startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
-                ? moment(req.query.startRange.split(' - ')[0]).toDate()
+                ? moment(req.query.startRange.split(' - ')[0])
+                    .toDate()
                 : new Date(), startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
-                ? moment(req.query.startRange.split(' - ')[1]).toDate()
-                : moment().add(1, 'month').toDate() }, req.query);
+                ? moment(req.query.startRange.split(' - ')[1])
+                    .toDate()
+                : moment()
+                    .add(1, 'month')
+                    .toDate() }, req.query);
         if (req.query.format === 'datatable') {
             const searchScreeningEventsResult = yield eventService.searchScreeningEvents(searchConditions);
             res.json({
@@ -70,9 +76,15 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
  * 上映イベントインポート
  */
 eventsRouter.post('/screeningEvent/import', ...[
-    check_1.body('superEventLocationBranchCodes').not().isEmpty().withMessage((_, options) => `${options.path} is required`)
+    check_1.body('superEventLocationBranchCodes')
+        .not()
+        .isEmpty()
+        .withMessage((_, options) => `${options.path} is required`)
         .isArray(),
-    check_1.body('startRange').not().isEmpty().withMessage((_, options) => `${options.path} is required`)
+    check_1.body('startRange')
+        .not()
+        .isEmpty()
+        .withMessage((_, options) => `${options.path} is required`)
 ], validator_1.default, (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
@@ -80,14 +92,17 @@ eventsRouter.post('/screeningEvent/import', ...[
             auth: req.user.authClient
         });
         const locationBranchCodes = req.body.superEventLocationBranchCodes;
-        const startFrom = moment(req.body.startRange.split(' - ')[0]).toDate();
-        const startThrough = moment(req.body.startRange.split(' - ')[1]).toDate();
+        const startFrom = moment(req.body.startRange.split(' - ')[0])
+            .toDate();
+        const startThrough = moment(req.body.startRange.split(' - ')[1])
+            .toDate();
         const tasks = yield Promise.all(locationBranchCodes.map((locationBranchCode) => __awaiter(this, void 0, void 0, function* () {
             const taskAttributes = {
                 name: cinerinoapi.factory.taskName.ImportScreeningEvents,
                 status: cinerinoapi.factory.taskStatus.Ready,
                 runsAt: new Date(),
                 remainingNumberOfTries: 1,
+                // tslint:disable-next-line:no-null-keyword
                 lastTriedAt: null,
                 numberOfTried: 0,
                 executionResults: [],
@@ -99,7 +114,8 @@ eventsRouter.post('/screeningEvent/import', ...[
             };
             return taskService.create(taskAttributes);
         })));
-        res.status(http_status_1.CREATED).json(tasks);
+        res.status(http_status_1.CREATED)
+            .json(tasks);
     }
     catch (error) {
         next(error);
@@ -149,8 +165,10 @@ eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(thi
             limit: req.query.limit,
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Ascending },
-            // tslint:disable-next-line:no-magic-numbers
-            orderDateFrom: moment(event.startDate).add(-3, 'months').toDate(),
+            orderDateFrom: moment(event.startDate)
+                // tslint:disable-next-line:no-magic-numbers
+                .add(-3, 'months')
+                .toDate(),
             orderDateThrough: new Date(),
             acceptedOffers: {
                 itemOffered: {

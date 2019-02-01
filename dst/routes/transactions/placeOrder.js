@@ -51,17 +51,26 @@ placeOrderTransactionsRouter.get('',
                 ? req.query.statuses
                 : transactionStatusChoices,
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
-                ? moment(req.query.startRange.split(' - ')[0]).toDate()
-                : moment().add(-1, 'week').toDate(),
+                ? moment(req.query.startRange.split(' - ')[0])
+                    .toDate()
+                : moment()
+                    .add(-1, 'week')
+                    .toDate(),
             startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
-                ? moment(req.query.startRange.split(' - ')[1]).toDate()
-                : moment().add(1, 'day').toDate(),
-            endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom).toDate() : undefined,
-            endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough).toDate() : undefined,
+                ? moment(req.query.startRange.split(' - ')[1])
+                    .toDate()
+                : moment()
+                    .add(1, 'day')
+                    .toDate(),
+            endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom)
+                .toDate() : undefined,
+            endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough)
+                .toDate() : undefined,
             agent: {
                 // typeOf: cinerinoapi.factory.personType.Person,
                 ids: (req.query.agent !== undefined && req.query.agent.ids !== undefined && req.query.agent.ids !== '')
-                    ? req.query.agent.ids.split(',').map((v) => v.trim())
+                    ? req.query.agent.ids.split(',')
+                        .map((v) => v.trim())
                     : undefined
             },
             seller: {
@@ -90,7 +99,8 @@ placeOrderTransactionsRouter.get('',
                     orderNumbers: (req.query.result !== undefined
                         && req.query.result.order !== undefined
                         && req.query.result.order.orderNumbers !== '')
-                        ? req.query.result.order.orderNumbers.split(',').map((v) => v.trim())
+                        ? req.query.result.order.orderNumbers.split(',')
+                            .map((v) => v.trim())
                         : undefined
                 }
             },

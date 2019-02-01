@@ -27,9 +27,9 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        let userPool = null;
+        let userPool;
         let userPoolClients = [];
-        let adminUserPool = null;
+        let adminUserPool;
         let adminUserPoolClients = [];
         try {
             userPool = yield userPoolService.findById({

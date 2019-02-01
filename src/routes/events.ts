@@ -38,14 +38,20 @@ eventsRouter.get(
                 superEvent: {
                     locationBranchCodes: (req.query.superEventLocationBranchCodes !== undefined)
                         ? req.query.superEventLocationBranchCodes
-                        : searchSellersResult.data.map((m) => m.location.branchCode)
+                        : searchSellersResult.data
+                            .filter((seller) => seller.location !== undefined && seller.location.branchCode !== undefined)
+                            .map((m) => (<cinerinoapi.factory.seller.ILocation>m.location).branchCode)
                 },
                 startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
-                    ? moment(req.query.startRange.split(' - ')[0]).toDate()
+                    ? moment(req.query.startRange.split(' - ')[0])
+                        .toDate()
                     : new Date(),
                 startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
-                    ? moment(req.query.startRange.split(' - ')[1]).toDate()
-                    : moment().add(1, 'month').toDate(),
+                    ? moment(req.query.startRange.split(' - ')[1])
+                        .toDate()
+                    : moment()
+                        .add(1, 'month')
+                        .toDate(),
                 ...req.query
             };
             if (req.query.format === 'datatable') {
@@ -73,9 +79,15 @@ eventsRouter.get(
 eventsRouter.post(
     '/screeningEvent/import',
     ...[
-        body('superEventLocationBranchCodes').not().isEmpty().withMessage((_, options) => `${options.path} is required`)
+        body('superEventLocationBranchCodes')
+            .not()
+            .isEmpty()
+            .withMessage((_, options) => `${options.path} is required`)
             .isArray(),
-        body('startRange').not().isEmpty().withMessage((_, options) => `${options.path} is required`)
+        body('startRange')
+            .not()
+            .isEmpty()
+            .withMessage((_, options) => `${options.path} is required`)
     ],
     validator,
     async (req, res, next) => {
@@ -85,14 +97,17 @@ eventsRouter.post(
                 auth: req.user.authClient
             });
             const locationBranchCodes = <string[]>req.body.superEventLocationBranchCodes;
-            const startFrom = moment(req.body.startRange.split(' - ')[0]).toDate();
-            const startThrough = moment(req.body.startRange.split(' - ')[1]).toDate();
+            const startFrom = moment(req.body.startRange.split(' - ')[0])
+                .toDate();
+            const startThrough = moment(req.body.startRange.split(' - ')[1])
+                .toDate();
             const tasks = await Promise.all(locationBranchCodes.map(async (locationBranchCode) => {
                 const taskAttributes: cinerinoapi.factory.task.IAttributes<cinerinoapi.factory.taskName.ImportScreeningEvents> = {
                     name: cinerinoapi.factory.taskName.ImportScreeningEvents,
                     status: cinerinoapi.factory.taskStatus.Ready,
                     runsAt: new Date(),
                     remainingNumberOfTries: 1,
+                    // tslint:disable-next-line:no-null-keyword
                     lastTriedAt: null,
                     numberOfTried: 0,
                     executionResults: [],
@@ -105,7 +120,8 @@ eventsRouter.post(
 
                 return taskService.create(taskAttributes);
             }));
-            res.status(CREATED).json(tasks);
+            res.status(CREATED)
+                .json(tasks);
         } catch (error) {
             next(error);
         }
@@ -157,8 +173,10 @@ eventsRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Ascending },
-                // tslint:disable-next-line:no-magic-numbers
-                orderDateFrom: moment(event.startDate).add(-3, 'months').toDate(),
+                orderDateFrom: moment(event.startDate)
+                    // tslint:disable-next-line:no-magic-numbers
+                    .add(-3, 'months')
+                    .toDate(),
                 orderDateThrough: new Date(),
                 acceptedOffers: {
                     itemOffered: {

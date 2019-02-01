@@ -20,7 +20,10 @@ dashboardRouter.get(
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
                 limit: 1,
                 page: 1,
-                orderDateFrom: moment().tz('Asia/Tokyo').startOf('day').toDate()
+                orderDateFrom: moment()
+                    .tz('Asia/Tokyo')
+                    .startOf('day')
+                    .toDate()
             };
             const { totalCount } = await orderService.search(searchConditions);
             res.json({
@@ -44,7 +47,10 @@ dashboardRouter.get(
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 limit: 1,
                 page: 1,
-                startFrom: moment().tz('Asia/Tokyo').startOf('day').toDate()
+                startFrom: moment()
+                    .tz('Asia/Tokyo')
+                    .startOf('day')
+                    .toDate()
             };
             const searchResult = await placeOrderService.search(searchConditions);
             searchConditions.statuses = [
@@ -91,7 +97,10 @@ dashboardRouter.get(
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 limit: 1,
                 page: 1,
-                startFrom: moment().tz('Asia/Tokyo').startOf('day').toDate()
+                startFrom: moment()
+                    .tz('Asia/Tokyo')
+                    .startOf('day')
+                    .toDate()
             };
             const searchResult = await placeOrderService.search(searchConditions);
             res.json({
@@ -115,8 +124,10 @@ dashboardRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: (req.query.sort !== undefined) ? req.query.sort : { orderDate: cinerinoapi.factory.sortType.Descending },
-                orderDateFrom: moment(req.query.orderDateFrom).toDate(),
-                orderDateThrough: moment(req.query.orderDateThrough).toDate()
+                orderDateFrom: moment(req.query.orderDateFrom)
+                    .toDate(),
+                orderDateThrough: moment(req.query.orderDateThrough)
+                    .toDate()
             });
             res.json(searchOrdersResult);
         } catch (error) {

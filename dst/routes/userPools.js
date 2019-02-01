@@ -89,7 +89,9 @@ userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(this, v
             limit: req.query.limit,
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-            orderDateFrom: moment().add(-1, 'months').toDate(),
+            orderDateFrom: moment()
+                .add(-1, 'months')
+                .toDate(),
             orderDateThrough: new Date(),
             customer: {
                 typeOf: cinerinoapi.factory.personType.Person,
@@ -142,7 +144,9 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) =>
             limit: req.query.limit,
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-            orderDateFrom: moment().add(-1, 'months').toDate(),
+            orderDateFrom: moment()
+                .add(-1, 'months')
+                .toDate(),
             orderDateThrough: new Date(),
             customer: {
                 typeOf: cinerinoapi.factory.personType.Person,

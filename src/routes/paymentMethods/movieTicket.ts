@@ -26,10 +26,12 @@ movieTicketPaymentMethodRouter.get(
                 page: req.query.page,
                 sort: { identifier: cinerinoapi.factory.sortType.Ascending },
                 identifiers: (req.query.identifiers !== undefined && req.query.identifiers !== '')
-                    ? (<string>req.query.identifiers).split(',').map((v) => v.trim())
+                    ? (<string>req.query.identifiers).split(',')
+                        .map((v) => v.trim())
                     : undefined,
                 serviceTypes: (req.query.serviceTypes !== undefined && req.query.serviceTypes !== '')
-                    ? (<string>req.query.serviceTypes).split(',').map((v) => v.trim())
+                    ? (<string>req.query.serviceTypes).split(',')
+                        .map((v) => v.trim())
                     : undefined
             };
 

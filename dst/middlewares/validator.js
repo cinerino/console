@@ -17,7 +17,8 @@ exports.default = (req, __, next) => __awaiter(this, void 0, void 0, function* (
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = check_1.validationResult(req);
     if (!errors.isEmpty()) {
-        next(new api_1.APIError(http_status_1.BAD_REQUEST, errors.array().map((mappedRrror) => {
+        next(new api_1.APIError(http_status_1.BAD_REQUEST, errors.array()
+            .map((mappedRrror) => {
             return new cinerinoapi_1.factory.errors.Argument(mappedRrror.param, mappedRrror.msg);
         })));
     }

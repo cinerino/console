@@ -44,17 +44,26 @@ returnOrderTransactionsRouter.get(
                     ? req.query.statuses
                     : transactionStatusChoices,
                 startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
-                    ? moment(req.query.startRange.split(' - ')[0]).toDate()
-                    : moment().add(-1, 'week').toDate(),
+                    ? moment(req.query.startRange.split(' - ')[0])
+                        .toDate()
+                    : moment()
+                        .add(-1, 'week')
+                        .toDate(),
                 startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
-                    ? moment(req.query.startRange.split(' - ')[1]).toDate()
-                    : moment().add(1, 'day').toDate(),
-                endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom).toDate() : undefined,
-                endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough).toDate() : undefined,
+                    ? moment(req.query.startRange.split(' - ')[1])
+                        .toDate()
+                    : moment()
+                        .add(1, 'day')
+                        .toDate(),
+                endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom)
+                    .toDate() : undefined,
+                endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough)
+                    .toDate() : undefined,
                 agent: {
                     typeOf: cinerinoapi.factory.personType.Person,
                     ids: (req.query.agent !== undefined && req.query.agent.ids !== '')
-                        ? (<string>req.query.agent.ids).split(',').map((v) => v.trim())
+                        ? (<string>req.query.agent.ids).split(',')
+                            .map((v) => v.trim())
                         : undefined
                 },
                 object: {
@@ -62,7 +71,8 @@ returnOrderTransactionsRouter.get(
                         orderNumbers: (req.query.object !== undefined
                             && req.query.object.order !== undefined
                             && req.query.object.order.orderNumbers !== '')
-                            ? (<string>req.query.object.order.orderNumbers).split(',').map((v) => v.trim())
+                            ? (<string>req.query.object.order.orderNumbers).split(',')
+                                .map((v) => v.trim())
                             : undefined
                     }
                 },
