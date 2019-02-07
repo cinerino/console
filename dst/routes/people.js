@@ -74,20 +74,33 @@ peopleRouter.get('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
             auth: req.user.authClient
         });
         const person = yield personService.findById({ id: req.params.id });
-        const creditCards = yield personOwnershipInfoService.searchCreditCards({ personId: req.params.id });
-        const searchCoinAccountsResult = yield personOwnershipInfoService.search({
-            personId: req.params.id,
-            typeOfGood: {
-                typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                accountType: cinerinoapi.factory.accountType.Coin
-            }
-        });
+        let creditCards = [];
+        let coinAccounts = [];
+        try {
+            creditCards = yield personOwnershipInfoService.searchCreditCards({ id: req.params.id });
+        }
+        catch (error) {
+            // no op
+        }
+        try {
+            const searchCoinAccountsResult = yield personOwnershipInfoService.search({
+                id: req.params.id,
+                typeOfGood: {
+                    typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                    accountType: cinerinoapi.factory.accountType.Coin
+                }
+            });
+            coinAccounts = searchCoinAccountsResult.data;
+        }
+        catch (error) {
+            // no op
+        }
         res.render('people/show', {
             message: message,
             moment: moment,
             person: person,
             creditCards: creditCards,
-            coinAccounts: searchCoinAccountsResult.data
+            coinAccounts: coinAccounts
         });
     }
     catch (error) {

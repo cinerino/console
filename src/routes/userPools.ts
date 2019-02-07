@@ -169,16 +169,16 @@ userPoolsRouter.get(
 );
 
 userPoolsRouter.get(
-    '/:userPoolId/people/:personId',
+    '/:userPoolId/people/:id',
     // tslint:disable-next-line:max-func-body-length
     async (req, res, next) => {
         try {
             switch (req.params.userPoolId) {
                 case process.env.DEFAULT_COGNITO_USER_POOL_ID:
-                    res.redirect(`/people/${req.params.personId}`);
+                    res.redirect(`/people/${req.params.id}`);
                     break;
                 case process.env.ADMIN_COGNITO_USER_POOL_ID:
-                    res.redirect(`/admin/${req.params.personId}`);
+                    res.redirect(`/admin/${req.params.id}`);
                     break;
                 default:
                     throw new Error('Unknown userPool');

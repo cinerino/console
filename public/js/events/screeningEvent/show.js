@@ -13,7 +13,10 @@ $(function () {
     searchOrders(function () {
         console.log('creating line chart...');
         // 全座席数は
-        var numberOfSeats = event.maximumAttendeeCapacity;
+        var numberOfSeats = 999;
+        if (Number.isInteger(event.maximumAttendeeCapacity)) {
+            numberOfSeats = event.maximumAttendeeCapacity
+        }
         // 売り出し日時は？
         var reservationStartDate = moment(event.startDate).add(-3, 'days').toDate();
         // var reservationPeriodInMinutes = moment(event.endDate).diff(moment(reservationStartDate), 'hours');

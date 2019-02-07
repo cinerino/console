@@ -10,6 +10,10 @@ import * as cinerinoapi from '../cinerinoapi';
 const debug = createDebug('cinerino-console:routes');
 const peopleRouter = express.Router();
 
+type IAccountOwnershipInfo =
+    // tslint:disable-next-line:max-line-length
+    cinerinoapi.factory.ownershipInfo.IOwnershipInfo<cinerinoapi.factory.ownershipInfo.IGoodWithDetail<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>>;
+
 /**
  * 会員検索
  */
@@ -70,20 +74,36 @@ peopleRouter.get(
                 auth: req.user.authClient
             });
             const person = await personService.findById({ id: req.params.id });
-            const creditCards = await personOwnershipInfoService.searchCreditCards({ personId: req.params.id });
-            const searchCoinAccountsResult = await personOwnershipInfoService.search({
-                personId: req.params.id,
-                typeOfGood: {
-                    typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                    accountType: cinerinoapi.factory.accountType.Coin
-                }
-            });
+
+            let creditCards: cinerinoapi.factory.paymentMethod.paymentCard.creditCard.ICheckedCard[] = [];
+            let coinAccounts: IAccountOwnershipInfo[] = [];
+
+            try {
+                creditCards = await personOwnershipInfoService.searchCreditCards({ id: req.params.id });
+            } catch (error) {
+                // no op
+            }
+
+            try {
+                const searchCoinAccountsResult =
+                    await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+                        id: req.params.id,
+                        typeOfGood: {
+                            typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                            accountType: cinerinoapi.factory.accountType.Coin
+                        }
+                    });
+                coinAccounts = searchCoinAccountsResult.data;
+            } catch (error) {
+                // no op
+            }
+
             res.render('people/show', {
                 message: message,
                 moment: moment,
                 person: person,
                 creditCards: creditCards,
-                coinAccounts: searchCoinAccountsResult.data
+                coinAccounts: coinAccounts
             });
         } catch (error) {
             next(error);
