@@ -31,16 +31,31 @@ eventsRouter.get(
             });
 
             const searchSellersResult = await sellerService.search({});
+            const sellers = searchSellersResult.data;
+
+            let superEventLocationBranchCodes: string[] | undefined;
+            if (req.query.seller !== undefined && Array.isArray(req.query.seller.ids)) {
+                const selectedSellers = sellers.filter((s) => req.query.seller.ids.indexOf(s.id) >= 0);
+                superEventLocationBranchCodes = selectedSellers.reduce<string[]>(
+                    (a, b) => {
+                        if (Array.isArray(b.makesOffer)) {
+                            a.push(...b.makesOffer.map(
+                                (offer) => offer.itemOffered.reservationFor.location.branchCode
+                            ));
+                        }
+
+                        return a;
+                    },
+                    []
+                );
+            }
+
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending },
                 superEvent: {
-                    locationBranchCodes: (req.query.superEventLocationBranchCodes !== undefined)
-                        ? req.query.superEventLocationBranchCodes
-                        : searchSellersResult.data
-                            .filter((seller) => seller.location !== undefined && seller.location.branchCode !== undefined)
-                            .map((m) => (<cinerinoapi.factory.seller.ILocation>m.location).branchCode)
+                    locationBranchCodes: superEventLocationBranchCodes
                 },
                 startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                     ? moment(req.query.startRange.split(' - ')[0])
@@ -65,7 +80,7 @@ eventsRouter.get(
             } else {
                 res.render('events/screeningEvent/index', {
                     moment: moment,
-                    movieTheaters: searchSellersResult.data,
+                    sellers: searchSellersResult.data,
                     searchConditions: searchConditions
                 });
             }
@@ -107,8 +122,6 @@ eventsRouter.post(
                     status: cinerinoapi.factory.taskStatus.Ready,
                     runsAt: new Date(),
                     remainingNumberOfTries: 1,
-                    // tslint:disable-next-line:no-null-keyword
-                    lastTriedAt: null,
                     numberOfTried: 0,
                     executionResults: [],
                     data: {

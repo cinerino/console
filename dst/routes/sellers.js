@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const COA = require("@motionpicture/coa-service");
 const createDebug = require("debug");
 const express = require("express");
+const google_libphonenumber_1 = require("google-libphonenumber");
 const http_status_1 = require("http-status");
 const moment = require("moment");
 const chevreapi = require("../chevreapi");
@@ -141,34 +142,52 @@ function createAttributesFromBody(params) {
         let movieTheaterFromChevre;
         const webAPIIdentifier = params.body.makesOffer.offeredThrough.identifier;
         const branchCode = params.body.branchCode;
-        switch (webAPIIdentifier) {
-            case cinerinoapi.factory.service.webAPI.Identifier.COA:
-                // COAから情報取得
-                const theaterFromCOA = yield COA.services.master.theater({ theaterCode: branchCode });
-                movieTheaterFromChevre = {
-                    typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
-                    branchCode: theaterFromCOA.theaterCode,
-                    name: {
-                        ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : '',
-                        en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : ''
-                    },
-                    telephone: theaterFromCOA.theaterTelNum,
-                    screenCount: 0,
-                    kanaName: '',
-                    id: '',
-                    containsPlace: [] // 使用しないので適当に
-                };
-                break;
-            case cinerinoapi.factory.service.webAPI.Identifier.Chevre:
-                // Chevreから情報取得
-                const placeService = new chevreapi.service.Place({
-                    endpoint: process.env.CHEVRE_ENDPOINT,
-                    auth: params.authClient
-                });
-                movieTheaterFromChevre = yield placeService.findMovieTheaterByBranchCode({ branchCode: branchCode });
-                break;
-            default:
-                throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
+        try {
+            switch (webAPIIdentifier) {
+                case cinerinoapi.factory.service.webAPI.Identifier.COA:
+                    // COAから情報取得
+                    const theaterFromCOA = yield COA.services.master.theater({ theaterCode: branchCode });
+                    // 日本語フォーマットで電話番号が提供される想定なので変換
+                    let formatedPhoneNumber;
+                    try {
+                        const phoneUtil = google_libphonenumber_1.PhoneNumberUtil.getInstance();
+                        const phoneNumber = phoneUtil.parse(theaterFromCOA.theaterTelNum, 'JP');
+                        if (!phoneUtil.isValidNumber(phoneNumber)) {
+                            throw new Error('Invalid phone number format.');
+                        }
+                        formatedPhoneNumber = phoneUtil.format(phoneNumber, google_libphonenumber_1.PhoneNumberFormat.E164);
+                    }
+                    catch (error) {
+                        throw new Error(`電話番号フォーマット時に問題が発生しました:${error.message}`);
+                    }
+                    movieTheaterFromChevre = {
+                        typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
+                        branchCode: theaterFromCOA.theaterCode,
+                        name: {
+                            ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : '',
+                            en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : ''
+                        },
+                        telephone: formatedPhoneNumber,
+                        screenCount: 0,
+                        kanaName: '',
+                        id: '',
+                        containsPlace: [] // 使用しないので適当に
+                    };
+                    break;
+                case cinerinoapi.factory.service.webAPI.Identifier.Chevre:
+                    // Chevreから情報取得
+                    const placeService = new chevreapi.service.Place({
+                        endpoint: process.env.CHEVRE_ENDPOINT,
+                        auth: params.authClient
+                    });
+                    movieTheaterFromChevre = yield placeService.findMovieTheaterByBranchCode({ branchCode: branchCode });
+                    break;
+                default:
+                    throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
+            }
+        }
+        catch (error) {
+            throw new Error(`${webAPIIdentifier}から劇場情報取得時に問題が発生しました:${error.message}`);
         }
         const paymentAccepted = [
             {
@@ -284,7 +303,7 @@ function createAttributesFromBody(params) {
                 priceCurrency: cinerinoapi.factory.priceCurrency.JPY,
                 offeredThrough: {
                     typeOf: 'WebAPI',
-                    identifier: params.body.makesOffer.offeredThrough.identifier
+                    identifier: webAPIIdentifier
                 },
                 itemOffered: {
                     typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation,

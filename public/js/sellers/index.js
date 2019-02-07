@@ -56,6 +56,27 @@ $(function () {
             },
             {
                 data: null,
+                // render: function (data, type, row) {
+                //     return '<ul class="list-unstyled">'
+                //         + '<li>' + JSON.stringify(data.makesOffer) + '</li>'
+                //         + '</ul>';
+                // }
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+                    if (Array.isArray(data.makesOffer)) {
+                        html += data.makesOffer.map(function (offer) {
+                            return '<li><span class="badge badge-secondary">' + offer.offeredThrough.identifier + '</span></li>'
+                                + '<li>' + JSON.stringify(offer.itemOffered, null, '\t') + '</li>';
+                        }).join('')
+
+                    }
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
                     if (Array.isArray(data.areaServed)) {

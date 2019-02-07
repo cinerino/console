@@ -454,8 +454,6 @@ ordersRouter.post('/:orderNumber/sendEmailMessage', (req, res, next) => __awaite
             status: cinerinoapi.factory.taskStatus.Ready,
             runsAt: new Date(),
             remainingNumberOfTries: 3,
-            // tslint:disable-next-line:no-null-keyword
-            lastTriedAt: null,
             numberOfTried: 0,
             executionResults: [],
             data: {

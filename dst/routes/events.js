@@ -36,12 +36,19 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
+        const sellers = searchSellersResult.data;
+        let superEventLocationBranchCodes;
+        if (req.query.seller !== undefined && Array.isArray(req.query.seller.ids)) {
+            const selectedSellers = sellers.filter((s) => req.query.seller.ids.indexOf(s.id) >= 0);
+            superEventLocationBranchCodes = selectedSellers.reduce((a, b) => {
+                if (Array.isArray(b.makesOffer)) {
+                    a.push(...b.makesOffer.map((offer) => offer.itemOffered.reservationFor.location.branchCode));
+                }
+                return a;
+            }, []);
+        }
         const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending }, superEvent: {
-                locationBranchCodes: (req.query.superEventLocationBranchCodes !== undefined)
-                    ? req.query.superEventLocationBranchCodes
-                    : searchSellersResult.data
-                        .filter((seller) => seller.location !== undefined && seller.location.branchCode !== undefined)
-                        .map((m) => m.location.branchCode)
+                locationBranchCodes: superEventLocationBranchCodes
             }, startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])
                     .toDate()
@@ -63,7 +70,7 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
         else {
             res.render('events/screeningEvent/index', {
                 moment: moment,
-                movieTheaters: searchSellersResult.data,
+                sellers: searchSellersResult.data,
                 searchConditions: searchConditions
             });
         }
@@ -102,8 +109,6 @@ eventsRouter.post('/screeningEvent/import', ...[
                 status: cinerinoapi.factory.taskStatus.Ready,
                 runsAt: new Date(),
                 remainingNumberOfTries: 1,
-                // tslint:disable-next-line:no-null-keyword
-                lastTriedAt: null,
                 numberOfTried: 0,
                 executionResults: [],
                 data: {

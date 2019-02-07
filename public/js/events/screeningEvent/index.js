@@ -23,28 +23,37 @@ $(function () {
                         ? data.workPerformed.thumbnailUrl
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrhpsOJOcLBwc1SPD9sWlinildy4S05-I2Wf6z2wRXnSxbmtRz';
 
+                    var alternativeHeadline = data.superEvent.alternativeHeadline;
+                    if (typeof data.superEvent.alternativeHeadline === 'object') {
+                        alternativeHeadline = data.superEvent.alternativeHeadline.ja;
+                    }
+
                     return '<ul class="products-list">'
                         + '<li class="item">'
                         + '<div class="product-img">'
                         + '<img src="' + thumbnailImageUrl + '" alt="Product Image" class="img-size-50">'
                         + '</div>'
                         + '<div class="product-info">'
-                        + '<a target="_blank" href="/events/screeningEvent/' + data.id + '">' + data.id + '</a>'
+                        + '<a target="_blank" href="/events/screeningEvent/' + data.id + '">'
+                        + data.name.ja
+                        // + '<span class="badge badge-warning float-right">' + data.maximumAttendeeCapacity + ' seats</span>'
+                        + '</a>'
+                        + '<span class="product-description">' + alternativeHeadline + '</span>'
                         + '</div>'
                         + '</li>'
-                        // + '<li><a target="_blank" href="/events/screeningEvent/' + data.id + '">' + data.id + '</a></li>'
                         + '</ul>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.superEvent.name.ja + '</li>'
-                        + '<li>' + data.superEvent.alternativeHeadline + '</li>'
-                        + '<li>' + data.name.ja + '</li>'
-                        + '<li>' + data.startDate + ' - ' + data.endDate + '</li>'
-                        + '</ul>';
+                    return '<p>' + data.startDate + ' - ' + data.endDate + '</p>'
+                        + '<p>'
+                        + '<i class="fa fa-user"></i> ' + data.maximumAttendeeCapacity + ' maximum'
+                        + '</p>'
+                        + '<p>'
+                        + '<i class="fa fa-user"></i> ' + data.remainingAttendeeCapacity + ' remaining'
+                        + '</p>';
                 }
             },
             {

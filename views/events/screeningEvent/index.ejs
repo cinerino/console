@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">上映イベント検索</h1>
+                <h1 class="m-0 text-dark">イベント検索</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">上映イベント検索</li>
+                    <li class="breadcrumb-item active">イベント検索</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -43,13 +43,14 @@
                                 <input type="text" class="form-control" id="name" name="name" placeholder="イベント名" value="<%= searchConditions.name %>">
                             </div>
                             <div class="form-group">
-                                <label>開催地</label>
-                                <select multiple class="form-control" name="superEventLocationBranchCodes[]">
-                                    <% movieTheaters.forEach(function (movieTheater) { %>
-                                    <option value="<%= movieTheater.location.branchCode %>" <%=(
-                                        searchConditions.superEvent.locationBranchCodes.indexOf(movieTheater.location.branchCode)>=
+                                <label>販売者</label>
+                                <select multiple class="form-control" name="seller[ids][]">
+                                    <% sellers.forEach(function (seller) { %>
+                                    <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
+                                        Array.isArray(searchConditions.seller.ids) &&
+                                        searchConditions.seller.ids.indexOf(seller.id)>=
                                         0) ? 'selected' : '' %>>
-                                        <%= movieTheater.name.ja %>
+                                        <%= seller.name.ja %>
                                     </option>
                                     <% }) %>
                                 </select>
