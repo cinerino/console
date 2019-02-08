@@ -33,22 +33,28 @@ eventsRouter.get(
             const searchSellersResult = await sellerService.search({});
             const sellers = searchSellersResult.data;
 
-            let superEventLocationBranchCodes: string[] | undefined;
-            if (req.query.seller !== undefined && Array.isArray(req.query.seller.ids)) {
-                const selectedSellers = sellers.filter((s) => req.query.seller.ids.indexOf(s.id) >= 0);
-                superEventLocationBranchCodes = selectedSellers.reduce<string[]>(
-                    (a, b) => {
-                        if (Array.isArray(b.makesOffer)) {
-                            a.push(...b.makesOffer.map(
-                                (offer) => offer.itemOffered.reservationFor.location.branchCode
-                            ));
-                        }
-
-                        return a;
-                    },
-                    []
-                );
+            // 販売者はデフォルトで全選択
+            if (req.query.seller === undefined) {
+                req.query.seller = {};
             }
+            if (!Array.isArray(req.query.seller.ids)) {
+                req.query.seller.ids = sellers.map((s) => s.id);
+            }
+
+            let superEventLocationBranchCodes: string[] | undefined;
+            const selectedSellers = sellers.filter((s) => req.query.seller.ids.indexOf(s.id) >= 0);
+            superEventLocationBranchCodes = selectedSellers.reduce<string[]>(
+                (a, b) => {
+                    if (Array.isArray(b.makesOffer)) {
+                        a.push(...b.makesOffer.map(
+                            (offer) => offer.itemOffered.reservationFor.location.branchCode
+                        ));
+                    }
+
+                    return a;
+                },
+                []
+            );
 
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
                 limit: req.query.limit,
@@ -94,7 +100,7 @@ eventsRouter.get(
 eventsRouter.post(
     '/screeningEvent/import',
     ...[
-        body('superEventLocationBranchCodes')
+        body('seller.ids')
             .not()
             .isEmpty()
             .withMessage((_, options) => `${options.path} is required`)
@@ -107,32 +113,69 @@ eventsRouter.post(
     validator,
     async (req, res, next) => {
         try {
+            const sellerService = new cinerinoapi.service.Seller({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
             const taskService = new cinerinoapi.service.Task({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const locationBranchCodes = <string[]>req.body.superEventLocationBranchCodes;
+
+            const sellerIds = <string[]>req.body.seller.ids;
+            const searchSellersResult = await sellerService.search({});
+            const sellers = searchSellersResult.data;
+            const selectedSellers = sellers.filter((s) => sellerIds.indexOf(s.id) >= 0);
+            // const superEventLocationBranchCodes = selectedSellers.reduce<string[]>(
+            //     (a, b) => {
+            //         if (Array.isArray(b.makesOffer)) {
+            //             a.push(...b.makesOffer.map(
+            //                 (offer) => offer.itemOffered.reservationFor.location.branchCode
+            //             ));
+            //         }
+
+            //         return a;
+            //     },
+            //     []
+            // );
+
             const startFrom = moment(req.body.startRange.split(' - ')[0])
                 .toDate();
             const startThrough = moment(req.body.startRange.split(' - ')[1])
                 .toDate();
-            const tasks = await Promise.all(locationBranchCodes.map(async (locationBranchCode) => {
-                const taskAttributes: cinerinoapi.factory.task.IAttributes<cinerinoapi.factory.taskName.ImportScreeningEvents> = {
-                    name: cinerinoapi.factory.taskName.ImportScreeningEvents,
-                    status: cinerinoapi.factory.taskStatus.Ready,
-                    runsAt: new Date(),
-                    remainingNumberOfTries: 1,
-                    numberOfTried: 0,
-                    executionResults: [],
-                    data: {
-                        locationBranchCode: locationBranchCode,
-                        importFrom: startFrom,
-                        importThrough: startThrough
-                    }
-                };
+            const taskAttributes = selectedSellers
+                .reduce<cinerinoapi.factory.task.IAttributes<cinerinoapi.factory.taskName.ImportScreeningEvents>[]>(
+                    (a, b) => {
+                        if (Array.isArray(b.makesOffer)) {
+                            a.push(...b.makesOffer.map(
+                                (offer) => {
+                                    return {
+                                        name: <cinerinoapi.factory.taskName.ImportScreeningEvents>
+                                            cinerinoapi.factory.taskName.ImportScreeningEvents,
+                                        status: cinerinoapi.factory.taskStatus.Ready,
+                                        runsAt: new Date(),
+                                        remainingNumberOfTries: 1,
+                                        numberOfTried: 0,
+                                        executionResults: [],
+                                        data: {
+                                            offeredThrough: offer.offeredThrough,
+                                            locationBranchCode: offer.itemOffered.reservationFor.location.branchCode,
+                                            importFrom: startFrom,
+                                            importThrough: startThrough
+                                        }
+                                    };
+                                }
+                            ));
+                        }
 
-                return taskService.create(taskAttributes);
+                        return a;
+                    },
+                    []
+                );
+            const tasks = await Promise.all(taskAttributes.map(async (a) => {
+                return taskService.create(a);
             }));
+
             res.status(CREATED)
                 .json(tasks);
         } catch (error) {

@@ -36,11 +36,13 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form role="form" method="get">
-                        <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint" value="<%= process.env.CHEVRE_BACKEND_ENDPOINT %>">
+                        <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint"
+                            value="<%= process.env.CHEVRE_BACKEND_ENDPOINT %>">
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="name">イベント名</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="イベント名" value="<%= searchConditions.name %>">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="イベント名"
+                                    value="<%= searchConditions.name %>">
                             </div>
                             <div class="form-group">
                                 <label>販売者</label>
@@ -49,9 +51,7 @@
                                     <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
                                         Array.isArray(searchConditions.seller.ids) &&
                                         searchConditions.seller.ids.indexOf(seller.id)>=
-                                        0) ? 'selected' : '' %>>
-                                        <%= seller.name.ja %>
-                                    </option>
+                                        0) ? 'selected' : '' %>><%= seller.name.ja %></option>
                                     <% }) %>
                                 </select>
                             </div>
@@ -65,7 +65,8 @@
                                             <i class="fa fa-calendar"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" name="startRange" id="reservation" value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDT00:00:00Z') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDT00:00:00Z') %>">
+                                    <input type="text" class="form-control" name="startRange" id="reservation"
+                                        value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDT00:00:00Z') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDT00:00:00Z') %>">
                                 </div>
                                 <!-- /.input group -->
                             </div>
@@ -74,7 +75,7 @@
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
                             <button type="button" class="btn btn-primary importScreeningEvents">
-                                <i class="fa fa-plus"></i> 在庫仕入れ from Chevre</button>
+                                <i class="fa fa-plus"></i> 在庫仕入れ from Chevre | COA</button>
                             <button type="button" class="btn btn-success updateEvents">
                                 <i class="fa fa-calendar-alt"></i> 在庫管理 by Chevre</button>
                             <button type="submit" class="btn btn-secondary float-right">検索</button>

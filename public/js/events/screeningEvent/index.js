@@ -77,18 +77,22 @@ $(function () {
         ]
     });
 
-    //Date range picker
+    // Date range picker
     $('#reservation').daterangepicker({
         timePicker: false,
         // timePickerIncrement: 30,
         format: 'YYYY-MM-DDT00:00:00+0900'
     })
 
-    // 上映イベントインポート
+    // イベント在庫仕入れ
     $('button.importScreeningEvents').click(function () {
-        var message = '開催地: ' + $('select[name="superEventLocationBranchCodes[]"]').val().join(',')
-            + '\n開催日: ' + $('input[name="startRange"]').val()
-            + '\nの上映イベントをインポートしようとしています。'
+        var selectedSellerNames = [];
+        $('select[name="seller[ids][]"] option:selected').each(function () {
+            selectedSellerNames.push($(this).text());
+        });
+        var message = '[販売者]\n' + selectedSellerNames.join('\n')
+            + '\n\n[開催日]\n' + $('input[name="startRange"]').val()
+            + '\n\nの販売イベントをインポートしようとしています。'
             + '\nよろしいですか？';
         if (window.confirm(message)) {
             $.ajax({

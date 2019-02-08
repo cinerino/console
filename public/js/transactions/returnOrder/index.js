@@ -92,7 +92,7 @@ $(function () {
         ]
     });
 
-    //Date range picker
+    // Date range picker
     $('#startRange').daterangepicker({
         timePicker: false,
         // timePickerIncrement: 30,

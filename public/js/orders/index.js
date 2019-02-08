@@ -106,7 +106,7 @@ $(function () {
         ]
     });
 
-    //Date range picker
+    // Date range picker
     $('#orderDateRange').daterangepicker({
         timePicker: false,
         // timePickerIncrement: 30,

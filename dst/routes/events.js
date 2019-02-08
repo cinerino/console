@@ -37,16 +37,21 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
         });
         const searchSellersResult = yield sellerService.search({});
         const sellers = searchSellersResult.data;
-        let superEventLocationBranchCodes;
-        if (req.query.seller !== undefined && Array.isArray(req.query.seller.ids)) {
-            const selectedSellers = sellers.filter((s) => req.query.seller.ids.indexOf(s.id) >= 0);
-            superEventLocationBranchCodes = selectedSellers.reduce((a, b) => {
-                if (Array.isArray(b.makesOffer)) {
-                    a.push(...b.makesOffer.map((offer) => offer.itemOffered.reservationFor.location.branchCode));
-                }
-                return a;
-            }, []);
+        // 販売者はデフォルトで全選択
+        if (req.query.seller === undefined) {
+            req.query.seller = {};
         }
+        if (!Array.isArray(req.query.seller.ids)) {
+            req.query.seller.ids = sellers.map((s) => s.id);
+        }
+        let superEventLocationBranchCodes;
+        const selectedSellers = sellers.filter((s) => req.query.seller.ids.indexOf(s.id) >= 0);
+        superEventLocationBranchCodes = selectedSellers.reduce((a, b) => {
+            if (Array.isArray(b.makesOffer)) {
+                a.push(...b.makesOffer.map((offer) => offer.itemOffered.reservationFor.location.branchCode));
+            }
+            return a;
+        }, []);
         const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending }, superEvent: {
                 locationBranchCodes: superEventLocationBranchCodes
             }, startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
@@ -83,7 +88,7 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
  * 上映イベントインポート
  */
 eventsRouter.post('/screeningEvent/import', ...[
-    check_1.body('superEventLocationBranchCodes')
+    check_1.body('seller.ids')
         .not()
         .isEmpty()
         .withMessage((_, options) => `${options.path} is required`)
@@ -94,30 +99,57 @@ eventsRouter.post('/screeningEvent/import', ...[
         .withMessage((_, options) => `${options.path} is required`)
 ], validator_1.default, (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        const sellerService = new cinerinoapi.service.Seller({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
         const taskService = new cinerinoapi.service.Task({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const locationBranchCodes = req.body.superEventLocationBranchCodes;
+        const sellerIds = req.body.seller.ids;
+        const searchSellersResult = yield sellerService.search({});
+        const sellers = searchSellersResult.data;
+        const selectedSellers = sellers.filter((s) => sellerIds.indexOf(s.id) >= 0);
+        // const superEventLocationBranchCodes = selectedSellers.reduce<string[]>(
+        //     (a, b) => {
+        //         if (Array.isArray(b.makesOffer)) {
+        //             a.push(...b.makesOffer.map(
+        //                 (offer) => offer.itemOffered.reservationFor.location.branchCode
+        //             ));
+        //         }
+        //         return a;
+        //     },
+        //     []
+        // );
         const startFrom = moment(req.body.startRange.split(' - ')[0])
             .toDate();
         const startThrough = moment(req.body.startRange.split(' - ')[1])
             .toDate();
-        const tasks = yield Promise.all(locationBranchCodes.map((locationBranchCode) => __awaiter(this, void 0, void 0, function* () {
-            const taskAttributes = {
-                name: cinerinoapi.factory.taskName.ImportScreeningEvents,
-                status: cinerinoapi.factory.taskStatus.Ready,
-                runsAt: new Date(),
-                remainingNumberOfTries: 1,
-                numberOfTried: 0,
-                executionResults: [],
-                data: {
-                    locationBranchCode: locationBranchCode,
-                    importFrom: startFrom,
-                    importThrough: startThrough
-                }
-            };
-            return taskService.create(taskAttributes);
+        const taskAttributes = selectedSellers
+            .reduce((a, b) => {
+            if (Array.isArray(b.makesOffer)) {
+                a.push(...b.makesOffer.map((offer) => {
+                    return {
+                        name: cinerinoapi.factory.taskName.ImportScreeningEvents,
+                        status: cinerinoapi.factory.taskStatus.Ready,
+                        runsAt: new Date(),
+                        remainingNumberOfTries: 1,
+                        numberOfTried: 0,
+                        executionResults: [],
+                        data: {
+                            offeredThrough: offer.offeredThrough,
+                            locationBranchCode: offer.itemOffered.reservationFor.location.branchCode,
+                            importFrom: startFrom,
+                            importThrough: startThrough
+                        }
+                    };
+                }));
+            }
+            return a;
+        }, []);
+        const tasks = yield Promise.all(taskAttributes.map((a) => __awaiter(this, void 0, void 0, function* () {
+            return taskService.create(a);
         })));
         res.status(http_status_1.CREATED)
             .json(tasks);

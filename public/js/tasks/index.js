@@ -64,7 +64,7 @@ $(function () {
         ]
     });
 
-    //Date range picker
+    // Date range picker
     $('#runsRange').daterangepicker({
         timePicker: false,
         // timePickerIncrement: 30,
