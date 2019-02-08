@@ -73,7 +73,10 @@ eventsRouter.get(
                     : moment()
                         .add(1, 'month')
                         .toDate(),
-                ...req.query
+                name: req.query.name,
+                ...<any>{
+                    seller: req.query.seller
+                }
             };
             if (req.query.format === 'datatable') {
                 const searchScreeningEventsResult = await eventService.searchScreeningEvents(searchConditions);

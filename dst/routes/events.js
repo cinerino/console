@@ -62,7 +62,9 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
                     .toDate()
                 : moment()
                     .add(1, 'month')
-                    .toDate() }, req.query);
+                    .toDate(), name: req.query.name }, {
+            seller: req.query.seller
+        });
         if (req.query.format === 'datatable') {
             const searchScreeningEventsResult = yield eventService.searchScreeningEvents(searchConditions);
             res.json({
