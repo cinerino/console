@@ -104,17 +104,33 @@
                         </p>
                         <hr>
 
-                        <strong><i class="fa fa-piggy-bank mr-1"></i> コイン口座</strong>
+                        <strong><i class="fa fa-piggy-bank mr-1"></i> 口座</strong>
                         <p class="text-muted">
                             <% coinAccounts.forEach((ownershipInfo) => { %>
                             <% const account = ownershipInfo.typeOfGood %>
-                            <span class="badge <%= account.accountType %>">
+                            <span class="badge badge-secondary <%= account.accountType %>">
                                 <%= account.accountType %>
                             </span>
-                            <a target="_blank" href="<%= process.env.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
+                            <a target="_blank"
+                                href="<%= process.env.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
                                 <%= account.accountNumber %>
                             </a>
-                            <span class="badge <%= account.status %>">
+                            <span class="badge badge-secondary <%= account.status %>">
+                                <%= account.status %>
+                            </span>
+                            <br>
+                            <% }) %>
+
+                            <% pointAccounts.forEach((ownershipInfo) => { %>
+                            <% const account = ownershipInfo.typeOfGood %>
+                            <span class="badge badge-secondary <%= account.accountType %>">
+                                <%= account.accountType %>
+                            </span>
+                            <a target="_blank"
+                                href="<%= process.env.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
+                                <%= account.accountNumber %>
+                            </a>
+                            <span class="badge badge-secondary <%= account.status %>">
                                 <%= account.status %>
                             </span>
                             <br>
@@ -130,9 +146,12 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">注文履歴</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">注文履歴</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                            </li>
                             <li class="nav-item"><a class="nav-link" href="#others" data-toggle="tab">その他の操作</a></li>
                         </ul>
                     </div><!-- /.card-header -->
@@ -160,15 +179,21 @@
                             <div class="tab-pane" id="jsonViewer">
                                 <h4>Person</h4>
                                 <div class="form-group">
-                                    <textarea class="form-control person" rows="20" placeholder="" disabled=""><%= JSON.stringify(person, null, '\t') %></textarea>
+                                    <textarea class="form-control person" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(person, null, '\t') %></textarea>
                                 </div>
                                 <h4>クレジットカード</h4>
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(creditCards, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(creditCards, null, '\t') %></textarea>
                                 </div>
-                                <h4>コイン口座</h4>
+                                <h4>口座</h4>
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(coinAccounts, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(coinAccounts, null, '\t') %></textarea>
+                                    <br>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(pointAccounts, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->

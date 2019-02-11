@@ -77,6 +77,7 @@ peopleRouter.get(
 
             let creditCards: cinerinoapi.factory.paymentMethod.paymentCard.creditCard.ICheckedCard[] = [];
             let coinAccounts: IAccountOwnershipInfo[] = [];
+            let pointAccounts: IAccountOwnershipInfo[] = [];
 
             try {
                 creditCards = await personOwnershipInfoService.searchCreditCards({ id: req.params.id });
@@ -93,7 +94,18 @@ peopleRouter.get(
                             accountType: cinerinoapi.factory.accountType.Coin
                         }
                     });
+
+                const searchPointAccountsResult =
+                    await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+                        id: req.params.id,
+                        typeOfGood: {
+                            typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                            accountType: cinerinoapi.factory.accountType.Point
+                        }
+                    });
+
                 coinAccounts = searchCoinAccountsResult.data;
+                pointAccounts = searchPointAccountsResult.data;
             } catch (error) {
                 // no op
             }
@@ -103,7 +115,8 @@ peopleRouter.get(
                 moment: moment,
                 person: person,
                 creditCards: creditCards,
-                coinAccounts: coinAccounts
+                coinAccounts: coinAccounts,
+                pointAccounts: pointAccounts
             });
         } catch (error) {
             next(error);
