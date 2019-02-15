@@ -38,7 +38,6 @@ placeOrderTransactionsRouter.get(
             const searchConditions: cinerinoapi.factory.transaction.ISearchConditions<cinerinoapi.factory.transactionType.PlaceOrder> = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { startDate: cinerinoapi.factory.sortType.Descending },
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 ids: (Array.isArray(req.query.ids)) ? req.query.ids : undefined,
                 statuses: (req.query.statuses !== undefined)
@@ -48,13 +47,12 @@ placeOrderTransactionsRouter.get(
                     ? moment(req.query.startRange.split(' - ')[0])
                         .toDate()
                     : moment()
-                        .add(-1, 'week')
+                        .add(-1, 'days')
                         .toDate(),
                 startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
                     ? moment(req.query.startRange.split(' - ')[1])
                         .toDate()
                     : moment()
-                        .add(1, 'day')
                         .toDate(),
                 endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom)
                     .toDate() : undefined,
@@ -199,7 +197,7 @@ placeOrderTransactionsRouter.get(
                     agent = {
                         id: a.agent.id,
                         name: transaction.seller.name.ja,
-                        url: `/organizations/movieTheater/${a.agent.id}`
+                        url: `/sellers/${a.agent.id}`
                     };
                 }
 

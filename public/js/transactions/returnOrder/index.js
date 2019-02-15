@@ -60,7 +60,7 @@ $(function () {
 
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + seller.typeOf + '">' + seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/organizations/' + seller.typeOf + '/' + seller.id + '">' + seller.name + '</a></li>'
+                        + '<li><a target="_blank" href="/sellers/' + seller.id + '">' + seller.name + '</a></li>'
                         + '<li>' + seller.telephone + '</li>'
                         + '<li>' + seller.url + '</li>'
                         + '</ul>';
@@ -94,9 +94,9 @@ $(function () {
 
     // Date range picker
     $('#startRange').daterangepicker({
-        timePicker: false,
+        timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDT00:00:00+0900'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
     });
 
     $('.search').click(function () {

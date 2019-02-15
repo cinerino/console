@@ -128,13 +128,12 @@ ordersRouter.get('',
                 ? moment(req.query.orderDateRange.split(' - ')[0])
                     .toDate()
                 : moment()
-                    .add(-1, 'month')
+                    .add(-1, 'day')
                     .toDate(),
             orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                 ? moment(req.query.orderDateRange.split(' - ')[1])
                     .toDate()
                 : moment()
-                    .add(1, 'day')
                     .toDate(),
             confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
                 ? req.query.confirmationNumbers.split(',')
@@ -191,19 +190,7 @@ ordersRouter.get('',
             }
         };
         if (req.query.format === 'datatable') {
-            const searchOrdersResult = yield orderService.search({
-                limit: searchConditions.limit,
-                page: searchConditions.page,
-                orderDateFrom: searchConditions.orderDateFrom,
-                orderDateThrough: searchConditions.orderDateThrough,
-                seller: searchConditions.seller,
-                customer: searchConditions.customer,
-                orderNumbers: searchConditions.orderNumbers,
-                orderStatuses: searchConditions.orderStatuses,
-                confirmationNumbers: searchConditions.confirmationNumbers,
-                acceptedOffers: searchConditions.acceptedOffers,
-                paymentMethods: searchConditions.paymentMethods
-            });
+            const searchOrdersResult = yield orderService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchOrdersResult.totalCount,
@@ -272,7 +259,7 @@ ordersRouter.get('/:orderNumber',
                     agent = {
                         id: a.agent.id,
                         name: order.seller.name,
-                        url: `/organizations/movieTheater/${a.agent.id}`
+                        url: `/sellers/${a.agent.id}`
                     };
                 }
                 let actionName;

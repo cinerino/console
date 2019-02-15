@@ -59,7 +59,6 @@ eventsRouter.get(
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending },
                 superEvent: {
                     locationBranchCodes: superEventLocationBranchCodes
                 },

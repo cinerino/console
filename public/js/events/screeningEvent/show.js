@@ -2,7 +2,7 @@
 var event = JSON.parse($('#jsonViewer textarea').val());
 var orders = [];
 var searchedAllOrders = false;
-var limit = 100;
+var limit = 10;
 var page = 0;
 var remainingAttendeeCapacityChart;
 var remainingAttendeeCapacityChart2;

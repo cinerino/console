@@ -68,7 +68,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a target="_blank" href="/organizations/' + data.seller.typeOf + '/' + data.seller.id + '">' + data.seller.id + '</a></li>'
+                        + '<li><a target="_blank" href="/sellers/' + data.seller.id + '">' + data.seller.id + '</a></li>'
                         + '<li><span class="badge badge-info">' + data.seller.typeOf + '</span></li>'
                         + '<li>' + data.seller.name + '</li>'
                         + '<li>' + data.seller.url + '</li>'
@@ -108,8 +108,8 @@ $(function () {
 
     // Date range picker
     $('#orderDateRange').daterangepicker({
-        timePicker: false,
+        timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDT00:00:00Z'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
     })
 });

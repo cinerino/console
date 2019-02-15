@@ -47,8 +47,7 @@
                                         <select size="10" class="form-control" name="name">
                                             <% taskNameChoices.forEach(function (taskName) { %>
                                             <% var selected = searchConditions.name === taskName %>
-                                            <option value="<%= taskName %>" <% if (selected) { %> selected
-                                                <% } %>>
+                                            <option value="<%= taskName %>" <% if (selected) { %> selected <% } %>>
                                                 <%= taskName %>
                                             </option>
                                             <% }) %>
@@ -65,7 +64,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" class="form-control" name="runsRange" id="runsRange"
-                                                value="<%= moment(searchConditions.runsFrom).format('YYYY-MM-DDT00:00:00Z') %> - <%= moment(searchConditions.runsThrough).format('YYYY-MM-DDT00:00:00Z') %>">
+                                                value="<%= moment(searchConditions.runsFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.runsThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -74,8 +73,7 @@
                                         <select multiple class="form-control" name="statuses[]">
                                             <% taskStatusChoices.forEach(function (taskStatus) { %>
                                             <% var selected = searchConditions.statuses.indexOf(taskStatus) >= 0; %>
-                                            <option value="<%= taskStatus %>" <% if (selected) { %> selected
-                                                <% } %>>
+                                            <option value="<%= taskStatus %>" <% if (selected) { %> selected <% } %>>
                                                 <%= taskStatus %>
                                             </option>
                                             <% }) %>

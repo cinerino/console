@@ -59,7 +59,7 @@ $(function () {
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/organizations/' + data.seller.typeOf + '/' + data.seller.id + '">' + data.seller.name.ja + '</a></li>'
+                        + '<li><a target="_blank" href="/sellers/' + data.seller.id + '">' + data.seller.name.ja + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
                         + '<li>' + data.seller.url + '</li>'
                         + '</ul>';
@@ -117,9 +117,9 @@ $(function () {
 
     // Date range picker
     $('#startRange').daterangepicker({
-        timePicker: false,
+        timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDT00:00:00+0900'
+        format: 'YYYY-MM-DDThh:mm:ssZ'
     });
 
     $('.search').click(function () {

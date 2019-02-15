@@ -24,7 +24,6 @@ movieTicketPaymentMethodRouter.get(
                 cinerinoapi.factory.paymentMethod.ISearchConditions<cinerinoapi.factory.paymentMethodType.MovieTicket> = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { identifier: cinerinoapi.factory.sortType.Ascending },
                 identifiers: (req.query.identifiers !== undefined && req.query.identifiers !== '')
                     ? (<string>req.query.identifiers).split(',')
                         .map((v) => v.trim())

@@ -52,7 +52,7 @@
                             販売者
                             <address>
                                 <strong>
-                                    <a target="_blank" href="/organizations/<%= transaction.seller.typeOf %>/<%= transaction.seller.id %>">
+                                    <a target="_blank" href="/sellers/<%= transaction.seller.id %>">
                                         <%= transaction.seller.name.ja %>
                                     </a>
                                 </strong>
@@ -131,9 +131,12 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Timeline</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#activity" data-toggle="tab">activity</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#timeline"
+                                    data-toggle="tab">Timeline</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#activity" data-toggle="tab">activity</a>
+                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -194,7 +197,8 @@
 
                             <div class="tab-pane" id="jsonViewer">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(transaction, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(transaction, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -225,7 +229,8 @@
                     <span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <textarea rows="40" class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.action, null, '\t') %></textarea>
+                <textarea rows="40" class="form-control" placeholder=""
+                    disabled=""><%= JSON.stringify(timeline.action, null, '\t') %></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -244,7 +249,8 @@
                     <span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <textarea rows="40" class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+                <textarea rows="40" class="form-control" placeholder=""
+                    disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

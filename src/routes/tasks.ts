@@ -41,13 +41,12 @@ tasksRouter.get(
                     ? moment(req.query.runsRange.split(' - ')[0])
                         .toDate()
                     : moment()
-                        .add(-1, 'day')
+                        .add(-1, 'hour')
                         .toDate(),
                 runsThrough: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                     ? moment(req.query.runsRange.split(' - ')[1])
                         .toDate()
                     : moment()
-                        .add(1, 'day')
                         .toDate()
             };
             if (req.query.format === 'datatable') {

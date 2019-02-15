@@ -44,33 +44,39 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="customer[membershipNumbers]">購入者会員番号</label>
-                                        <input type="text" class="form-control" id="customer[membershipNumbers]" name="customer[membershipNumbers]"
-                                            placeholder="購入者会員番号" value="<%= (Array.isArray(searchConditions.customer.membershipNumbers)) ? searchConditions.customer.membershipNumbers.join(',') : '' %>">
+                                        <input type="text" class="form-control" id="customer[membershipNumbers]"
+                                            name="customer[membershipNumbers]" placeholder="購入者会員番号"
+                                            value="<%= (Array.isArray(searchConditions.customer.membershipNumbers)) ? searchConditions.customer.membershipNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者ID</label>
                                         <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
-                                            placeholder="購入者ID" value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
+                                            placeholder="購入者ID"
+                                            value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者性</label>
-                                        <input type="text" class="form-control" id="customer[familyName]" name="customer[familyName]"
-                                            placeholder="もーしょん(正規表現使用可)" value="<%= searchConditions.customer.familyName %>">
+                                        <input type="text" class="form-control" id="customer[familyName]"
+                                            name="customer[familyName]" placeholder="もーしょん(正規表現使用可)"
+                                            value="<%= searchConditions.customer.familyName %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者名</label>
-                                        <input type="text" class="form-control" id="customer[givenName]" name="customer[givenName]"
-                                            placeholder="たろう(正規表現使用可)" value="<%= searchConditions.customer.givenName %>">
+                                        <input type="text" class="form-control" id="customer[givenName]"
+                                            name="customer[givenName]" placeholder="たろう(正規表現使用可)"
+                                            value="<%= searchConditions.customer.givenName %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者メールアドレス</label>
-                                        <input type="text" class="form-control" id="customer[email]" name="customer[email]"
-                                            placeholder="cinerino@example.com(正規表現使用可)" value="<%= searchConditions.customer.email %>">
+                                        <input type="text" class="form-control" id="customer[email]"
+                                            name="customer[email]" placeholder="cinerino@example.com(正規表現使用可)"
+                                            value="<%= searchConditions.customer.email %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">購入者TEL</label>
-                                        <input type="text" class="form-control" id="customer[telephone]" name="customer[telephone]"
-                                            placeholder="0312345678(正規表現使用可)" value="<%= searchConditions.customer.telephone %>">
+                                        <input type="text" class="form-control" id="customer[telephone]"
+                                            name="customer[telephone]" placeholder="0312345678(正規表現使用可)"
+                                            value="<%= searchConditions.customer.telephone %>">
                                     </div>
                                     <div class="form-group">
                                         <label>購入クライアント</label>
@@ -83,8 +89,7 @@
                                             }
                                             %>
                                             <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
-                                                selected
-                                                <% } %>>
+                                                selected <% } %>>
                                                 Customer -
                                                 <%= userPoolClient.ClientName %>
                                             </option>
@@ -98,8 +103,7 @@
                                             }
                                             %>
                                             <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
-                                                selected
-                                                <% } %>>
+                                                selected <% } %>>
                                                 Admin -
                                                 <%= userPoolClient.ClientName %>
                                             </option>
@@ -126,8 +130,9 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="confirmationNumbers">確認番号</label>
-                                        <input type="text" class="form-control" id="confirmationNumbers" name="confirmationNumbers"
-                                            placeholder="確認番号" value="<%= searchConditions.confirmationNumbers.join(',') %>">
+                                        <input type="text" class="form-control" id="confirmationNumbers"
+                                            name="confirmationNumbers" placeholder="確認番号"
+                                            value="<%= searchConditions.confirmationNumbers.join(',') %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="orderNumbers">注文番号</label>
@@ -143,8 +148,9 @@
                                                     <i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="orderDateRange" id="orderDateRange"
-                                                value="<%= moment(searchConditions.orderDateFrom).format('YYYY-MM-DDT00:00:00Z') %> - <%= moment(searchConditions.orderDateThrough).format('YYYY-MM-DDT00:00:00Z') %>">
+                                            <input type="text" class="form-control" name="orderDateRange"
+                                                id="orderDateRange"
+                                                value="<%= moment(searchConditions.orderDateFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.orderDateThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -153,8 +159,7 @@
                                         <select multiple class="form-control" name="orderStatuses[]">
                                             <% orderStatusChoices.forEach(function (orderStatus) { %>
                                             <% var selected = searchConditions.orderStatuses.indexOf(orderStatus) >= 0; %>
-                                            <option value="<%= orderStatus %>" <% if (selected) { %> selected
-                                                <% } %>>
+                                            <option value="<%= orderStatus %>" <% if (selected) { %> selected <% } %>>
                                                 <%= orderStatus %>
                                             </option>
                                             <% }) %>
@@ -170,9 +175,7 @@
                                                 selected = searchConditions.paymentMethods.typeOfs.indexOf(paymentMethod) >= 0;
                                             }
                                             %>
-                                            <option value="<%= paymentMethod %>" <% if (selected) { %>
-                                                selected
-                                                <% } %>>
+                                            <option value="<%= paymentMethod %>" <% if (selected) { %> selected <% } %>>
                                                 <%= paymentMethod %>
                                             </option>
                                             <% }) %>
@@ -189,22 +192,30 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="acceptedOffers[itemOffered][reservationFor][ids]">イベントID</label>
-                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][reservationFor][ids]"
-                                            name="acceptedOffers[itemOffered][reservationFor][ids]" placeholder="予約イベントID"
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][ids]"
+                                            name="acceptedOffers[itemOffered][reservationFor][ids]"
+                                            placeholder="予約イベントID"
                                             value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">イベントシリーズID</label>
-                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
+                                        <label
+                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">イベントシリーズID</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
-                                            placeholder="イベントシリーズID" value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') %>">
+                                            placeholder="イベントシリーズID"
+                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') %>">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">作品コード</label>
-                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
+                                        <label
+                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">作品コード</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
-                                            placeholder="作品コード" value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') %>">
+                                            placeholder="作品コード"
+                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') %>">
                                     </div>
                                 </div>
                             </div>

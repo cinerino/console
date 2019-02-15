@@ -52,7 +52,7 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
             }
             return a;
         }, []);
-        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { startDate: cinerinoapi.factory.chevre.sortType.Ascending }, superEvent: {
+        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, superEvent: {
                 locationBranchCodes: superEventLocationBranchCodes
             }, startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])

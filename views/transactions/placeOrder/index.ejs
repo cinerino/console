@@ -42,23 +42,28 @@
                                     <div class="form-group">
                                         <label for="agent[ids]">購入者</label>
                                         <input type="text" class="form-control" id="agent[ids]" name="agent[ids]"
-                                            placeholder="購入者ID" value="<%= (Array.isArray(searchConditions.agent.ids)) ? searchConditions.agent.ids.join(',') : '' %>">
+                                            placeholder="購入者ID"
+                                            value="<%= (Array.isArray(searchConditions.agent.ids)) ? searchConditions.agent.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="object[customerContact][familyName]"
-                                            name="object[customerContact][familyName]" placeholder="姓" value="<%= searchConditions.object.customerContact.familyName %>">
+                                            name="object[customerContact][familyName]" placeholder="姓"
+                                            value="<%= searchConditions.object.customerContact.familyName %>">
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="object[customerContact][givenName]"
-                                            name="object[customerContact][givenName]" placeholder="名" value="<%= searchConditions.object.customerContact.givenName %>">
+                                            name="object[customerContact][givenName]" placeholder="名"
+                                            value="<%= searchConditions.object.customerContact.givenName %>">
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="object[customerContact][email]"
-                                            name="object[customerContact][email]" placeholder="test@example.com" value="<%= searchConditions.object.customerContact.email %>">
+                                            name="object[customerContact][email]" placeholder="test@example.com"
+                                            value="<%= searchConditions.object.customerContact.email %>">
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="object[customerContact][telephone]"
-                                            name="object[customerContact][telephone]" placeholder="+819012345678" value="<%= searchConditions.object.customerContact.telephone %>">
+                                            name="object[customerContact][telephone]" placeholder="+819012345678"
+                                            value="<%= searchConditions.object.customerContact.telephone %>">
                                     </div>
                                     <div class="form-group">
                                         <label>販売者</label>
@@ -76,8 +81,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="result[order][orderNumbers]">注文番号</label>
-                                        <input type="text" class="form-control" id="result[order][orderNumbers]" name="result[order][orderNumbers]"
-                                            placeholder="注文番号" value="<%= (Array.isArray(searchConditions.result.order.orderNumbers)) ? searchConditions.result.order.orderNumbers.join(',') : '' %>">
+                                        <input type="text" class="form-control" id="result[order][orderNumbers]"
+                                            name="result[order][orderNumbers]" placeholder="注文番号"
+                                            value="<%= (Array.isArray(searchConditions.result.order.orderNumbers)) ? searchConditions.result.order.orderNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label>取引開始日時</label>
@@ -89,7 +95,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" class="form-control" name="startRange" id="startRange"
-                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDT00:00:00Z') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDT00:00:00Z') %>">
+                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -110,8 +116,7 @@
                                         <select multiple class="form-control" name="tasksExportationStatuses[]">
                                             <% Object.values(TransactionTasksExportationStatus).forEach(function (status) { %>
                                             <% var selected = searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
-                                            <option value="<%= status %>" <% if (selected) { %> selected
-                                                <% } %>>
+                                            <option value="<%= status %>" <% if (selected) { %> selected <% } %>>
                                                 <%= status %>
                                             </option>
                                             <% }) %>

@@ -66,8 +66,8 @@ $(function () {
 
     // Date range picker
     $('#runsRange').daterangepicker({
-        timePicker: false,
+        timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDT00:00:00Z'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
     })
 });
