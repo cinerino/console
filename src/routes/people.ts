@@ -3,6 +3,7 @@
  */
 import * as createDebug from 'debug';
 import * as express from 'express';
+import { NO_CONTENT } from 'http-status';
 import * as moment from 'moment';
 
 import * as cinerinoapi from '../cinerinoapi';
@@ -58,13 +59,13 @@ peopleRouter.get(
 );
 
 /**
- * 会員詳細
+ * 会員編集
  */
-peopleRouter.get(
+peopleRouter.all(
     '/:id',
     async (req, res, next) => {
         try {
-            const message = '';
+            let message = '';
             const personService = new cinerinoapi.service.Person({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
@@ -74,6 +75,24 @@ peopleRouter.get(
                 auth: req.user.authClient
             });
             const person = await personService.findById({ id: req.params.id });
+
+            if (req.method === 'DELETE') {
+                // 何もしない
+                res.status(NO_CONTENT)
+                    .end();
+
+                return;
+            } else if (req.method === 'POST') {
+                try {
+                    await personService.updateProfile({ id: req.params.id, ...req.body });
+                    req.flash('message', '更新しました');
+                    res.redirect(req.originalUrl);
+
+                    return;
+                } catch (error) {
+                    message = error.message;
+                }
+            }
 
             let creditCards: cinerinoapi.factory.paymentMethod.paymentCard.creditCard.ICheckedCard[] = [];
             let coinAccounts: IAccountOwnershipInfo[] = [];

@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const createDebug = require("debug");
 const express = require("express");
+const http_status_1 = require("http-status");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
@@ -60,11 +61,11 @@ peopleRouter.get('',
     }
 }));
 /**
- * 会員詳細
+ * 会員編集
  */
-peopleRouter.get('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const message = '';
+        let message = '';
         const personService = new cinerinoapi.service.Person({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
@@ -74,6 +75,23 @@ peopleRouter.get('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
             auth: req.user.authClient
         });
         const person = yield personService.findById({ id: req.params.id });
+        if (req.method === 'DELETE') {
+            // 何もしない
+            res.status(http_status_1.NO_CONTENT)
+                .end();
+            return;
+        }
+        else if (req.method === 'POST') {
+            try {
+                yield personService.updateProfile(Object.assign({ id: req.params.id }, req.body));
+                req.flash('message', '更新しました');
+                res.redirect(req.originalUrl);
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
         let creditCards = [];
         let coinAccounts = [];
         let pointAccounts = [];
