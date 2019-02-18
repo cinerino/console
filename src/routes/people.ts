@@ -127,6 +127,8 @@ peopleRouter.all(
                 pointAccounts = searchPointAccountsResult.data;
             } catch (error) {
                 // no op
+                debug(error);
+                message = `所有権検索で問題が発生しました:${error.message}`;
             }
 
             res.render('people/show', {
@@ -169,6 +171,70 @@ peopleRouter.get(
             });
             debug(searchOrdersResult.totalCount, 'orders found.');
             res.json(searchOrdersResult);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * 予約検索
+ */
+peopleRouter.get(
+    '/:id/reservations',
+    async (req, res, next) => {
+        try {
+            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchResult =
+                await personOwnershipInfoService.search<cinerinoapi.factory.chevre.reservationType.EventReservation>({
+                    limit: req.query.limit,
+                    page: req.query.page,
+                    id: req.params.id,
+                    typeOfGood: {
+                        typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation
+                    },
+                    ownedFrom: moment()
+                        .add(-1, 'month')
+                        .toDate(),
+                    ownedThrough: new Date()
+                });
+            debug(searchResult.totalCount, 'reservations found.');
+            res.json(searchResult);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * 会員プログラム検索
+ */
+peopleRouter.get(
+    '/:id/programMemberships',
+    async (req, res, next) => {
+        try {
+            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchResult =
+                await personOwnershipInfoService.search({
+                    limit: req.query.limit,
+                    page: req.query.page,
+                    id: req.params.id,
+                    typeOfGood: {
+                        typeOf: <any>'ProgramMembership'
+                    },
+                    ownedFrom: moment()
+                        .add(-1, 'month')
+                        .toDate(),
+                    ownedThrough: new Date()
+                });
+            debug(searchResult.totalCount, 'programMemberships found.');
+            res.json(searchResult);
         } catch (error) {
             next(error);
         }

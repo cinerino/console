@@ -121,6 +121,8 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
         }
         catch (error) {
             // no op
+            debug(error);
+            message = `所有権検索で問題が発生しました:${error.message}`;
         }
         res.render('people/show', {
             message: message,
@@ -159,6 +161,62 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void
         });
         debug(searchOrdersResult.totalCount, 'orders found.');
         res.json(searchOrdersResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 予約検索
+ */
+peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchResult = yield personOwnershipInfoService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            id: req.params.id,
+            typeOfGood: {
+                typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation
+            },
+            ownedFrom: moment()
+                .add(-1, 'month')
+                .toDate(),
+            ownedThrough: new Date()
+        });
+        debug(searchResult.totalCount, 'reservations found.');
+        res.json(searchResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 会員プログラム検索
+ */
+peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchResult = yield personOwnershipInfoService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            id: req.params.id,
+            typeOfGood: {
+                typeOf: 'ProgramMembership'
+            },
+            ownedFrom: moment()
+                .add(-1, 'month')
+                .toDate(),
+            ownedThrough: new Date()
+        });
+        debug(searchResult.totalCount, 'programMemberships found.');
+        res.json(searchResult);
     }
     catch (error) {
         next(error);
