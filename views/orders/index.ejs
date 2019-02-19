@@ -132,12 +132,13 @@
                                         <label for="confirmationNumbers">確認番号</label>
                                         <input type="text" class="form-control" id="confirmationNumbers"
                                             name="confirmationNumbers" placeholder="確認番号"
-                                            value="<%= searchConditions.confirmationNumbers.join(',') %>">
+                                            value="<%= (Array.isArray(searchConditions.confirmationNumbers)) ? searchConditions.confirmationNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="orderNumbers">注文番号</label>
                                         <input type="text" class="form-control" id="orderNumbers" name="orderNumbers"
-                                            placeholder="注文番号" value="<%= searchConditions.orderNumbers.join(',') %>">
+                                            placeholder="注文番号"
+                                            value="<%= (Array.isArray(searchConditions.orderNumbers)) ? searchConditions.orderNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label>注文日時</label>
@@ -157,8 +158,11 @@
                                     <div class="form-group">
                                         <label>注文ステータス</label>
                                         <select multiple class="form-control" name="orderStatuses[]">
-                                            <% orderStatusChoices.forEach(function (orderStatus) { %>
-                                            <% var selected = searchConditions.orderStatuses.indexOf(orderStatus) >= 0; %>
+                                            <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
+                                            <% 
+                                            var selected = false;
+                                            selected = Array.isArray(searchConditions.orderStatuses) && searchConditions.orderStatuses.indexOf(orderStatus) >= 0;
+                                            %>
                                             <option value="<%= orderStatus %>" <% if (selected) { %> selected <% } %>>
                                                 <%= orderStatus %>
                                             </option>
@@ -185,7 +189,7 @@
                                         <label for="orderNumbers">決済ID</label>
                                         <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
                                             name="paymentMethods[paymentMethodIds]" placeholder="カンマ区切りで、GMO取引ID、口座番号など"
-                                            value="<%= searchConditions.paymentMethods.paymentMethodIds.join(',') %>">
+                                            value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
                                     </div>
                                 </div>
 
@@ -196,7 +200,7 @@
                                             id="acceptedOffers[itemOffered][reservationFor][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][ids]"
                                             placeholder="予約イベントID"
-                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') %>">
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label
@@ -205,7 +209,7 @@
                                             id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
                                             placeholder="イベントシリーズID"
-                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') %>">
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') : '' %>">
                                     </div>
 
                                     <div class="form-group">
@@ -215,7 +219,7 @@
                                             id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             placeholder="作品コード"
-                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') %>">
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') : '' %>">
                                     </div>
                                 </div>
                             </div>

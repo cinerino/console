@@ -50,12 +50,6 @@ ordersRouter.get(
                 // no op
             }
 
-            const orderStatusChoices = [
-                cinerinoapi.factory.orderStatus.OrderDelivered,
-                cinerinoapi.factory.orderStatus.OrderPickupAvailable,
-                cinerinoapi.factory.orderStatus.OrderProcessing,
-                cinerinoapi.factory.orderStatus.OrderReturned
-            ];
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
@@ -115,10 +109,10 @@ ordersRouter.get(
                 orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                     ? (<string>req.query.orderNumbers).split(',')
                         .map((v) => v.trim())
-                    : [],
+                    : undefined,
                 orderStatuses: (req.query.orderStatuses !== undefined)
                     ? req.query.orderStatuses
-                    : orderStatusChoices,
+                    : undefined,
                 orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                     ? moment(req.query.orderDateRange.split(' - ')[0])
                         .toDate()
@@ -133,7 +127,7 @@ ordersRouter.get(
                 confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
                     ? (<string>req.query.confirmationNumbers).split(',')
                         .map((v) => v.trim())
-                    : [],
+                    : undefined,
                 acceptedOffers: {
                     itemOffered: {
                         reservationFor: {
@@ -143,7 +137,7 @@ ordersRouter.get(
                                 && req.query.acceptedOffers.itemOffered.reservationFor.ids !== '')
                                 ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.ids).split(',')
                                     .map((v) => v.trim())
-                                : [],
+                                : undefined,
                             superEvent: {
                                 ids: (req.query.acceptedOffers !== undefined
                                     && req.query.acceptedOffers.itemOffered !== undefined
@@ -153,7 +147,7 @@ ordersRouter.get(
                                     ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.superEvent.ids)
                                         .split(',')
                                         .map((v) => v.trim())
-                                    : [],
+                                    : undefined,
                                 workPerformed: {
                                     identifiers: (req.query.acceptedOffers !== undefined
                                         && req.query.acceptedOffers.itemOffered !== undefined
@@ -164,7 +158,7 @@ ordersRouter.get(
                                         ? (<string>req.query.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)
                                             .split(',')
                                             .map((v) => v.trim())
-                                        : []
+                                        : undefined
                                 }
                             }
                         }
@@ -181,7 +175,7 @@ ordersRouter.get(
                         && req.query.paymentMethods.paymentMethodIds !== '')
                         ? (<string>req.query.paymentMethods.paymentMethodIds).split(',')
                             .map((v) => v.trim())
-                        : []
+                        : undefined
                 }
             };
             if (req.query.format === 'datatable') {
@@ -199,7 +193,7 @@ ordersRouter.get(
                     userPoolClients: userPoolClients,
                     adminUserPoolClients: adminUserPoolClients,
                     searchConditions: searchConditions,
-                    orderStatusChoices: orderStatusChoices,
+                    OrderStatus: cinerinoapi.factory.orderStatus,
                     PaymentMethodType: cinerinoapi.factory.paymentMethodType
                 });
             }
