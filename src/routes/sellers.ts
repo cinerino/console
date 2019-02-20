@@ -144,43 +144,65 @@ async function createAttributesFromBody(params: {
     body: any;
     authClient: any;
 }): Promise<cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType>> {
-    let movieTheaterFromChevre: cinerinoapi.factory.chevre.place.movieTheater.IPlace;
     const webAPIIdentifier = params.body.makesOffer.offeredThrough.identifier;
     const branchCode: string = params.body.branchCode;
+    const initialName = `${process.env.PROJECT_ID}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
+
+    let movieTheaterFromChevre: cinerinoapi.factory.chevre.place.movieTheater.IPlace = {
+        typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
+        branchCode: branchCode,
+        name: {
+            ja: initialName,
+            en: initialName
+        },
+        telephone: PROJECT_ORGANIZATION.telephone,
+        screenCount: 0, // 使用しないので適当に
+        kanaName: '', // 使用しないので適当に
+        id: '', // 使用しないので適当に
+        containsPlace: [] // 使用しないので適当に
+    };
 
     try {
         switch (webAPIIdentifier) {
             case cinerinoapi.factory.service.webAPI.Identifier.COA:
                 // COAから情報取得
-                const theaterFromCOA = await COA.services.master.theater({ theaterCode: branchCode });
-
-                // 日本語フォーマットで電話番号が提供される想定なので変換
-                let formatedPhoneNumber: string;
+                let theaterFromCOA: COA.services.master.ITheaterResult | undefined;
                 try {
-                    const phoneUtil = PhoneNumberUtil.getInstance();
-                    const phoneNumber = phoneUtil.parse(theaterFromCOA.theaterTelNum, 'JP');
-                    if (!phoneUtil.isValidNumber(phoneNumber)) {
-                        throw new Error('Invalid phone number format.');
-                    }
-
-                    formatedPhoneNumber = phoneUtil.format(phoneNumber, PhoneNumberFormat.E164);
+                    theaterFromCOA = await COA.services.master.theater({ theaterCode: branchCode });
                 } catch (error) {
-                    throw new Error(`電話番号フォーマット時に問題が発生しました:${error.message}`);
+                    // no op
                 }
 
-                movieTheaterFromChevre = {
-                    typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
-                    branchCode: theaterFromCOA.theaterCode,
-                    name: {
-                        ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : '',
-                        en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : ''
-                    },
-                    telephone: formatedPhoneNumber,
-                    screenCount: 0, // 使用しないので適当に
-                    kanaName: '', // 使用しないので適当に
-                    id: '', // 使用しないので適当に
-                    containsPlace: [] // 使用しないので適当に
-                };
+                // COAから情報取得できればmovieTheaterFromChevreを上書き
+                if (theaterFromCOA !== undefined) {
+                    // 日本語フォーマットで電話番号が提供される想定なので変換
+                    let formatedPhoneNumber: string;
+                    try {
+                        const phoneUtil = PhoneNumberUtil.getInstance();
+                        const phoneNumber = phoneUtil.parse(theaterFromCOA.theaterTelNum, 'JP');
+                        if (!phoneUtil.isValidNumber(phoneNumber)) {
+                            throw new Error('Invalid phone number format.');
+                        }
+
+                        formatedPhoneNumber = phoneUtil.format(phoneNumber, PhoneNumberFormat.E164);
+                    } catch (error) {
+                        throw new Error(`電話番号フォーマット時に問題が発生しました:${error.message}`);
+                    }
+
+                    movieTheaterFromChevre = {
+                        typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
+                        branchCode: theaterFromCOA.theaterCode,
+                        name: {
+                            ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : '',
+                            en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : ''
+                        },
+                        telephone: formatedPhoneNumber,
+                        screenCount: 0, // 使用しないので適当に
+                        kanaName: '', // 使用しないので適当に
+                        id: '', // 使用しないので適当に
+                        containsPlace: [] // 使用しないので適当に
+                    };
+                }
 
                 break;
 
@@ -191,13 +213,14 @@ async function createAttributesFromBody(params: {
                     auth: params.authClient
                 });
                 movieTheaterFromChevre = await placeService.findMovieTheaterByBranchCode({ branchCode: branchCode });
+
                 break;
 
             default:
                 throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
         }
     } catch (error) {
-        throw new Error(`${webAPIIdentifier}から劇場情報取得時に問題が発生しました:${error.message}`);
+        throw new Error(`${webAPIIdentifier}から劇場情報取得時に問題が発生しました: ${error.message}`);
     }
 
     const paymentAccepted: cinerinoapi.factory.seller.IPaymentAccepted<cinerinoapi.factory.paymentMethodType>[] = [
