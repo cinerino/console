@@ -102,8 +102,8 @@
                                     <div class="form-group">
                                         <label>ステータス</label>
                                         <select multiple class="form-control" name="statuses[]">
-                                            <% transactionStatusChoices.forEach(function (transactionStatus) { %>
-                                            <% var selected = searchConditions.statuses.indexOf(transactionStatus) >= 0; %>
+                                            <% Object.values(TransactionStatusType).forEach(function (transactionStatus) { %>
+                                            <% var selected = Array.isArray(searchConditions.statuses) && searchConditions.statuses.indexOf(transactionStatus) >= 0; %>
                                             <option value="<%= transactionStatus %>" <% if (selected) { %> selected
                                                 <% } %>>
                                                 <%= transactionStatus %>
@@ -115,7 +115,7 @@
                                         <label>タスクエクスポートステータス</label>
                                         <select multiple class="form-control" name="tasksExportationStatuses[]">
                                             <% Object.values(TransactionTasksExportationStatus).forEach(function (status) { %>
-                                            <% var selected = searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
+                                            <% var selected = Array.isArray(searchConditions.tasksExportationStatuses) && searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
                                             <option value="<%= status %>" <% if (selected) { %> selected <% } %>>
                                                 <%= status %>
                                             </option>
@@ -161,22 +161,22 @@
                         <table id="transactions-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>ID<br>Status<br>Start<br>End<br>Expires</th>
-                                    <th>購入者</th>
-                                    <th>販売者</th>
-                                    <th>ユーザー主体<br>トークン発行者<br>クライアント</th>
-                                    <th>結果</th>
-                                    <th>タスクエクスポート</th>
+                                    <th>ID<br>Status<br>Start / End / Expires</th>
+                                    <th>Customer</th>
+                                    <th>Seller</th>
+                                    <th>Result</th>
+                                    <th>Export Task</th>
+                                    <th>Required Time<br>Task Latency</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>ID<br>Status<br>Start<br>End<br>Expires</th>
-                                    <th>購入者</th>
-                                    <th>販売者</th>
-                                    <th>ユーザー主体<br>トークン発行者<br>クライアント</th>
-                                    <th>結果</th>
-                                    <th>タスクエクスポート</th>
+                                    <th>ID<br>Status<br>Start / End / Expires</th>
+                                    <th>Customer</th>
+                                    <th>Seller</th>
+                                    <th>Result</th>
+                                    <th>Export Task</th>
+                                    <th>Required Time<br>Task Latency</th>
                                 </tr>
                             </tfoot>
                         </table>

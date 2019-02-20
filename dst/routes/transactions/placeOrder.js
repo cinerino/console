@@ -35,12 +35,6 @@ placeOrderTransactionsRouter.get('',
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
-        const transactionStatusChoices = [
-            cinerinoapi.factory.transactionStatusType.Canceled,
-            cinerinoapi.factory.transactionStatusType.Confirmed,
-            cinerinoapi.factory.transactionStatusType.Expired,
-            cinerinoapi.factory.transactionStatusType.InProgress
-        ];
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
@@ -48,7 +42,7 @@ placeOrderTransactionsRouter.get('',
             ids: (Array.isArray(req.query.ids)) ? req.query.ids : undefined,
             statuses: (req.query.statuses !== undefined)
                 ? req.query.statuses
-                : transactionStatusChoices,
+                : undefined,
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])
                     .toDate()
@@ -104,7 +98,7 @@ placeOrderTransactionsRouter.get('',
             },
             tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)
                 ? req.query.tasksExportationStatuses
-                : Object.values(cinerinoapi.factory.transactionTasksExportationStatus)
+                : undefined
         };
         debug('searchConditions:', searchConditions);
         if (req.query.format === 'datatable') {
@@ -127,7 +121,7 @@ placeOrderTransactionsRouter.get('',
             res.render('transactions/placeOrder/index', {
                 moment: moment,
                 movieTheaters: searchSellersResult.data,
-                transactionStatusChoices: transactionStatusChoices,
+                TransactionStatusType: cinerinoapi.factory.transactionStatusType,
                 TransactionTasksExportationStatus: cinerinoapi.factory.transactionTasksExportationStatus,
                 searchConditions: searchConditions
             });

@@ -49,6 +49,22 @@ $(function () {
                             + '<li>' + data.object.customerContact.email + '</li>'
                             + '<li>' + data.object.customerContact.telephone + '</li>';
                     }
+
+                    var userPoolId = '';
+                    var iss = '';
+                    var clientId = '';
+                    if (data.object.clientUser !== undefined) {
+                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                        iss = data.object.clientUser.iss;
+                        clientId = data.object.clientUser.client_id;
+                    }
+                    html += '<li><a target="_blank" href="/userPools/' + userPoolId + '">' + iss + '</a></li>'
+                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
+
+                    if (data.agent.memberOf !== undefined) {
+                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>';
+                    }
+
                     html += '</ul>';
 
                     return html;
@@ -63,30 +79,6 @@ $(function () {
                         + '<li>' + data.seller.telephone + '</li>'
                         + '<li>' + data.seller.url + '</li>'
                         + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var userPoolId = '';
-                    var iss = '';
-                    var clientId = '';
-                    if (data.object.clientUser !== undefined) {
-                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
-                        iss = data.object.clientUser.iss;
-                        clientId = data.object.clientUser.client_id;
-                    }
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '">' + iss + '</a></li>'
-                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
-
-                    if (data.agent.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>';
-                    }
-
-                    html += '</ul>';
-
-                    return html;
                 }
             },
             {
@@ -110,6 +102,21 @@ $(function () {
                         + '<li><span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span></li>'
                         + '<li>' + data.tasksExportedAt + '</li>'
                         + '</ul>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.endDate !== undefined) {
+                        html += '<li>' + moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s</li>';
+                        html += '<li>' + moment.duration(moment(data.tasksExportedAt).diff(data.endDate)).asMilliseconds() + ' ms</li>';
+                    }
+
+                    html += '</ul>';
+
+                    return html;
                 }
             }
         ]
