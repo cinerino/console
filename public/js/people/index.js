@@ -22,8 +22,13 @@ $(function () {
                         + '<li><span class="badge badge-info">' + data.typeOf + '</span></li>'
                         + '<li><a target="_blank" href="/people/' + data.id + '">' + data.id + '</a></li>';
                     if (data.memberOf !== undefined) {
-                        html += '<li>' + data.memberOf.membershipNumber + '</li>';
+                        html += '<li><span class="badge badge-warning">' + ((data.memberOf.membershipNumber !== undefined) ? data.memberOf.membershipNumber : '') + '</span></li>';
                     }
+
+                    html += '<li>' + data.familyName + ' ' + data.givenName + '</li>'
+                        + '<li>' + data.email + '</li>'
+                        + '<li>' + data.telephone + '</li>'
+
                     html += '</ul>';
 
                     return html;
@@ -32,25 +37,17 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.email + '</li>'
-                        + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.telephone + '</li>'
-                        + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.familyName + ' ' + data.givenName + '</li>'
-                        + '</ul>';
+                    var html = '<ul class="list-unstyled">';
+
+                    if (Array.isArray(data.additionalProperty)) {
+                        data.additionalProperty.forEach(function (p) {
+                            html += '<li>' + '<span class="badge badge-secondary">' + p.name + '</span> ' + p.value.toString() + '</li>';
+                        });
+                    }
+
+                    html += '</ul>';
+
+                    return html;
                 }
             }
         ]

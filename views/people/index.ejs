@@ -43,12 +43,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="id">ユーザーID</label>
+                                        <label for="id">ID</label>
                                         <input type="text" class="form-control" id="id" name="id"
                                             placeholder="ユーザーID(前方一致)" value="<%= searchConditions.id %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="username">ユーザーネーム</label>
+                                        <label for="username">Username</label>
                                         <input type="text" class="form-control" id="username" name="username"
                                             placeholder="ユーザーネーム(前方一致)" value="<%= searchConditions.username %>">
                                     </div>
@@ -101,18 +101,14 @@
                         <table id="people-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Email</th>
-                                    <th>Telephone</th>
-                                    <th>Name</th>
+                                    <th>Profile</th>
+                                    <th>Additional Property</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Email</th>
-                                    <th>Telephone</th>
-                                    <th>Name</th>
+                                    <th>Profile</th>
+                                    <th>Additional Property</th>
                                 </tr>
                             </tfoot>
                         </table>
