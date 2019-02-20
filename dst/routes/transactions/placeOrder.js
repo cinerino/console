@@ -15,7 +15,6 @@ const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
 const cinerinoapi = require("../../cinerinoapi");
-// import validator from '../../middlewares/validator';
 const debug = createDebug('cinerino-console:routes');
 const placeOrderTransactionsRouter = express.Router();
 /**
@@ -40,9 +39,7 @@ placeOrderTransactionsRouter.get('',
             page: req.query.page,
             typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
             ids: (Array.isArray(req.query.ids)) ? req.query.ids : undefined,
-            statuses: (req.query.statuses !== undefined)
-                ? req.query.statuses
-                : undefined,
+            statuses: (req.query.statuses !== undefined) ? req.query.statuses : undefined,
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])
                     .toDate()
@@ -54,22 +51,24 @@ placeOrderTransactionsRouter.get('',
                     .toDate()
                 : moment()
                     .toDate(),
-            endFrom: (req.query.endFrom !== undefined) ? moment(req.query.endFrom)
-                .toDate() : undefined,
-            endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough)
-                .toDate() : undefined,
+            endFrom: (req.query.endFrom !== undefined)
+                ? moment(req.query.endFrom)
+                    .toDate()
+                : undefined,
+            endThrough: (req.query.endThrough !== undefined)
+                ? moment(req.query.endThrough)
+                    .toDate()
+                : undefined,
             agent: {
-                // typeOf: cinerinoapi.factory.personType.Person,
                 ids: (req.query.agent !== undefined && req.query.agent.ids !== undefined && req.query.agent.ids !== '')
                     ? req.query.agent.ids.split(',')
                         .map((v) => v.trim())
                     : undefined
             },
             seller: {
-                // typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                 ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                     ? req.query.seller.ids
-                    : searchSellersResult.data.map((m) => m.id)
+                    : undefined
             },
             object: {
                 customerContact: (req.query.object !== undefined
@@ -120,7 +119,7 @@ placeOrderTransactionsRouter.get('',
         else {
             res.render('transactions/placeOrder/index', {
                 moment: moment,
-                movieTheaters: searchSellersResult.data,
+                sellers: searchSellersResult.data,
                 TransactionStatusType: cinerinoapi.factory.transactionStatusType,
                 TransactionTasksExportationStatus: cinerinoapi.factory.transactionTasksExportationStatus,
                 searchConditions: searchConditions

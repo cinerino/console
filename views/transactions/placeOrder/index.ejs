@@ -67,12 +67,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label>販売者</label>
-                                        <select multiple class="form-control" name="seller[ids][]">
-                                            <% movieTheaters.forEach(function (movieTheater) { %>
-                                            <% var selected = searchConditions.seller.ids.indexOf( movieTheater.id) >= 0; %>
-                                            <option value="<%= movieTheater.id %>" <% if (selected) { %> selected
-                                                <% } %>>
-                                                <%= movieTheater.name.ja %>
+                                        <select multiple class="form-control" name="seller[ids][]" size="10">
+                                            <% sellers.forEach(function (seller) { %>
+                                            <% var selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf(seller.id) >= 0; %>
+                                            <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                                <%= seller.name.ja %>
                                             </option>
                                             <% }) %>
                                         </select>
