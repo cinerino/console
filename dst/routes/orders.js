@@ -55,6 +55,28 @@ ordersRouter.get('',
         catch (error) {
             // no op
         }
+        let identifiers;
+        if (req.query.customer !== undefined) {
+            if (Array.isArray(req.query.customer.userPoolClients)) {
+                identifiers = req.query.customer.userPoolClients.map((userPoolClient) => {
+                    return {
+                        name: 'clientId',
+                        value: userPoolClient
+                    };
+                });
+            }
+            if (req.query.customer.identifiers !== '') {
+                const splitted = req.query.customer.identifiers.split(':');
+                if (splitted.length > 1) {
+                    identifiers = [
+                        {
+                            name: splitted[0],
+                            value: splitted[1]
+                        }
+                    ];
+                }
+            }
+        }
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
@@ -76,14 +98,7 @@ ordersRouter.get('',
                     ? req.query.customer.membershipNumbers.split(',')
                         .map((v) => v.trim())
                     : undefined,
-                identifiers: (req.query.customer !== undefined && Array.isArray(req.query.customer.userPoolClients))
-                    ? req.query.customer.userPoolClients.map((userPoolClient) => {
-                        return {
-                            name: 'clientId',
-                            value: userPoolClient
-                        };
-                    })
-                    : undefined,
+                identifiers: identifiers,
                 // : [
                 //     ...searchUserPoolClientsResult.data.map((userPoolClient) => {
                 //         return {

@@ -50,6 +50,31 @@ ordersRouter.get(
                 // no op
             }
 
+            let identifiers: cinerinoapi.factory.person.IIdentifier | undefined;
+
+            if (req.query.customer !== undefined) {
+                if (Array.isArray(req.query.customer.userPoolClients)) {
+                    identifiers = req.query.customer.userPoolClients.map((userPoolClient: string) => {
+                        return {
+                            name: 'clientId',
+                            value: userPoolClient
+                        };
+                    });
+                }
+
+                if (req.query.customer.identifiers !== '') {
+                    const splitted = (<string>req.query.customer.identifiers).split(':');
+                    if (splitted.length > 1) {
+                        identifiers = [
+                            {
+                                name: splitted[0],
+                                value: splitted[1]
+                            }
+                        ];
+                    }
+                }
+            }
+
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
@@ -71,14 +96,7 @@ ordersRouter.get(
                         ? (<string>req.query.customer.membershipNumbers).split(',')
                             .map((v) => v.trim())
                         : undefined,
-                    identifiers: (req.query.customer !== undefined && Array.isArray(req.query.customer.userPoolClients))
-                        ? req.query.customer.userPoolClients.map((userPoolClient: string) => {
-                            return {
-                                name: 'clientId',
-                                value: userPoolClient
-                            };
-                        })
-                        : undefined,
+                    identifiers: identifiers,
                     // : [
                     //     ...searchUserPoolClientsResult.data.map((userPoolClient) => {
                     //         return {

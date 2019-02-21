@@ -63,9 +63,29 @@ $(function () {
                         + '<li>Client: <a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
 
                     if (Array.isArray(data.customer.identifier)) {
-                        data.customer.identifier.forEach(function (i) {
+                        data.customer.identifier.slice(0, 2).forEach(function (i) {
                             html += '<li>' + '<span class="badge badge-secondary">' + i.name + '</span> ' + i.value.toString() + '</li>';
                         });
+
+                        html += '...'
+                            + '<li><a href="#" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-customer-identifier-' + data.orderNumber + '">識別子をより詳しく見る</a><li>'
+                            + '<div class="modal" id="modal-customer-identifier-' + data.orderNumber + '" tabindex="-1" role="dialog">'
+                            + '<div class="modal-dialog modal-lg" role="document">'
+                            + '<div class="modal-content">'
+                            + '<div class="modal-header">'
+                            + '<h5 class="modal-title">Customer Identifier ' + data.orderNumber + '</h5>'
+                            + '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+                            + '<span aria-hidden="true">×</span></button>'
+                            + '</div>'
+                            + '<div class="modal-body">'
+                            + '<textarea rows="40" class="form-control" placeholder="" disabled="">' + JSON.stringify(data.customer.identifier, null, '\t') + '</textarea>'
+                            + '</div>'
+                            + '<div class="modal-footer">'
+                            + '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>';
                     }
 
                     html += '</ul>';

@@ -111,6 +111,15 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
+                                        <label for="customer[identifiers]">購入者識別子</label>
+                                        <input type="text" class="form-control" id="customer[identifiers]"
+                                            name="customer[identifiers]" placeholder="username:cinerino"
+                                            value="<%= (Array.isArray(searchConditions.customer.identifiers)) ? `${searchConditions.customer.identifiers[0].name}:${searchConditions.customer.identifiers[0].value}` : '' %>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
                                         <label>販売者</label>
                                         <select multiple class="form-control" name="seller[ids][]">
                                             <% movieTheaters.forEach(function (movieTheater) { %>
@@ -124,6 +133,33 @@
                                             </option>
                                             <% }) %>
                                         </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationFor][ids]">イベントID</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][ids]"
+                                            name="acceptedOffers[itemOffered][reservationFor][ids]"
+                                            placeholder="予約イベントID"
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label
+                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">イベントシリーズID</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
+                                            name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
+                                            placeholder="イベントシリーズID"
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label
+                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">作品コード</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
+                                            name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
+                                            placeholder="作品コード"
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') : '' %>">
                                     </div>
                                 </div>
 
@@ -190,36 +226,6 @@
                                         <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
                                             name="paymentMethods[paymentMethodIds]" placeholder="カンマ区切りで、GMO取引ID、口座番号など"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="acceptedOffers[itemOffered][reservationFor][ids]">イベントID</label>
-                                        <input type="text" class="form-control"
-                                            id="acceptedOffers[itemOffered][reservationFor][ids]"
-                                            name="acceptedOffers[itemOffered][reservationFor][ids]"
-                                            placeholder="予約イベントID"
-                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label
-                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">イベントシリーズID</label>
-                                        <input type="text" class="form-control"
-                                            id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
-                                            name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
-                                            placeholder="イベントシリーズID"
-                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label
-                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">作品コード</label>
-                                        <input type="text" class="form-control"
-                                            id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
-                                            name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
-                                            placeholder="作品コード"
-                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') : '' %>">
                                     </div>
                                 </div>
                             </div>
