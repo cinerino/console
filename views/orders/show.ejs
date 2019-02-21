@@ -123,7 +123,8 @@
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
                                             <% if (acceptedOffer.itemOffered.reservationFor !== undefined) { %>
-                                            <a target="_blank" href="/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
+                                            <a target="_blank"
+                                                href="/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
                                                 <%= acceptedOffer.itemOffered.reservationFor.name.ja %>
                                                 <br>
                                                 <%= moment(acceptedOffer.itemOffered.reservationFor.startDate).format('YY-MM-DD hh:mm') %>
@@ -225,13 +226,14 @@
                     <!-- this row will not appear when printing -->
                     <div class="row no-print">
                         <div class="col-12">
-                            <a href="javascript:void(0)" onclick="window.print(); return false;" class="btn btn-default">
+                            <a href="javascript:void(0)" onclick="window.print(); return false;"
+                                class="btn btn-default">
                                 <i class="fa fa-print"></i> Print</a>
                             <% if (order.orderStatus === 'OrderDelivered') { %>
-                            <button type="button" class="btn btn-danger float-right returnOrder">
-                                <i class="fa fa-undo"></i> 返品
-                            </button>
-                            <button type="button" class="btn btn-warning float-right sendEmailMessage" style="margin-right: 5px;">
+                            <a href="#" class="btn btn-danger float-right" data-toggle="modal"
+                                data-target="#modal-confirmReturnOrder"><i class="fa fa-undo"></i> 返品</a>
+                            <button type="button" class="btn btn-warning float-right sendEmailMessage"
+                                style="margin-right: 5px;">
                                 <i class="fa fa-envelope"></i> 配送メール送信
                             </button>
                             <% } %>
@@ -262,8 +264,10 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Timeline</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#timeline"
+                                    data-toggle="tab">Timeline</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -325,7 +329,8 @@
 
                             <div class="tab-pane" id="jsonViewer">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(order, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(order, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -352,7 +357,8 @@
                     <span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <textarea rows="40" class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.action, null, '\t') %></textarea>
+                <textarea rows="40" class="form-control" placeholder=""
+                    disabled=""><%= JSON.stringify(timeline.action, null, '\t') %></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -362,6 +368,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 <div class="modal" id="modal-actionResult-<%= timeline.action.id %>" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -371,7 +378,8 @@
                     <span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <textarea rows="40" class="form-control" placeholder="" disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+                <textarea rows="40" class="form-control" placeholder=""
+                    disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -382,6 +390,35 @@
     <!-- /.modal-dialog -->
 </div>
 <% }) %>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-confirmReturnOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%= order.orderNumber %>の返品処理を実行しますか？</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><%= order.orderNumber %>の返品処理を実行するには、注文番号「<b><%= order.orderNumber %></b>」を入力してください。
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="confirmReturnOrder" placeholder="注文番号"
+                            data-expected="<%= order.orderNumber %>">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-danger disabled returnOrder" disabled>返品する</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">

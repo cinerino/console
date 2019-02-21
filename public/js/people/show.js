@@ -23,6 +23,27 @@ $(function () {
     console.log('searching programMemberships...');
     searchProgramMemberships(1, function () {
     });
+
+    // プロフィール更新
+    var updateProfileButton = $('button.updateProfile');
+    $('#modal-updateProfile').on('shown.bs.modal', function () {
+        $('#confirmUpdateProfile').val('');
+        updateProfileButton.prop('disabled', true);
+        updateProfileButton.addClass('disabled');
+    });
+    $('#confirmUpdateProfile').keyup(function () {
+        var validValue = ($(this).val() === $(this).data('expected'));
+        if (validValue) {
+            updateProfileButton.prop('disabled', false);
+            updateProfileButton.removeClass('disabled');
+        } else {
+            updateProfileButton.prop('disabled', true);
+            updateProfileButton.addClass('disabled');
+        }
+    });
+    updateProfileButton.click(function () {
+        $('#settings form').submit();
+    });
 });
 
 function searchOrders(page, cb) {
