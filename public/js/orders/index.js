@@ -1,5 +1,5 @@
 $(function () {
-    $("#orders-table").DataTable({
+    var table = $("#orders-table").DataTable({
         processing: true,
         serverSide: true,
         ajax: {
@@ -68,24 +68,7 @@ $(function () {
                         });
 
                         html += '...'
-                            + '<li><a href="#" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-customer-identifier-' + data.orderNumber + '">識別子をより詳しく見る</a><li>'
-                            + '<div class="modal" id="modal-customer-identifier-' + data.orderNumber + '" tabindex="-1" role="dialog">'
-                            + '<div class="modal-dialog modal-lg" role="document">'
-                            + '<div class="modal-content">'
-                            + '<div class="modal-header">'
-                            + '<h5 class="modal-title">Customer Identifier ' + data.orderNumber + '</h5>'
-                            + '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
-                            + '<span aria-hidden="true">×</span></button>'
-                            + '</div>'
-                            + '<div class="modal-body">'
-                            + '<textarea rows="40" class="form-control" placeholder="" disabled="">' + JSON.stringify(data.customer.identifier, null, '\t') + '</textarea>'
-                            + '</div>'
-                            + '<div class="modal-footer">'
-                            + '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>';
+                            + '<li><a href="javascript:void(0)" class="btn btn-default btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
                     }
 
                     html += '</ul>';
@@ -147,4 +130,33 @@ $(function () {
         // timePickerIncrement: 30,
         format: 'YYYY-MM-DDTHH:mm:ssZ'
     })
+
+    $(document).on('click', '.showCustomerIdentifier', function () {
+        var orderNumber = $(this).data('ordernumber');
+        console.log('showing... orderNumber:', orderNumber);
+
+        showCustomerIdentifier(orderNumber);
+    });
+
+    /**
+     * 注文のCustomer Identifierを表示する
+     */
+    function showCustomerIdentifier(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-customer-identifier');
+        var title = 'Order `' + order.orderNumber + '` Customer Identifier';
+        var body = '<textarea rows="40" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.customer.identifier, null, '\t');
+        + '</textarea>'
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
 });
