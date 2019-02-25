@@ -790,6 +790,7 @@ function searchLatestOrders(cb) {
     ).done(function (data) {
         orders = data.data;
 
+        $('.latestOrders tbody').empty();
         $.each(data.data, function (_, order) {
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
