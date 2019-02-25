@@ -91,7 +91,6 @@ userPoolsRouter.get(
                     .toDate(),
                 orderDateThrough: new Date(),
                 customer: {
-                    typeOf: cinerinoapi.factory.personType.Person,
                     identifiers: [
                         {
                             name: 'tokenIssuer',
@@ -151,7 +150,6 @@ userPoolsRouter.get(
                     .toDate(),
                 orderDateThrough: new Date(),
                 customer: {
-                    typeOf: cinerinoapi.factory.personType.Person,
                     identifiers: [
                         {
                             name: 'clientId',

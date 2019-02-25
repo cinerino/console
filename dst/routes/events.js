@@ -203,7 +203,7 @@ eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(thi
         const searchOrdersResult = yield orderService.search({
             limit: req.query.limit,
             page: req.query.page,
-            sort: { orderDate: cinerinoapi.factory.sortType.Ascending },
+            sort: { orderDate: cinerinoapi.factory.sortType.Descending },
             orderDateFrom: moment(event.startDate)
                 // tslint:disable-next-line:no-magic-numbers
                 .add(-3, 'months')

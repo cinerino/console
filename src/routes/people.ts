@@ -165,7 +165,6 @@ peopleRouter.get(
                     .toDate(),
                 orderDateThrough: new Date(),
                 customer: {
-                    typeOf: cinerinoapi.factory.personType.Person,
                     ids: [req.params.id]
                 }
             });

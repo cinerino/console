@@ -56,7 +56,8 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                 <div class="card card-dark card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle" src="<%= thumbnailImageUrl %>" alt="Thumbnail">
+                            <img class="profile-user-img img-fluid img-circle" src="<%= thumbnailImageUrl %>"
+                                alt="Thumbnail">
                         </div>
 
                         <h3 class="profile-username text-center">
@@ -69,7 +70,7 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
 
                         <ul class="list-group list-group-unbordered mb-3">
                             <li class="list-group-item">
-                                <b>Orders</b> <a class="float-right" id="orderCount"></a>
+                                <b>Orders</b> <a class="float-right" id="orderCount">searching...</a>
                             </li>
                         </ul>
 
@@ -135,8 +136,10 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                             <li class="nav-item"><a class="nav-link active" href="#remainingAttendeeCapacity"
                                     data-toggle="tab">残席数遷移</a></li>
                             <li class="nav-item"><a class="nav-link" href="#orders" data-toggle="tab">注文履歴</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                            </li>
                             <li class="nav-item"><a class="nav-link" href="#others" data-toggle="tab">その他の操作</a></li>
                         </ul>
                     </div><!-- /.card-header -->
@@ -152,7 +155,8 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="chart" id="remainingAttendeeCapacityChart2" style="height: 400px;"></div>
+                                        <div class="chart" id="remainingAttendeeCapacityChart2" style="height: 400px;">
+                                            searching...</div>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -180,7 +184,8 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
 
                             <div class="tab-pane" id="jsonViewer">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(event, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(event, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->

@@ -94,7 +94,6 @@ userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(this, v
                 .toDate(),
             orderDateThrough: new Date(),
             customer: {
-                typeOf: cinerinoapi.factory.personType.Person,
                 identifiers: [
                     {
                         name: 'tokenIssuer',
@@ -149,7 +148,6 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) =>
                 .toDate(),
             orderDateThrough: new Date(),
             customer: {
-                typeOf: cinerinoapi.factory.personType.Person,
                 identifiers: [
                     {
                         name: 'clientId',

@@ -230,7 +230,7 @@ eventsRouter.get(
             const searchOrdersResult = await orderService.search({
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { orderDate: cinerinoapi.factory.sortType.Ascending },
+                sort: { orderDate: cinerinoapi.factory.sortType.Descending },
                 orderDateFrom: moment(event.startDate)
                     // tslint:disable-next-line:no-magic-numbers
                     .add(-3, 'months')

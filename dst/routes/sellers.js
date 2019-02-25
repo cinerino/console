@@ -376,7 +376,6 @@ sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, voi
                 .toDate(),
             orderDateThrough: new Date(),
             seller: {
-                typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                 ids: [req.params.id]
             }
         });

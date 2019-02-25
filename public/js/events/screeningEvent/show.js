@@ -20,23 +20,26 @@ $(function () {
         // 売り出し日時は？
         var reservationStartDate = moment(event.startDate).add(-3, 'days').toDate();
         // var reservationPeriodInMinutes = moment(event.endDate).diff(moment(reservationStartDate), 'hours');
-        var datas = orders.reduce(
-            (a, b) => {
-                numberOfSeats -= b.acceptedOffers.length;
-                // 予約開始からの時間
-                // const diff = moment(b.orderDate).diff(moment(reservationStartDate), 'hours', true);
-                a.push({
-                    x: moment(b.orderDate).toISOString(),
-                    y: numberOfSeats,
-                });
+        var datas = orders.sort(function (a, b) {
+            return moment(a.orderDate).unix() - moment(b.orderDate).unix();
+        })
+            .reduce(
+                (a, b) => {
+                    numberOfSeats -= b.acceptedOffers.length;
+                    // 予約開始からの時間
+                    // const diff = moment(b.orderDate).diff(moment(reservationStartDate), 'hours', true);
+                    a.push({
+                        x: moment(b.orderDate).toISOString(),
+                        y: numberOfSeats,
+                    });
 
-                return a;
-            },
-            [
-                { x: moment(reservationStartDate).toISOString(), y: numberOfSeats },
-                { x: moment(event.endDate).toISOString(), y: null }
-            ],
-        );
+                    return a;
+                },
+                [
+                    { x: moment(reservationStartDate).toISOString(), y: numberOfSeats },
+                    { x: moment(event.endDate).toISOString(), y: null }
+                ],
+            );
         createRemainingAttendeeCapacityChart(datas);
     });
 });
@@ -50,6 +53,7 @@ function searchOrders(cb) {
         searchedAllOrders = (data.data.length < limit);
         $.each(data.data, function (_, order) {
             orders.push(order);
+
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'

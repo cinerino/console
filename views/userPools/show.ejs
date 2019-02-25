@@ -48,7 +48,7 @@
 
                         <ul class="list-group list-group-unbordered mb-3">
                             <li class="list-group-item">
-                                <b>Orders</b> <a class="float-right" id="orderCount"></a>
+                                <b>Orders</b> <a class="float-right" id="orderCount">searching...</a>
                             </li>
                         </ul>
 
@@ -85,10 +85,13 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">注文履歴</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">注文履歴</a>
+                            </li>
                             <li class="nav-item"><a class="nav-link" href="#clients" data-toggle="tab">クライアント</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON Viewer</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -126,7 +129,8 @@
                                             <% userPoolClients.forEach(function (userPoolClient) { %>
                                             <tr>
                                                 <td>
-                                                    <a target="_blank" href="/userPools/<%= userPoolClient.UserPoolId %>/clients/<%= userPoolClient.ClientId %>">
+                                                    <a target="_blank"
+                                                        href="/userPools/<%= userPoolClient.UserPoolId %>/clients/<%= userPoolClient.ClientId %>">
                                                         <%= userPoolClient.ClientId %>
                                                     </a>
                                                 </td>
@@ -144,7 +148,8 @@
 
                             <div class="tab-pane" id="jsonViewer">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder="" disabled=""><%= JSON.stringify(userPool, null, '\t') %></textarea>
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(userPool, null, '\t') %></textarea>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->

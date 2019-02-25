@@ -397,7 +397,6 @@ sellersRouter.get(
                     .toDate(),
                 orderDateThrough: new Date(),
                 seller: {
-                    typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                     ids: [req.params.id]
                 }
             });

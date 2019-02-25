@@ -155,7 +155,6 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void
                 .toDate(),
             orderDateThrough: new Date(),
             customer: {
-                typeOf: cinerinoapi.factory.personType.Person,
                 ids: [req.params.id]
             }
         });
