@@ -784,12 +784,12 @@ function searchLatestOrders(cb) {
             limit: 10,
             page: 1,
             sort: { orderDate: -1 },
-            orderDateFrom: moment().add(-1, 'month').toISOString(),
+            orderDateFrom: moment().add(-1, 'day').toISOString(),
             orderDateThrough: moment().toISOString()
         }
     ).done(function (data) {
-        $('.latestOrders tbody').html('');
         orders = data.data;
+
         $.each(data.data, function (_, order) {
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
@@ -804,7 +804,7 @@ function searchLatestOrders(cb) {
                     return '<span class="badge badge-secondary ' + paymentMethod.typeOf + '">' + paymentMethod.typeOf + '</span>';
                 }).join('&nbsp;') + '</td>'
                 + '<td>' + '<span class="badge badge-secondary  ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
-            ).appendTo(".latestOrders tbody");
+            ).appendTo('.latestOrders tbody');
         });
         cb();
     }).fail(function () {
