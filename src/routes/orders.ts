@@ -78,6 +78,7 @@ ordersRouter.get(
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
+                sort: { orderDate: cinerinoapi.factory.sortType.Descending },
                 seller: {
                     // typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                     ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
@@ -235,8 +236,7 @@ ordersRouter.get(
             const searchOrdersResult = await orderService.search({
                 orderNumbers: [req.params.orderNumber],
                 orderDateFrom: moment('2017-04-20T00:00:00+09:00')
-                    .toDate(),
-                orderDateThrough: new Date()
+                    .toDate()
             });
             const order = searchOrdersResult.data.shift();
             if (order === undefined) {

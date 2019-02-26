@@ -28,9 +28,7 @@ if (seller !== undefined) {
             selected = seller.typeOf === organizationType;
         }
         %>
-        <option value="<%= organizationType %>" <% if (selected) { %>
-            selected
-            <% } %>>
+        <option value="<%= organizationType %>" <% if (selected) { %> selected <% } %>>
             <%= organizationType %>
         </option>
         <% }) %>
@@ -46,9 +44,7 @@ if (seller !== undefined) {
             selected = seller.makesOffer[0].offeredThrough.identifier === identifier;
         }
         %>
-        <option value="<%= identifier %>" <% if (selected) { %>
-            selected
-            <% } %>>
+        <option value="<%= identifier %>" <% if (selected) { %> selected <% } %>>
             <%= identifier %>
         </option>
         <% }) %>
@@ -56,36 +52,44 @@ if (seller !== undefined) {
 </div>
 <div class="form-group">
     <label for="branchCode">販売イベント劇場枝番号</label>
-    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="販売イベント劇場枝番号" value="<%= (seller !== undefined) ?  seller.location.branchCode : '' %>">
+    <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="販売イベント劇場枝番号"
+        value="<%= (seller !== undefined) ?  seller.location.branchCode : '' %>">
 </div>
 <div class="form-group">
-    <label for="name.ja">name.ja</label>
-    <input disabled type="text" class="form-control" id="name.ja" name="name.ja" placeholder="name.ja" value="<%= (seller !== undefined) ?  seller.name.ja : '' %>">
+    <label for="name[ja]">日本語名称</label>
+    <input type="text" class="form-control" id="name[ja]" name="name[ja]" placeholder="日本語名称"
+        value="<%= (seller !== undefined) ?  seller.name.ja : '' %>">
 </div>
 <div class="form-group">
-    <label for="name.en">name.en</label>
-    <input disabled type="text" class="form-control" id="name.en" name="name.en" placeholder="name.en" value="<%= (seller !== undefined) ?  seller.name.en : '' %>">
+    <label for="name[en]">英語名称</label>
+    <input type="text" class="form-control" id="name[en]" name="name[en]" placeholder="英語名称"
+        value="<%= (seller !== undefined) ?  seller.name.en : '' %>">
 </div>
 <div class="form-group">
-    <label for="telephone">telephone</label>
-    <input disabled type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone" value="<%= (seller !== undefined) ?  seller.telephone : '' %>">
+    <label for="telephone">Telephone</label>
+    <input type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone"
+        value="<%= (seller !== undefined) ?  seller.telephone : '' %>">
 </div>
 <div class="form-group">
     <label for="url">URL</label>
-    <input type="text" class="form-control" id="url" name="url" placeholder="URL" value="<%= (seller !== undefined) ?  seller.url : '' %>">
+    <input type="text" class="form-control" id="url" name="url" placeholder="URL"
+        value="<%= (seller !== undefined) ?  seller.url : '' %>">
 </div>
 <hr>
 <div class="form-group">
     <label for="gmoInfo[siteId]">GMOサイトID</label>
-    <input type="text" class="form-control" id="gmoInfo[siteId]" disabled placeholder="GMOサイトID" value="<%= process.env.GMO_SITE_ID %>">
+    <input type="text" class="form-control" id="gmoInfo[siteId]" disabled placeholder="GMOサイトID"
+        value="<%= process.env.GMO_SITE_ID %>">
 </div>
 <div class="form-group">
     <label for="gmoInfo[shopId]">GMOショップID</label>
-    <input type="text" class="form-control" id="gmoInfo[shopId]" name="gmoInfo[shopId]" placeholder="GMOショップID" value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopId : '' %>">
+    <input type="text" class="form-control" id="gmoInfo[shopId]" name="gmoInfo[shopId]" placeholder="GMOショップID"
+        value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopId : '' %>">
 </div>
 <div class="form-group">
     <label for="gmoInfo[shopPass]">GMOショップPASS</label>
-    <input type="password" class="form-control" id="gmoInfo[shopPass]" name="gmoInfo[shopPass]" placeholder="GMOショップPASS"
+    <input type="password" class="form-control" id="gmoInfo[shopPass]" name="gmoInfo[shopPass]"
+        placeholder="GMOショップPASS"
         value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopPass : '' %>">
 </div>
 <hr>
@@ -96,12 +100,14 @@ if (seller !== undefined) {
 </div>
 <div class="form-group">
     <label for="movieTicketInfo[kgygishCd]">ムビチケ興行会社コード</label>
-    <input type="text" class="form-control" id="movieTicketInfo[kgygishCd]" disabled placeholder="ムビチケ興行会社コード" value="<%= process.env.MVTK_COMPANY_CODE %>">
+    <input type="text" class="form-control" id="movieTicketInfo[kgygishCd]" disabled placeholder="ムビチケ興行会社コード"
+        value="<%= process.env.MVTK_COMPANY_CODE %>">
     <input type="hidden" name="movieTicketInfo[kgygishCd]" value="<%= process.env.MVTK_COMPANY_CODE %>">
 </div>
 <div class="form-group">
     <label for="gmoInfo[shopId]">ムビチケサイトコード</label>
-    <input type="text" class="form-control" id="movieTicketInfo[stCd]" name="movieTicketInfo[stCd]" placeholder="ムビチケサイトコード"
+    <input type="text" class="form-control" id="movieTicketInfo[stCd]" name="movieTicketInfo[stCd]"
+        placeholder="ムビチケサイトコード"
         value="<%= (movieTicketPayment !== undefined) ? movieTicketPayment.movieTicketInfo.stCd : '' %>">
 </div>
 
@@ -109,26 +115,26 @@ if (seller !== undefined) {
 <div class="form-check">
     <input type="checkbox" class="form-check-input" id="coinAccountPaymentAccepted" name="coinAccountPaymentAccepted"
         <%=(coinAccountPayment !==undefined) ? ' checked' : '' %>>
-    <label class="form-check-label" for="coinAccountPaymentAccepted">コイン口座決済を許可(許可するとコイン口座が開設されます)</label>
+    <label class="form-check-label" for="coinAccountPaymentAccepted">コイン口座決済を許可</label>
 </div>
 <div class="form-group">
     <label for="coinAccountPayment[accountNumber]"></label>
-    <input type="hidden" class="form-control" id="coinAccountPayment[accountNumber]" name="coinAccountPayment[accountNumber]"
-        placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
-    <input disabled type="text" class="form-control" placeholder="コイン口座番号" value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
+    <input type="text" class="form-control id=" coinAccountPayment[accountNumber]"
+        name="coinAccountPayment[accountNumber]"" placeholder=" コイン口座番号"
+        value="<%= (coinAccountPayment !== undefined) ? coinAccountPayment.accountNumber : '' %>">
 </div>
 
 <hr>
 <div class="form-check">
     <input type="checkbox" class="form-check-input" id="pointAccountPaymentAccepted" name="pointAccountPaymentAccepted"
         <%=(pointAccountPayment !==undefined) ? ' checked' : '' %>>
-    <label class="form-check-label" for="pointAccountPaymentAccepted">ポイント口座決済を許可(許可するとポイント口座が開設されます)</label>
+    <label class="form-check-label" for="pointAccountPaymentAccepted">ポイント口座決済を許可</label>
 </div>
 <div class="form-group">
     <label for="pointAccountPayment[accountNumber]"></label>
-    <input type="hidden" class="form-control" id="pointAccountPayment[accountNumber]" name="pointAccountPayment[accountNumber]"
-        placeholder="コイン口座番号" value="<%= (pointAccountPayment !== undefined) ? pointAccountPayment.accountNumber : '' %>">
-    <input disabled type="text" class="form-control" placeholder="ポイント口座番号" value="<%= (pointAccountPayment !== undefined) ? pointAccountPayment.accountNumber : '' %>">
+    <input type="text" class="form-control" id="pointAccountPayment[accountNumber]"
+        name="pointAccountPayment[accountNumber]" placeholder="ポイント口座番号"
+        value="<%= (pointAccountPayment !== undefined) ? pointAccountPayment.accountNumber : '' %>">
 </div>
 
 <hr>
@@ -162,10 +168,11 @@ if (seller !== undefined) {
         <div class="form-group">
             <label for="hasPOS[<%= index %>][name]">POS名</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="hasPOS[<%= index %>][name]" name="hasPOS[<%= index %>][name]"
-                    placeholder="POS Name" value="<%= pos.name %>">
+                <input type="text" class="form-control" id="hasPOS[<%= index %>][name]"
+                    name="hasPOS[<%= index %>][name]" placeholder="POS Name" value="<%= pos.name %>">
                 <span class="input-group-append">
-                    <button type="button" class="btn btn-danger" onclick="removePOS('<%= index %>');"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-danger" onclick="removePOS('<%= index %>');"><i
+                            class="fa fa-minus"></i></button>
                 </span>
             </div>
         </div>
@@ -180,8 +187,8 @@ if (seller !== undefined) {
     <div class="col-md-6">
         <div class="form-group">
             <label for="hasPOS[<%= hasPOS.length %>][id]">POSクライアントID</label>
-            <input type="text" class="form-control" id="hasPOS[<%= hasPOS.length %>][id]" name="hasPOS[<%= hasPOS.length %>][id]"
-                placeholder="POS ID" value="">
+            <input type="text" class="form-control" id="hasPOS[<%= hasPOS.length %>][id]"
+                name="hasPOS[<%= hasPOS.length %>][id]" placeholder="POS ID" value="">
         </div>
     </div>
 
@@ -189,8 +196,8 @@ if (seller !== undefined) {
         <div class="form-group">
             <label for="hasPOS[<%= hasPOS.length %>][name]">POS名</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="hasPOS[<%= hasPOS.length %>][name]" name="hasPOS[<%= hasPOS.length %>][name]"
-                    placeholder="POS Name" value="">
+                <input type="text" class="form-control" id="hasPOS[<%= hasPOS.length %>][name]"
+                    name="hasPOS[<%= hasPOS.length %>][name]" placeholder="POS Name" value="">
                 <span class="input-group-append">
                     <button type="button" class="btn btn-info" onclick="addPOS();"><i class="fa fa-plus"></i></button>
                 </span>
@@ -207,12 +214,10 @@ if (seller !== undefined) {
         <div class="form-group">
             <label for="areaServed[<%= index %>][typeOf]">店舗タイプ</label>
             <select class="form-control" name="areaServed[<%= index %>][typeOf]">
-                <option value="<%= PlaceType.Online %>" <% if (area.typeOf===PlaceType.Online) { %> selected
-                    <% } %>>
+                <option value="<%= PlaceType.Online %>" <% if (area.typeOf===PlaceType.Online) { %> selected <% } %>>
                     <%= PlaceType.Online %>
                 </option>
-                <option value="<%= PlaceType.Store %>" <% if (area.typeOf===PlaceType.Store) { %> selected
-                    <% } %>>
+                <option value="<%= PlaceType.Store %>" <% if (area.typeOf===PlaceType.Store) { %> selected <% } %>>
                     <%= PlaceType.Store %>
                 </option>
             </select>
@@ -222,8 +227,8 @@ if (seller !== undefined) {
     <div class="col-md-4">
         <div class="form-group">
             <label for="areaServed[<%= index %>][id]">店舗ID</label>
-            <input type="text" class="form-control" id="areaServed[<%= index %>][id]" name="areaServed[<%= index %>][id]"
-                placeholder="店舗ID" value="<%= area.id %>">
+            <input type="text" class="form-control" id="areaServed[<%= index %>][id]"
+                name="areaServed[<%= index %>][id]" placeholder="店舗ID" value="<%= area.id %>">
         </div>
     </div>
 
@@ -231,10 +236,11 @@ if (seller !== undefined) {
         <div class="form-group">
             <label for="areaServed[<%= index %>][name]">店舗名</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="areaServed[<%= index %>][name]" name="areaServed[<%= index %>][name]"
-                    placeholder="店舗名" value="<%= area.name %>">
+                <input type="text" class="form-control" id="areaServed[<%= index %>][name]"
+                    name="areaServed[<%= index %>][name]" placeholder="店舗名" value="<%= area.name %>">
                 <span class="input-group-append">
-                    <button type="button" class="btn btn-danger" onclick="removeAreaServed('<%= index %>');"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-danger" onclick="removeAreaServed('<%= index %>');"><i
+                            class="fa fa-minus"></i></button>
                 </span>
             </div>
         </div>
@@ -263,8 +269,8 @@ if (seller !== undefined) {
     <div class="col-md-4">
         <div class="form-group">
             <label for="areaServed[<%= areaServed.length %>][id]">店舗ID</label>
-            <input type="text" class="form-control" id="areaServed[<%= areaServed.length %>][id]" name="areaServed[<%= areaServed.length %>][id]"
-                placeholder="店舗ID" value="">
+            <input type="text" class="form-control" id="areaServed[<%= areaServed.length %>][id]"
+                name="areaServed[<%= areaServed.length %>][id]" placeholder="店舗ID" value="">
         </div>
     </div>
 
@@ -272,10 +278,11 @@ if (seller !== undefined) {
         <div class="form-group">
             <label for="areaServed[<%= areaServed.length %>][name]">店舗名</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="areaServed[<%= areaServed.length %>][name]" name="areaServed[<%= areaServed.length %>][name]"
-                    placeholder="店舗名" value="">
+                <input type="text" class="form-control" id="areaServed[<%= areaServed.length %>][name]"
+                    name="areaServed[<%= areaServed.length %>][name]" placeholder="店舗名" value="">
                 <span class="input-group-append">
-                    <button type="button" class="btn btn-info" onclick="addAreaServed();"><i class="fa fa-plus"></i></button>
+                    <button type="button" class="btn btn-info" onclick="addAreaServed();"><i
+                            class="fa fa-plus"></i></button>
                 </span>
             </div>
         </div>

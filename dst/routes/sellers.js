@@ -136,7 +136,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
         next(error);
     }
 }));
-// tslint:disable-next-line:max-func-body-length
+// tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createAttributesFromBody(params) {
     return __awaiter(this, void 0, void 0, function* () {
         const webAPIIdentifier = params.body.makesOffer.offeredThrough.identifier;
@@ -341,7 +341,10 @@ function createAttributesFromBody(params) {
         ];
         return {
             typeOf: params.body.typeOf,
-            name: movieTheaterFromChevre.name,
+            name: {
+                ja: (params.body.name.ja !== '') ? params.body.name.ja : movieTheaterFromChevre.name.ja,
+                en: (params.body.name.en !== '') ? params.body.name.en : movieTheaterFromChevre.name.en
+            },
             legalName: movieTheaterFromChevre.name,
             parentOrganization: PROJECT_ORGANIZATION,
             location: {
@@ -349,7 +352,7 @@ function createAttributesFromBody(params) {
                 branchCode: movieTheaterFromChevre.branchCode,
                 name: movieTheaterFromChevre.name
             },
-            telephone: movieTheaterFromChevre.telephone,
+            telephone: (params.body.telephone !== '') ? params.body.telephone : movieTheaterFromChevre.telephone,
             url: params.body.url,
             paymentAccepted: paymentAccepted,
             hasPOS: hasPOS,
