@@ -41,7 +41,7 @@
                     <form role="form" method="get">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="customer[membershipNumbers]">購入者会員番号</label>
                                         <input type="text" class="form-control" id="customer[membershipNumbers]"
@@ -118,7 +118,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>販売者</label>
                                         <select multiple class="form-control" name="seller[ids][]">
@@ -135,7 +135,39 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="acceptedOffers[itemOffered][reservationFor][ids]">イベントID</label>
+                                        <label>決済方法</label>
+                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]">
+                                            <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
+                                            <%
+                                            var selected = false;
+                                            if (searchConditions.paymentMethods !== undefined && searchConditions.paymentMethods.typeOfs !== undefined) {
+                                                selected = searchConditions.paymentMethods.typeOfs.indexOf(paymentMethod) >= 0;
+                                            }
+                                            %>
+                                            <option value="<%= paymentMethod %>" <% if (selected) { %> selected <% } %>>
+                                                <%= paymentMethod %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="orderNumbers">決済ID</label>
+                                        <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
+                                            name="paymentMethods[paymentMethodIds]"
+                                            placeholder="GMO取引ID、口座番号、ムビチケ購入管理番号など(カンマ区切り)"
+                                            value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][ids]">注文アイテムID</label>
+                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][ids]"
+                                            name="acceptedOffers[itemOffered][ids]" placeholder="アイテムID(予約IDなど)"
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.ids)) ? searchConditions.acceptedOffers.itemOffered.ids.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationFor][ids]">予約イベントID</label>
                                         <input type="text" class="form-control"
                                             id="acceptedOffers[itemOffered][reservationFor][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][ids]"
@@ -143,27 +175,51 @@
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationFor][name]">予約イベント名称</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationFor][name]"
+                                            name="acceptedOffers[itemOffered][reservationFor][name]"
+                                            placeholder="予約イベント名称"
+                                            value="<%= searchConditions.acceptedOffers.itemOffered.reservationFor.name %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>予約イベント開催期間</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="reservationForInSessionRange"
+                                                id="reservationForInSessionRange" value="<%= (searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom !== undefined)
+                                                ? `${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionThrough).format('YYYY-MM-DDTHH:mm:ssZ')}`
+                                                : '' %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                    <div class="form-group">
                                         <label
-                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">イベントシリーズID</label>
+                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">予約イベントシリーズID</label>
                                         <input type="text" class="form-control"
                                             id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
-                                            placeholder="イベントシリーズID"
+                                            placeholder="予約イベントシリーズID"
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.ids.join(',') : '' %>">
                                     </div>
 
                                     <div class="form-group">
                                         <label
-                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">作品コード</label>
+                                            for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">予約作品コード</label>
                                         <input type="text" class="form-control"
                                             id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
-                                            placeholder="作品コード"
+                                            placeholder="予約作品コード"
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') : '' %>">
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="confirmationNumbers">確認番号</label>
                                         <input type="text" class="form-control" id="confirmationNumbers"
@@ -204,28 +260,6 @@
                                             </option>
                                             <% }) %>
                                         </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>決済方法</label>
-                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]">
-                                            <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
-                                            <%
-                                            var selected = false;
-                                            if (searchConditions.paymentMethods !== undefined && searchConditions.paymentMethods.typeOfs !== undefined) {
-                                                selected = searchConditions.paymentMethods.typeOfs.indexOf(paymentMethod) >= 0;
-                                            }
-                                            %>
-                                            <option value="<%= paymentMethod %>" <% if (selected) { %> selected <% } %>>
-                                                <%= paymentMethod %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="orderNumbers">決済ID</label>
-                                        <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
-                                            name="paymentMethods[paymentMethodIds]" placeholder="カンマ区切りで、GMO取引ID、口座番号など"
-                                            value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
                                     </div>
                                 </div>
                             </div>

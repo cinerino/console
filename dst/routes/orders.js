@@ -151,6 +151,13 @@ ordersRouter.get('',
                 : undefined,
             acceptedOffers: {
                 itemOffered: {
+                    ids: (req.query.acceptedOffers !== undefined
+                        && req.query.acceptedOffers.itemOffered !== undefined
+                        && req.query.acceptedOffers.itemOffered.ids !== undefined
+                        && req.query.acceptedOffers.itemOffered.ids !== '')
+                        ? req.query.acceptedOffers.itemOffered.ids.split(',')
+                            .map((v) => v.trim())
+                        : undefined,
                     reservationFor: {
                         ids: (req.query.acceptedOffers !== undefined
                             && req.query.acceptedOffers.itemOffered !== undefined
@@ -158,6 +165,22 @@ ordersRouter.get('',
                             && req.query.acceptedOffers.itemOffered.reservationFor.ids !== '')
                             ? req.query.acceptedOffers.itemOffered.reservationFor.ids.split(',')
                                 .map((v) => v.trim())
+                            : undefined,
+                        name: (req.query.acceptedOffers !== undefined
+                            && req.query.acceptedOffers.itemOffered !== undefined
+                            && req.query.acceptedOffers.itemOffered.reservationFor !== undefined
+                            && req.query.acceptedOffers.itemOffered.reservationFor.name !== '')
+                            ? req.query.acceptedOffers.itemOffered.reservationFor.name
+                            : undefined,
+                        inSessionFrom: (req.query.reservationForInSessionRange !== undefined
+                            && req.query.reservationForInSessionRange !== '')
+                            ? moment(req.query.reservationForInSessionRange.split(' - ')[0])
+                                .toDate()
+                            : undefined,
+                        inSessionThrough: (req.query.reservationForInSessionRange !== undefined
+                            && req.query.reservationForInSessionRange !== '')
+                            ? moment(req.query.reservationForInSessionRange.split(' - ')[1])
+                                .toDate()
                             : undefined,
                         superEvent: {
                             ids: (req.query.acceptedOffers !== undefined

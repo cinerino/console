@@ -125,7 +125,7 @@ $(function () {
     });
 
     // Date range picker
-    $('#orderDateRange').daterangepicker({
+    $('#orderDateRange,#reservationForInSessionRange').daterangepicker({
         timePicker: true,
         // timePickerIncrement: 30,
         format: 'YYYY-MM-DDTHH:mm:ssZ'
