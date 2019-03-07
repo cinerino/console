@@ -37,12 +37,11 @@ tasksRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
+            sort: { runsAt: cinerinoapi.factory.sortType.Descending },
             name: (req.query.name !== '')
                 ? req.query.name
                 : undefined,
-            statuses: (req.query.statuses !== undefined)
-                ? req.query.statuses
-                : taskStatusChoices,
+            statuses: (req.query.statuses !== undefined) ? req.query.statuses : undefined,
             runsFrom: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                 ? moment(req.query.runsRange.split(' - ')[0])
                     .toDate()

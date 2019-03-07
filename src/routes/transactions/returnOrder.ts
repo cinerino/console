@@ -37,6 +37,7 @@ returnOrderTransactionsRouter.get(
             const searchConditions: cinerinoapi.factory.transaction.ISearchConditions<cinerinoapi.factory.transactionType.ReturnOrder> = {
                 limit: req.query.limit,
                 page: req.query.page,
+                sort: { startDate: cinerinoapi.factory.sortType.Descending },
                 typeOf: cinerinoapi.factory.transactionType.ReturnOrder,
                 ids: (Array.isArray(req.query.ids)) ? req.query.ids : undefined,
                 statuses: (req.query.statuses !== undefined)

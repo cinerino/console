@@ -19,11 +19,12 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        // + '<li><a target="_blank" href="/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
-                        // + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
                         + '<li>' + data.id + '</li>'
                         + '<li><span class="badge-secondary badge ' + data.name + '">' + data.name + '</span></li>'
+                        + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
                         + '<li>' + data.remainingNumberOfTries + '/' + data.numberOfTried + '</li>'
+                        + '<li>' + data.runsAt + '</li>'
+                        + '<li>' + data.lastTriedAt + '</li>'
                         + '</ul>';
 
                 }
@@ -32,8 +33,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li>' + data.runsAt + '</li>'
-                        + '<li>' + data.lastTriedAt + '</li>'
+                        + '<li><textarea class="form-control" placeholder="" disabled="" rows="8">' + JSON.stringify(data.data, null, '\t') + '</textarea></li>'
                         + '</ul>';
                 }
             },
@@ -41,23 +41,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
-                        + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><textarea class="form-control" placeholder="" disabled="">' + JSON.stringify(data.data, null, '\t') + '</textarea></li>'
-                        + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><textarea class="form-control" placeholder="" disabled="">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea></li>'
+                        + '<li><textarea class="form-control" placeholder="" disabled="" rows="8">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea></li>'
                         + '</ul>';
                 }
             }

@@ -31,12 +31,11 @@ tasksRouter.get(
             const searchConditions: cinerinoapi.factory.task.ISearchConditions<cinerinoapi.factory.taskName> = {
                 limit: req.query.limit,
                 page: req.query.page,
+                sort: { runsAt: cinerinoapi.factory.sortType.Descending },
                 name: (req.query.name !== '')
                     ? req.query.name
                     : undefined,
-                statuses: (req.query.statuses !== undefined)
-                    ? req.query.statuses
-                    : taskStatusChoices,
+                statuses: (req.query.statuses !== undefined) ? req.query.statuses : undefined,
                 runsFrom: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                     ? moment(req.query.runsRange.split(' - ')[0])
                         .toDate()
@@ -49,6 +48,7 @@ tasksRouter.get(
                     : moment()
                         .toDate()
             };
+
             if (req.query.format === 'datatable') {
                 const searchResult = await taskService.search(searchConditions);
                 res.json({
