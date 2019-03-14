@@ -375,7 +375,7 @@ sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, voi
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
             orderDateFrom: moment()
-                .add(-1, 'months')
+                .add(-1, 'week')
                 .toDate(),
             orderDateThrough: new Date(),
             seller: {
