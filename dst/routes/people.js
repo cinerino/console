@@ -83,7 +83,16 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
         }
         else if (req.method === 'POST') {
             try {
-                yield personService.updateProfile(Object.assign({ id: req.params.id }, req.body));
+                // 管理者としてプロフィール更新の場合、メールアドレスを認証済にセット
+                const additionalProperty = (Array.isArray(req.body.additionalProperty))
+                    ? req.body.additionalProperty
+                    : [];
+                additionalProperty.push({
+                    name: 'email_verified',
+                    value: 'true'
+                });
+                const profile = Object.assign({}, req.body, { additionalProperty: additionalProperty });
+                yield personService.updateProfile(Object.assign({ id: req.params.id }, profile));
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
                 return;

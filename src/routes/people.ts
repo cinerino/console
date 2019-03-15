@@ -84,7 +84,24 @@ peopleRouter.all(
                 return;
             } else if (req.method === 'POST') {
                 try {
-                    await personService.updateProfile({ id: req.params.id, ...req.body });
+                    // 管理者としてプロフィール更新の場合、メールアドレスを認証済にセット
+                    const additionalProperty = (Array.isArray(req.body.additionalProperty))
+                        ? <cinerinoapi.factory.person.IAdditionalProperty>req.body.additionalProperty
+                        : [];
+                    additionalProperty.push({
+                        name: 'email_verified',
+                        value: 'true'
+                    });
+                    const profile = {
+                        ...req.body,
+                        additionalProperty: additionalProperty
+                    };
+
+                    await personService.updateProfile({
+                        id: req.params.id,
+                        ...profile
+                    });
+
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);
 
