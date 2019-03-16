@@ -156,6 +156,13 @@ ordersRouter.get(
                             ? (<string>req.query.acceptedOffers.itemOffered.ids).split(',')
                                 .map((v) => v.trim())
                             : undefined,
+                        reservationNumbers: (req.query.acceptedOffers !== undefined
+                            && req.query.acceptedOffers.itemOffered !== undefined
+                            && req.query.acceptedOffers.itemOffered.reservationNumbers !== undefined
+                            && req.query.acceptedOffers.itemOffered.reservationNumbers !== '')
+                            ? (<string>req.query.acceptedOffers.itemOffered.reservationNumbers).split(',')
+                                .map((v) => v.trim())
+                            : undefined,
                         reservationFor: {
                             ids: (req.query.acceptedOffers !== undefined
                                 && req.query.acceptedOffers.itemOffered !== undefined

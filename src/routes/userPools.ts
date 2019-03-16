@@ -87,7 +87,7 @@ userPoolsRouter.get(
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
                 orderDateFrom: moment()
-                    .add(-1, 'week')
+                    .add(-1, 'day')
                     .toDate(),
                 orderDateThrough: new Date(),
                 customer: {
@@ -146,7 +146,7 @@ userPoolsRouter.get(
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
                 orderDateFrom: moment()
-                    .add(-1, 'week')
+                    .add(-1, 'day')
                     .toDate(),
                 orderDateThrough: new Date(),
                 customer: {

@@ -167,6 +167,13 @@
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.ids)) ? searchConditions.acceptedOffers.itemOffered.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
+                                        <label for="acceptedOffers[itemOffered][reservationNumbers]">予約番号</label>
+                                        <input type="text" class="form-control"
+                                            id="acceptedOffers[itemOffered][reservationNumbers]"
+                                            name="acceptedOffers[itemOffered][reservationNumbers]" placeholder="予約番号"
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationNumbers)) ? searchConditions.acceptedOffers.itemOffered.reservationNumbers.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="acceptedOffers[itemOffered][reservationFor][ids]">予約イベントID</label>
                                         <input type="text" class="form-control"
                                             id="acceptedOffers[itemOffered][reservationFor][ids]"

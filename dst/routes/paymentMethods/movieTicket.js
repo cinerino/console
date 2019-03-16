@@ -57,6 +57,92 @@ movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(this, void 
     }
 }));
 /**
+ * ムビチケ認証
+ */
+movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const paymentService = new cinerinoapi.service.Payment({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const sellerService = new cinerinoapi.service.Seller({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchSellersResult = yield sellerService.search({});
+        const sellers = searchSellersResult.data;
+        const searchConditions = {
+            seller: {
+                id: (req.body.seller !== undefined)
+                    ? req.body.seller.id
+                    : undefined
+            },
+            identifier: req.body.identifier,
+            accessCode: req.body.accessCode,
+            serviceOutput: {
+                reservationFor: {
+                    id: (req.body.serviceOutput !== undefined
+                        && req.body.serviceOutput.reservationFor !== undefined)
+                        ? req.body.serviceOutput.reservationFor.id
+                        : undefined
+                }
+            }
+        };
+        if (req.body.format === 'datatable') {
+            const seller = sellers.find((s) => s.id === searchConditions.seller.id);
+            if (seller === undefined) {
+                throw new Error(`Seller ${searchConditions.seller.id} not found`);
+            }
+            const checkAction = yield paymentService.checkMovieTicket({
+                typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                movieTickets: [{
+                        typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                        identifier: searchConditions.identifier,
+                        accessCode: searchConditions.accessCode,
+                        serviceType: '',
+                        serviceOutput: {
+                            reservationFor: {
+                                typeOf: cinerinoapi.factory.chevre.eventType.ScreeningEvent,
+                                id: searchConditions.serviceOutput.reservationFor.id
+                            },
+                            reservedTicket: {
+                                ticketedSeat: {
+                                    typeOf: cinerinoapi.factory.chevre.placeType.Seat,
+                                    seatingType: {
+                                        typeOf: 'Default'
+                                    },
+                                    seatNumber: '',
+                                    seatRow: '',
+                                    seatSection: ''
+                                }
+                            }
+                        }
+                    }],
+                seller: seller
+            });
+            const result = checkAction.result;
+            if (result === undefined) {
+                throw new Error('checkAction.result undefined');
+            }
+            res.json({
+                draw: req.body.draw,
+                recordsTotal: result.movieTickets.length,
+                recordsFiltered: result.movieTickets.length,
+                data: result.movieTickets
+            });
+        }
+        else {
+            res.render('paymentMethods/movieTicket/check', {
+                searchConditions: searchConditions,
+                sellers: sellers
+            });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
  * ムビチケ詳細
  */
 movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter(this, void 0, void 0, function* () {

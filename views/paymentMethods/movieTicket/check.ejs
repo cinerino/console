@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">ムビチケ検索</h1>
+                <h1 class="m-0 text-dark">ムビチケ認証</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">ムビチケ検索</li>
+                    <li class="breadcrumb-item active">ムビチケ認証</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -35,26 +35,46 @@
                     </div> -->
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" method="get">
+                    <form role="form" method="post">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="name">購入管理番号</label>
-                                <input type="text" class="form-control" id="identifiers" name="identifiers"
-                                    placeholder="8559919013,8559919014" value="<%= searchConditions.identifiers %>">
+                                <label>販売者</label>
+                                <select class="form-control" name="seller[id]">
+                                    <% sellers.forEach(function (seller) { %>
+                                    <% 
+                                        var selected = false;
+                                        selected = searchConditions.seller.id === seller.id;
+                                         %>
+                                    <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                        <%= seller.name.ja %>
+                                    </option>
+                                    <% }) %>
+                                </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="name">券種区分</label>
-                                <input type="text" class="form-control" id="serviceTypes" name="serviceTypes"
-                                    placeholder="01,09,BG" value="<%= searchConditions.serviceTypes %>">
+                                <label for="serviceOutput[reservationFor][id]">イベントID</label>
+                                <input type="text" class="form-control" id="serviceOutput[reservationFor][id]"
+                                    name="serviceOutput[reservationFor][id]" placeholder=""
+                                    value="<%= searchConditions.serviceOutput.reservationFor.id %>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="identifier">購入管理番号</label>
+                                <input type="text" class="form-control" id="identifier" name="identifier"
+                                    placeholder="8559919013" value="<%= searchConditions.identifier %>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="accessCode">PINコード</label>
+                                <input type="text" class="form-control" id="accessCode" name="accessCode"
+                                    placeholder="1234" value="<%= searchConditions.accessCode %>">
                             </div>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer clearfix">
-                            <a href="/paymentMethods/movieTicket/check" class="btn btn-primary">
-                                <i class="fa fa-unlock"></i> ムビチケ認証</a>
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                            <button type="submit" class="btn btn-secondary float-right">認証</button>
                         </div>
                     </form>
                 </div>
@@ -103,4 +123,4 @@
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
-<script src="/js/paymentMethods/movieTicket/index.js"></script>
+<script src="/js/paymentMethods/movieTicket/check.js"></script>

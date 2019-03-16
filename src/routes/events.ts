@@ -59,6 +59,7 @@ eventsRouter.get(
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
+                typeOf: cinerinoapi.factory.chevre.eventType.ScreeningEvent,
                 superEvent: {
                     locationBranchCodes: superEventLocationBranchCodes
                 },
@@ -73,7 +74,7 @@ eventsRouter.get(
                         .add(1, 'month')
                         .toDate(),
                 name: req.query.name,
-                ...<any>{
+                ...{
                     seller: req.query.seller
                 }
             };

@@ -242,7 +242,7 @@ peopleRouter.get(
                     page: req.query.page,
                     id: req.params.id,
                     typeOfGood: {
-                        typeOf: <any>'ProgramMembership'
+                        typeOf: 'ProgramMembership'
                     },
                     ownedFrom: moment()
                         .add(-1, 'month')

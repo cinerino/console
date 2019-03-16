@@ -30,6 +30,20 @@ $(function () {
                         + '<li>' + data.serviceType + '</li>'
                         + '</ul>';
                 }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">'
+
+                    if (data.validThrough !== undefined) {
+                        html += '<li>- ' + data.validThrough + '</li>';
+                    }
+
+                    html += '</ul>';
+
+                    return html;
+                }
             }
         ]
     });
