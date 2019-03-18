@@ -215,19 +215,24 @@ ordersRouter.get('',
                     }
                 }
             },
-            paymentMethods: {
-                typeOfs: (req.query.paymentMethods !== undefined
-                    && req.query.paymentMethods.typeOfs !== undefined)
-                    ? req.query.paymentMethods.typeOfs
-                    : undefined,
+            paymentMethods: Object.assign({
+                accountIds: (req.query.paymentMethods !== undefined
+                    && req.query.paymentMethods.accountIds !== undefined
+                    && req.query.paymentMethods.accountIds !== '')
+                    ? req.query.paymentMethods.accountIds.split(',')
+                        .map((v) => v.trim())
+                    : undefined
+            }, { 
                 // : Object.values(cinerinoapi.factory.paymentMethodType),
                 paymentMethodIds: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== '')
                     ? req.query.paymentMethods.paymentMethodIds.split(',')
                         .map((v) => v.trim())
-                    : undefined
-            }
+                    : undefined, typeOfs: (req.query.paymentMethods !== undefined
+                    && req.query.paymentMethods.typeOfs !== undefined)
+                    ? req.query.paymentMethods.typeOfs
+                    : undefined })
         };
         if (req.query.format === 'datatable') {
             const searchOrdersResult = yield orderService.search(searchConditions);

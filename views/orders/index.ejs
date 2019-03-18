@@ -151,6 +151,13 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
+                                        <label for="paymentMethods[accountIds]">決済アカウントID</label>
+                                        <input type="text" class="form-control" id="paymentMethods[accountIds]"
+                                            name="paymentMethods[accountIds]"
+                                            placeholder="クレジットカード番号(マスク)、口座番号、ムビチケ購入管理番号など(カンマ区切り)"
+                                            value="<%= (Array.isArray(searchConditions.paymentMethods.accountIds)) ? searchConditions.paymentMethods.accountIds.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="paymentMethods[paymentMethodIds]">決済ID</label>
                                         <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
                                             name="paymentMethods[paymentMethodIds]"

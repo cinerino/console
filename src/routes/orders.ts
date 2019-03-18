@@ -214,16 +214,24 @@ ordersRouter.get(
                     }
                 },
                 paymentMethods: {
-                    typeOfs: (req.query.paymentMethods !== undefined
-                        && req.query.paymentMethods.typeOfs !== undefined)
-                        ? req.query.paymentMethods.typeOfs
-                        : undefined,
+                    ...{
+                        accountIds: (req.query.paymentMethods !== undefined
+                            && req.query.paymentMethods.accountIds !== undefined
+                            && req.query.paymentMethods.accountIds !== '')
+                            ? (<string>req.query.paymentMethods.accountIds).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    },
                     // : Object.values(cinerinoapi.factory.paymentMethodType),
                     paymentMethodIds: (req.query.paymentMethods !== undefined
                         && req.query.paymentMethods.paymentMethodIds !== undefined
                         && req.query.paymentMethods.paymentMethodIds !== '')
                         ? (<string>req.query.paymentMethods.paymentMethodIds).split(',')
                             .map((v) => v.trim())
+                        : undefined,
+                    typeOfs: (req.query.paymentMethods !== undefined
+                        && req.query.paymentMethods.typeOfs !== undefined)
+                        ? req.query.paymentMethods.typeOfs
                         : undefined
                 }
             };
