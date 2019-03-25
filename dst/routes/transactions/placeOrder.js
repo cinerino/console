@@ -64,28 +64,26 @@ placeOrderTransactionsRouter.get('',
                 ids: (req.query.agent !== undefined && req.query.agent.ids !== undefined && req.query.agent.ids !== '')
                     ? req.query.agent.ids.split(',')
                         .map((v) => v.trim())
-                    : undefined
+                    : undefined,
+                givenName: (req.query.agent !== undefined
+                    && req.query.agent.givenName !== '')
+                    ? req.query.agent.givenName : undefined,
+                familyName: (req.query.agent !== undefined
+                    && req.query.agent.familyName !== '')
+                    ? req.query.agent.familyName : undefined,
+                telephone: (req.query.agent !== undefined
+                    && req.query.agent.telephone !== '')
+                    ? req.query.agent.telephone : undefined,
+                email: (req.query.agent !== undefined
+                    && req.query.agent.email !== '')
+                    ? req.query.agent.email : undefined
             },
             seller: {
                 ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                     ? req.query.seller.ids
                     : undefined
             },
-            object: {
-                customerContact: (req.query.object !== undefined
-                    && req.query.object.customerContact !== undefined)
-                    ? {
-                        givenName: (req.query.object.customerContact.givenName !== '')
-                            ? req.query.object.customerContact.givenName : undefined,
-                        familyName: (req.query.object.customerContact.familyName !== '')
-                            ? req.query.object.customerContact.familyName : undefined,
-                        telephone: (req.query.object.customerContact.telephone !== '')
-                            ? req.query.object.customerContact.telephone : undefined,
-                        email: (req.query.object.customerContact.email !== '')
-                            ? req.query.object.customerContact.email : undefined
-                    }
-                    : {}
-            },
+            object: {},
             result: {
                 order: {
                     orderNumbers: (req.query.result !== undefined
@@ -154,7 +152,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
         try {
             actionsOnTransaction = yield placeOrderService.searchActionsByTransactionId({
                 id: transaction.id,
-                sort: { endDate: cinerinoapi.factory.sortType.Ascending }
+                sort: { startDate: cinerinoapi.factory.sortType.Ascending }
             });
         }
         catch (error) {

@@ -67,11 +67,9 @@
                             </address>
                         </div>
                         <!-- /.col -->
-                        <%
-                        let customerCotact = (transaction.object.customerContact !== undefined) ? transaction.object.customerContact: {};
-                        %>
+
                         <div class="col-sm-4 invoice-col">
-                            購入者
+                            Customer
                             <address>
                                 <strong>
                                     <% if (transaction.agent.memberOf !== undefined) { %>
@@ -85,13 +83,13 @@
                                 <br> Type:
                                 <%= transaction.agent.typeOf %>
                                 <br> Family Name:
-                                <%= customerCotact.familyName %>
+                                <%= transaction.agent.familyName %>
                                 <br> Given Name:
-                                <%= customerCotact.givenName %>
+                                <%= transaction.agent.givenName %>
                                 <br> Phone:
-                                <%= customerCotact.telephone %>
+                                <%= transaction.agent.telephone %>
                                 <br> Email:
-                                <%= customerCotact.email %>
+                                <%= transaction.agent.email %>
                             </address>
                         </div>
                         <!-- /.col -->

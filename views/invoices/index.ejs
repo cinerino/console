@@ -43,25 +43,25 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="customer[ids]">購入者ID</label>
+                                        <label for="customer[ids]">Customer ID</label>
                                         <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
-                                            placeholder="購入者ID"
+                                            placeholder="Customer ID"
                                             value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">購入者メールアドレス</label>
+                                        <label for="customer[ids]">Customer Email</label>
                                         <input type="text" class="form-control" id="customer[email]"
                                             name="customer[email]" placeholder="cinerino@example.com(正規表現使用可)"
                                             value="<%= searchConditions.customer.email %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">購入者TEL</label>
+                                        <label for="customer[ids]">Customer Telephone</label>
                                         <input type="text" class="form-control" id="customer[telephone]"
                                             name="customer[telephone]" placeholder="0312345678(正規表現使用可)"
                                             value="<%= searchConditions.customer.telephone %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[identifiers]">購入者識別子</label>
+                                        <label for="customer[identifiers]">Customer Identifier</label>
                                         <input type="text" class="form-control" id="customer[identifiers]"
                                             name="customer[identifiers]" placeholder="username:cinerino"
                                             value="<%= (Array.isArray(searchConditions.customer.identifiers)) ? `${searchConditions.customer.identifiers[0].name}:${searchConditions.customer.identifiers[0].value}` : '' %>">

@@ -44,11 +44,9 @@ $(function () {
                         html += '<li>' + data.agent.id + '</li>';
                     }
 
-                    if (data.object.customerContact !== undefined) {
-                        html += '<li>' + data.object.customerContact.familyName + ' ' + data.object.customerContact.givenName + '</li>'
-                            + '<li>' + data.object.customerContact.email + '</li>'
-                            + '<li>' + data.object.customerContact.telephone + '</li>';
-                    }
+                    html += '<li>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</li>'
+                        + '<li>' + String(data.agent.email) + '</li>'
+                        + '<li>' + String(data.agent.telephone) + '</li>';
 
                     var userPoolId = '';
                     var iss = '';

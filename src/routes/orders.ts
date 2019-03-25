@@ -286,7 +286,7 @@ ordersRouter.get(
             try {
                 actionsOnOrder = await orderService.searchActionsByOrderNumber({
                     orderNumber: order.orderNumber,
-                    sort: { endDate: cinerinoapi.factory.sortType.Ascending }
+                    sort: { startDate: cinerinoapi.factory.sortType.Ascending }
                 });
 
                 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length

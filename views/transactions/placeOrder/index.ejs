@@ -40,30 +40,29 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="agent[ids]">購入者</label>
+                                        <label for="agent[ids]">Customer ID</label>
                                         <input type="text" class="form-control" id="agent[ids]" name="agent[ids]"
-                                            placeholder="購入者ID"
+                                            placeholder="Customer ID"
                                             value="<%= (Array.isArray(searchConditions.agent.ids)) ? searchConditions.agent.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="object[customerContact][familyName]"
-                                            name="object[customerContact][familyName]" placeholder="姓"
-                                            value="<%= searchConditions.object.customerContact.familyName %>">
+                                        <input type="text" class="form-control" id="agent[familyName]"
+                                            name="agent[familyName]" placeholder="Family Name"
+                                            value="<%= searchConditions.agent.familyName %>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="object[customerContact][givenName]"
-                                            name="object[customerContact][givenName]" placeholder="名"
-                                            value="<%= searchConditions.object.customerContact.givenName %>">
+                                        <input type="text" class="form-control" id="agent[givenName]"
+                                            name="agent[givenName]" placeholder="Given Name"
+                                            value="<%= searchConditions.agent.givenName %>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="object[customerContact][email]"
-                                            name="object[customerContact][email]" placeholder="test@example.com"
-                                            value="<%= searchConditions.object.customerContact.email %>">
+                                        <input type="text" class="form-control" id="agent[email]" name="agent[email]"
+                                            placeholder="test@example.com" value="<%= searchConditions.agent.email %>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="object[customerContact][telephone]"
-                                            name="object[customerContact][telephone]" placeholder="+819012345678"
-                                            value="<%= searchConditions.object.customerContact.telephone %>">
+                                        <input type="text" class="form-control" id="agent[telephone]"
+                                            name="agent[telephone]" placeholder="+819012345678"
+                                            value="<%= searchConditions.agent.telephone %>">
                                     </div>
                                     <div class="form-group">
                                         <label>販売者</label>
