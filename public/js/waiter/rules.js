@@ -19,7 +19,8 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li>' + data.scope + '</li>'
+                        + '<li><span class="badge badge-success">' + data.scope + '</span></li>'
+                        + '<li>' + data.name + '</li>'
                         + '</ul>';
                 }
             },
@@ -27,15 +28,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li>' + data.aggregationUnitInSeconds + '</li>'
-                        + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.threshold + '</li>'
+                        + '<li>' + data.threshold + ' / ' + data.aggregationUnitInSeconds + ' seconds</li>'
                         + '</ul>';
                 }
             },
@@ -43,10 +36,31 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
-                    data.unavailableHoursSpecifications.forEach(function (specification) {
-                        html += '<li>' + specification.startDate + ' - ' + specification.endDate + '</li>'
-                    });
+
+                    if (Array.isArray(data.availableHoursSpecifications)) {
+                        data.availableHoursSpecifications.forEach(function (specification) {
+                            html += '<li>' + specification.startDate + ' - ' + specification.endDate + '</li>'
+                        });
+                    }
+
                     html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (Array.isArray(data.unavailableHoursSpecifications)) {
+                        data.unavailableHoursSpecifications.forEach(function (specification) {
+                            html += '<li>' + specification.startDate + ' - ' + specification.endDate + '</li>'
+                        });
+                    }
+
+                    html += '</ul>';
+
                     return html;
                 }
             }
