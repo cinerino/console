@@ -141,14 +141,22 @@
                                         </td>
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
+                                            <% if (acceptedOffer.itemOffered.reservedTicket !== undefined) { %>
+                                            <% if (acceptedOffer.itemOffered.reservedTicket.ticketedSeat !== undefined) { %>
+                                            Seat Number:
+                                            <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatNumber %>
+                                            <% } else { %>
+                                            Non-reserved Seat
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                            <br>
+                                            <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
                                             <%= (acceptedOffer.itemOffered.reservedTicket !== undefined) ? acceptedOffer.itemOffered.reservedTicket.ticketToken : '' %>
                                             <% } %>
                                         </td>
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
-                                            <% if (acceptedOffer.itemOffered.reservedTicket!==undefined) { %>
-                                            <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatNumber %>
-                                            <% } %>
                                             <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
                                             <%= acceptedOffer.price %>
                                             <%= acceptedOffer.priceCurrency %>
@@ -157,8 +165,17 @@
                                             <% } %>
                                         </td>
                                         <td>
+                                            <% if (Number.isInteger(acceptedOffer.price)) { %>
                                             <%= acceptedOffer.price %>
-                                            <%= acceptedOffer.priceCurrency %>
+                                            <% } else if (acceptedOffer.priceSpecification !== undefined) { %>
+                                            <% if (Array.isArray(acceptedOffer.priceSpecification.priceComponent)) { %>
+                                            <% const unitPriceSpec = acceptedOffer.priceSpecification.priceComponent.find((c) => c.typeOf === 'UnitPriceSpecification') %>
+                                            <% if (unitPriceSpec !== undefined) { %>
+                                            <%= unitPriceSpec.price %> / <%= unitPriceSpec.referenceQuantity.value %>
+                                            <%= unitPriceSpec.priceCurrency %>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
                                         </td>
                                     </tr>
 

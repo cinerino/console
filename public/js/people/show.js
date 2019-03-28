@@ -64,7 +64,7 @@ function searchOrders(page, cb) {
                 + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
                 + '<td>'
                 + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {
-                    if (o.itemOffered.reservedTicket !== undefined) {
+                    if (o.itemOffered.reservedTicket !== undefined && o.itemOffered.reservedTicket.ticketedSeat !== undefined) {
                         return o.itemOffered.reservedTicket.ticketedSeat.seatNumber
                     }
                     return o.itemOffered.typeOf;
