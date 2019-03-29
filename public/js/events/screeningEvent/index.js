@@ -10,6 +10,17 @@ $(function () {
                 d.page = (d.start / d.length) + 1;
                 // d.name = d.search.value;
                 d.format = 'datatable';
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error(jqXHR, textStatus, errorThrown);
+                var message = '予期せぬ原因で検索に失敗しました';
+                if (jqXHR.responseJSON !== undefined && jqXHR.responseJSON.error !== undefined) {
+                    var errors = jqXHR.responseJSON.error.errors;
+                    if (Array.isArray(errors)) {
+                        message = errors[0].name + '\n\n' + errors[0].message;
+                    }
+                }
+                alert(message);
             }
         },
         searching: false,

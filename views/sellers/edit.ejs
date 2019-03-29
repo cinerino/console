@@ -85,8 +85,8 @@
                     <div class="card-body">
                         <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
                         <p class="text-muted">
-                            <%= seller.location.branchCode %>
-                            <%= seller.location.name.ja %>
+                            <%= (seller.location !== undefined && seller.location !== null) ? seller.location.branchCode : '' %>
+                            <%= (seller.location !== undefined && seller.location !== null) ? seller.location.name.ja : '' %>
                         </p>
                         <hr>
 
