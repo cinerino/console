@@ -295,7 +295,7 @@ function createAttributesFromBody(params) {
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.EMoney
             });
         }
-        const hasPOS = [];
+        let hasPOS = [];
         if (Array.isArray(params.body.hasPOS)) {
             params.body.hasPOS.forEach((pos) => {
                 if (pos.id !== '') {
@@ -307,6 +307,7 @@ function createAttributesFromBody(params) {
                 }
             });
         }
+        hasPOS = hasPOS.sort((a, b) => (String(a.id) < String(b.id)) ? -1 : 1);
         const areaServed = [];
         if (Array.isArray(params.body.areaServed)) {
             params.body.areaServed.forEach((area) => {

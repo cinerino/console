@@ -311,7 +311,7 @@ async function createAttributesFromBody(params: {
         });
     }
 
-    const hasPOS: cinerinoapi.factory.seller.IPOS[] = [];
+    let hasPOS: cinerinoapi.factory.seller.IPOS[] = [];
     if (Array.isArray(params.body.hasPOS)) {
         params.body.hasPOS.forEach((pos: any) => {
             if (pos.id !== '') {
@@ -323,6 +323,7 @@ async function createAttributesFromBody(params: {
             }
         });
     }
+    hasPOS = hasPOS.sort((a, b) => (String(a.id) < String(b.id)) ? -1 : 1);
 
     const areaServed: cinerinoapi.factory.seller.IAreaServed[] = [];
     if (Array.isArray(params.body.areaServed)) {
