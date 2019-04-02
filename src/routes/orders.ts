@@ -246,7 +246,7 @@ ordersRouter.get(
             } else {
                 res.render('orders/index', {
                     moment: moment,
-                    movieTheaters: searchSellersResult.data,
+                    sellers: searchSellersResult.data,
                     userPoolClients: userPoolClients,
                     adminUserPoolClients: adminUserPoolClients,
                     searchConditions: searchConditions,

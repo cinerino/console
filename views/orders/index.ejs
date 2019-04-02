@@ -43,45 +43,46 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="customer[membershipNumbers]">Customer Membership Number</label>
+                                        <label for="customer[membershipNumbers]">顧客会員番号</label>
                                         <input type="text" class="form-control" id="customer[membershipNumbers]"
                                             name="customer[membershipNumbers]" placeholder="username1234"
                                             value="<%= (Array.isArray(searchConditions.customer.membershipNumbers)) ? searchConditions.customer.membershipNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">Customer ID</label>
+                                        <label for="customer[ids]">顧客ID</label>
                                         <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
                                             placeholder="Customer ID"
                                             value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">Customer Family Name</label>
+                                        <label for="customer[ids]">Family Name</label>
                                         <input type="text" class="form-control" id="customer[familyName]"
                                             name="customer[familyName]" placeholder="もーしょん(正規表現使用可)"
                                             value="<%= searchConditions.customer.familyName %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">Customer Given Name</label>
+                                        <label for="customer[ids]">Given Name</label>
                                         <input type="text" class="form-control" id="customer[givenName]"
                                             name="customer[givenName]" placeholder="たろう(正規表現使用可)"
                                             value="<%= searchConditions.customer.givenName %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">Customer Email</label>
+                                        <label for="customer[ids]">Email</label>
                                         <input type="text" class="form-control" id="customer[email]"
                                             name="customer[email]" placeholder="cinerino@example.com(正規表現使用可)"
                                             value="<%= searchConditions.customer.email %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">Customer Telephone</label>
+                                        <label for="customer[ids]">Telephone</label>
                                         <input type="text" class="form-control" id="customer[telephone]"
                                             name="customer[telephone]" placeholder="0312345678(正規表現使用可)"
                                             value="<%= searchConditions.customer.telephone %>">
                                     </div>
 
                                     <div class="form-group">
-                                        <label>購入クライアント</label>
-                                        <select multiple class="form-control" name="customer[userPoolClients][]">
+                                        <label>クライアント</label>
+                                        <select multiple class="form-control" name="customer[userPoolClients][]"
+                                            size="6">
                                             <% userPoolClients.forEach(function (userPoolClient) { %>
                                             <% 
                                             var selected = false;
@@ -112,7 +113,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[identifiers]">Custome Identifier</label>
+                                        <label for="customer[identifiers]">顧客識別子</label>
                                         <input type="text" class="form-control" id="customer[identifiers]"
                                             name="customer[identifiers]" placeholder="username:cinerino"
                                             value="<%= (Array.isArray(searchConditions.customer.identifiers)) ? `${searchConditions.customer.identifiers[0].name}:${searchConditions.customer.identifiers[0].value}` : '' %>">
@@ -122,22 +123,22 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>販売者</label>
-                                        <select multiple class="form-control" name="seller[ids][]">
-                                            <% movieTheaters.forEach(function (movieTheater) { %>
+                                        <select multiple class="form-control" name="seller[ids][]" size="10">
+                                            <% sellers.forEach(function (seller) { %>
                                             <% 
                                             var selected = false;
-                                            selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf( movieTheater.id) >= 0;
-                                             %>
-                                            <option value="<%= movieTheater.id %>" <% if (selected) { %> selected
-                                                <% } %>>
-                                                <%= movieTheater.name.ja %>
+                                            selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf(seller.id) >= 0;
+                                            %>
+                                            <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                                <%= seller.name.ja %>
                                             </option>
                                             <% }) %>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>決済方法</label>
-                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]">
+                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]"
+                                            size="10">
                                             <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
                                             <%
                                             var selected = false;
@@ -154,15 +155,14 @@
                                     <div class="form-group">
                                         <label for="paymentMethods[accountIds]">決済アカウントID</label>
                                         <input type="text" class="form-control" id="paymentMethods[accountIds]"
-                                            name="paymentMethods[accountIds]"
-                                            placeholder="クレジットカード番号(マスク)、口座番号、ムビチケ購入管理番号など(カンマ区切り)"
+                                            name="paymentMethods[accountIds]" placeholder="************1111、口座番号、購入管理番号"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.accountIds)) ? searchConditions.paymentMethods.accountIds.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="paymentMethods[paymentMethodIds]">決済ID</label>
                                         <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
                                             name="paymentMethods[paymentMethodIds]"
-                                            placeholder="GMO取引ID、口座番号、ムビチケ購入管理番号など(カンマ区切り)"
+                                            placeholder="GMOオーダーID、購入管理番号など(カンマ区切り)"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
                                     </div>
                                 </div>
@@ -264,7 +264,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>注文ステータス</label>
-                                        <select multiple class="form-control" name="orderStatuses[]">
+                                        <select multiple class="form-control" name="orderStatuses[]" size="10">
                                             <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
                                             <% 
                                             var selected = false;
@@ -305,6 +305,7 @@
                                 <tr>
                                     <th>Order Number
                                         <br><span class="text-muted">Confirmation Number</span>
+                                        <br>Order Date
                                         <br>Order Status
                                     </th>
                                     <th>Customer</th>

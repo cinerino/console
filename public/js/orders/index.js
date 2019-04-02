@@ -47,7 +47,12 @@ $(function () {
 
                     var html = '<ul class="list-unstyled">';
 
-                    html += '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>';
+                    html += '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>'
+                        + '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
+                        + '<li>'
+                        + '<a target="_blank" href="/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
+                        + ' <a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
+                        + '</li>';
 
                     if (data.customer.memberOf !== undefined) {
                         html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.customer.id + '">' + data.customer.id + '</a></li>';
@@ -55,20 +60,16 @@ $(function () {
                         html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + data.customer.id + '">' + data.customer.id + '</a></li>';
                     }
 
-                    html += '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
-                        + '<li>' + data.customer.name + '</li>'
+                    html += '<li>' + data.customer.name + '</li>'
                         + '<li>' + data.customer.email + '</li>'
-                        + '<li>' + data.customer.telephone + '</li>'
-                        + '<li>Issuer: <a target="_blank" href="/userPools/' + userPoolId + '">' + tokenIssuer + '</a></li>'
-                        + '<li>Client: <a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
+                        + '<li>' + data.customer.telephone + '</li>';
 
                     if (Array.isArray(data.customer.identifier)) {
-                        data.customer.identifier.slice(0, 2).forEach(function (i) {
-                            html += '<li>' + '<span class="badge badge-secondary">' + i.name + '</span> ' + i.value.toString() + '</li>';
-                        });
+                        // data.customer.identifier.slice(0, 2).forEach(function (i) {
+                        //     html += '<li>' + '<span class="badge badge-secondary">' + i.name + '</span> ' + i.value.toString() + '</li>';
+                        // });
 
-                        html += '...'
-                            + '<li><a href="javascript:void(0)" class="btn btn-default btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
+                        html += '<li><a href="javascript:void(0)" class="btn btn-default btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
                     }
 
                     html += '</ul>';
@@ -83,7 +84,7 @@ $(function () {
                         + '<li><span class="badge badge-info">' + data.seller.typeOf + '</span></li>'
                         + '<li><a target="_blank" href="/sellers/' + data.seller.id + '">' + data.seller.id + '</a></li>'
                         + '<li>' + data.seller.name + '</li>'
-                        + '<li>' + data.seller.url + '</li>'
+                        + '<li><a target="_blank" href="' + data.seller.url + '">' + data.seller.url + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
                         + '</ul>';
                 }
@@ -91,8 +92,14 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var numItems = '';
+                    if (Array.isArray(data.acceptedOffers)) {
+                        numItems = data.acceptedOffers.length;
+                    }
+
                     return '<ul class="list-unstyled">'
                         + '<li>' + data.price + ' ' + data.priceCurrency + '</li>'
+                        + '<li>' + numItems + ' items</li>'
                         + '</ul>';
                 }
             },
@@ -153,7 +160,7 @@ $(function () {
 
         var modal = $('#modal-customer-identifier');
         var title = 'Order `' + order.orderNumber + '` Customer Identifier';
-        var body = '<textarea ="40" class="form-control" placeholder="" disabled="">'
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.customer.identifier, null, '\t');
         + '</textarea>'
         modal.find('.modal-title').html(title);
