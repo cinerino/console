@@ -866,6 +866,7 @@ function initializeVisitorsChart() {
     waiterDatasets = waiterRules.map(function (rule) {
         return {
             scope: rule.scope,
+            name: rule.name,
             data: [],
             numberOfIssuedPassports: 0,
         };
@@ -880,7 +881,7 @@ function initializeVisitorsChart() {
             return rule.scope
         }),
         labels: waiterRules.map(function (rule) {
-            return rule.scope
+            return rule.name
         }),
         lineColors: waiterRules.map(function (_, index) {
             return colorChoices[index % colorChoices.length];
