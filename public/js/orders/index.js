@@ -69,7 +69,7 @@ $(function () {
                         //     html += '<li>' + '<span class="badge badge-secondary">' + i.name + '</span> ' + i.value.toString() + '</li>';
                         // });
 
-                        html += '<li><a href="javascript:void(0)" class="btn btn-default btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
+                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
                     }
 
                     html += '</ul>';
@@ -108,7 +108,7 @@ $(function () {
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
                         + data.paymentMethods.map(function (payment) {
-                            var listHtml = '<li><span class="badge ' + payment.typeOf + '">' + payment.typeOf + '</span></li>'
+                            var listHtml = '<li><span class="badge badge-secondary ' + payment.typeOf + '">' + payment.typeOf + '</span></li>'
                                 + '<li><span>' + payment.accountId + '</span></li>'
                                 + '<li><span>' + payment.paymentMethodId + '</span></li>';
 

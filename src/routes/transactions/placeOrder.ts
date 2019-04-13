@@ -106,13 +106,22 @@ placeOrderTransactionsRouter.get(
                     data: searchScreeningEventsResult.data
                 });
             } else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
-                const stream = <NodeJS.ReadableStream>await placeOrderService.downloadReport({
+                const stream = <NodeJS.ReadableStream>await placeOrderService.stream({
                     ...searchConditions,
                     format: cinerinoapi.factory.encodingFormat.Text.csv
                 });
                 const filename = 'TransactionReport';
                 res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
-                res.setHeader('Content-Type', 'text/csv; charset=UTF-8');
+                res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
+                stream.pipe(res);
+            } else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
+                const stream = <NodeJS.ReadableStream>await placeOrderService.stream({
+                    ...searchConditions,
+                    format: cinerinoapi.factory.encodingFormat.Application.json
+                });
+                const filename = 'TransactionReport';
+                res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.json`)}`);
+                res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);
                 stream.pipe(res);
             } else {
                 res.render('transactions/placeOrder/index', {

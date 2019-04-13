@@ -112,7 +112,7 @@ movieTicketPaymentMethodRouter.all(
                                 ticketedSeat: {
                                     typeOf: cinerinoapi.factory.chevre.placeType.Seat,
                                     seatingType: {
-                                        typeOf: 'Default'
+                                        typeOf: <any>'Default'
                                     },
                                     seatNumber: '',
                                     seatRow: '',
