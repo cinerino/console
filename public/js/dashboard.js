@@ -200,7 +200,7 @@ $(function () {
         function () {
             updateCharts();
         },
-        60000
+        30000
     );
 
     $.getJSON(
@@ -220,6 +220,12 @@ function updateCharts() {
     countNewUser(function () {
     });
     countNewTransaction(function () {
+    });
+    updateDbStats(function () {
+    });
+    updateHealth(function () {
+    });
+    updateQueueCount(function () {
     });
     updateSalesAmountChart();
     updateNumTransactions2salesAmountChart();
@@ -833,7 +839,7 @@ function aggregateExitRate(cb) {
         '/dashboard/aggregateExitRate',
         {}
     ).done(function (data) {
-        $('#exitRate').html(data.rate.toString() + '<sup style="font-size: 20px">%</sup>');
+        $('#exitRate').html(data.rate.toString());
         cb();
     }).fail(function () {
         console.error('離脱率を取得できませんでした')
@@ -955,4 +961,57 @@ function startMonitoringWaiter() {
         },
         2000
     );
+}
+
+function updateHealth(cb) {
+    $.getJSON(
+        '/dashboard/health',
+        {}
+    ).done(function (data) {
+        console.log('health:', data);
+        $('.health').removeClass('text-danger').text(data.status);
+        $('.version').text('v' + data.version);
+
+        cb();
+    }).fail(function (jqXHR, textStatus, error) {
+        console.error('ヘルス情報を検索できませんでした', jqXHR);
+        $('.health').addClass('text-danger').text(textStatus);
+    });
+}
+
+function updateDbStats(cb) {
+    var GB = 1000000000;
+    $.getJSON(
+        '/dashboard/dbStats',
+        {}
+    ).done(function (data) {
+        console.log('stats:', data);
+        var usedSpaceStr = Math.floor(Number(data.fsUsedSize) / GB)
+            + '/'
+            + Math.floor(Number(data.fsTotalSize) / GB);
+        var dbText = data.db + ' has ' + data.objects + ' objects';
+
+        $('.usedSpace').removeClass('text-danger').text(usedSpaceStr);
+        $('.dbText').text(dbText);
+
+        cb();
+    }).fail(function (jqXHR, textStatus, error) {
+        console.error('DB統計を検索できませんでした', jqXHR);
+        $('.usedSpace').addClass('text-danger').text(textStatus);
+    });
+}
+
+function updateQueueCount(cb) {
+    $.getJSON(
+        '/dashboard/queueCount',
+        {}
+    ).done(function (data) {
+        console.log('QueueCount:', data);
+        $('.queueCount').removeClass('text-danger').text(data.totalCount);
+
+        cb();
+    }).fail(function (jqXHR, textStatus, error) {
+        console.error('キューを検索できませんでした', jqXHR);
+        $('.queueCount').addClass('text-danger').text(textStatus);
+    });
 }

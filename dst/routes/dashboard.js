@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 // import * as createDebug from 'debug';
 const express = require("express");
+const http_status_1 = require("http-status");
 const moment = require("moment-timezone");
 const cinerinoapi = require("../cinerinoapi");
 // const debug = createDebug('cinerino-console:routes');
@@ -126,6 +127,82 @@ dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 
     }
     catch (error) {
         next(error);
+    }
+}));
+dashboardRouter.get('/dbStats', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const eventService = new cinerinoapi.service.Event({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const stats = yield eventService.fetch({
+            uri: '/stats/dbStats',
+            method: 'GET',
+            // tslint:disable-next-line:no-magic-numbers
+            expectedStatusCodes: [200]
+        })
+            .then((response) => __awaiter(this, void 0, void 0, function* () {
+            return response.json();
+        }));
+        res.json(stats);
+    }
+    catch (error) {
+        res.status(http_status_1.INTERNAL_SERVER_ERROR)
+            .json({
+            error: { message: error.message }
+        });
+    }
+}));
+dashboardRouter.get('/health', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const eventService = new cinerinoapi.service.Event({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const stats = yield eventService.fetch({
+            uri: '/health',
+            method: 'GET',
+            // tslint:disable-next-line:no-magic-numbers
+            expectedStatusCodes: [200]
+        })
+            .then((response) => __awaiter(this, void 0, void 0, function* () {
+            const version = response.headers.get('X-API-Version');
+            return {
+                version: version,
+                status: response.status
+            };
+        }));
+        res.json(stats);
+    }
+    catch (error) {
+        res.status(http_status_1.INTERNAL_SERVER_ERROR)
+            .json({
+            error: { message: error.message }
+        });
+    }
+}));
+dashboardRouter.get('/queueCount', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const taskService = new cinerinoapi.service.Task({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const result = yield taskService.search({
+            limit: 1,
+            runsFrom: moment()
+                .add(-1, 'day')
+                .toDate(),
+            runsThrough: moment()
+                .toDate(),
+            statuses: [cinerinoapi.factory.taskStatus.Ready]
+        });
+        res.json(result);
+    }
+    catch (error) {
+        res.status(http_status_1.INTERNAL_SERVER_ERROR)
+            .json({
+            error: { message: error.message }
+        });
     }
 }));
 exports.default = dashboardRouter;

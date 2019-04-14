@@ -50,21 +50,14 @@ $(function () {
                         // + '<span class="badge badge-warning float-right">' + data.maximumAttendeeCapacity + ' seats</span>'
                         + '</a>'
                         + '<span class="product-description">' + alternativeHeadline + '</span>'
+                        + data.startDate + ' - ' + data.endDate + '<br>'
+                        + '<i class="fa fa-user"></i> ' + data.maximumAttendeeCapacity + ' maximum'
+                        + '<br>'
+                        + '<i class="fa fa-user"></i> ' + data.remainingAttendeeCapacity + ' remaining'
+                        + '<br>'
                         + '</div>'
                         + '</li>'
                         + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<p>' + data.startDate + ' - ' + data.endDate + '</p>'
-                        + '<p>'
-                        + '<i class="fa fa-user"></i> ' + data.maximumAttendeeCapacity + ' maximum'
-                        + '</p>'
-                        + '<p>'
-                        + '<i class="fa fa-user"></i> ' + data.remainingAttendeeCapacity + ' remaining'
-                        + '</p>';
                 }
             },
             {
@@ -82,6 +75,21 @@ $(function () {
                     return '<ul class="list-unstyled">'
                         + '<li>' + data.workPerformed.name + '</li>'
                         + '<li>' + moment.duration(data.workPerformed.duration).asMinutes() + ' minutes</li>'
+                        + '</ul>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if (data.offers === undefined) {
+                        data.offers = { name: {} };
+                    }
+
+                    return '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-secondary">ID</span> ' + String(data.offers.id) + '</li>'
+                        + '<li><span class="badge badge-secondary">NAME</span> ' + String(data.offers.name.ja) + '</li>'
+                        + '<li><span class="badge badge-secondary">AVBL</span> ' + String(data.offers.availability) + '</li>'
+                        + '<li><span class="badge badge-secondary">VALID</span> ' + String(data.offers.validFrom) + ' - ' + String(data.offers.validThrough) + '</li>'
                         + '</ul>';
                 }
             }

@@ -3,6 +3,7 @@
  */
 // import * as createDebug from 'debug';
 import * as express from 'express';
+import { INTERNAL_SERVER_ERROR } from 'http-status';
 import * as moment from 'moment-timezone';
 
 import * as cinerinoapi from '../cinerinoapi';
@@ -132,6 +133,95 @@ dashboardRouter.get(
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);
+        }
+    }
+);
+
+dashboardRouter.get(
+    '/dbStats',
+    async (req, res) => {
+        try {
+            const eventService = new cinerinoapi.service.Event({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const stats = await eventService.fetch({
+                uri: '/stats/dbStats',
+                method: 'GET',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [200]
+            })
+                .then(async (response) => {
+                    return response.json();
+                });
+
+            res.json(stats);
+        } catch (error) {
+            res.status(INTERNAL_SERVER_ERROR)
+                .json({
+                    error: { message: error.message }
+                });
+        }
+    }
+);
+
+dashboardRouter.get(
+    '/health',
+    async (req, res) => {
+        try {
+            const eventService = new cinerinoapi.service.Event({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const stats = await eventService.fetch({
+                uri: '/health',
+                method: 'GET',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [200]
+            })
+                .then(async (response) => {
+                    const version = response.headers.get('X-API-Version');
+
+                    return {
+                        version: version,
+                        status: response.status
+                    };
+                });
+
+            res.json(stats);
+        } catch (error) {
+            res.status(INTERNAL_SERVER_ERROR)
+                .json({
+                    error: { message: error.message }
+                });
+        }
+    }
+);
+
+dashboardRouter.get(
+    '/queueCount',
+    async (req, res) => {
+        try {
+            const taskService = new cinerinoapi.service.Task({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const result = await taskService.search({
+                limit: 1,
+                runsFrom: moment()
+                    .add(-1, 'day')
+                    .toDate(),
+                runsThrough: moment()
+                    .toDate(),
+                statuses: [cinerinoapi.factory.taskStatus.Ready]
+            });
+
+            res.json(result);
+        } catch (error) {
+            res.status(INTERNAL_SERVER_ERROR)
+                .json({
+                    error: { message: error.message }
+                });
         }
     }
 );

@@ -39,68 +39,125 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3 id="newOrderCount"></h3>
-                        <p>本日の新規注文</p>
+            <div class="col-md-6">
+
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3 id="newOrderCount"></h3>
+                                <p>本日の新規注文</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="/orders" class="small-box-footer">More info <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
+                    <!-- ./col -->
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3><span id="exitRate">0</span><sup style="font-size: 20px">%</sup></h3>
+                                <p>本日の離脱率</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="/transactions/placeOrder" class="small-box-footer">More info <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <a href="/orders" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    <!-- ./col -->
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3 id="newUserCount">0</h3>
+                                <p>本日のユーザー登録</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3 id="newTransactionCount">0</h3>
+                                <p>本日の注文取引数</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a href="/transactions/placeOrder" class="small-box-footer">More info <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
                 </div>
+                <!-- /.row -->
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3 id="exitRate">0</h3>
-                        <p>本日の離脱率</p>
+
+            <div class="col-md-6">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-secondary">
+                            <div class="inner">
+                                <h3><span class="usedSpace"></span> <sup style="font-size: 20px">GB</sup></h3>
+                                <p>Database Used Space</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-database"></i>
+                            </div>
+                            <span class="small-box-footer dbText"></span>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
+                    <!-- ./col -->
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3><span class="health"></span></h3>
+                                <p>API Health</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-heartbeat"></i>
+                            </div>
+                            <span class="small-box-footer version"></span>
+                        </div>
                     </div>
-                    <a href="/transactions/placeOrder" class="small-box-footer">More info <i
-                            class="fa fa-arrow-circle-right"></i></a>
+                    <!-- ./col -->
+                    <div class="col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-secondary">
+                            <div class="inner">
+                                <h3><span class="queueCount"></span></h3>
+                                <p>Queues</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-tasks"></i>
+                            </div>
+                            <a href="/tasks" class="small-box-footer">More info <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
                 </div>
+                <!-- /.row -->
+
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3 id="newUserCount">0</h3>
-                        <p>本日のユーザー登録</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3 id="newTransactionCount">0</h3>
-                        <p>本日の注文取引数</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="/transactions/placeOrder" class="small-box-footer">More info <i
-                            class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
         </div>
-        <!-- /.row -->
 
         <!-- Main row -->
         <div class="row">
