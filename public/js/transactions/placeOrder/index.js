@@ -139,10 +139,12 @@ $(function () {
         window.open(url, '_blank');
     });
 
-    $('form .card-footer .btn-group').popover({
-        title: '検索方法',
-        content: 'ドロップダウンメニューから出力フォーマットを選択できます。ストリーミングダウンロードの場合、全件出力が可能です。',
-        placement: 'top',
-        trigger: 'hover'
-    })
+    $('form .card-footer .btn-group')
+        .popover({
+            title: '検索方法',
+            content: 'ドロップダウンメニューから出力フォーマットを選択できます。ストリーミングダウンロードの場合、全件出力が可能です。',
+            placement: 'top',
+            trigger: 'hover'
+        })
+        .popover('show');
 });
