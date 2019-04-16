@@ -37,12 +37,12 @@ sellersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, functi
             name: req.query.name
         };
         if (req.query.format === 'datatable') {
-            const searchMovieTheatersResult = yield sellerService.search(searchConditions);
+            const searchSellersResult = yield sellerService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchMovieTheatersResult.totalCount,
-                recordsFiltered: searchMovieTheatersResult.totalCount,
-                data: searchMovieTheatersResult.data
+                recordsTotal: searchSellersResult.totalCount,
+                recordsFiltered: searchSellersResult.totalCount,
+                data: searchSellersResult.data
             });
         }
         else {

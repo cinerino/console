@@ -23,7 +23,7 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const organizationService = new cinerinoapi.service.Organization({
+        const sellerService = new cinerinoapi.service.Seller({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
         });
@@ -46,7 +46,7 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
         catch (error) {
             // no op
         }
-        const searchMovieTheatersResult = yield organizationService.searchMovieTheaters({});
+        const searchSellersResult = yield sellerService.search({});
         res.render('index', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
@@ -54,7 +54,7 @@ homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function
             adminUserPool: adminUserPool,
             adminUserPoolClients: adminUserPoolClients,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
-            sellers: searchMovieTheatersResult.data
+            sellers: searchSellersResult.data
         });
     }
     catch (error) {

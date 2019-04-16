@@ -33,12 +33,12 @@ sellersRouter.get(
                 name: req.query.name
             };
             if (req.query.format === 'datatable') {
-                const searchMovieTheatersResult = await sellerService.search(searchConditions);
+                const searchSellersResult = await sellerService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchMovieTheatersResult.totalCount,
-                    recordsFiltered: searchMovieTheatersResult.totalCount,
-                    data: searchMovieTheatersResult.data
+                    recordsTotal: searchSellersResult.totalCount,
+                    recordsFiltered: searchSellersResult.totalCount,
+                    data: searchSellersResult.data
                 });
             } else {
                 res.render('sellers/index', {

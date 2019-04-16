@@ -23,11 +23,7 @@ returnOrderTransactionsRouter.get(
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const organizationService = new cinerinoapi.service.Organization({
-                endpoint: <string>process.env.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const searchMovieTheatersResult = await organizationService.searchMovieTheaters({});
+
             const transactionStatusChoices = [
                 cinerinoapi.factory.transactionStatusType.Canceled,
                 cinerinoapi.factory.transactionStatusType.Confirmed,
@@ -99,7 +95,6 @@ returnOrderTransactionsRouter.get(
             } else {
                 res.render('transactions/returnOrder/index', {
                     moment: moment,
-                    movieTheaters: searchMovieTheatersResult.data,
                     transactionStatusChoices: transactionStatusChoices,
                     TransactionTasksExportationStatus: cinerinoapi.factory.transactionTasksExportationStatus,
                     searchConditions: searchConditions
