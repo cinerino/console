@@ -20,7 +20,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
 
         await req.user.retrieveProfile();
-        res.locals.user = req.user;
+        res.locals.req = req;
         next();
     } catch (error) {
         next(error);

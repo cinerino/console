@@ -176,7 +176,7 @@ userPoolsRouter.get(
                     res.redirect(`/people/${req.params.id}`);
                     break;
                 case process.env.ADMIN_COGNITO_USER_POOL_ID:
-                    res.redirect(`/admin/${req.params.id}`);
+                    res.redirect(`/iam/users/${req.params.id}`);
                     break;
                 default:
                     throw new Error('Unknown userPool');

@@ -21,7 +21,7 @@ exports.default = (req, res, next) => __awaiter(this, void 0, void 0, function* 
             return;
         }
         yield req.user.retrieveProfile();
-        res.locals.user = req.user;
+        res.locals.req = req;
         next();
     }
     catch (error) {

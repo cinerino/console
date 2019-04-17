@@ -92,8 +92,8 @@
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">
-                            <%= user.profile.given_name %>
-                            <%= user.profile.family_name %>
+                            <%= req.user.profile.given_name %>
+                            <%= req.user.profile.family_name %>
                         </a>
                     </div>
                 </div>
@@ -164,7 +164,15 @@
                                 <i class="nav-icon fa fa-receipt"></i>
                                 <p>
                                     インボイス
-                                    <span class="right badge badge-danger">New</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/tasks" class="nav-link">
+                                <i class="nav-icon fa fa-tasks"></i>
+                                <p>
+                                    タスク
+                                    <span class="badge badge-info right"></span>
                                 </p>
                             </a>
                         </li>
@@ -178,11 +186,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/tasks" class="nav-link">
-                                <i class="nav-icon fa fa-tasks"></i>
+                            <a href="/iam/users" class="nav-link">
+                                <i class="nav-icon fa fa-user-shield"></i>
                                 <p>
-                                    タスク
-                                    <span class="badge badge-info right"></span>
+                                    IAMユーザー
+                                    <span class="right badge badge-danger right">New</span>
                                 </p>
                             </a>
                         </li>
@@ -211,7 +219,7 @@
                                 <i class="nav-icon fa fa-credit-card"></i>
                                 <p>
                                     ムビチケ検索 & 認証
-                                    <span class="right badge badge-danger">New</span>
+                                    <span class="badge badge-info right"></span>
                                 </p>
                             </a>
                         </li>
@@ -236,7 +244,7 @@
 
                         <li class="nav-header">アカウント</li>
                         <li class="nav-item">
-                            <a href="<%= user.generateLogoutUrl() %>" class="nav-link">
+                            <a href="<%= req.user.generateLogoutUrl() %>" class="nav-link">
                                 <i class="nav-icon fa fa-sign-out-alt"></i>
                                 <p>
                                     ログアウト

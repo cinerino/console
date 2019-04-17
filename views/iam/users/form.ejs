@@ -1,0 +1,20 @@
+<div class="form-group">
+    <label for="familyName">Family Name</label>
+    <input type="text" class="form-control" id="familyName" name="familyName" placeholder="Family Name"
+        value="<%= (user !== undefined) ?  user.familyName : '' %>">
+</div>
+<div class="form-group">
+    <label for="givenName">Given Name</label>
+    <input type="text" class="form-control" id="givenName" name="givenName" placeholder="Given Name"
+        value="<%= (user !== undefined) ?  user.givenName : '' %>">
+</div>
+<div class="form-group">
+    <label for="telephone">Telephone</label>
+    <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="Telephone"
+        value="<%= (user !== undefined) ?  user.telephone : '' %>">
+</div>
+<div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="URL"
+        value="<%= (user !== undefined) ?  user.email : '' %>">
+</div>

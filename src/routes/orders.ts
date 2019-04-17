@@ -293,9 +293,20 @@ ordersRouter.get(
                 timelines = actionsOnOrder.map((a) => {
                     let agent: any;
                     if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+                        let userPoolId = '';
+                        let tokenIssuer = '';
+                        if (Array.isArray(a.agent.identifier)) {
+                            const tokenIssuerIdentifier = a.agent.identifier.find((i: any) => i.name === 'tokenIssuer');
+                            if (tokenIssuerIdentifier !== undefined) {
+                                tokenIssuer = tokenIssuerIdentifier.value;
+                                userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                            }
+                        }
+
                         const url = (a.agent.memberOf !== undefined)
-                            ? `/people/${a.agent.id}`
-                            : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
+                            ? `/userPools/${userPoolId}/people/${a.agent.id}`
+                            : `/userPools/${userPoolId}/clients/${a.agent.id}`;
+
                         agent = {
                             id: a.agent.id,
                             name: order.customer.name,
