@@ -202,7 +202,12 @@ function createAttributesFromBody(params) {
                         endpoint: process.env.CHEVRE_ENDPOINT,
                         auth: params.authClient
                     });
-                    movieTheaterFromChevre = yield placeService.findMovieTheaterByBranchCode({ branchCode: branchCode });
+                    const searchMovieTheatersResult = yield placeService.searchMovieTheaters({ branchCodes: [branchCode] });
+                    const movieTheater = searchMovieTheatersResult.data.shift();
+                    if (movieTheater === undefined) {
+                        throw new Error(`Movie Theater ${branchCode} Not Found`);
+                    }
+                    movieTheaterFromChevre = yield placeService.findMovieTheaterById({ id: movieTheater.id });
                     break;
                 default:
                     throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);

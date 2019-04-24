@@ -212,7 +212,13 @@ async function createAttributesFromBody(params: {
                     endpoint: <string>process.env.CHEVRE_ENDPOINT,
                     auth: params.authClient
                 });
-                movieTheaterFromChevre = await placeService.findMovieTheaterByBranchCode({ branchCode: branchCode });
+                const searchMovieTheatersResult = await placeService.searchMovieTheaters({ branchCodes: [branchCode] });
+                const movieTheater = searchMovieTheatersResult.data.shift();
+                if (movieTheater === undefined) {
+                    throw new Error(`Movie Theater ${branchCode} Not Found`);
+                }
+
+                movieTheaterFromChevre = await placeService.findMovieTheaterById({ id: movieTheater.id });
 
                 break;
 
