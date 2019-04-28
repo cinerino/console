@@ -64,7 +64,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
         let attributes;
         if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
+                attributes = yield createAttributesFromBody({ req: req });
                 debug('creating organization...', attributes);
                 const sellerService = new cinerinoapi.service.Seller({
                     endpoint: process.env.API_ENDPOINT,
@@ -113,7 +113,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
         }
         else if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ body: req.body, authClient: req.user.chevreAuthClient });
+                attributes = yield createAttributesFromBody({ req: req });
                 yield sellerService.update({ id: req.params.id, attributes: attributes });
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
@@ -139,10 +139,13 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createAttributesFromBody(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        const webAPIIdentifier = params.body.makesOffer.offeredThrough.identifier;
-        const branchCode = params.body.branchCode;
+        const body = params.req.body;
+        const authClient = params.req.user.chevreAuthClient;
+        const webAPIIdentifier = body.makesOffer.offeredThrough.identifier;
+        const branchCode = body.branchCode;
         const initialName = `${process.env.PROJECT_ID}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
         let movieTheaterFromChevre = {
+            project: params.req.project,
             typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
             branchCode: branchCode,
             name: {
@@ -182,6 +185,7 @@ function createAttributesFromBody(params) {
                             throw new Error(`電話番号フォーマット時に問題が発生しました:${error.message}`);
                         }
                         movieTheaterFromChevre = {
+                            project: params.req.project,
                             typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
                             branchCode: theaterFromCOA.theaterCode,
                             name: {
@@ -200,9 +204,12 @@ function createAttributesFromBody(params) {
                     // Chevreから情報取得
                     const placeService = new chevreapi.service.Place({
                         endpoint: process.env.CHEVRE_ENDPOINT,
-                        auth: params.authClient
+                        auth: authClient
                     });
-                    const searchMovieTheatersResult = yield placeService.searchMovieTheaters({ branchCodes: [branchCode] });
+                    const searchMovieTheatersResult = yield placeService.searchMovieTheaters({
+                        project: { ids: [params.req.project.id] },
+                        branchCodes: [branchCode]
+                    });
                     const movieTheater = searchMovieTheatersResult.data.shift();
                     if (movieTheater === undefined) {
                         throw new Error(`Movie Theater ${branchCode} Not Found`);
@@ -221,24 +228,24 @@ function createAttributesFromBody(params) {
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.CreditCard,
                 gmoInfo: {
                     siteId: process.env.GMO_SITE_ID,
-                    shopId: params.body.gmoInfo.shopId,
-                    shopPass: params.body.gmoInfo.shopPass
+                    shopId: body.gmoInfo.shopId,
+                    shopPass: body.gmoInfo.shopPass
                 }
             }
         ];
         // ムビチケ決済を有効にする場合
-        if (params.body.movieTicketPaymentAccepted === 'on') {
+        if (body.movieTicketPaymentAccepted === 'on') {
             paymentAccepted.push({
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.MovieTicket,
-                movieTicketInfo: params.body.movieTicketInfo
+                movieTicketInfo: body.movieTicketInfo
             });
         }
         // if (!Array.isArray(movieTheater.paymentAccepted)) {
         //     movieTheater.paymentAccepted = [];
         // }
         // コイン口座決済を有効にする場合、口座未開設であれば開設する
-        if (params.body.coinAccountPaymentAccepted === 'on') {
-            if (params.body.coinAccountPayment.accountNumber === '') {
+        if (body.coinAccountPaymentAccepted === 'on') {
+            if (body.coinAccountPayment.accountNumber === '') {
                 // const account = await cinerinoapi.service.account.open({
                 //     name: movieTheater.name.ja
                 // })({
@@ -258,13 +265,13 @@ function createAttributesFromBody(params) {
                 paymentAccepted.push({
                     paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
                     accountType: cinerinoapi.factory.accountType.Coin,
-                    accountNumber: params.body.coinAccountPayment.accountNumber
+                    accountNumber: body.coinAccountPayment.accountNumber
                 });
             }
         }
         // ポイント口座決済を有効にする場合、口座未開設であれば開設する
-        if (params.body.pointAccountPaymentAccepted === 'on') {
-            if (params.body.pointAccountPayment.accountNumber === '') {
+        if (body.pointAccountPaymentAccepted === 'on') {
+            if (body.pointAccountPayment.accountNumber === '') {
                 // const account = await cinerinoapi.service.account.open({
                 //     name: movieTheater.name.ja
                 // })({
@@ -284,25 +291,25 @@ function createAttributesFromBody(params) {
                 paymentAccepted.push({
                     paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
                     accountType: cinerinoapi.factory.accountType.Point,
-                    accountNumber: params.body.pointAccountPayment.accountNumber
+                    accountNumber: body.pointAccountPayment.accountNumber
                 });
             }
         }
         // 現金決済を有効にする場合
-        if (params.body.cashPaymentAccepted === 'on') {
+        if (body.cashPaymentAccepted === 'on') {
             paymentAccepted.push({
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.Cash
             });
         }
         // 電子マネー決済を有効にする場合
-        if (params.body.emoneyPaymentAccepted === 'on') {
+        if (body.emoneyPaymentAccepted === 'on') {
             paymentAccepted.push({
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.EMoney
             });
         }
         let hasPOS = [];
-        if (Array.isArray(params.body.hasPOS)) {
-            params.body.hasPOS.forEach((pos) => {
+        if (Array.isArray(body.hasPOS)) {
+            body.hasPOS.forEach((pos) => {
                 if (pos.id !== '') {
                     hasPOS.push({
                         typeOf: 'POS',
@@ -314,8 +321,8 @@ function createAttributesFromBody(params) {
         }
         hasPOS = hasPOS.sort((a, b) => (String(a.id) < String(b.id)) ? -1 : 1);
         const areaServed = [];
-        if (Array.isArray(params.body.areaServed)) {
-            params.body.areaServed.forEach((area) => {
+        if (Array.isArray(body.areaServed)) {
+            body.areaServed.forEach((area) => {
                 if (area.id !== '') {
                     areaServed.push({
                         typeOf: area.typeOf,
@@ -346,10 +353,10 @@ function createAttributesFromBody(params) {
             }
         ];
         return {
-            typeOf: params.body.typeOf,
+            typeOf: body.typeOf,
             name: {
-                ja: (params.body.name.ja !== '') ? params.body.name.ja : movieTheaterFromChevre.name.ja,
-                en: (params.body.name.en !== '') ? params.body.name.en : movieTheaterFromChevre.name.en
+                ja: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja,
+                en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
             },
             legalName: movieTheaterFromChevre.name,
             parentOrganization: PROJECT_ORGANIZATION,
@@ -358,8 +365,8 @@ function createAttributesFromBody(params) {
                 branchCode: movieTheaterFromChevre.branchCode,
                 name: movieTheaterFromChevre.name
             },
-            telephone: (params.body.telephone !== '') ? params.body.telephone : movieTheaterFromChevre.telephone,
-            url: params.body.url,
+            telephone: (body.telephone !== '') ? body.telephone : movieTheaterFromChevre.telephone,
+            url: body.url,
             paymentAccepted: paymentAccepted,
             hasPOS: hasPOS,
             areaServed: areaServed,
