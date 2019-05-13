@@ -77,11 +77,6 @@ if (seller !== undefined) {
 </div>
 <hr>
 <div class="form-group">
-    <label for="gmoInfo[siteId]">GMOサイトID</label>
-    <input type="text" class="form-control" id="gmoInfo[siteId]" disabled placeholder="GMOサイトID"
-        value="<%= process.env.GMO_SITE_ID %>">
-</div>
-<div class="form-group">
     <label for="gmoInfo[shopId]">GMOショップID</label>
     <input type="text" class="form-control" id="gmoInfo[shopId]" name="gmoInfo[shopId]" placeholder="GMOショップID"
         value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopId : '' %>">

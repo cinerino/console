@@ -9,6 +9,7 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 // tslint:disable-next-line:no-require-imports no-var-requires
 const flash = require('express-flash');
+const favicon = require("serve-favicon");
 const errorHandler_1 = require("./middlewares/errorHandler");
 const notFoundHandler_1 = require("./middlewares/notFoundHandler");
 const session_1 = require("./middlewares/session");
@@ -37,6 +38,7 @@ app.use((__, res, next) => {
     res.locals.version = packageInfo.version;
     next();
 });
+app.use(favicon(`${__dirname}/../public/favicon.ico`));
 app.use(bodyParser.json());
 // The extended option allows to choose between parsing the URL-encoded data
 // with the querystring library (when false) or the qs library (when true).

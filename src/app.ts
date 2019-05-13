@@ -8,6 +8,8 @@ import * as express from 'express';
 import * as expressLayouts from 'express-ejs-layouts';
 // tslint:disable-next-line:no-require-imports no-var-requires
 const flash = require('express-flash');
+import * as favicon from 'serve-favicon';
+
 import errorHandler from './middlewares/errorHandler';
 import notFoundHandler from './middlewares/notFoundHandler';
 import session from './middlewares/session';
@@ -41,6 +43,8 @@ app.use((__, res, next) => {
     res.locals.version = <string>packageInfo.version;
     next();
 });
+
+app.use(favicon(`${__dirname}/../public/favicon.ico`));
 
 app.use(bodyParser.json());
 // The extended option allows to choose between parsing the URL-encoded data

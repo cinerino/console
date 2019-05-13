@@ -112,7 +112,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header">検索</li>
+                        <li class="nav-header">リソース検索</li>
                         <li class="nav-item">
                             <a href="/sellers" class="nav-link">
                                 <i class="nav-icon fa fa-store"></i>
@@ -272,11 +272,22 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li class="nav-header">プロジェクト</li>
                         <li class="nav-item">
                             <a href="/waiter/rules" class="nav-link">
                                 <i class="nav-icon fa fa-passport"></i>
                                 <p>
                                     入場制限規則
+                                    <span class="badge badge-info right"></span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/projects/<%= req.project.id %>" class="nav-link">
+                                <i class="nav-icon fa fa-cog"></i>
+                                <p>
+                                    設定
                                     <span class="badge badge-info right"></span>
                                 </p>
                             </a>

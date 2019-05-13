@@ -1,0 +1,38 @@
+<div class="form-group">
+    <label for="names">名称</label>
+    <input disabled type="text" class="form-control" id="name" name="name" placeholder="名称"
+        value="<%= (project !== undefined) ?  project.name : '' %>">
+</div>
+<hr>
+
+<div class="form-group">
+    <label for="settings[chevre][endpoint]">Chevreエンドポイント</label>
+    <input disabled type="text" class="form-control" id="settings[chevre][endpoint]" placeholder="https://example.com"
+        value="<%= (project !== undefined && project.settings.chevre !== undefined) ? project.settings.chevre.endpoint : '' %>">
+</div>
+
+<div class="form-group">
+    <label for="settings[gmo][endpoint]">GMOエンドポイント</label>
+    <input disabled type="text" class="form-control" id="settings[gmo][endpoint]" placeholder="https://example.com"
+        value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.endpoint : '' %>">
+</div>
+
+<div class="form-group">
+    <label for="settings[gmo][siteId]">GMOサイトID</label>
+    <input disabled type="text" class="form-control" id="settings[gmo][siteId]" placeholder="GMOサイトID"
+        value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.siteId : '' %>">
+</div>
+
+<div class="form-group">
+    <label for="settings[gmo][sitePass]">GMOサイトPASS</label>
+    <input disabled type="text" class="form-control" id="settings[gmo][sitePass]" name="settings[gmo][sitePass]"
+        placeholder="GMOサイトPASS"
+        value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.sitePass : '' %>">
+</div>
+
+<div class="form-group">
+    <label for="settings[mvtkReserve][endpoint]">ムビチケ着券エンドポイント</label>
+    <input disabled type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
+        placeholder="https://example.com"
+        value="<%= (project !== undefined && project.settings.mvtkReserve !== undefined) ? project.settings.mvtkReserve.endpoint : '' %>">
+</div>

@@ -62,9 +62,14 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         let message;
         let attributes;
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
         if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ req: req });
+                attributes = yield createAttributesFromBody({ project: project, req: req });
                 debug('creating organization...', attributes);
                 const sellerService = new cinerinoapi.service.Seller({
                     endpoint: process.env.API_ENDPOINT,
@@ -100,6 +105,11 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         let message;
         let attributes;
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
         const sellerService = new cinerinoapi.service.Seller({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
@@ -113,7 +123,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
         }
         else if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ req: req });
+                attributes = yield createAttributesFromBody({ project: project, req: req });
                 yield sellerService.update({ id: req.params.id, attributes: attributes });
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
@@ -139,6 +149,15 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createAttributesFromBody(params) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (params.project.settings === undefined) {
+            throw new Error('Project settings undefined');
+        }
+        if (params.project.settings.chevre === undefined) {
+            throw new Error('Project chevre settings undefined');
+        }
+        if (params.project.settings.gmo === undefined) {
+            throw new Error('Project gmo settings undefined');
+        }
         const body = params.req.body;
         const authClient = params.req.user.chevreAuthClient;
         const webAPIIdentifier = body.makesOffer.offeredThrough.identifier;
@@ -203,7 +222,7 @@ function createAttributesFromBody(params) {
                 case cinerinoapi.factory.service.webAPI.Identifier.Chevre:
                     // Chevreから情報取得
                     const placeService = new chevreapi.service.Place({
-                        endpoint: process.env.CHEVRE_ENDPOINT,
+                        endpoint: params.project.settings.chevre.endpoint,
                         auth: authClient
                     });
                     const searchMovieTheatersResult = yield placeService.searchMovieTheaters({
@@ -227,7 +246,7 @@ function createAttributesFromBody(params) {
             {
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.CreditCard,
                 gmoInfo: {
-                    siteId: process.env.GMO_SITE_ID,
+                    siteId: params.project.settings.gmo.siteId,
                     shopId: body.gmoInfo.shopId,
                     shopPass: body.gmoInfo.shopPass
                 }

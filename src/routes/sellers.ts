@@ -60,9 +60,16 @@ sellersRouter.all(
         try {
             let message;
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
             if (req.method === 'POST') {
                 try {
-                    attributes = await createAttributesFromBody({ req: req });
+                    attributes = await createAttributesFromBody({ project: project, req: req });
                     debug('creating organization...', attributes);
                     const sellerService = new cinerinoapi.service.Seller({
                         endpoint: <string>process.env.API_ENDPOINT,
@@ -102,6 +109,13 @@ sellersRouter.all(
         try {
             let message;
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
             const sellerService = new cinerinoapi.service.Seller({
                 endpoint: <string>process.env.API_ENDPOINT,
                 auth: req.user.authClient
@@ -115,7 +129,7 @@ sellersRouter.all(
                 return;
             } else if (req.method === 'POST') {
                 try {
-                    attributes = await createAttributesFromBody({ req: req });
+                    attributes = await createAttributesFromBody({ project: project, req: req });
                     await sellerService.update({ id: req.params.id, attributes: attributes });
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);
@@ -141,8 +155,19 @@ sellersRouter.all(
 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 async function createAttributesFromBody(params: {
+    project: cinerinoapi.factory.project.IProject;
     req: express.Request;
 }): Promise<cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType>> {
+    if (params.project.settings === undefined) {
+        throw new Error('Project settings undefined');
+    }
+    if (params.project.settings.chevre === undefined) {
+        throw new Error('Project chevre settings undefined');
+    }
+    if (params.project.settings.gmo === undefined) {
+        throw new Error('Project gmo settings undefined');
+    }
+
     const body = params.req.body;
     const authClient = params.req.user.chevreAuthClient;
 
@@ -213,7 +238,7 @@ async function createAttributesFromBody(params: {
             case cinerinoapi.factory.service.webAPI.Identifier.Chevre:
                 // Chevreから情報取得
                 const placeService = new chevreapi.service.Place({
-                    endpoint: <string>process.env.CHEVRE_ENDPOINT,
+                    endpoint: params.project.settings.chevre.endpoint,
                     auth: authClient
                 });
                 const searchMovieTheatersResult = await placeService.searchMovieTheaters({
@@ -240,7 +265,7 @@ async function createAttributesFromBody(params: {
         {
             paymentMethodType: cinerinoapi.factory.paymentMethodType.CreditCard,
             gmoInfo: {
-                siteId: <string>process.env.GMO_SITE_ID,
+                siteId: params.project.settings.gmo.siteId,
                 shopId: body.gmoInfo.shopId,
                 shopPass: body.gmoInfo.shopPass
             }
