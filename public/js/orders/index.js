@@ -109,6 +109,7 @@ $(function () {
                     return '<ul class="list-unstyled">'
                         + data.paymentMethods.map(function (payment) {
                             var listHtml = '<li><span class="badge badge-secondary ' + payment.typeOf + '">' + payment.typeOf + '</span></li>'
+                                + '<li><span>' + payment.name + '</span></li>'
                                 + '<li><span>' + payment.accountId + '</span></li>'
                                 + '<li><span>' + payment.paymentMethodId + '</span></li>';
 

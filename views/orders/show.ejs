@@ -93,7 +93,7 @@
                             <br>
                             <b>Payment Method:</b>
                             <br>
-                            <%- (order.paymentMethods.length > 0) ? order.paymentMethods.map((p)=>`${p.typeOf} ${p.paymentMethodId}`).join('<br>') : '' %>
+                            <%- (order.paymentMethods.length > 0) ? order.paymentMethods.map((p)=>`${p.name} ${p.paymentMethodId}`).join('<br>') : '' %>
                         </div>
                         <!-- /.col -->
                     </div>
