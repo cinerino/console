@@ -19,17 +19,6 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a href="#">' + data.code + '</a></li>'
-                        + '<li>' + data.validFrom + '</li>'
-                        + '<li>' + data.validUntil + '</li>'
-                        + '</ul>';
-
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary">' + data.project.typeOf + '</span></li>'
                         + '<li>' + data.project.id + '</li>'
                         + '</ul>';
@@ -38,13 +27,25 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    return '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-dark">' + data.code + '</span></li>'
+                        + '<li>' + data.validFrom + '</li>'
+                        + '<li>' + data.validUntil + '</li>'
+                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showQRCode" data-id="' + data.id + '">QRコード表示</a><li>'
+                        + '</ul>';
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-info">' + data.object.typeOf + '</span></li>'
-                        + '<li><span class="badge badge-secondary">' + data.object.id + '</span></li>';
+                        + '<li><span class="badge badge-primary">' + data.object.typeOf + '</span></li>'
+                        + '<li><a target="_blank" href="/ownershipInfos?ids=' + data.object.id + '">' + data.object.id + '</a></li>';
 
                     if (data.object.typeOfGood !== undefined) {
                         html += '<ul class="list-unstyled">'
-                            + '<li><span class="badge badge-info">' + data.object.typeOfGood.typeOf + '</span></li>'
+                            + '<li><span class="badge badge-success">' + data.object.typeOfGood.typeOf + '</span></li>'
                             + '<li><span class="badge badge-secondary">' + data.object.typeOfGood.id + '</span></li>';
                     }
 
@@ -72,6 +73,13 @@ $(function () {
         showObject(id);
     });
 
+    $(document).on('click', '.showQRCode', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showQRCode(id);
+    });
+
     /**
      * 認可対象を詳しく表示する
      */
@@ -84,7 +92,7 @@ $(function () {
             return a.id === id
         })
 
-        var modal = $('#modal-customer-identifier');
+        var modal = $('#modal-authorization-object');
         var title = 'Authorization `' + authorization.id + '` Object';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(authorization.object, null, '\t');
@@ -92,5 +100,29 @@ $(function () {
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
         modal.modal();
+    }
+
+    /**
+     * QRコードを表示する
+     */
+    function showQRCode(id) {
+        var authorizations = table
+            .rows()
+            .data()
+            .toArray();
+        var authorization = authorizations.find(function (a) {
+            return a.id === id
+        })
+
+        QRCode.toDataURL(authorization.code, function (err, url) {
+            console.log('qr generated', url)
+
+            var modal = $('#modal-authorization-qrcode');
+            var title = 'QR ' + authorization.id;
+            var img = $('<img />').attr('src', url).addClass('rounded mx-auto d-block');
+            modal.find('.modal-title').html(title);
+            modal.find('.modal-body').html(img);
+            modal.modal();
+        });
     }
 });

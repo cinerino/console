@@ -26,7 +26,7 @@ ownershipInfosRouter.get(
                 auth: req.user.authClient
             });
 
-            const searchConditions: cinerinoapi.factory.ownershipInfo.ISearchConditions<any> = {
+            const searchConditions: cinerinoapi.factory.ownershipInfo.ISearchConditions<cinerinoapi.factory.ownershipInfo.IGoodType> = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { ownedFrom: cinerinoapi.factory.sortType.Descending },
@@ -56,11 +56,24 @@ ownershipInfosRouter.get(
                         && req.query.typeOfGood.typeOf !== undefined
                         && req.query.typeOfGood.typeOf !== '')
                         ? req.query.typeOfGood.typeOf
+                        : undefined,
+                    ids: (req.query.typeOfGood !== undefined
+                        && req.query.typeOfGood.ids !== undefined
+                        && req.query.typeOfGood.ids !== '')
+                        ? (<string>req.query.typeOfGood.ids).split(',')
+                            .map((v) => v.trim())
+                        : undefined,
+                    accountNumbers: (req.query.typeOfGood !== undefined
+                        && req.query.typeOfGood.accountNumbers !== undefined
+                        && req.query.typeOfGood.accountNumbers !== '')
+                        ? (<string>req.query.typeOfGood.accountNumbers).split(',')
+                            .map((v) => v.trim())
                         : undefined
                 }
             };
 
             if (req.query.format === 'datatable') {
+                debug('searching ownershipInfos...', searchConditions);
                 const searchOrdersResult = await ownershipInfoService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,

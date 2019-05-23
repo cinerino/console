@@ -81,7 +81,7 @@ $(function () {
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-primary">' + data.typeOfGood.typeOf + '</span></li>'
                         + '<li><span class="badge badge-secondary">' + data.typeOfGood.id + '</span></li>'
-                        + '<li>' + JSON.stringify(data.typeOfGood) + '</li>'
+                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showTypeOfGood" data-id="' + data.id + '">所有物をより詳しく見る</a><li>'
                         + '</ul>';
                 }
             }
@@ -94,4 +94,33 @@ $(function () {
         // timePickerIncrement: 30,
         format: 'YYYY-MM-DDTHH:mm:ssZ'
     });
+
+    $(document).on('click', '.showTypeOfGood', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showTypeOfGood(id);
+    });
+
+    /**
+     * 認可対象を詳しく表示する
+     */
+    function showTypeOfGood(id) {
+        var ownershipInfos = table
+            .rows()
+            .data()
+            .toArray();
+        var ownershipInfo = ownershipInfos.find(function (o) {
+            return o.id === id
+        })
+
+        var modal = $('#modal-ownershipInfo-typeOfGood');
+        var title = 'OwnershipInfo `' + ownershipInfo.id + '` Object';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(ownershipInfo.typeOfGood, null, '\t');
+        + '</textarea>'
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
 });

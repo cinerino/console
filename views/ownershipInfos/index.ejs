@@ -44,15 +44,14 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="ids">所有権ID</label>
-                                        <input type="text" class="form-control" id="ids" name="ids"
-                                            placeholder="12345678-abcd-1234-abcd-123456abcdef"
+                                        <input type="text" class="form-control" id="ids" name="ids" placeholder="所有権ID"
                                             value="<%= (Array.isArray(searchConditions.ids)) ? searchConditions.ids.join(',') : '' %>">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="ownedBy[id]">所有者ID</label>
                                         <input type="text" class="form-control" id="ownedBy[id]" name="ownedBy[id]"
-                                            placeholder="12345678-abcd-1234-abcd-123456abcdef"
+                                            placeholder="顧客ID,クライアントIDなど"
                                             value="<%= (searchConditions.ownedBy !== undefined) ? searchConditions.ownedBy.id : '' %>">
                                     </div>
                                 </div>
@@ -60,7 +59,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>所有物タイプ</label>
-                                        <select class="form-control" name="typeOfGood[typeOf]" size="10">
+                                        <select class="form-control" name="typeOfGood[typeOf]" size="">
+                                            <option value="">---</option>
                                             <% GoodTypeChoices.forEach(function (GoodTypeChoice) { %>
                                             <%
                                             var selected = false;
@@ -74,6 +74,20 @@
                                             </option>
                                             <% }) %>
                                         </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="typeOfGood[ids]">所有物ID</label>
+                                        <input type="text" class="form-control" id="typeOfGood[ids]"
+                                            name="typeOfGood[ids]" placeholder="予約IDなど"
+                                            value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.ids)) ? searchConditions.typeOfGood.ids.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="typeOfGood[accountNumbers]">口座番号</label>
+                                        <input type="text" class="form-control" id="typeOfGood[accountNumbers]"
+                                            name="typeOfGood[accountNumbers]" placeholder="1234567"
+                                            value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.accountNumbers)) ? searchConditions.typeOfGood.accountNumbers.join(',') : '' %>">
                                     </div>
                                 </div>
 
@@ -152,7 +166,7 @@
 </section>
 <!-- /.content -->
 
-<div class="modal" id="modal-customer-identifier" tabindex="-1" role="dialog">
+<div class="modal" id="modal-ownershipInfo-typeOfGood" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

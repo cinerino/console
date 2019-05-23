@@ -52,7 +52,7 @@
                                     <div class="form-group">
                                         <label for="object[ids]">認可対象ID</label>
                                         <input type="text" class="form-control" id="object[ids]" name="object[ids]"
-                                            placeholder="12345678-abcd-1234-abcd-123456abcdef"
+                                            placeholder="所有権IDなど"
                                             value="<%= (Array.isArray(searchConditions.object.ids)) ? searchConditions.object.ids.join(',') : '' %>">
                                     </div>
 
@@ -120,21 +120,21 @@
                         <table id="authorizations-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
+                                    <th>Project</th>
                                     <th>Code
                                         <br>Valid From
                                         <br>Valid Until
                                     </th>
-                                    <th>Project</th>
                                     <th>Object</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th>Project</th>
                                     <th>Code
                                         <br>Valid From
                                         <br>Valid Until
                                     </th>
-                                    <th>Project</th>
                                     <th>Object</th>
                                 </tr>
                                 </tr>
@@ -153,8 +153,25 @@
 </section>
 <!-- /.content -->
 
-<div class="modal" id="modal-customer-identifier" tabindex="-1" role="dialog">
+<div class="modal" id="modal-authorization-object" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-authorization-qrcode" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -177,4 +194,5 @@
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css">
 
 <script src="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/node_modules/qrcode/build/qrcode.min.js"></script>
 <script src="/js/authorizations/index.js"></script>

@@ -61,10 +61,23 @@ ownershipInfosRouter.get('',
                     && req.query.typeOfGood.typeOf !== undefined
                     && req.query.typeOfGood.typeOf !== '')
                     ? req.query.typeOfGood.typeOf
+                    : undefined,
+                ids: (req.query.typeOfGood !== undefined
+                    && req.query.typeOfGood.ids !== undefined
+                    && req.query.typeOfGood.ids !== '')
+                    ? req.query.typeOfGood.ids.split(',')
+                        .map((v) => v.trim())
+                    : undefined,
+                accountNumbers: (req.query.typeOfGood !== undefined
+                    && req.query.typeOfGood.accountNumbers !== undefined
+                    && req.query.typeOfGood.accountNumbers !== '')
+                    ? req.query.typeOfGood.accountNumbers.split(',')
+                        .map((v) => v.trim())
                     : undefined
             }
         };
         if (req.query.format === 'datatable') {
+            debug('searching ownershipInfos...', searchConditions);
             const searchOrdersResult = yield ownershipInfoService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
