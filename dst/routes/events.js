@@ -28,11 +28,11 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, 
     try {
         debug('req.query:', req.query);
         const eventService = new cinerinoapi.service.Event({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
@@ -102,11 +102,11 @@ eventsRouter.post('/screeningEvent/import', ...[
 ], validator_1.default, (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const taskService = new cinerinoapi.service.Task({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const sellerIds = req.body.seller.ids;
@@ -166,7 +166,7 @@ eventsRouter.post('/screeningEvent/import', ...[
 eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const event = yield eventService.findScreeningEventById({
@@ -189,11 +189,11 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void
 eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const event = yield eventService.findScreeningEventById({

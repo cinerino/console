@@ -26,11 +26,11 @@ placeOrderTransactionsRouter.get('',
     try {
         debug('req.query:', req.query);
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
@@ -144,7 +144,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchTransactionsResult = yield placeOrderService.search({
@@ -167,7 +167,8 @@ placeOrderTransactionsRouter.get('/:transactionId',
         }
         const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
             ? `/projects/${req.project.id}/people/${transaction.agent.id}`
-            : `/projects/${req.project.id}/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${transaction.agent.id}`;
+            // tslint:disable-next-line:max-line-length
+            : `/projects/${req.project.id}/userPools/${req.project.settings.DEFAULT_COGNITO_USER_POOL_ID}/clients/${transaction.agent.id}`;
         const timelines = [{
                 action: {},
                 agent: {
@@ -187,7 +188,8 @@ placeOrderTransactionsRouter.get('/:transactionId',
             if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
                 const url = (a.agent.memberOf !== undefined)
                     ? `/projects/${req.project.id}/people/${a.agent.id}`
-                    : `/projects/${req.project.id}/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
+                    // tslint:disable-next-line:max-line-length
+                    : `/projects/${req.project.id}/userPools/${req.project.settings.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
                 agent = {
                     id: a.agent.id,
                     name: a.agent.id,

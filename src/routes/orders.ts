@@ -21,15 +21,15 @@ ordersRouter.get(
         try {
             debug('req.query:', req.query);
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 
@@ -39,10 +39,10 @@ ordersRouter.get(
             let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             try {
                 const searchUserPoolClientsResult = await userPoolService.searchClients({
-                    userPoolId: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID
+                    userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
                 });
                 const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
-                    userPoolId: <string>process.env.ADMIN_COGNITO_USER_POOL_ID
+                    userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
                 });
                 userPoolClients = searchUserPoolClientsResult.data;
                 adminUserPoolClients = searchAdminUserPoolClientsResult.data;
@@ -268,7 +268,7 @@ ordersRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -430,7 +430,7 @@ ordersRouter.post(
     async (req, res, next) => {
         try {
             const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const returnOrderTransaction = await returnOrderService.start({
@@ -459,11 +459,11 @@ ordersRouter.post(
     async (req, res, next) => {
         try {
             const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const taskService = new cinerinoapi.service.Task({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchTransactionsResult = await placeOrderService.search({

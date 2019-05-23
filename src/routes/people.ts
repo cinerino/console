@@ -25,7 +25,7 @@ peopleRouter.get(
         try {
             debug('req.query:', req.query);
             const personService = new cinerinoapi.service.Person({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchConditions = {
@@ -67,11 +67,11 @@ peopleRouter.all(
         try {
             let message = '';
             const personService = new cinerinoapi.service.Person({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const person = await personService.findById({ id: req.params.id });
@@ -170,7 +170,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -201,7 +201,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchResult =
@@ -233,7 +233,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchResult =

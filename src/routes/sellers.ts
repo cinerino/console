@@ -14,8 +14,6 @@ import * as cinerinoapi from '../cinerinoapi';
 const debug = createDebug('cinerino-console:routes');
 const sellersRouter = express.Router();
 
-const PROJECT_ORGANIZATION = JSON.parse((process.env.PROJECT_ORGANIZATION !== undefined) ? process.env.PROJECT_ORGANIZATION : '{}');
-
 /**
  * 販売者検索
  */
@@ -24,7 +22,7 @@ sellersRouter.get(
     async (req, res, next) => {
         try {
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchConditions: cinerinoapi.factory.seller.ISearchConditions = {
@@ -61,18 +59,24 @@ sellersRouter.all(
             let message;
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
+            const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
+
             const projectService = new cinerinoapi.service.Project({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
 
             if (req.method === 'POST') {
                 try {
-                    attributes = await createAttributesFromBody({ project: project, req: req });
+                    attributes = await createAttributesFromBody({
+                        project: project,
+                        req: req,
+                        projectOrganization: PROJECT_ORGANIZATION
+                    });
                     debug('creating organization...', attributes);
                     const sellerService = new cinerinoapi.service.Seller({
-                        endpoint: <string>process.env.API_ENDPOINT,
+                        endpoint: req.project.settings.API_ENDPOINT,
                         auth: req.user.authClient
                     });
                     const seller = await sellerService.create<cinerinoapi.factory.organizationType>(attributes);
@@ -110,14 +114,16 @@ sellersRouter.all(
             let message;
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
+            const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
+
             const projectService = new cinerinoapi.service.Project({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
 
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const seller = await sellerService.findById({ id: req.params.id });
@@ -129,7 +135,11 @@ sellersRouter.all(
                 return;
             } else if (req.method === 'POST') {
                 try {
-                    attributes = await createAttributesFromBody({ project: project, req: req });
+                    attributes = await createAttributesFromBody({
+                        project: project,
+                        req: req,
+                        projectOrganization: PROJECT_ORGANIZATION
+                    });
                     await sellerService.update({ id: req.params.id, attributes: attributes });
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);
@@ -157,6 +167,7 @@ sellersRouter.all(
 async function createAttributesFromBody(params: {
     project: cinerinoapi.factory.project.IProject;
     req: express.Request;
+    projectOrganization: any;
 }): Promise<cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType>> {
     if (params.project.settings === undefined) {
         throw new Error('Project settings undefined');
@@ -173,7 +184,7 @@ async function createAttributesFromBody(params: {
 
     const webAPIIdentifier = body.makesOffer.offeredThrough.identifier;
     const branchCode: string = body.branchCode;
-    const initialName = `${process.env.PROJECT_ID}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
+    const initialName = `${params.project.id}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
 
     let movieTheaterFromChevre: cinerinoapi.factory.chevre.place.movieTheater.IPlace = {
         project: params.req.project,
@@ -183,7 +194,7 @@ async function createAttributesFromBody(params: {
             ja: initialName,
             en: initialName
         },
-        telephone: PROJECT_ORGANIZATION.telephone,
+        telephone: params.projectOrganization.telephone,
         screenCount: 0, // 使用しないので適当に
         kanaName: '', // 使用しないので適当に
         id: '', // 使用しないので適当に
@@ -411,7 +422,7 @@ async function createAttributesFromBody(params: {
             en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
         },
         legalName: movieTheaterFromChevre.name,
-        parentOrganization: PROJECT_ORGANIZATION,
+        parentOrganization: params.projectOrganization,
         location: {
             typeOf: movieTheaterFromChevre.typeOf,
             branchCode: movieTheaterFromChevre.branchCode,
@@ -434,7 +445,7 @@ sellersRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({

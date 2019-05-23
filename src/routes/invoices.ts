@@ -20,7 +20,7 @@ invoicesRouter.get(
         try {
             debug('req.query:', req.query);
             const invoiceService = new cinerinoapi.service.Invoice({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 

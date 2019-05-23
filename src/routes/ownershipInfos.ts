@@ -22,7 +22,7 @@ ownershipInfosRouter.get(
         try {
             debug('req.query:', req.query);
             const ownershipInfoService = new cinerinoapi.service.OwnershipInfo({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 

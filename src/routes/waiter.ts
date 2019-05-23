@@ -15,7 +15,7 @@ waiterRouter.get(
         try {
             if (req.query.format === 'datatable') {
                 const rules = await request.get(
-                    `${process.env.WAITER_ENDPOINT}/projects/${process.env.PROJECT_ID}/rules`,
+                    `${process.env.WAITER_ENDPOINT}/projects/${req.project.id}/rules`,
                     { json: true }
                 )
                     .promise();

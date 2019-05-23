@@ -163,7 +163,7 @@
         <div class="row">
             <input type="hidden" name="waiterEndpoint" value="<%= process.env.WAITER_ENDPOINT %>">
             <input type="hidden" name="telemetryEndpoint" value="<%= process.env.TELEMETRY_API_ENDPOINT %>">
-            <input type="hidden" name="projectId" value="<%= process.env.PROJECT_ID %>">
+            <input type="hidden" name="projectId" value="<%= req.project.id %>">
             <!-- Left col -->
             <section class="col-lg-7 connectedSortable">
                 <!-- solid sales graph -->

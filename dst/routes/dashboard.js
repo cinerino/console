@@ -21,11 +21,11 @@ const dashboardRouter = express.Router();
 dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         let userPool;
@@ -34,12 +34,12 @@ dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, func
         let adminUserPoolClients = [];
         try {
             userPool = yield userPoolService.findById({
-                userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
+                userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
             });
             const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
             userPoolClients = searchUserPoolClientsResult.data;
             adminUserPool = yield userPoolService.findById({
-                userPoolId: process.env.ADMIN_COGNITO_USER_POOL_ID
+                userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
             });
             const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: adminUserPool.Id });
             adminUserPoolClients = searchAdminUserPoolClientsResult.data;
@@ -65,7 +65,7 @@ dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, func
 dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -88,7 +88,7 @@ dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(this, void 0
 dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -131,7 +131,7 @@ dashboardRouter.get('/countNewUser', (_, res, next) => __awaiter(this, void 0, v
 dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -155,7 +155,7 @@ dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(this, 
 dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -176,7 +176,7 @@ dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 
 dashboardRouter.get('/dbStats', (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const stats = yield eventService.fetch({
@@ -200,7 +200,7 @@ dashboardRouter.get('/dbStats', (req, res) => __awaiter(this, void 0, void 0, fu
 dashboardRouter.get('/health', (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const stats = yield eventService.fetch({
@@ -228,7 +228,7 @@ dashboardRouter.get('/health', (req, res) => __awaiter(this, void 0, void 0, fun
 dashboardRouter.get('/queueCount', (req, res) => __awaiter(this, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const result = yield taskService.search({

@@ -17,7 +17,7 @@ movieTicketPaymentMethodRouter.get(
     async (req, res, next) => {
         try {
             const paymentMethodService = new cinerinoapi.service.PaymentMethod({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchConditions:
@@ -61,11 +61,11 @@ movieTicketPaymentMethodRouter.all(
     async (req, res, next) => {
         try {
             const paymentService = new cinerinoapi.service.Payment({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 
@@ -157,7 +157,7 @@ movieTicketPaymentMethodRouter.get(
             const message = undefined;
 
             const paymentMethodService = new cinerinoapi.service.PaymentMethod({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchResult = await paymentMethodService.searchMovieTickets({
@@ -189,7 +189,7 @@ movieTicketPaymentMethodRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchResult = await orderService.search({

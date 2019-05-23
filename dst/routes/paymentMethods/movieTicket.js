@@ -22,7 +22,7 @@ const movieTicketPaymentMethodRouter = express.Router();
 movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const paymentMethodService = new cinerinoapi.service.PaymentMethod({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -62,11 +62,11 @@ movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(this, void 
 movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const paymentService = new cinerinoapi.service.Payment({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
@@ -149,7 +149,7 @@ movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter
     try {
         const message = undefined;
         const paymentMethodService = new cinerinoapi.service.PaymentMethod({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchResult = yield paymentMethodService.searchMovieTickets({
@@ -177,7 +177,7 @@ movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter
 movieTicketPaymentMethodRouter.get('/:identifier/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchResult = yield orderService.search({

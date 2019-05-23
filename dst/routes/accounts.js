@@ -15,7 +15,7 @@ const accountsRouter = express.Router();
 //     async (req, res, next) => {
 //         try {
 //             const accountService = new cinerinoapi.service.Account({
-//                 endpoint: <string>process.env.API_ENDPOINT,
+//                 endpoint: req.project.settings.API_ENDPOINT,
 //                 auth: req.user.authClient
 //             });
 //             debug('searching accounts...', req.query);
@@ -43,7 +43,7 @@ const accountsRouter = express.Router();
 //     async (req, res, next) => {
 //         try {
 //             const accountService = new cinerinoapi.service.Account({
-//                 endpoint: <string>process.env.API_ENDPOINT,
+//                 endpoint: req.project.settings.API_ENDPOINT,
 //                 auth: req.user.authClient
 //             });
 //             const actions = await accountService.searchMoneyTransferActions({ accountNumber: req.params.accountNumber });

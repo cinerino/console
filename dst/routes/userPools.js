@@ -29,11 +29,11 @@ userPoolsRouter.get('',
         if (req.query.format === 'datatable') {
             const userPools = [
                 {
-                    id: process.env.DEFAULT_COGNITO_USER_POOL_ID,
+                    id: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID,
                     name: 'Customerユーザープール'
                 },
                 {
-                    id: process.env.ADMIN_COGNITO_USER_POOL_ID,
+                    id: req.project.settings.ADMIN_COGNITO_USER_POOL_ID,
                     name: 'Adminユーザープール'
                 }
             ];
@@ -59,7 +59,7 @@ userPoolsRouter.get('/:userPoolId',
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const userPool = yield userPoolService.findById({
@@ -82,7 +82,7 @@ userPoolsRouter.get('/:userPoolId',
 userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -114,7 +114,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId',
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const userPoolClient = yield userPoolService.findClientById({
@@ -136,7 +136,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId',
 userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -168,10 +168,10 @@ userPoolsRouter.get('/:userPoolId/people/:id',
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         switch (req.params.userPoolId) {
-            case process.env.DEFAULT_COGNITO_USER_POOL_ID:
+            case req.project.settings.DEFAULT_COGNITO_USER_POOL_ID:
                 res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
                 break;
-            case process.env.ADMIN_COGNITO_USER_POOL_ID:
+            case req.project.settings.ADMIN_COGNITO_USER_POOL_ID:
                 res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
                 break;
             default:

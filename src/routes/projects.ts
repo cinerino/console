@@ -23,6 +23,8 @@ import transactionsRouter from './transactions';
 import userPoolsRouter from './userPools';
 import waiterRouter from './waiter';
 
+const projects: any[] = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
+
 const projectsRouter = express.Router();
 
 projectsRouter.all(
@@ -30,8 +32,11 @@ projectsRouter.all(
     async (req, res, next) => {
         try {
             const message: string = '';
+            const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
+            req.project = projectFromEnvironment;
+
             const projectService = new cinerinoapi.service.Project({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: projectFromEnvironment.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
@@ -43,6 +48,18 @@ projectsRouter.all(
         } catch (error) {
             next(error);
         }
+    }
+);
+
+projectsRouter.all(
+    '/:id/*',
+    async (req, _, next) => {
+        // ルーティングからプロジェクトをセット
+        const project = projects.find((p) => p.id === req.params.id);
+
+        req.project = project;
+
+        next();
     }
 );
 

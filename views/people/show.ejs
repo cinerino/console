@@ -119,7 +119,7 @@
                                 <%= account.accountType %>
                             </span>
                             <a target="_blank"
-                                href="<%= process.env.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
+                                href="<%= req.project.settings.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
                                 <%= account.accountNumber %>
                             </a>
                             <span class="badge badge-secondary <%= account.status %>">
@@ -134,7 +134,7 @@
                                 <%= account.accountType %>
                             </span>
                             <a target="_blank"
-                                href="<%= process.env.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
+                                href="<%= req.project.settings.PECORINO_CONSOLE_ENDPOINT %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
                                 <%= account.accountNumber %>
                             </a>
                             <span class="badge badge-secondary <%= account.status %>">

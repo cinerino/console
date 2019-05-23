@@ -14,15 +14,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import * as createDebug from 'debug';
 const express = require("express");
 // import * as moment from 'moment';
+const projects = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
 // const debug = createDebug('cinerino-console:routes');
 const homeRouter = express.Router();
 homeRouter.get('/', (_, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const projects = [{
-                typeOf: 'Project',
-                id: process.env.PROJECT_ID
-            }];
         res.render('dashboard', {
+            layout: 'layouts/dashboard',
             message: 'Welcome to Cinerino Console!',
             projects: projects
         });

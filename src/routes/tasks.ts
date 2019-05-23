@@ -18,7 +18,7 @@ tasksRouter.get(
         try {
             debug('req.query:', req.query);
             const taskService = new cinerinoapi.service.Task({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const taskNameChoices = Object.values(cinerinoapi.factory.taskName);

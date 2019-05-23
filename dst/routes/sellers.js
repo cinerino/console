@@ -21,14 +21,13 @@ const chevreapi = require("../chevreapi");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
 const sellersRouter = express.Router();
-const PROJECT_ORGANIZATION = JSON.parse((process.env.PROJECT_ORGANIZATION !== undefined) ? process.env.PROJECT_ORGANIZATION : '{}');
 /**
  * 販売者検索
  */
 sellersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -62,17 +61,22 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         let message;
         let attributes;
+        const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
         const projectService = new cinerinoapi.service.Project({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });
         if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ project: project, req: req });
+                attributes = yield createAttributesFromBody({
+                    project: project,
+                    req: req,
+                    projectOrganization: PROJECT_ORGANIZATION
+                });
                 debug('creating organization...', attributes);
                 const sellerService = new cinerinoapi.service.Seller({
-                    endpoint: process.env.API_ENDPOINT,
+                    endpoint: req.project.settings.API_ENDPOINT,
                     auth: req.user.authClient
                 });
                 const seller = yield sellerService.create(attributes);
@@ -105,13 +109,14 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         let message;
         let attributes;
+        const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
         const projectService = new cinerinoapi.service.Project({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const seller = yield sellerService.findById({ id: req.params.id });
@@ -123,7 +128,11 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
         }
         else if (req.method === 'POST') {
             try {
-                attributes = yield createAttributesFromBody({ project: project, req: req });
+                attributes = yield createAttributesFromBody({
+                    project: project,
+                    req: req,
+                    projectOrganization: PROJECT_ORGANIZATION
+                });
                 yield sellerService.update({ id: req.params.id, attributes: attributes });
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
@@ -162,7 +171,7 @@ function createAttributesFromBody(params) {
         const authClient = params.req.user.chevreAuthClient;
         const webAPIIdentifier = body.makesOffer.offeredThrough.identifier;
         const branchCode = body.branchCode;
-        const initialName = `${process.env.PROJECT_ID}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
+        const initialName = `${params.project.id}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
         let movieTheaterFromChevre = {
             project: params.req.project,
             typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
@@ -171,7 +180,7 @@ function createAttributesFromBody(params) {
                 ja: initialName,
                 en: initialName
             },
-            telephone: PROJECT_ORGANIZATION.telephone,
+            telephone: params.projectOrganization.telephone,
             screenCount: 0,
             kanaName: '',
             id: '',
@@ -384,7 +393,7 @@ function createAttributesFromBody(params) {
                 en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
             },
             legalName: movieTheaterFromChevre.name,
-            parentOrganization: PROJECT_ORGANIZATION,
+            parentOrganization: params.projectOrganization,
             location: {
                 typeOf: movieTheaterFromChevre.typeOf,
                 branchCode: movieTheaterFromChevre.branchCode,
@@ -405,7 +414,7 @@ function createAttributesFromBody(params) {
 sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({

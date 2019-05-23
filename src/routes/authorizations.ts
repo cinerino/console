@@ -22,7 +22,7 @@ authorizationsRouter.get(
         try {
             debug('req.query:', req.query);
             const authorizationService = new cinerinoapi.service.Authorization({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 

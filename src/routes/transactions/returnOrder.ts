@@ -20,7 +20,7 @@ returnOrderTransactionsRouter.get(
         try {
             debug('req.query:', req.query);
             const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 
@@ -114,7 +114,7 @@ returnOrderTransactionsRouter.get(
     async (req, res, next) => {
         try {
             const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchTransactionsResult = await returnOrderService.search({

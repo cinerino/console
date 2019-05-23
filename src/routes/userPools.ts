@@ -22,11 +22,11 @@ userPoolsRouter.get(
             if (req.query.format === 'datatable') {
                 const userPools = [
                     {
-                        id: <string>process.env.DEFAULT_COGNITO_USER_POOL_ID,
+                        id: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID,
                         name: 'Customerユーザープール'
                     },
                     {
-                        id: <string>process.env.ADMIN_COGNITO_USER_POOL_ID,
+                        id: req.project.settings.ADMIN_COGNITO_USER_POOL_ID,
                         name: 'Adminユーザープール'
                     }
                 ];
@@ -53,7 +53,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const userPool = await userPoolService.findById({
@@ -79,7 +79,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -113,7 +113,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const userPoolClient = await userPoolService.findClientById({
@@ -138,7 +138,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -172,10 +172,10 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             switch (req.params.userPoolId) {
-                case process.env.DEFAULT_COGNITO_USER_POOL_ID:
+                case req.project.settings.DEFAULT_COGNITO_USER_POOL_ID:
                     res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
                     break;
-                case process.env.ADMIN_COGNITO_USER_POOL_ID:
+                case req.project.settings.ADMIN_COGNITO_USER_POOL_ID:
                     res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
                     break;
                 default:

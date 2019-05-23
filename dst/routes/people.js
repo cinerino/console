@@ -27,7 +27,7 @@ peopleRouter.get('',
     try {
         debug('req.query:', req.query);
         const personService = new cinerinoapi.service.Person({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -67,11 +67,11 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
     try {
         let message = '';
         const personService = new cinerinoapi.service.Person({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const person = yield personService.findById({ id: req.params.id });
@@ -152,7 +152,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
 peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -180,7 +180,7 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void
 peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchResult = yield personOwnershipInfoService.search({
@@ -208,7 +208,7 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(this, void 0
 peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchResult = yield personOwnershipInfoService.search({

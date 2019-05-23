@@ -20,7 +20,7 @@ reservationsRouter.get(
         try {
             debug('req.query:', req.query);
             const reservationService = new cinerinoapi.service.Reservation({
-                endpoint: <string>process.env.API_ENDPOINT,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
 

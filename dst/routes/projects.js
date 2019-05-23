@@ -30,12 +30,15 @@ const tasks_1 = require("./tasks");
 const transactions_1 = require("./transactions");
 const userPools_1 = require("./userPools");
 const waiter_1 = require("./waiter");
+const projects = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
 const projectsRouter = express.Router();
 projectsRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const message = '';
+        const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
+        req.project = projectFromEnvironment;
         const projectService = new cinerinoapi.service.Project({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: projectFromEnvironment.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });
@@ -47,6 +50,12 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, f
     catch (error) {
         next(error);
     }
+}));
+projectsRouter.all('/:id/*', (req, _, next) => __awaiter(this, void 0, void 0, function* () {
+    // ルーティングからプロジェクトをセット
+    const project = projects.find((p) => p.id === req.params.id);
+    req.project = project;
+    next();
 }));
 projectsRouter.use('/:id/accounts', accounts_1.default);
 projectsRouter.use('/:id/authorizations', authorizations_1.default);

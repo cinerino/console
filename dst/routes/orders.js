@@ -28,15 +28,15 @@ ordersRouter.get('',
     try {
         debug('req.query:', req.query);
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
@@ -44,10 +44,10 @@ ordersRouter.get('',
         let adminUserPoolClients = [];
         try {
             const searchUserPoolClientsResult = yield userPoolService.searchClients({
-                userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
+                userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
             });
             const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({
-                userPoolId: process.env.ADMIN_COGNITO_USER_POOL_ID
+                userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
             });
             userPoolClients = searchUserPoolClientsResult.data;
             adminUserPoolClients = searchAdminUserPoolClientsResult.data;
@@ -267,7 +267,7 @@ ordersRouter.get('/:orderNumber',
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -427,7 +427,7 @@ ordersRouter.get('/:orderNumber',
 ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const returnOrderTransaction = yield returnOrderService.start({
@@ -454,11 +454,11 @@ ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(this, vo
 ordersRouter.post('/:orderNumber/sendEmailMessage', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const taskService = new cinerinoapi.service.Task({
-            endpoint: process.env.API_ENDPOINT,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const searchTransactionsResult = yield placeOrderService.search({
