@@ -304,8 +304,8 @@ ordersRouter.get(
                         }
 
                         const url = (a.agent.memberOf !== undefined)
-                            ? `/userPools/${userPoolId}/people/${a.agent.id}`
-                            : `/userPools/${userPoolId}/clients/${a.agent.id}`;
+                            ? `/projects/${req.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
+                            : `/projects/${req.project.id}/userPools/${userPoolId}/clients/${a.agent.id}`;
 
                         agent = {
                             id: a.agent.id,
@@ -316,7 +316,7 @@ ordersRouter.get(
                         agent = {
                             id: a.agent.id,
                             name: order.seller.name,
-                            url: `/sellers/${a.agent.id}`
+                            url: `/projects/${req.project.id}/sellers/${a.agent.id}`
                         };
                     }
 

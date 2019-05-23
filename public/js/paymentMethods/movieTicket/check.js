@@ -4,7 +4,7 @@ $(function () {
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/paymentMethods/movieTicket/check',
+                url: '/projects/' + PROJECT_ID + '/paymentMethods/movieTicket/check',
                 type: 'POST',
                 data: function (d) {
                     // d.name = d.search.value;
@@ -22,7 +22,7 @@ $(function () {
                     data: null,
                     render: function (data, type, row) {
                         return '<ul class="list-unstyled">'
-                            + '<li><a href="/paymentMethods/movieTicket/' + data.identifier + '">' + data.identifier + '</a></li>'
+                            + '<li><a href="/projects/' + PROJECT_ID + '/paymentMethods/movieTicket/' + data.identifier + '">' + data.identifier + '</a></li>'
                             + '</ul>';
                     }
                 },

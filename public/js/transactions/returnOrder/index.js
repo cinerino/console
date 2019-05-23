@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/transactions/returnOrder?' * $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -19,7 +19,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a target="_blank" href="/transactions/returnOrder/' + data.id + '">' + data.id + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/returnOrder/' + data.id + '">' + data.id + '</a></li>'
                         + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
                         + '<li>' + data.startDate + '</li>'
                         + '<li>' + data.endDate + '</li>'
@@ -39,7 +39,7 @@ $(function () {
                         + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>';
 
                     if (data.agent.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>'
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>'
                             + '<li>' + data.agent.memberOf.membershipNumber + '</li>';
                     } else {
                         html += '<li>' + data.agent.id + '</li>';
@@ -60,7 +60,7 @@ $(function () {
 
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + seller.typeOf + '">' + seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/sellers/' + seller.id + '">' + seller.name + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/sellers/' + seller.id + '">' + seller.name + '</a></li>'
                         + '<li>' + seller.telephone + '</li>'
                         + '<li>' + seller.url + '</li>'
                         + '</ul>';
@@ -71,7 +71,7 @@ $(function () {
                 render: function (data, type, row) {
                     if (data.object !== undefined && data.object.order !== undefined) {
                         return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="/orders/' + data.object.order.orderNumber + '">' + data.object.order.orderNumber + '</a></li>'
+                            + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.object.order.orderNumber + '">' + data.object.order.orderNumber + '</a></li>'
                             + '</ul>';
                     } else {
                         return '<ul class="list-unstyled">'
@@ -103,7 +103,7 @@ $(function () {
         $('form').submit();
     });
     $('.downloadCSV').click(function () {
-        var url = '/transactions/returnOrder?' + $('form').serialize() + '&format=text/csv';
+        var url = '/projects/' + PROJECT_ID + '/transactions/returnOrder?' + $('form').serialize() + '&format=text/csv';
         window.open(url, '_blank');
     });
 });

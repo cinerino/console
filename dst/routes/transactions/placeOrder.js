@@ -166,8 +166,8 @@ placeOrderTransactionsRouter.get('/:transactionId',
             // no op
         }
         const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
-            ? `/people/${transaction.agent.id}`
-            : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${transaction.agent.id}`;
+            ? `/projects/${req.project.id}/people/${transaction.agent.id}`
+            : `/projects/${req.project.id}/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${transaction.agent.id}`;
         const timelines = [{
                 action: {},
                 agent: {
@@ -186,8 +186,8 @@ placeOrderTransactionsRouter.get('/:transactionId',
             let agent;
             if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
                 const url = (a.agent.memberOf !== undefined)
-                    ? `/people/${a.agent.id}`
-                    : `/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
+                    ? `/projects/${req.project.id}/people/${a.agent.id}`
+                    : `/projects/${req.project.id}/userPools/${process.env.DEFAULT_COGNITO_USER_POOL_ID}/clients/${a.agent.id}`;
                 agent = {
                     id: a.agent.id,
                     name: a.agent.id,
@@ -198,7 +198,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                 agent = {
                     id: a.agent.id,
                     name: transaction.seller.name.ja,
-                    url: `/sellers/${a.agent.id}`
+                    url: `/projects/${req.project.id}/sellers/${a.agent.id}`
                 };
             }
             let actionName;

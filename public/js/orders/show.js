@@ -13,7 +13,7 @@ $(function () {
         if (window.confirm(message)) {
             button.addClass('disabled');
             $.ajax({
-                url: '/orders/' + order.orderNumber + '/sendEmailMessage',
+                url: '/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '/sendEmailMessage',
                 type: 'POST',
                 dataType: 'json'
                 // data: $('form').serialize()
@@ -51,7 +51,7 @@ $(function () {
         var button = $(this);
         button.addClass('disabled');
         $.ajax({
-            url: '/orders/' + order.orderNumber + '/return',
+            url: '/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '/return',
             type: 'POST'
             // dataType: 'json'
             // data: $('form').serialize()

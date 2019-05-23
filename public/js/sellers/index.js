@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/sellers?' + $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -19,7 +19,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a href="/sellers/' + data.id + '">' + data.id + '</a></li>'
+                        + '<li><a href="/projects/' + PROJECT_ID + '/sellers/' + data.id + '">' + data.id + '</a></li>'
                         + '<li><span class="badge badge-info ' + data.typeOf + '">' + data.typeOf + '</span></li>'
                         + '<li>' + data.name.ja + '</li>'
                         + '<li>' + data.name.en + '</li>'

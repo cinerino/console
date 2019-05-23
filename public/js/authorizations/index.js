@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/authorizations?' + $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -41,7 +41,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-primary">' + data.object.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/ownershipInfos?ids=' + data.object.id + '">' + data.object.id + '</a></li>';
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/ownershipInfos?ids=' + data.object.id + '">' + data.object.id + '</a></li>';
 
                     if (data.object.typeOfGood !== undefined) {
                         html += '<ul class="list-unstyled">'

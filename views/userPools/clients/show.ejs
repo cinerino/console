@@ -68,7 +68,8 @@
                         <strong><i class="fa fa-user mr-1"></i> ユーザープール</strong>
 
                         <p class="text-muted">
-                            <a target="_blank" href="/userPools/<%= userPoolClient.UserPoolId %>">
+                            <a target="_blank"
+                                href="/projects/<%= req.project.id %>/userPools/<%= userPoolClient.UserPoolId %>">
                                 <%= userPoolClient.UserPoolId %></a>
                         </p>
 

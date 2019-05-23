@@ -13,7 +13,7 @@ $(function () {
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
-        '/sellers/' + seller.id + '/orders',
+        '/projects/' + PROJECT_ID + '/sellers/' + seller.id + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
         $('#orderCount').html(data.totalCount.toString());

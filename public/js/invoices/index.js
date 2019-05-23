@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/invoices?' + $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;

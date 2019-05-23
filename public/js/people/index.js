@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/people?' + $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -20,7 +20,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-info">' + data.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/people/' + data.id + '">' + data.id + '</a></li>';
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/people/' + data.id + '">' + data.id + '</a></li>';
                     if (data.memberOf !== undefined) {
                         html += '<li><span class="badge badge-warning">' + ((data.memberOf.membershipNumber !== undefined) ? data.memberOf.membershipNumber : '') + '</span></li>';
                     }

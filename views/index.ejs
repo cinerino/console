@@ -54,7 +54,7 @@
                             <div class="icon">
                                 <i class="ion ion-bag"></i>
                             </div>
-                            <a href="/orders" class="small-box-footer">More info <i
+                            <a href="/projects/<%= req.project.id %>/orders" class="small-box-footer">More info <i
                                     class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -69,8 +69,8 @@
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="/transactions/placeOrder" class="small-box-footer">More info <i
-                                    class="fa fa-arrow-circle-right"></i></a>
+                            <a href="/projects/<%= req.project.id %>/transactions/placeOrder"
+                                class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
@@ -98,8 +98,8 @@
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
                             </div>
-                            <a href="/transactions/placeOrder" class="small-box-footer">More info <i
-                                    class="fa fa-arrow-circle-right"></i></a>
+                            <a href="/projects/<%= req.project.id %>/transactions/placeOrder"
+                                class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
@@ -148,7 +148,7 @@
                             <div class="icon">
                                 <i class="fa fa-tasks"></i>
                             </div>
-                            <a href="/tasks" class="small-box-footer">More info <i
+                            <a href="/projects/<%= req.project.id %>/tasks" class="small-box-footer">More info <i
                                     class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -180,7 +180,8 @@
                                     <i class="fa fa-wrench"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                    <a target="_blank" href="/waiter/rules" class="dropdown-item">入場制限設定を見る</a>
+                                    <a target="_blank" href="/projects/<%= req.project.id %>/waiter/rules"
+                                        class="dropdown-item">入場制限設定を見る</a>
                                 </div>
                             </div>
                             <button type="button" class="btn bg-dark btn-sm" data-widget="collapse">
@@ -297,7 +298,8 @@
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
                         <!-- <a href="#" class="btn btn-sm btn-info float-left">Place New Order</a> -->
-                        <a target="_blank" href="/orders" class="btn btn-sm btn-secondary float-right">View All
+                        <a target="_blank" href="/projects/<%= req.project.id %>/orders"
+                            class="btn btn-sm btn-secondary float-right">View All
                             Orders</a>
                     </div>
                     <!-- /.card-footer -->

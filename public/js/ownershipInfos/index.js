@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/ownershipInfos?' + $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -48,14 +48,14 @@ $(function () {
                     html += '<li><span class="badge badge-info">' + data.ownedBy.typeOf + '</span></li>'
                         + '<li><span class="badge badge-warning">' + ((data.ownedBy.memberOf !== undefined) ? data.ownedBy.memberOf.membershipNumber : '') + '</span></li>'
                         + '<li>'
-                        + '<a target="_blank" href="/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
-                        + ' <a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
+                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
+                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
                         + '</li>';
 
                     if (data.ownedBy.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.ownedBy.id + '">' + data.ownedBy.id + '</a></li>';
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.ownedBy.id + '">' + data.ownedBy.id + '</a></li>';
                     } else {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + data.ownedBy.id + '">' + data.ownedBy.id + '</a></li>';
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + data.ownedBy.id + '">' + data.ownedBy.id + '</a></li>';
                     }
 
                     html += '<li>' + data.ownedBy.name + '</li>'
@@ -83,7 +83,7 @@ $(function () {
 
                     var reservationUrl = '#';
                     if (data.typeOfGood.typeOf === 'EventReservation') {
-                        reservationUrl = '/reservations?ids=' + data.typeOfGood.id;
+                        reservationUrl = '/projects/' + PROJECT_ID + '/reservations?ids=' + data.typeOfGood.id;
                     }
 
                     html += '<li><a target="_blank" href="' + reservationUrl + '">' + data.typeOfGood.id + '</a></li>'

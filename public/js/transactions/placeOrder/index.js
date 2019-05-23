@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/transactions/placeOrder?' * $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -19,7 +19,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a target="_blank" href="/transactions/placeOrder/' + data.id + '">' + data.id + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/placeOrder/' + data.id + '">' + data.id + '</a></li>'
                         + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
                         + '<li>' + data.startDate + '</li>'
                         + '<li>' + data.endDate + '</li>'
@@ -38,7 +38,7 @@ $(function () {
                         + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>';
 
                     if (data.agent.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>'
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>'
                             + '<li>' + data.agent.memberOf.membershipNumber + '</li>';
                     } else {
                         html += '<li>' + data.agent.id + '</li>';
@@ -56,11 +56,11 @@ $(function () {
                         iss = data.object.clientUser.iss;
                         clientId = data.object.clientUser.client_id;
                     }
-                    html += '<li><a target="_blank" href="/userPools/' + userPoolId + '">' + iss + '</a></li>'
-                        + '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
+                    html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '">' + iss + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
 
                     if (data.agent.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>';
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>';
                     }
 
                     html += '</ul>';
@@ -73,7 +73,7 @@ $(function () {
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/sellers/' + data.seller.id + '">' + data.seller.name.ja + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/sellers/' + data.seller.id + '">' + data.seller.name.ja + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
                         + '<li>' + data.seller.url + '</li>'
                         + '</ul>';
@@ -84,7 +84,7 @@ $(function () {
                 render: function (data, type, row) {
                     if (data.result !== undefined) {
                         return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="/orders/' + data.result.order.orderNumber + '">' + data.result.order.orderNumber + '</a></li>'
+                            + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.result.order.orderNumber + '">' + data.result.order.orderNumber + '</a></li>'
                             + '</ul>';
                     } else {
                         return '<ul class="list-unstyled">'
@@ -131,11 +131,11 @@ $(function () {
         $('form').submit();
     });
     $('.downloadCSV').click(function () {
-        var url = '/transactions/placeOrder?' + $('form').serialize() + '&format=text/csv';
+        var url = '/projects/' + PROJECT_ID + '/transactions/placeOrder?' + $('form').serialize() + '&format=text/csv';
         window.open(url, '_blank');
     });
     $('.downloadJson').click(function () {
-        var url = '/transactions/placeOrder?' + $('form').serialize() + '&format=application/json';
+        var url = '/projects/' + PROJECT_ID + '/transactions/placeOrder?' + $('form').serialize() + '&format=application/json';
         window.open(url, '_blank');
     });
 

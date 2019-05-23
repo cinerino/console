@@ -104,17 +104,17 @@
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="/" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/dashboard" class="nav-link">
                                 <i class="nav-icon fa fa-tachometer-alt"></i>
                                 <p>
-                                    Dashboard
+                                    HOME
                                     <span class="badge badge-info right"></span>
                                 </p>
                             </a>
                         </li>
                         <li class="nav-header">リソース検索</li>
                         <li class="nav-item">
-                            <a href="/sellers" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/sellers" class="nav-link">
                                 <i class="nav-icon fa fa-store"></i>
                                 <p>
                                     販売者
@@ -123,7 +123,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/events/screeningEvent" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/events/screeningEvent" class="nav-link">
                                 <i class="nav-icon fa fa-film"></i>
                                 <p>
                                     イベント
@@ -142,7 +142,7 @@
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <a href="/orders" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/orders" class="nav-link">
                                         <i class="nav-icon fa fa-shopping-cart"></i>
                                         <p>
                                             注文
@@ -151,7 +151,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/transactions/placeOrder" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/transactions/placeOrder" class="nav-link">
                                         <i class="nav-icon fa fa-table"></i>
                                         <p>
                                             注文取引
@@ -160,7 +160,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/transactions/returnOrder" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/transactions/returnOrder" class="nav-link">
                                         <i class="nav-icon fa fa-table"></i>
                                         <p>
                                             注文返品取引
@@ -169,7 +169,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/invoices" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/invoices" class="nav-link">
                                         <i class="nav-icon fa fa-receipt"></i>
                                         <p>
                                             インボイス
@@ -188,7 +188,8 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/paymentMethods/movieTicket" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/paymentMethods/movieTicket"
+                                        class="nav-link">
                                         <i class="nav-icon fa fa-credit-card"></i>
                                         <p>
                                             ムビチケ検索 & 認証
@@ -197,7 +198,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/pecorino/accounts/coin" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/pecorino/accounts/coin" class="nav-link">
                                         <i class="nav-icon fa fa-piggy-bank"></i>
                                         <p>
                                             コイン口座
@@ -206,7 +207,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/pecorino/accounts/point" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/pecorino/accounts/point" class="nav-link">
                                         <i class="nav-icon fa fa-piggy-bank"></i>
                                         <p>
                                             ポイント口座
@@ -217,7 +218,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="/reservations" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/reservations" class="nav-link">
                                 <i class="nav-icon fa fa-ticket-alt"></i>
                                 <p>
                                     予約
@@ -226,7 +227,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/tasks" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/tasks" class="nav-link">
                                 <i class="nav-icon fa fa-tasks"></i>
                                 <p>
                                     タスク
@@ -244,7 +245,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/people" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/people" class="nav-link">
                                         <i class="nav-icon fa fa-user"></i>
                                         <p>
                                             会員
@@ -262,7 +263,7 @@
                                     </a>
                                 </li> -->
                                 <li class="nav-item">
-                                    <a href="/userPools" class="nav-link">
+                                    <a href="/projects/<%= req.project.id %>/userPools" class="nav-link">
                                         <i class="nav-icon fa fa-users"></i>
                                         <p>
                                             ユーザープール
@@ -273,7 +274,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="/ownershipInfos" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/ownershipInfos" class="nav-link">
                                 <i class="nav-icon fa fa-hands"></i>
                                 <p>
                                     所有権
@@ -282,7 +283,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/authorizations" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/authorizations" class="nav-link">
                                 <i class="nav-icon fa fa-qrcode"></i>
                                 <p>
                                     認可
@@ -293,7 +294,7 @@
 
                         <li class="nav-header">プロジェクト</li>
                         <li class="nav-item">
-                            <a href="/waiter/rules" class="nav-link">
+                            <a href="/projects/<%= req.project.id %>/waiter/rules" class="nav-link">
                                 <i class="nav-icon fa fa-passport"></i>
                                 <p>
                                     入場制限規則
@@ -330,6 +331,10 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <script>
+                var PROJECT_ID = '<%= process.env.PROJECT_ID %>';
+            </script>
+            <input type="hidden" name="PROJECT_ID" value="<%= process.env.PROJECT_ID %>">
             <%- body %>
         </div>
         <!-- /.content-wrapper -->

@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/orders?' + $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -19,7 +19,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
-                        + '<li><a target="_blank" href="/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
                         + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
                         + '<li>' + data.orderDate + '</li>'
                         + '<li><span class="badge ' + data.orderStatus + '">' + data.orderStatus + '</span></li>'
@@ -50,14 +50,14 @@ $(function () {
                     html += '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>'
                         + '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
                         + '<li>'
-                        + '<a target="_blank" href="/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
-                        + ' <a target="_blank" href="/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
+                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
+                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
                         + '</li>';
 
                     if (data.customer.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.customer.id + '">' + data.customer.id + '</a></li>';
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.customer.id + '">' + data.customer.id + '</a></li>';
                     } else {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + data.customer.id + '">' + data.customer.id + '</a></li>';
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + data.customer.id + '">' + data.customer.id + '</a></li>';
                     }
 
                     html += '<li>' + data.customer.name + '</li>'
@@ -82,7 +82,7 @@ $(function () {
                 render: function (data, type, row) {
                     return '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-info">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/sellers/' + data.seller.id + '">' + data.seller.id + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/sellers/' + data.seller.id + '">' + data.seller.id + '</a></li>'
                         + '<li>' + data.seller.name + '</li>'
                         + '<li><a target="_blank" href="' + data.seller.url + '">' + data.seller.url + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'

@@ -447,7 +447,7 @@ function searchNumPlaceOrder(cb) {
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
-        '/dashboard/orders',
+        '/projects/' + PROJECT_ID + '/dashboard/orders',
         {
             limit: limit,
             page: page,
@@ -785,7 +785,7 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
 }
 function searchLatestOrders(cb) {
     $.getJSON(
-        '/dashboard/orders',
+        '/projects/' + PROJECT_ID + '/dashboard/orders',
         {
             limit: 10,
             page: 1,
@@ -801,7 +801,7 @@ function searchLatestOrders(cb) {
             var numDisplayItems = 4;
 
             $('<tr>').html(
-                '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
                 + '<td>'
                 + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {
@@ -825,7 +825,7 @@ function searchLatestOrders(cb) {
 }
 function countNewOrder(cb) {
     $.getJSON(
-        '/dashboard/countNewOrder',
+        '/projects/' + PROJECT_ID + '/dashboard/countNewOrder',
         {}
     ).done(function (data) {
         $('#newOrderCount').html(data.totalCount.toString());
@@ -836,7 +836,7 @@ function countNewOrder(cb) {
 }
 function aggregateExitRate(cb) {
     $.getJSON(
-        '/dashboard/aggregateExitRate',
+        '/projects/' + PROJECT_ID + '/dashboard/aggregateExitRate',
         {}
     ).done(function (data) {
         $('#exitRate').html(data.rate.toString());
@@ -847,7 +847,7 @@ function aggregateExitRate(cb) {
 }
 function countNewUser(cb) {
     $.getJSON(
-        '/dashboard/countNewUser',
+        '/projects/' + PROJECT_ID + '/dashboard/countNewUser',
         {}
     ).done(function (data) {
         $('#newUserCount').html(data.totalCount.toString());
@@ -858,7 +858,7 @@ function countNewUser(cb) {
 }
 function countNewTransaction(cb) {
     $.getJSON(
-        '/dashboard/countNewTransaction',
+        '/projects/' + PROJECT_ID + '/dashboard/countNewTransaction',
         {}
     ).done(function (data) {
         $('#newTransactionCount').html(data.totalCount.toString());
@@ -965,7 +965,7 @@ function startMonitoringWaiter() {
 
 function updateHealth(cb) {
     $.getJSON(
-        '/dashboard/health',
+        '/projects/' + PROJECT_ID + '/dashboard/health',
         {}
     ).done(function (data) {
         console.log('health:', data);
@@ -982,7 +982,7 @@ function updateHealth(cb) {
 function updateDbStats(cb) {
     var GB = 1000000000;
     $.getJSON(
-        '/dashboard/dbStats',
+        '/projects/' + PROJECT_ID + '/dashboard/dbStats',
         {}
     ).done(function (data) {
         console.log('stats:', data);
@@ -1003,7 +1003,7 @@ function updateDbStats(cb) {
 
 function updateQueueCount(cb) {
     $.getJSON(
-        '/dashboard/queueCount',
+        '/projects/' + PROJECT_ID + '/dashboard/queueCount',
         {}
     ).done(function (data) {
         console.log('QueueCount:', data);

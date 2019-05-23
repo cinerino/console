@@ -49,7 +49,7 @@ $(function () {
 function searchOrders(page, cb) {
     // page += 1;
     $.getJSON(
-        '/people/' + person.id + '/orders',
+        '/projects/' + PROJECT_ID + '/people/' + person.id + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
         $('#orderCount').html(data.totalCount.toString());
@@ -60,7 +60,7 @@ function searchOrders(page, cb) {
             var numDisplayItems = 4;
 
             $('<tr>').html(
-                '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
                 + '<td>'
                 + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {
@@ -90,7 +90,7 @@ function searchOrders(page, cb) {
 function searchReservations(page, cb) {
     // page += 1;
     $.getJSON(
-        '/people/' + person.id + '/reservations',
+        '/projects/' + PROJECT_ID + '/people/' + person.id + '/reservations',
         { limit: limit, page: page }
     ).done(function (data) {
         // $('#orderCount').html(data.totalCount.toString());
@@ -102,7 +102,7 @@ function searchReservations(page, cb) {
             var html = '<td>' + '<a href="#">' + reservation.reservationNumber + '</a>' + '</td>'
                 + '<td>' + moment(reservation.modifiedTime).format('lllZ') + '</td>';
             if (reservation.reservationFor !== undefined) {
-                html += '<td>' + '<a target="_blank" href="/events/' + reservation.reservationFor.typeOf + '/' + reservation.reservationFor.id + '">' + reservation.reservationFor.name.ja + '</a>' + '</td>';
+                html += '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + reservation.reservationFor.typeOf + '/' + reservation.reservationFor.id + '">' + reservation.reservationFor.name.ja + '</a>' + '</td>';
             } else {
                 html += '<td></td>';
             }
@@ -122,7 +122,7 @@ function searchReservations(page, cb) {
 function searchProgramMemberships(page, cb) {
     // page += 1;
     $.getJSON(
-        '/people/' + person.id + '/programMemberships',
+        '/projects/' + PROJECT_ID + '/people/' + person.id + '/programMemberships',
         { limit: limit, page: page }
     ).done(function (data) {
         // $('#orderCount').html(data.totalCount.toString());

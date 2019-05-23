@@ -46,7 +46,7 @@ $(function () {
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
-        '/events/screeningEvent/' + event.id + '/orders',
+        '/projects/' + PROJECT_ID + '/events/screeningEvent/' + event.id + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
         $('#orderCount').html(data.totalCount.toString());
@@ -57,7 +57,7 @@ function searchOrders(cb) {
             var numDisplayItems = 4;
 
             $('<tr>').html(
-                '<td>' + '<a target="_blank" href="/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
                 + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
                 + '<td>'
                 + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {

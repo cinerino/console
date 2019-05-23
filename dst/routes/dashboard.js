@@ -18,6 +18,50 @@ const moment = require("moment-timezone");
 const cinerinoapi = require("../cinerinoapi");
 // const debug = createDebug('cinerino-console:routes');
 const dashboardRouter = express.Router();
+dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const userPoolService = new cinerinoapi.service.UserPool({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const sellerService = new cinerinoapi.service.Seller({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        let userPool;
+        let userPoolClients = [];
+        let adminUserPool;
+        let adminUserPoolClients = [];
+        try {
+            userPool = yield userPoolService.findById({
+                userPoolId: process.env.DEFAULT_COGNITO_USER_POOL_ID
+            });
+            const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
+            userPoolClients = searchUserPoolClientsResult.data;
+            adminUserPool = yield userPoolService.findById({
+                userPoolId: process.env.ADMIN_COGNITO_USER_POOL_ID
+            });
+            const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: adminUserPool.Id });
+            adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+        }
+        catch (error) {
+            // no op
+        }
+        const searchSellersResult = yield sellerService.search({});
+        res.render('index', {
+            message: 'Welcome to Cinerino Console!',
+            userPool: userPool,
+            userPoolClients: userPoolClients,
+            adminUserPool: adminUserPool,
+            adminUserPoolClients: adminUserPoolClients,
+            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            sellers: searchSellersResult.data
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({

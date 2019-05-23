@@ -4,7 +4,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/events/screeningEvent?' * $('form').serialize(),
+            url: '?' + $('form').serialize(),
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;
@@ -45,7 +45,7 @@ $(function () {
                         + '<img src="' + thumbnailImageUrl + '" alt="Product Image" class="img-size-50">'
                         + '</div>'
                         + '<div class="product-info">'
-                        + '<a target="_blank" href="/events/screeningEvent/' + data.id + '">'
+                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/events/screeningEvent/' + data.id + '">'
                         + data.name.ja
                         // + '<span class="badge badge-warning float-right">' + data.maximumAttendeeCapacity + ' seats</span>'
                         + '</a>'
@@ -115,7 +115,7 @@ $(function () {
             + '\nよろしいですか？';
         if (window.confirm(message)) {
             $.ajax({
-                url: '/events/screeningEvent/import',
+                url: '/projects/' + PROJECT_ID + '/events/screeningEvent/import',
                 type: 'POST',
                 dataType: 'json',
                 data: $('form').serialize()

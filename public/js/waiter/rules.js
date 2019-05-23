@@ -3,7 +3,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/waiter/rules',
+            url: '',
             data: function (d) {
                 d.limit = d.length;
                 d.page = (d.start / d.length) + 1;

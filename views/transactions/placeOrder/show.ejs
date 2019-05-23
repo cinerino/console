@@ -52,7 +52,8 @@
                             販売者
                             <address>
                                 <strong>
-                                    <a target="_blank" href="/sellers/<%= transaction.seller.id %>">
+                                    <a target="_blank"
+                                        href="/projects/<%= req.project.id %>/sellers/<%= transaction.seller.id %>">
                                         <%= transaction.seller.name.ja %>
                                     </a>
                                 </strong>
@@ -73,7 +74,8 @@
                             <address>
                                 <strong>
                                     <% if (transaction.agent.memberOf !== undefined) { %>
-                                    <a target="_blank" href="/people/<%= transaction.agent.id %>">
+                                    <a target="_blank"
+                                        href="/projects/<%= req.project.id %>/people/<%= transaction.agent.id %>">
                                         <%= transaction.agent.memberOf.membershipNumber %>
                                     </a>
                                     <% } else {%>
@@ -99,7 +101,8 @@
                                 <br> -->
                             <b>注文:</b>
                             <% if (transaction.result !== undefined) { %>
-                            <a target="_blank" href="/orders/<%= transaction.result.order.orderNumber %>">
+                            <a target="_blank"
+                                href="/projects/<%= req.project.id %>/orders/<%= transaction.result.order.orderNumber %>">
                                 <%= transaction.result.order.orderNumber %>
                             </a>
                             <% } %>
