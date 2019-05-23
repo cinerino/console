@@ -78,11 +78,19 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-primary">' + data.typeOfGood.typeOf + '</span></li>'
-                        + '<li><span class="badge badge-secondary">' + data.typeOfGood.id + '</span></li>'
+                    var html = '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-primary">' + data.typeOfGood.typeOf + '</span></li>';
+
+                    var reservationUrl = '#';
+                    if (data.typeOfGood.typeOf === 'EventReservation') {
+                        reservationUrl = '/reservations?ids=' + data.typeOfGood.id;
+                    }
+
+                    html += '<li><a target="_blank" href="' + reservationUrl + '">' + data.typeOfGood.id + '</a></li>'
                         + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showTypeOfGood" data-id="' + data.id + '">所有物をより詳しく見る</a><li>'
                         + '</ul>';
+
+                    return html;
                 }
             }
         ]
@@ -117,8 +125,8 @@ $(function () {
         var modal = $('#modal-ownershipInfo-typeOfGood');
         var title = 'OwnershipInfo `' + ownershipInfo.id + '` Object';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(ownershipInfo.typeOfGood, null, '\t');
-        + '</textarea>'
+            + JSON.stringify(ownershipInfo.typeOfGood, null, '\t')
+            + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
         modal.modal();

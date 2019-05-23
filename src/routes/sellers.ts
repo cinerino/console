@@ -349,6 +349,13 @@ async function createAttributesFromBody(params: {
         });
     }
 
+    // その他の決済を有効にする場合
+    if (body.othersPaymentAccepted === 'on') {
+        paymentAccepted.push({
+            paymentMethodType: cinerinoapi.factory.paymentMethodType.Others
+        });
+    }
+
     let hasPOS: cinerinoapi.factory.seller.IPOS[] = [];
     if (Array.isArray(body.hasPOS)) {
         body.hasPOS.forEach((pos: any) => {

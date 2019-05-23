@@ -138,8 +138,8 @@ $(function () {
         var modal = $('#modal-customer-identifier');
         var title = 'Order `' + order.orderNumber + '` Customer Identifier';
         var body = '<textarea ="40" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(order.customer.identifier, null, '\t');
-        + '</textarea>'
+            + JSON.stringify(order.customer.identifier, null, '\t')
+            + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
         modal.modal();

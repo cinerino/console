@@ -95,8 +95,8 @@ $(function () {
         var modal = $('#modal-authorization-object');
         var title = 'Authorization `' + authorization.id + '` Object';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(authorization.object, null, '\t');
-        + '</textarea>'
+            + JSON.stringify(authorization.object, null, '\t')
+            + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
         modal.modal();

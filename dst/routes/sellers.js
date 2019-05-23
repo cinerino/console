@@ -326,6 +326,12 @@ function createAttributesFromBody(params) {
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.EMoney
             });
         }
+        // その他の決済を有効にする場合
+        if (body.othersPaymentAccepted === 'on') {
+            paymentAccepted.push({
+                paymentMethodType: cinerinoapi.factory.paymentMethodType.Others
+            });
+        }
         let hasPOS = [];
         if (Array.isArray(body.hasPOS)) {
             body.hasPOS.forEach((pos) => {
