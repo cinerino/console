@@ -5,15 +5,26 @@
 import * as express from 'express';
 // import * as moment from 'moment';
 
-const projects: any[] = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
+import * as cinerinoapi from '../cinerinoapi';
+
+const projectsFromEnvironment: any[] = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
 
 // const debug = createDebug('cinerino-console:routes');
 const homeRouter = express.Router();
 
 homeRouter.get(
     '/',
-    async (_, res, next) => {
+    async (req, res, next) => {
         try {
+            const projects = await Promise.all(projectsFromEnvironment.map(async (p) => {
+                const projectService = new cinerinoapi.service.Project({
+                    endpoint: p.settings.API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+
+                return projectService.findById({ id: p.id });
+            }));
+
             res.render('dashboard', {
                 layout: 'layouts/dashboard',
                 message: 'Welcome to Cinerino Console!',

@@ -27,16 +27,16 @@ userPoolsRouter.get('',
     try {
         debug('req.query:', req.query);
         if (req.query.format === 'datatable') {
-            const userPools = [
+            const userPools = (req.project.settings.cognito !== undefined) ? [
                 {
-                    id: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID,
+                    id: req.project.settings.cognito.customerUserPool.id,
                     name: 'Customerユーザープール'
                 },
                 {
-                    id: req.project.settings.ADMIN_COGNITO_USER_POOL_ID,
+                    id: req.project.settings.cognito.adminUserPool.id,
                     name: 'Adminユーザープール'
                 }
-            ];
+            ] : [];
             res.json({
                 draw: req.query.draw,
                 recordsTotal: userPools.length,
@@ -167,15 +167,20 @@ userPoolsRouter.get('/:userPoolId/people/:id',
 // tslint:disable-next-line:max-func-body-length
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        switch (req.params.userPoolId) {
-            case req.project.settings.DEFAULT_COGNITO_USER_POOL_ID:
-                res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
-                break;
-            case req.project.settings.ADMIN_COGNITO_USER_POOL_ID:
-                res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
-                break;
-            default:
-                throw new Error('Unknown userPool');
+        if (req.project.settings.cognito !== undefined) {
+            switch (req.params.userPoolId) {
+                case req.project.settings.cognito.customerUserPool.id:
+                    res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
+                    break;
+                case req.project.settings.cognito.adminUserPool.id:
+                    res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
+                    break;
+                default:
+                    throw new Error('Unknown userPool');
+            }
+        }
+        else {
+            throw new Error('Unknown userPool');
         }
     }
     catch (error) {

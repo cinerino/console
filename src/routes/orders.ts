@@ -38,14 +38,16 @@ ordersRouter.get(
             let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             try {
-                const searchUserPoolClientsResult = await userPoolService.searchClients({
-                    userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
-                });
-                const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
-                    userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
-                });
-                userPoolClients = searchUserPoolClientsResult.data;
-                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+                if (req.project.settings.cognito !== undefined) {
+                    const searchUserPoolClientsResult = await userPoolService.searchClients({
+                        userPoolId: req.project.settings.cognito.customerUserPool.id
+                    });
+                    const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
+                        userPoolId: req.project.settings.cognito.adminUserPool.id
+                    });
+                    userPoolClients = searchUserPoolClientsResult.data;
+                    adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+                }
             } catch (error) {
                 // no op
             }

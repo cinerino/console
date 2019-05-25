@@ -30,19 +30,21 @@ dashboardRouter.get(
             let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
 
             try {
-                userPool = await userPoolService.findById({
-                    userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
-                });
+                if (req.project.settings.cognito !== undefined) {
+                    userPool = await userPoolService.findById({
+                        userPoolId: req.project.settings.cognito.customerUserPool.id
+                    });
 
-                const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
-                userPoolClients = searchUserPoolClientsResult.data;
+                    const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
+                    userPoolClients = searchUserPoolClientsResult.data;
 
-                adminUserPool = await userPoolService.findById({
-                    userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
-                });
+                    adminUserPool = await userPoolService.findById({
+                        userPoolId: req.project.settings.cognito.adminUserPool.id
+                    });
 
-                const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
-                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+                    const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
+                    adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+                }
             } catch (error) {
                 // no op
             }

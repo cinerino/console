@@ -61,7 +61,6 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         let message;
         let attributes;
-        const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
         const projectService = new cinerinoapi.service.Project({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
@@ -71,8 +70,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
             try {
                 attributes = yield createAttributesFromBody({
                     project: project,
-                    req: req,
-                    projectOrganization: PROJECT_ORGANIZATION
+                    req: req
                 });
                 debug('creating organization...', attributes);
                 const sellerService = new cinerinoapi.service.Seller({
@@ -109,7 +107,6 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
     try {
         let message;
         let attributes;
-        const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
         const projectService = new cinerinoapi.service.Project({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
@@ -130,8 +127,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
             try {
                 attributes = yield createAttributesFromBody({
                     project: project,
-                    req: req,
-                    projectOrganization: PROJECT_ORGANIZATION
+                    req: req
                 });
                 yield sellerService.update({ id: req.params.id, attributes: attributes });
                 req.flash('message', '更新しました');
@@ -139,6 +135,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
                 return;
             }
             catch (error) {
+                console.error(error);
                 message = error.message;
             }
         }
@@ -180,7 +177,7 @@ function createAttributesFromBody(params) {
                 ja: initialName,
                 en: initialName
             },
-            telephone: params.projectOrganization.telephone,
+            telephone: (params.project.telephone !== undefined) ? params.project.telephone : '',
             screenCount: 0,
             kanaName: '',
             id: '',
@@ -393,7 +390,7 @@ function createAttributesFromBody(params) {
                 en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
             },
             legalName: movieTheaterFromChevre.name,
-            parentOrganization: params.projectOrganization,
+            parentOrganization: params.project.parentOrganization,
             location: {
                 typeOf: movieTheaterFromChevre.typeOf,
                 branchCode: movieTheaterFromChevre.branchCode,

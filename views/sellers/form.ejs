@@ -98,8 +98,9 @@ if (seller !== undefined) {
 <div class="form-group">
     <label for="movieTicketInfo[kgygishCd]">ムビチケ興行会社コード</label>
     <input type="text" class="form-control" id="movieTicketInfo[kgygishCd]" disabled placeholder="ムビチケ興行会社コード"
-        value="<%= req.project.settings.MVTK_COMPANY_CODE %>">
-    <input type="hidden" name="movieTicketInfo[kgygishCd]" value="<%= req.project.settings.MVTK_COMPANY_CODE %>">
+        value="<%= (req.project.settings.mvtkReserve !== undefined) ? req.project.settings.mvtkReserve.companyCode : '' %>">
+    <input type="hidden" name="movieTicketInfo[kgygishCd]"
+        value="<%= (req.project.settings.mvtkReserve !== undefined) ? req.project.settings.mvtkReserve.companyCode : '' %>">
 </div>
 <div class="form-group">
     <label for="gmoInfo[shopId]">ムビチケサイトコード</label>

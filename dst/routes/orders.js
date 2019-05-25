@@ -43,14 +43,16 @@ ordersRouter.get('',
         let userPoolClients = [];
         let adminUserPoolClients = [];
         try {
-            const searchUserPoolClientsResult = yield userPoolService.searchClients({
-                userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
-            });
-            const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({
-                userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
-            });
-            userPoolClients = searchUserPoolClientsResult.data;
-            adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+            if (req.project.settings.cognito !== undefined) {
+                const searchUserPoolClientsResult = yield userPoolService.searchClients({
+                    userPoolId: req.project.settings.cognito.customerUserPool.id
+                });
+                const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({
+                    userPoolId: req.project.settings.cognito.adminUserPool.id
+                });
+                userPoolClients = searchUserPoolClientsResult.data;
+                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+            }
         }
         catch (error) {
             // no op

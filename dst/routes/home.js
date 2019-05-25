@@ -14,11 +14,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import * as createDebug from 'debug';
 const express = require("express");
 // import * as moment from 'moment';
-const projects = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
+const cinerinoapi = require("../cinerinoapi");
+const projectsFromEnvironment = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
 // const debug = createDebug('cinerino-console:routes');
 const homeRouter = express.Router();
-homeRouter.get('/', (_, res, next) => __awaiter(this, void 0, void 0, function* () {
+homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        const projects = yield Promise.all(projectsFromEnvironment.map((p) => __awaiter(this, void 0, void 0, function* () {
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: p.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            return projectService.findById({ id: p.id });
+        })));
         res.render('dashboard', {
             layout: 'layouts/dashboard',
             message: 'Welcome to Cinerino Console!',

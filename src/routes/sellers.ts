@@ -59,8 +59,6 @@ sellersRouter.all(
             let message;
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
-            const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
-
             const projectService = new cinerinoapi.service.Project({
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
@@ -71,8 +69,7 @@ sellersRouter.all(
                 try {
                     attributes = await createAttributesFromBody({
                         project: project,
-                        req: req,
-                        projectOrganization: PROJECT_ORGANIZATION
+                        req: req
                     });
                     debug('creating organization...', attributes);
                     const sellerService = new cinerinoapi.service.Seller({
@@ -114,8 +111,6 @@ sellersRouter.all(
             let message;
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
-            const PROJECT_ORGANIZATION = JSON.parse(req.project.settings.PROJECT_ORGANIZATION);
-
             const projectService = new cinerinoapi.service.Project({
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
@@ -137,8 +132,7 @@ sellersRouter.all(
                 try {
                     attributes = await createAttributesFromBody({
                         project: project,
-                        req: req,
-                        projectOrganization: PROJECT_ORGANIZATION
+                        req: req
                     });
                     await sellerService.update({ id: req.params.id, attributes: attributes });
                     req.flash('message', '更新しました');
@@ -146,6 +140,7 @@ sellersRouter.all(
 
                     return;
                 } catch (error) {
+                    console.error(error);
                     message = error.message;
                 }
             }
@@ -167,7 +162,6 @@ sellersRouter.all(
 async function createAttributesFromBody(params: {
     project: cinerinoapi.factory.project.IProject;
     req: express.Request;
-    projectOrganization: any;
 }): Promise<cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType>> {
     if (params.project.settings === undefined) {
         throw new Error('Project settings undefined');
@@ -194,7 +188,7 @@ async function createAttributesFromBody(params: {
             ja: initialName,
             en: initialName
         },
-        telephone: params.projectOrganization.telephone,
+        telephone: (params.project.telephone !== undefined) ? params.project.telephone : '',
         screenCount: 0, // 使用しないので適当に
         kanaName: '', // 使用しないので適当に
         id: '', // 使用しないので適当に
@@ -422,7 +416,7 @@ async function createAttributesFromBody(params: {
             en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
         },
         legalName: movieTheaterFromChevre.name,
-        parentOrganization: params.projectOrganization,
+        parentOrganization: params.project.parentOrganization,
         location: {
             typeOf: movieTheaterFromChevre.typeOf,
             branchCode: movieTheaterFromChevre.branchCode,

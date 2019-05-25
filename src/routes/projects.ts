@@ -33,17 +33,18 @@ projectsRouter.all(
         try {
             const message: string = '';
             const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
-            req.project = projectFromEnvironment;
 
             const projectService = new cinerinoapi.service.Project({
                 endpoint: projectFromEnvironment.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: req.project.id });
+            const project = await projectService.findById({ id: projectFromEnvironment.id });
+
+            req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
 
             res.render('projects/edit', {
                 message: message,
-                project: project
+                project: req.project
             });
         } catch (error) {
             next(error);
@@ -55,9 +56,15 @@ projectsRouter.all(
     '/:id/*',
     async (req, _, next) => {
         // ルーティングからプロジェクトをセット
-        const project = projects.find((p) => p.id === req.params.id);
+        const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
 
-        req.project = project;
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: projectFromEnvironment.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = await projectService.findById({ id: projectFromEnvironment.id });
+
+        req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
 
         next();
     }

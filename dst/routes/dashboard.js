@@ -33,16 +33,18 @@ dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, func
         let adminUserPool;
         let adminUserPoolClients = [];
         try {
-            userPool = yield userPoolService.findById({
-                userPoolId: req.project.settings.DEFAULT_COGNITO_USER_POOL_ID
-            });
-            const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
-            userPoolClients = searchUserPoolClientsResult.data;
-            adminUserPool = yield userPoolService.findById({
-                userPoolId: req.project.settings.ADMIN_COGNITO_USER_POOL_ID
-            });
-            const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: adminUserPool.Id });
-            adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+            if (req.project.settings.cognito !== undefined) {
+                userPool = yield userPoolService.findById({
+                    userPoolId: req.project.settings.cognito.customerUserPool.id
+                });
+                const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
+                userPoolClients = searchUserPoolClientsResult.data;
+                adminUserPool = yield userPoolService.findById({
+                    userPoolId: req.project.settings.cognito.adminUserPool.id
+                });
+                const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: adminUserPool.Id });
+                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+            }
         }
         catch (error) {
             // no op
