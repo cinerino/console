@@ -17,12 +17,16 @@ homeRouter.get(
     async (req, res, next) => {
         try {
             const projects = await Promise.all(projectsFromEnvironment.map(async (p) => {
-                const projectService = new cinerinoapi.service.Project({
-                    endpoint: p.settings.API_ENDPOINT,
-                    auth: req.user.authClient
-                });
+                try {
+                    const projectService = new cinerinoapi.service.Project({
+                        endpoint: p.settings.API_ENDPOINT,
+                        auth: req.user.authClient
+                    });
 
-                return projectService.findById({ id: p.id });
+                    return projectService.findById({ id: p.id });
+                } catch (error) {
+                    return p;
+                }
             }));
 
             res.render('dashboard', {

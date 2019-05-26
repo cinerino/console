@@ -21,11 +21,16 @@ const homeRouter = express.Router();
 homeRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const projects = yield Promise.all(projectsFromEnvironment.map((p) => __awaiter(this, void 0, void 0, function* () {
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: p.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            return projectService.findById({ id: p.id });
+            try {
+                const projectService = new cinerinoapi.service.Project({
+                    endpoint: p.settings.API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                return projectService.findById({ id: p.id });
+            }
+            catch (error) {
+                return p;
+            }
         })));
         res.render('dashboard', {
             layout: 'layouts/dashboard',
