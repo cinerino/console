@@ -119,6 +119,21 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
         const seller = yield sellerService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
             yield sellerService.deleteById({ id: req.params.id });
+            if (Array.isArray(seller.paymentAccepted)) {
+                // 口座があれば解約
+                const accountService = new cinerinoapi.service.Account({
+                    endpoint: req.project.settings.API_ENDPOINT,
+                    auth: req.user.authClient
+                });
+                const accountPaymentsAccepted = seller.paymentAccepted.filter((p) => p.paymentMethodType === cinerinoapi.factory.paymentMethodType.Account);
+                yield Promise.all(accountPaymentsAccepted.map((paymentAccepted) => __awaiter(this, void 0, void 0, function* () {
+                    debug('closing account...', paymentAccepted);
+                    yield accountService.close({
+                        accountType: paymentAccepted.accountType,
+                        accountNumber: paymentAccepted.accountNumber
+                    });
+                })));
+            }
             res.status(http_status_1.NO_CONTENT)
                 .end();
             return;
@@ -271,20 +286,21 @@ function createAttributesFromBody(params) {
         // コイン口座決済を有効にする場合、口座未開設であれば開設する
         if (body.coinAccountPaymentAccepted === 'on') {
             if (body.coinAccountPayment.accountNumber === '') {
-                // const account = await cinerinoapi.service.account.open({
-                //     name: movieTheater.name.ja
-                // })({
-                //     accountNumber: new cinerino.repository.AccountNumber(redisClient),
-                //     accountService: new cinerino.pecorinoapi.service.Account({
-                //         endpoint: <string>process.env.PECORINO_API_ENDPOINT,
-                //         auth: pecorinoAuthClient
-                //     })
-                // });
-                // debug('account opened.');
-                // update.paymentAccepted.push({
-                //     paymentMethodType: cinerino.factory.paymentMethodType.Pecorino,
-                //     accountNumber: account.accountNumber
-                // });
+                // 口座番号の指定がなければ自動開設
+                const accountService = new cinerinoapi.service.Account({
+                    endpoint: params.req.project.settings.API_ENDPOINT,
+                    auth: params.req.user.authClient
+                });
+                const account = yield accountService.open({
+                    accountType: cinerinoapi.factory.accountType.Coin,
+                    name: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja
+                });
+                debug('account opened');
+                paymentAccepted.push({
+                    paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
+                    accountType: account.accountType,
+                    accountNumber: account.accountNumber
+                });
             }
             else {
                 paymentAccepted.push({
@@ -294,23 +310,24 @@ function createAttributesFromBody(params) {
                 });
             }
         }
-        // ポイント口座決済を有効にする場合、口座未開設であれば開設する
+        // ポイント口座決済を有効にする場合
         if (body.pointAccountPaymentAccepted === 'on') {
             if (body.pointAccountPayment.accountNumber === '') {
-                // const account = await cinerinoapi.service.account.open({
-                //     name: movieTheater.name.ja
-                // })({
-                //     accountNumber: new cinerino.repository.AccountNumber(redisClient),
-                //     accountService: new cinerino.pecorinoapi.service.Account({
-                //         endpoint: <string>process.env.PECORINO_API_ENDPOINT,
-                //         auth: pecorinoAuthClient
-                //     })
-                // });
-                // debug('account opened.');
-                // update.paymentAccepted.push({
-                //     paymentMethodType: cinerino.factory.paymentMethodType.Pecorino,
-                //     accountNumber: account.accountNumber
-                // });
+                // 口座番号の指定がなければ自動開設
+                const accountService = new cinerinoapi.service.Account({
+                    endpoint: params.req.project.settings.API_ENDPOINT,
+                    auth: params.req.user.authClient
+                });
+                const account = yield accountService.open({
+                    accountType: cinerinoapi.factory.accountType.Point,
+                    name: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja
+                });
+                debug('account opened');
+                paymentAccepted.push({
+                    paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
+                    accountType: account.accountType,
+                    accountNumber: account.accountNumber
+                });
             }
             else {
                 paymentAccepted.push({
