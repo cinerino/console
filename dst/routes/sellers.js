@@ -79,7 +79,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
                 });
                 const seller = yield sellerService.create(attributes);
                 req.flash('message', '販売者を作成しました');
-                res.redirect(`/sellers/${seller.id}`);
+                res.redirect(`/projects/${req.project.id}/sellers/${seller.id}`);
                 return;
             }
             catch (error) {

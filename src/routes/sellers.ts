@@ -78,7 +78,7 @@ sellersRouter.all(
                     });
                     const seller = await sellerService.create<cinerinoapi.factory.organizationType>(attributes);
                     req.flash('message', '販売者を作成しました');
-                    res.redirect(`/sellers/${seller.id}`);
+                    res.redirect(`/projects/${req.project.id}/sellers/${seller.id}`);
 
                     return;
                 } catch (error) {

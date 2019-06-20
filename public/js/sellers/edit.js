@@ -55,11 +55,11 @@ $(function () {
     $('button.delete').click(function () {
         if (window.confirm('元には戻せません。本当に削除しますか？')) {
             $.ajax({
-                url: '/sellers/' + seller.id,
+                url: '/projects/' + PROJECT_ID + '/sellers/' + seller.id,
                 type: 'DELETE'
             }).done(function () {
                 alert('削除しました');
-                location.href = '/sellers';
+                location.href = '/projects/' + PROJECT_ID + '/sellers';
             }).fail(function () {
                 alert('削除できませんでした');
             }).always(function () {
