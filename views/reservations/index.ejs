@@ -53,14 +53,16 @@
                                             name="reservationNumbers" placeholder="予約番号"
                                             value="<%= (Array.isArray(searchConditions.reservationNumbers)) ? searchConditions.reservationNumbers.join(',') : '' %>">
                                     </div>
+
                                     <div class="form-group">
                                         <label for="ids">追加チケットテキスト</label>
                                         <input type="text" class="form-control" id="additionalTicketText"
                                             name="additionalTicketText" placeholder="追加チケットテキスト"
                                             value="<%= searchConditions.additionalTicketText %>">
                                     </div>
+
                                     <div class="form-group">
-                                        <label>予約日時</label>
+                                        <label>予約日時(確定予約のみ)</label>
 
                                         <div class="input-group">
                                             <div class="input-group-prepend">
@@ -70,7 +72,23 @@
                                             </div>
                                             <input type="text" class="form-control" name="bookingTimeRange"
                                                 id="bookingTimeRange"
-                                                value="<%= moment(searchConditions.bookingFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.bookingThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                                value="<%= (searchConditions.bookingFrom !== undefined) ? `${moment(searchConditions.bookingFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.bookingThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>更新日時</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="modifiedTimeRange"
+                                                id="modifiedTimeRange"
+                                                value="<%= moment(searchConditions.modifiedFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.modifiedThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                         </div>
                                         <!-- /.input group -->
                                     </div>

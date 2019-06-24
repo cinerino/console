@@ -70,11 +70,19 @@ reservationsRouter.get(
                 bookingFrom: (req.query.bookingTimeRange !== undefined && req.query.bookingTimeRange !== '')
                     ? moment(req.query.bookingTimeRange.split(' - ')[0])
                         .toDate()
+                    : undefined,
+                bookingThrough: (req.query.bookingTimeRange !== undefined && req.query.bookingTimeRange !== '')
+                    ? moment(req.query.bookingTimeRange.split(' - ')[1])
+                        .toDate()
+                    : undefined,
+                modifiedFrom: (req.query.modifiedTimeRange !== undefined && req.query.modifiedTimeRange !== '')
+                    ? moment(req.query.modifiedTimeRange.split(' - ')[0])
+                        .toDate()
                     : moment()
                         .add(-1, 'day')
                         .toDate(),
-                bookingThrough: (req.query.bookingTimeRange !== undefined && req.query.bookingTimeRange !== '')
-                    ? moment(req.query.bookingTimeRange.split(' - ')[1])
+                modifiedThrough: (req.query.modifiedTimeRange !== undefined && req.query.modifiedTimeRange !== '')
+                    ? moment(req.query.modifiedTimeRange.split(' - ')[1])
                         .toDate()
                     : moment()
                         .toDate(),
