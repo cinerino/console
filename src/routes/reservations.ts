@@ -32,22 +32,37 @@ reservationsRouter.get(
                 sort: { modifiedTime: cinerinoapi.factory.sortType.Descending },
                 typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation,
                 underName: {
-                    // typeOf: cinerinoapi.factory.personType.Person,
-                    id: (req.query.underName !== undefined && req.query.underName.id !== undefined && req.query.underName.id !== '')
-                        ? <string>req.query.underName.id
+                    id: (req.query.underName !== undefined && req.query.underName.id !== '')
+                        ? req.query.underName.id
                         : undefined,
                     name: (req.query.underName !== undefined && req.query.underName.name !== '')
                         ? req.query.underName.name
                         : undefined,
-                    // name: (req.query.underName !== undefined && req.query.underName.familyName !== '')
-                    //     ? req.query.underName.familyName
-                    //     : undefined,
+                    familyName: (req.query.underName !== undefined && req.query.underName.familyName !== '')
+                        ? req.query.underName.familyName
+                        : undefined,
+                    givenName: (req.query.underName !== undefined && req.query.underName.givenName !== '')
+                        ? req.query.underName.givenName
+                        : undefined,
                     email: (req.query.underName !== undefined && req.query.underName.email !== '')
                         ? req.query.underName.email
                         : undefined,
                     telephone: (req.query.underName !== undefined && req.query.underName.telephone !== '')
                         ? req.query.underName.telephone
-                        : undefined
+                        : undefined,
+                    identifier: {
+                        $all: (req.query.underName !== undefined
+                            && req.query.underName.identifier !== undefined
+                            && req.query.underName.identifier !== ''
+                            && (<string>req.query.underName.identifier).split(':').length > 0)
+                            ? [
+                                {
+                                    name: (<string>req.query.underName.identifier).split(':')[0],
+                                    value: (<string>req.query.underName.identifier).split(':')[1]
+                                }
+                            ]
+                            : undefined
+                    }
                 },
                 reservationStatuses: (req.query.reservationStatuses !== undefined)
                     ? req.query.reservationStatuses
@@ -72,6 +87,9 @@ reservationsRouter.get(
                     && req.query.reservationNumbers !== '')
                     ? (<string>req.query.reservationNumbers).split(',')
                         .map((v) => v.trim())
+                    : undefined,
+                additionalTicketText: (req.query.additionalTicketText !== '')
+                    ? req.query.additionalTicketText
                     : undefined,
                 reservationFor: {
                     ids: (req.query.reservationFor !== undefined
@@ -108,6 +126,26 @@ reservationsRouter.get(
                         //             .split(',')
                         //             .map((v) => v.trim())
                         //         : undefined
+                    }
+                },
+                reservedTicket: {
+                    ticketedSeat: {
+                        seatNumbers: (req.query.reservedTicket !== undefined
+                            && req.query.reservedTicket.ticketedSeat !== undefined
+                            && req.query.reservedTicket.ticketedSeat.seatNumbers !== undefined
+                            && req.query.reservedTicket.ticketedSeat.seatNumbers !== '')
+                            ? (<string>req.query.reservedTicket.ticketedSeat.seatNumbers).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    },
+                    ticketType: {
+                        ids: (req.query.reservedTicket !== undefined
+                            && req.query.reservedTicket.ticketType !== undefined
+                            && req.query.reservedTicket.ticketType.ids !== undefined
+                            && req.query.reservedTicket.ticketType.ids !== '')
+                            ? (<string>req.query.reservedTicket.ticketType.ids).split(',')
+                                .map((v) => v.trim())
+                            : undefined
                     }
                 }
             };

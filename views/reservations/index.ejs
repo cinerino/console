@@ -43,32 +43,6 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="underName[id]">Under Name ID</label>
-                                        <input type="text" class="form-control" id="underName[id]" name="underName[id]"
-                                            placeholder="Under Name ID" value="<%= searchConditions.underName.id %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[name]">Name</label>
-                                        <input type="text" class="form-control" id="underName[name]"
-                                            name="underName[name]" placeholder="もーしょん(正規表現使用可)"
-                                            value="<%= searchConditions.underName.name %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[email]">Email</label>
-                                        <input type="text" class="form-control" id="underName[email]"
-                                            name="underName[email]" placeholder="cinerino@example.com(正規表現使用可)"
-                                            value="<%= searchConditions.underName.email %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[telephone]">Telephone</label>
-                                        <input type="text" class="form-control" id="underName[telephone]"
-                                            name="underName[telephone]" placeholder="0312345678(正規表現使用可)"
-                                            value="<%= searchConditions.underName.telephone %>">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
                                         <label for="ids">予約ID</label>
                                         <input type="text" class="form-control" id="ids" name="ids" placeholder="予約ID"
                                             value="<%= (Array.isArray(searchConditions.ids)) ? searchConditions.ids.join(',') : '' %>">
@@ -80,26 +54,11 @@
                                             value="<%= (Array.isArray(searchConditions.reservationNumbers)) ? searchConditions.reservationNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="reservationFor[ids]">予約イベントID</label>
-                                        <input type="text" class="form-control" id="reservationFor[ids]"
-                                            name="reservationFor[ids]" placeholder="予約イベントID"
-                                            value="<%= (Array.isArray(searchConditions.reservationFor.ids)) ? searchConditions.reservationFor.ids.join(',') : '' %>">
+                                        <label for="ids">追加チケットテキスト</label>
+                                        <input type="text" class="form-control" id="additionalTicketText"
+                                            name="additionalTicketText" placeholder="追加チケットテキスト"
+                                            value="<%= searchConditions.additionalTicketText %>">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="reservationFor[name]">予約イベント名称</label>
-                                        <input type="text" class="form-control" id="reservationFor[name]"
-                                            name="reservationFor[name]" placeholder="予約イベント名称"
-                                            value="<%= searchConditions.reservationFor.name %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="reservationFor[superEvent][ids]">予約イベントシリーズID</label>
-                                        <input type="text" class="form-control" id="reservationFor[superEvent][ids]"
-                                            name="reservationFor[superEvent][ids]" placeholder="予約イベントシリーズID"
-                                            value="<%= (Array.isArray(searchConditions.reservationFor.superEvent.ids)) ? searchConditions.reservationFor.superEvent.ids.join(',') : '' %>">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>予約日時</label>
 
@@ -118,7 +77,7 @@
 
                                     <div class="form-group">
                                         <label>予約ステータス</label>
-                                        <select multiple class="form-control" name="reservationStatuses[]" size="10">
+                                        <select multiple class="form-control" name="reservationStatuses[]" size="5">
                                             <% Object.values(ReservationStatusType).forEach(function (reservationStatus) { %>
                                             <% 
                                             var selected = false;
@@ -130,6 +89,85 @@
                                             </option>
                                             <% }) %>
                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="reservationFor[ids]">予約イベントID</label>
+                                        <input type="text" class="form-control" id="reservationFor[ids]"
+                                            name="reservationFor[ids]" placeholder="予約イベントID"
+                                            value="<%= (Array.isArray(searchConditions.reservationFor.ids)) ? searchConditions.reservationFor.ids.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="reservationFor[name]">予約イベント名称</label>
+                                        <input type="text" class="form-control" id="reservationFor[name]"
+                                            name="reservationFor[name]" placeholder="予約イベント名称"
+                                            value="<%= searchConditions.reservationFor.name %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="reservationFor[superEvent][ids]">予約イベントシリーズID</label>
+                                        <input type="text" class="form-control" id="reservationFor[superEvent][ids]"
+                                            name="reservationFor[superEvent][ids]" placeholder="予約イベントシリーズID"
+                                            value="<%= (Array.isArray(searchConditions.reservationFor.superEvent.ids)) ? searchConditions.reservationFor.superEvent.ids.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="reservedTicket[ticketedSeat][seatNumbers]">座席番号</label>
+                                        <input type="text" class="form-control"
+                                            id="reservedTicket[ticketedSeat][seatNumbers]"
+                                            name="reservedTicket[ticketedSeat][seatNumbers]" placeholder="座席番号"
+                                            value="<%= (Array.isArray(searchConditions.reservedTicket.ticketedSeat.seatNumbers)) ? searchConditions.reservedTicket.ticketedSeat.seatNumbers.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="reservedTicket[ticketType][ids]">券種ID</label>
+                                        <input type="text" class="form-control" id="reservedTicket[ticketType][ids]"
+                                            name="reservedTicket[ticketType][ids]" placeholder="券種ID"
+                                            value="<%= (Array.isArray(searchConditions.reservedTicket.ticketType.ids)) ? searchConditions.reservedTicket.ticketType.ids.join(',') : '' %>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="underName[id]">チケットホルダーID</label>
+                                        <input type="text" class="form-control" id="underName[id]" name="underName[id]"
+                                            placeholder="チケットホルダーID" value="<%= searchConditions.underName.id %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="underName[name]">Name</label>
+                                        <input type="text" class="form-control" id="underName[name]"
+                                            name="underName[name]" placeholder="もーしょん(正規表現使用可)"
+                                            value="<%= searchConditions.underName.name %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="underName[familyName]">Family Name</label>
+                                        <input type="text" class="form-control" id="underName[familyName]"
+                                            name="underName[familyName]" placeholder="Family Name(正規表現使用可)"
+                                            value="<%= searchConditions.underName.familyName %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="underName[givenName]">Given Name</label>
+                                        <input type="text" class="form-control" id="underName[givenName]"
+                                            name="underName[givenName]" placeholder="Given Name(正規表現使用可)"
+                                            value="<%= searchConditions.underName.givenName %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="underName[email]">Email</label>
+                                        <input type="text" class="form-control" id="underName[email]"
+                                            name="underName[email]" placeholder="cinerino@example.com(正規表現使用可)"
+                                            value="<%= searchConditions.underName.email %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="underName[telephone]">Telephone</label>
+                                        <input type="text" class="form-control" id="underName[telephone]"
+                                            name="underName[telephone]" placeholder="0312345678(正規表現使用可)"
+                                            value="<%= searchConditions.underName.telephone %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="underName[identifier]">識別子</label>
+                                        <input type="text" class="form-control" id="underName[identifier]"
+                                            name="underName[identifier]" placeholder="username:cinerino"
+                                            value="<%= (Array.isArray(searchConditions.underName.identifier.$all)) ? `${searchConditions.underName.identifier.$all[0].name}:${searchConditions.underName.identifier.$all[0].value}` : '' %>">
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +196,7 @@
                         <table id="reservations-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>ID<br>Reservation Number<br>Status<br>Booking Time
+                                    <th>ID<br>Reservation Number<br>Status<br>Booking Time<br>Additional Ticket Text
                                     <th>Event</th>
                                     <th>Ticket</th>
                                     <th>Under Name</th>
@@ -167,7 +205,7 @@
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>ID<br>Reservation Number<br>Status<br>Booking Time
+                                    <th>ID<br>Reservation Number<br>Status<br>Booking Time<br>Additional Ticket Text
                                     <th>Event</th>
                                     <th>Ticket</th>
                                     <th>Under Name</th>

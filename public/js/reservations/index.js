@@ -18,11 +18,23 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var orderFrom = moment(data.bookingTime).add(-1, 'day').toISOString();
+                    var orderThrough = moment(data.bookingTime).toISOString();
+
+                    var orderUrl = '/projects/' + PROJECT_ID + '/orders?'
+                        + 'acceptedOffers[itemOffered][ids]=' + data.id
+                        + '&orderDateRange=' + orderFrom + ' - ' + orderThrough;
+
+                    var orderUrl4reservationNumber = '/projects/' + PROJECT_ID + '/orders?'
+                        + 'acceptedOffers[itemOffered][reservationNumbers]=' + data.reservationNumber
+                        + '&orderDateRange=' + orderFrom + ' - ' + orderThrough;
+
                     return '<ul class="list-unstyled">'
-                        + '<li>' + data.id + '</li>'
-                        + '<li>' + data.reservationNumber + '</li>'
+                        + '<li><a target="_blank" href="' + orderUrl + '">' + data.id + '</a></li>'
+                        + '<li><a target="_blank" href="' + orderUrl4reservationNumber + '">' + data.reservationNumber + '</a></li>'
                         + '<li><span class="badge badge-secondary ' + data.reservationStatus + '">' + data.reservationStatus + '</span></li>'
                         + '<li>' + data.bookingTime + '</li>'
+                        + '<li><span class="text-muted">' + data.additionalTicketText + '</span></li>'
                         + '</ul>';
 
                 }
@@ -75,13 +87,20 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
+                    var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.underName.typeOf + '">' + data.underName.typeOf + '</span></li>'
                         + '<li>' + data.underName.id + '</li>'
                         + '<li>' + data.underName.name + '</li>'
                         + '<li>' + data.underName.email + '</li>'
-                        + '<li>' + data.underName.telephone + '</li>'
-                        + '</ul>';
+                        + '<li>' + data.underName.telephone + '</li>';
+
+                    if (Array.isArray(data.underName.identifier)) {
+                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showUnderNameIdentifier" data-id="' + data.id + '">識別子をより詳しく見る</a><li>';
+                    }
+
+                    html += '</ul>';
+
+                    return html;
                 }
             },
             {
@@ -103,29 +122,29 @@ $(function () {
         format: 'YYYY-MM-DDTHH:mm:ssZ'
     })
 
-    $(document).on('click', '.showCustomerIdentifier', function () {
-        var orderNumber = $(this).data('ordernumber');
-        console.log('showing... orderNumber:', orderNumber);
+    $(document).on('click', '.showUnderNameIdentifier', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
 
-        showCustomerIdentifier(orderNumber);
+        showUnderNameIdentifier(id);
     });
 
     /**
      * 注文のCustomer Identifierを表示する
      */
-    function showCustomerIdentifier(orderNumber) {
+    function showUnderNameIdentifier(id) {
         var reservations = table
             .rows()
             .data()
             .toArray();
-        var order = reservations.find(function (order) {
-            return order.orderNumber === orderNumber
+        var reservation = reservations.find(function (r) {
+            return r.id === id
         })
 
-        var modal = $('#modal-customer-identifier');
-        var title = 'Order `' + order.orderNumber + '` Customer Identifier';
+        var modal = $('#modal-underName-identifier');
+        var title = 'Reservation `' + reservation.id + '` Under Name Identifier';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(order.customer.identifier, null, '\t')
+            + JSON.stringify(reservation.underName.identifier, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);

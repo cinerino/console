@@ -3499,13 +3499,13 @@ input[type="button"].btn-block {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5); }
 
-.badge-success, .badge.OrderDelivered, .badge.Confirmed, .badge.Executed, .badge.CompletedActionStatus, .badge.Account, .badge.Opened {
+.badge-success, .badge.OrderDelivered, .badge.Confirmed, .badge.Executed, .badge.CompletedActionStatus, .badge.Account, .badge.Opened, .badge.ReservationConfirmed {
   color: #fff;
   background-color: #28a745; }
-  a.badge-success:hover, a.badge.OrderDelivered:hover, a.badge.Confirmed:hover, a.badge.Executed:hover, a.badge.CompletedActionStatus:hover, a.badge.Account:hover, a.badge.Opened:hover, a.badge-success:focus, a.badge.OrderDelivered:focus, a.badge.Confirmed:focus, a.badge.Executed:focus, a.badge.CompletedActionStatus:focus, a.badge.Account:focus, a.badge.Opened:focus {
+  a.badge-success:hover, a.badge.OrderDelivered:hover, a.badge.Confirmed:hover, a.badge.Executed:hover, a.badge.CompletedActionStatus:hover, a.badge.Account:hover, a.badge.Opened:hover, a.badge.ReservationConfirmed:hover, a.badge-success:focus, a.badge.OrderDelivered:focus, a.badge.Confirmed:focus, a.badge.Executed:focus, a.badge.CompletedActionStatus:focus, a.badge.Account:focus, a.badge.Opened:focus, a.badge.ReservationConfirmed:focus {
     color: #fff;
     background-color: #1e7e34; }
-  a.badge-success:focus, a.badge.OrderDelivered:focus, a.badge.Confirmed:focus, a.badge.Executed:focus, a.badge.CompletedActionStatus:focus, a.badge.Account:focus, a.badge.Opened:focus, a.badge-success.focus, a.focus.badge.OrderDelivered, a.focus.badge.Confirmed, a.focus.badge.Executed, a.focus.badge.CompletedActionStatus, a.focus.badge.Account, a.focus.badge.Opened {
+  a.badge-success:focus, a.badge.OrderDelivered:focus, a.badge.Confirmed:focus, a.badge.Executed:focus, a.badge.CompletedActionStatus:focus, a.badge.Account:focus, a.badge.Opened:focus, a.badge.ReservationConfirmed:focus, a.badge-success.focus, a.focus.badge.OrderDelivered, a.focus.badge.Confirmed, a.focus.badge.Executed, a.focus.badge.CompletedActionStatus, a.focus.badge.Account, a.focus.badge.Opened, a.focus.badge.ReservationConfirmed {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5); }
 
@@ -3519,23 +3519,23 @@ input[type="button"].btn-block {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5); }
 
-.badge-warning, .badge.Canceled, .badge.Ready, .badge.CanceledActionStatus, .badge.MovieTicket {
+.badge-warning, .badge.Canceled, .badge.Ready, .badge.CanceledActionStatus, .badge.MovieTicket, .badge.ReservationHold, .badge.ReservationPending {
   color: #212529;
   background-color: #ffc107; }
-  a.badge-warning:hover, a.badge.Canceled:hover, a.badge.Ready:hover, a.badge.CanceledActionStatus:hover, a.badge.MovieTicket:hover, a.badge-warning:focus, a.badge.Canceled:focus, a.badge.Ready:focus, a.badge.CanceledActionStatus:focus, a.badge.MovieTicket:focus {
+  a.badge-warning:hover, a.badge.Canceled:hover, a.badge.Ready:hover, a.badge.CanceledActionStatus:hover, a.badge.MovieTicket:hover, a.badge.ReservationHold:hover, a.badge.ReservationPending:hover, a.badge-warning:focus, a.badge.Canceled:focus, a.badge.Ready:focus, a.badge.CanceledActionStatus:focus, a.badge.MovieTicket:focus, a.badge.ReservationHold:focus, a.badge.ReservationPending:focus {
     color: #212529;
     background-color: #d39e00; }
-  a.badge-warning:focus, a.badge.Canceled:focus, a.badge.Ready:focus, a.badge.CanceledActionStatus:focus, a.badge.MovieTicket:focus, a.badge-warning.focus, a.focus.badge.Canceled, a.focus.badge.Ready, a.focus.badge.CanceledActionStatus, a.focus.badge.MovieTicket {
+  a.badge-warning:focus, a.badge.Canceled:focus, a.badge.Ready:focus, a.badge.CanceledActionStatus:focus, a.badge.MovieTicket:focus, a.badge.ReservationHold:focus, a.badge.ReservationPending:focus, a.badge-warning.focus, a.focus.badge.Canceled, a.focus.badge.Ready, a.focus.badge.CanceledActionStatus, a.focus.badge.MovieTicket, a.focus.badge.ReservationHold, a.focus.badge.ReservationPending {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5); }
 
-.badge-danger, .badge.OrderReturned, .badge.Expired, .badge.Aborted, .badge.FailedActionStatus, .badge.Closed {
+.badge-danger, .badge.OrderReturned, .badge.Expired, .badge.Aborted, .badge.FailedActionStatus, .badge.Closed, .badge.ReservationCancelled {
   color: #fff;
   background-color: #dc3545; }
-  a.badge-danger:hover, a.badge.OrderReturned:hover, a.badge.Expired:hover, a.badge.Aborted:hover, a.badge.FailedActionStatus:hover, a.badge.Closed:hover, a.badge-danger:focus, a.badge.OrderReturned:focus, a.badge.Expired:focus, a.badge.Aborted:focus, a.badge.FailedActionStatus:focus, a.badge.Closed:focus {
+  a.badge-danger:hover, a.badge.OrderReturned:hover, a.badge.Expired:hover, a.badge.Aborted:hover, a.badge.FailedActionStatus:hover, a.badge.Closed:hover, a.badge.ReservationCancelled:hover, a.badge-danger:focus, a.badge.OrderReturned:focus, a.badge.Expired:focus, a.badge.Aborted:focus, a.badge.FailedActionStatus:focus, a.badge.Closed:focus, a.badge.ReservationCancelled:focus {
     color: #fff;
     background-color: #bd2130; }
-  a.badge-danger:focus, a.badge.OrderReturned:focus, a.badge.Expired:focus, a.badge.Aborted:focus, a.badge.FailedActionStatus:focus, a.badge.Closed:focus, a.badge-danger.focus, a.focus.badge.OrderReturned, a.focus.badge.Expired, a.focus.badge.Aborted, a.focus.badge.FailedActionStatus, a.focus.badge.Closed {
+  a.badge-danger:focus, a.badge.OrderReturned:focus, a.badge.Expired:focus, a.badge.Aborted:focus, a.badge.FailedActionStatus:focus, a.badge.Closed:focus, a.badge.ReservationCancelled:focus, a.badge-danger.focus, a.focus.badge.OrderReturned, a.focus.badge.Expired, a.focus.badge.Aborted, a.focus.badge.FailedActionStatus, a.focus.badge.Closed, a.focus.badge.ReservationCancelled {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); }
 
