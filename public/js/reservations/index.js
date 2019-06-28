@@ -19,7 +19,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var orderFrom = moment(data.bookingTime).add(-1, 'day').toISOString();
-                    var orderThrough = moment(data.bookingTime).toISOString();
+                    var orderThrough = moment(data.bookingTime).add(1, 'minute').toISOString();
 
                     var orderUrl = '/projects/' + PROJECT_ID + '/orders?'
                         + 'acceptedOffers[itemOffered][ids]=' + data.id
