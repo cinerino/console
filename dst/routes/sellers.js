@@ -212,17 +212,19 @@ function createAttributesFromBody(params) {
                     // COAから情報取得できればmovieTheaterFromChevreを上書き
                     if (theaterFromCOA !== undefined) {
                         // 日本語フォーマットで電話番号が提供される想定なので変換
-                        let formatedPhoneNumber;
-                        try {
-                            const phoneUtil = google_libphonenumber_1.PhoneNumberUtil.getInstance();
-                            const phoneNumber = phoneUtil.parse(theaterFromCOA.theaterTelNum, 'JP');
-                            if (!phoneUtil.isValidNumber(phoneNumber)) {
-                                throw new Error('Invalid phone number format.');
+                        let formatedPhoneNumber = '';
+                        if (typeof theaterFromCOA.theaterTelNum === 'string' && theaterFromCOA.theaterTelNum.length > 0) {
+                            try {
+                                const phoneUtil = google_libphonenumber_1.PhoneNumberUtil.getInstance();
+                                const phoneNumber = phoneUtil.parse(theaterFromCOA.theaterTelNum, 'JP');
+                                if (!phoneUtil.isValidNumber(phoneNumber)) {
+                                    throw new Error('Invalid phone number format.');
+                                }
+                                formatedPhoneNumber = phoneUtil.format(phoneNumber, google_libphonenumber_1.PhoneNumberFormat.E164);
                             }
-                            formatedPhoneNumber = phoneUtil.format(phoneNumber, google_libphonenumber_1.PhoneNumberFormat.E164);
-                        }
-                        catch (error) {
-                            throw new Error(`電話番号フォーマット時に問題が発生しました:${error.message}`);
+                            catch (error) {
+                                throw new Error(`電話番号フォーマット時に問題が発生しました:${error.message}`);
+                            }
                         }
                         movieTheaterFromChevre = {
                             project: params.req.project,
