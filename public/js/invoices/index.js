@@ -98,7 +98,7 @@ $(function () {
                     var html = '<ul class="list-unstyled">'
 
                     if (data.referencesOrder !== undefined) {
-                        html += '<li><a target="_blank" href="/orders/' + data.referencesOrder.orderNumber + '">' + data.referencesOrder.orderNumber + '</a></li>'
+                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.referencesOrder.orderNumber + '">' + data.referencesOrder.orderNumber + '</a></li>'
                     }
 
                     html += '</ul>';
