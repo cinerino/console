@@ -469,7 +469,7 @@ function searchOrders(cb) {
     });
 }
 function createNumPlaceOrderChart(datas) {
-    var statuses = ['Canceled', 'Expired', 'Confirmed'];
+    var statuses = ['Confirmed', 'Canceled', 'Expired'];
 
     new Morris.Line({
         element: 'numPlaceOrderChart',
@@ -485,7 +485,7 @@ function createNumPlaceOrderChart(datas) {
         xkey: 'y',
         ykeys: statuses,
         labels: statuses,
-        lineColors: ['#fad684', '#e96c6c', '#79f67d'],
+        lineColors: ['#79f67d', '#fad684', '#e96c6c'],
         // lineColors: ['#ffc107', '#dc3545', '#28a745'],
         lineWidth: 2,
         hideHover: 'auto',

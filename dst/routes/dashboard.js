@@ -29,21 +29,22 @@ dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, func
             auth: req.user.authClient
         });
         let userPool;
-        let userPoolClients = [];
+        const userPoolClients = [];
         let adminUserPool;
-        let adminUserPoolClients = [];
+        const adminUserPoolClients = [];
         try {
             if (req.project.settings.cognito !== undefined) {
                 userPool = yield userPoolService.findById({
                     userPoolId: req.project.settings.cognito.customerUserPool.id
                 });
-                const searchUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: userPool.Id });
-                userPoolClients = searchUserPoolClientsResult.data;
+                // const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
+                // userPoolClients = searchUserPoolClientsResult.data;
                 adminUserPool = yield userPoolService.findById({
                     userPoolId: req.project.settings.cognito.adminUserPool.id
                 });
-                const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({ userPoolId: adminUserPool.Id });
-                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+                // tslint:disable-next-line:max-line-length
+                // const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
+                // adminUserPoolClients = searchAdminUserPoolClientsResult.data;
             }
         }
         catch (error) {

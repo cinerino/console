@@ -25,9 +25,9 @@ dashboardRouter.get(
             });
 
             let userPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
-            let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            const userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             let adminUserPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
-            let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            const adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
 
             try {
                 if (req.project.settings.cognito !== undefined) {
@@ -35,15 +35,16 @@ dashboardRouter.get(
                         userPoolId: req.project.settings.cognito.customerUserPool.id
                     });
 
-                    const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
-                    userPoolClients = searchUserPoolClientsResult.data;
+                    // const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
+                    // userPoolClients = searchUserPoolClientsResult.data;
 
                     adminUserPool = await userPoolService.findById({
                         userPoolId: req.project.settings.cognito.adminUserPool.id
                     });
 
-                    const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
-                    adminUserPoolClients = searchAdminUserPoolClientsResult.data;
+                    // tslint:disable-next-line:max-line-length
+                    // const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
+                    // adminUserPoolClients = searchAdminUserPoolClientsResult.data;
                 }
             } catch (error) {
                 // no op
