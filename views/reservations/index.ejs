@@ -214,7 +214,9 @@
                         <table id="reservations-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>ID<br>Reservation Number<br>Status<br>Booking Time<br>Additional Ticket Text
+                                    <th>ID<br>Reservation Number<br>Reservation Status<br>Booking Time<br>Modified
+                                        Time<br>Additional
+                                        Ticket Text</th>
                                     <th>Event</th>
                                     <th>Ticket</th>
                                     <th>Under Name</th>
@@ -223,7 +225,9 @@
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>ID<br>Reservation Number<br>Status<br>Booking Time<br>Additional Ticket Text
+                                    <th>ID<br>Reservation Number<br>Reservation Status<br>Booking Time<br>Modified
+                                        Time<br>Additional
+                                        Ticket Text</th>
                                     <th>Event</th>
                                     <th>Ticket</th>
                                     <th>Under Name</th>
@@ -246,6 +250,40 @@
 <!-- /.content -->
 
 <div class="modal" id="modal-underName-identifier" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-additionalProperty" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-price" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
