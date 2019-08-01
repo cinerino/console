@@ -23,7 +23,8 @@ $(function () {
                     html += '<li><span class="badge badge-secondary">' + data.typeOf + '</span></li>'
                         + '<li><span class="text-muted">' + data.id + '</span></li>'
                         + '<li>' + data.startDate + '</li>'
-                        + '<li><span class="badge ' + data.actionStatus + '">' + data.actionStatus + '</span></li>';
+                        + '<li>' + data.endDate + '</li>';
+                    html += '<li><span class="badge ' + data.actionStatus + '">' + data.actionStatus + '</span></li>';
                     html += '</ul>';
 
                     return html;
@@ -48,8 +49,15 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     if (data.object !== undefined) {
-                        html += '<li><span class="badge badge-secondary">' + data.object.typeOf + '</span></li>'
-                            + '<li><span class="text-muted">' + data.object.id + '</span></li>';
+                        if (Array.isArray(data.object)) {
+                            data.object.forEach(function (o) {
+                                html += '<li><span class="badge badge-secondary">' + o.typeOf + '</span></li>'
+                                    + '<li><span class="text-muted">' + o.id + '</span></li>';
+                            });
+                        } else {
+                            html += '<li><span class="badge badge-secondary">' + data.object.typeOf + '</span></li>'
+                                + '<li><span class="text-muted">' + data.object.id + '</span></li>';
+                        }
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showObject" data-id="' + data.id + '">詳しく見る</a><li>';
                     }
 
@@ -105,7 +113,20 @@ $(function () {
 
                     return html;
                 }
-            }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.endDate !== undefined) {
+                        html += '<li>' + moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s</li>';
+                    }
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
         ]
     });
 

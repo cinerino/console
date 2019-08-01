@@ -37,6 +37,9 @@ actionsRouter.get('',
             typeOf: (req.query.typeOf !== undefined && req.query.typeOf !== '')
                 ? req.query.typeOf
                 : undefined,
+            actionStatusTypes: (req.query.actionStatusTypes !== undefined)
+                ? req.query.actionStatusTypes
+                : undefined,
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])
                     .toDate()
@@ -66,6 +69,27 @@ actionsRouter.get('',
                         ? req.query.object.id.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
+                },
+                orderNumber: {
+                    $in: (req.query.object !== undefined
+                        && req.query.object.orderNumber !== undefined
+                        && req.query.object.orderNumber.$in !== undefined
+                        && req.query.object.orderNumber.$in !== '')
+                        ? req.query.object.orderNumber.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                },
+                paymentMethod: {
+                    paymentMethodId: {
+                        $in: (req.query.object !== undefined
+                            && req.query.object.paymentMethod !== undefined
+                            && req.query.object.paymentMethod.paymentMethodId !== undefined
+                            && req.query.object.paymentMethod.paymentMethodId.$in !== undefined
+                            && req.query.object.paymentMethod.paymentMethodId.$in !== '')
+                            ? req.query.object.paymentMethod.paymentMethodId.$in.split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    }
                 }
             },
             purpose: {
@@ -86,6 +110,44 @@ actionsRouter.get('',
                         ? req.query.purpose.id.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
+                },
+                orderNumber: {
+                    $in: (req.query.purpose !== undefined
+                        && req.query.purpose.orderNumber !== undefined
+                        && req.query.purpose.orderNumber.$in !== undefined
+                        && req.query.purpose.orderNumber.$in !== '')
+                        ? req.query.purpose.orderNumber.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                }
+            },
+            result: {
+                typeOf: {
+                    $in: (req.query.result !== undefined
+                        && req.query.result.typeOf !== undefined
+                        && req.query.result.typeOf.$in !== undefined
+                        && req.query.result.typeOf.$in !== '')
+                        ? req.query.result.typeOf.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                },
+                id: {
+                    $in: (req.query.result !== undefined
+                        && req.query.result.id !== undefined
+                        && req.query.result.id.$in !== undefined
+                        && req.query.result.id.$in !== '')
+                        ? req.query.result.id.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                },
+                orderNumber: {
+                    $in: (req.query.result !== undefined
+                        && req.query.result.orderNumber !== undefined
+                        && req.query.result.orderNumber.$in !== undefined
+                        && req.query.result.orderNumber.$in !== '')
+                        ? req.query.result.orderNumber.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
                 }
             }
         };
@@ -103,12 +165,7 @@ actionsRouter.get('',
             res.render('actions/index', {
                 moment: moment,
                 searchConditions: searchConditions,
-                OrderStatus: cinerinoapi.factory.orderStatus,
-                GoodTypeChoices: [
-                    cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                    cinerinoapi.factory.chevre.reservationType.EventReservation,
-                    'ProgramMembership'
-                ]
+                ActionStatusType: cinerinoapi.factory.actionStatusType
             });
         }
     }
