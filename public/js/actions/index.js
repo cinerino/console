@@ -48,7 +48,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (data.object !== undefined) {
+                    if (data.object !== undefined && data.object !== null) {
                         if (Array.isArray(data.object)) {
                             data.object.forEach(function (o) {
                                 html += '<li><span class="badge badge-secondary">' + o.typeOf + '</span></li>'
@@ -71,7 +71,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (data.purpose !== undefined) {
+                    if (data.purpose !== undefined && data.purpose !== null) {
                         html += '<li><span class="badge badge-secondary">' + data.purpose.typeOf + '</span></li>'
                             + '<li><span class="text-muted">' + data.purpose.id + '</span></li>';
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳しく見る</a><li>';
@@ -87,7 +87,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (data.result !== undefined) {
+                    if (data.result !== undefined && data.result !== null) {
                         html += '<li><span class="badge badge-secondary">' + data.result.typeOf + '</span></li>'
                             + '<li><span class="text-muted">' + data.result.id + '</span></li>';
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showResult" data-id="' + data.id + '">詳しく見る</a><li>';
@@ -103,7 +103,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (data.error !== undefined) {
+                    if (data.error !== undefined && data.error !== null) {
                         html += '<li><span class="tbadge badge-danger">' + data.error.name + '</span></li>'
                             + '<li>' + data.error.message + '</li>';
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳しく見る</a><li>';
