@@ -104,8 +104,8 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     if (data.error !== undefined) {
-                        html += '<li><span class="badge badge-secondary">' + data.error.typeOf + '</span></li>'
-                            + '<li><span class="text-muted">' + data.reserrorult.id + '</span></li>';
+                        html += '<li><span class="tbadge badge-danger">' + data.error.name + '</span></li>'
+                            + '<li>' + data.error.message + '</li>';
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳しく見る</a><li>';
                     }
 
