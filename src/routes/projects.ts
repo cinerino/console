@@ -6,6 +6,7 @@ import * as express from 'express';
 import * as cinerinoapi from '../cinerinoapi';
 
 import accountsRouter from './accounts';
+import actionsRouter from './actions';
 import authorizationsRouter from './authorizations';
 import dashboardRouter from './dashboard';
 import eventsRouter from './events';
@@ -71,6 +72,7 @@ projectsRouter.all(
 );
 
 projectsRouter.use('/:id/accounts', accountsRouter);
+projectsRouter.use('/:id/actions', actionsRouter);
 projectsRouter.use('/:id/authorizations', authorizationsRouter);
 projectsRouter.use('/:id/dashboard', dashboardRouter);
 projectsRouter.use('/:id/events', eventsRouter);

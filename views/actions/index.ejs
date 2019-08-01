@@ -1,0 +1,188 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">アクション検索</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">アクション検索</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-default">
+                    <!-- <div class="card-header">
+                        <h3 class="card-title">Select2</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div> -->
+                    <form role="form" method="get">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="typeOf">Action Type</label>
+                                            <input type="text" class="form-control" id="typeOf" name="typeOf"
+                                                placeholder="Action Type"
+                                                value="<%= (searchConditions.typeOf !== undefined) ? searchConditions.typeOf : '' %>">
+                                        </div>
+
+                                        <label>開始日時</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="startRange" id="startRange"
+                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="object[typeOf][$in]">Object Type</label>
+                                        <input type="text" class="form-control" id="object[typeOf][$in]"
+                                            name="object[typeOf][$in]" placeholder="Object Type"
+                                            value="<%= (searchConditions.object !== undefined && searchConditions.object.typeOf !== undefined && Array.isArray(searchConditions.object.typeOf.$in)) ? searchConditions.object.typeOf.$in.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="object[id][$in]">Object ID</label>
+                                        <input type="text" class="form-control" id="object[id][$in]"
+                                            name="object[id][$in]" placeholder="Object ID"
+                                            value="<%= (searchConditions.object !== undefined && searchConditions.object.id !== undefined && Array.isArray(searchConditions.object.id.$in)) ? searchConditions.object.id.$in.join(',') : '' %>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="purpose[typeOf][$in]">Purpose Type</label>
+                                        <input type="text" class="form-control" id="purpose[typeOf][$in]"
+                                            name="purpose[typeOf][$in]" placeholder="Purpose Type"
+                                            value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.typeOf !== undefined && Array.isArray(searchConditions.purpose.typeOf.$in)) ? searchConditions.purpose.typeOf.$in.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="purpose[id][$in]">Purpose ID</label>
+                                        <input type="text" class="form-control" id="purpose[id][$in]"
+                                            name="purpose[id][$in]" placeholder="Purpose ID"
+                                            value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.id !== undefined && Array.isArray(searchConditions.purpose.id.$in)) ? searchConditions.purpose.id.$in.join(',') : '' %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Results</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive">
+                        <table id="actions-table" class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>ID
+                                        <br>Start Date
+                                        <br>Action Status
+                                    </th>
+                                    <th>Agent</th>
+                                    <th>Object</th>
+                                    <th>Purpose</th>
+                                    <th>Result</th>
+                                    <th>Error</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>ID
+                                        <br>Start Date
+                                        <br>Action Status
+                                    </th>
+                                    <th>Agent</th>
+                                    <th>Object</th>
+                                    <th>Purpose</th>
+                                    <th>Result</th>
+                                    <th>Error</th>
+                                </tr>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<div class="modal" id="modal-action" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
+
+<!-- daterange picker -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css">
+
+<script src="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/js/actions/index.js"></script>
