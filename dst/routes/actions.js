@@ -165,7 +165,8 @@ actionsRouter.get('',
             res.render('actions/index', {
                 moment: moment,
                 searchConditions: searchConditions,
-                ActionStatusType: cinerinoapi.factory.actionStatusType
+                ActionStatusType: cinerinoapi.factory.actionStatusType,
+                ActionType: cinerinoapi.factory.actionType
             });
         }
     }

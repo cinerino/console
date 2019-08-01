@@ -43,12 +43,17 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <div class="form-group">
-                                            <label for="typeOf">Action Type</label>
-                                            <input type="text" class="form-control" id="typeOf" name="typeOf"
-                                                placeholder="Action Type"
-                                                value="<%= (searchConditions.typeOf !== undefined) ? searchConditions.typeOf : '' %>">
-                                        </div>
+                                        <label>Action Type</label>
+                                        <select class="form-control" name="typeOf" size="4">
+                                            <% Object.values(ActionType).forEach(function (actionType) { %>
+                                            <%
+                                            var selected = searchConditions.typeOf === actionType;
+                                            %>
+                                            <option value="<%= actionType %>" <% if (selected) { %> selected <% } %>>
+                                                <%= actionType %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
                                     </div>
 
                                     <div class="form-group">
