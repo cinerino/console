@@ -202,22 +202,8 @@ async function createAttributesFromBody(params: {
 
     const webAPIIdentifier = body.makesOffer.offeredThrough.identifier;
     const branchCode: string = body.branchCode;
-    const initialName = `${params.project.id}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
-
-    let movieTheaterFromChevre: cinerinoapi.factory.chevre.place.movieTheater.IPlace = {
-        project: params.req.project,
-        typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
-        branchCode: branchCode,
-        name: {
-            ja: initialName,
-            en: initialName
-        },
-        telephone: (params.project.telephone !== undefined) ? params.project.telephone : '',
-        screenCount: 0, // 使用しないので適当に
-        kanaName: '', // 使用しないので適当に
-        id: '', // 使用しないので適当に
-        containsPlace: [] // 使用しないので適当に
-    };
+    const initialName = `${params.project.id}-${cinerinoapi.factory.chevre.placeType.MovieTheater}`;
+    let movieTheaterFromChevre: cinerinoapi.factory.chevre.place.movieTheater.IPlace | undefined;
 
     try {
         switch (webAPIIdentifier) {
@@ -253,8 +239,8 @@ async function createAttributesFromBody(params: {
                         typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
                         branchCode: theaterFromCOA.theaterCode,
                         name: {
-                            ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : '',
-                            en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : ''
+                            ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : initialName,
+                            en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : initialName
                         },
                         telephone: formatedPhoneNumber,
                         screenCount: 0, // 使用しないので適当に
@@ -286,7 +272,8 @@ async function createAttributesFromBody(params: {
                 break;
 
             default:
-                throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
+            // no op
+            // throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
         }
     } catch (error) {
         throw new Error(`${webAPIIdentifier}から劇場情報取得時に問題が発生しました: ${error.message}`);
@@ -324,7 +311,7 @@ async function createAttributesFromBody(params: {
             });
             const account = await accountService.open({
                 accountType: cinerinoapi.factory.accountType.Coin,
-                name: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja
+                name: (body.name.ja !== '') ? body.name.ja : initialName
             });
             debug('account opened');
 
@@ -352,7 +339,7 @@ async function createAttributesFromBody(params: {
             });
             const account = await accountService.open({
                 accountType: cinerinoapi.factory.accountType.Point,
-                name: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja
+                name: (body.name.ja !== '') ? body.name.ja : initialName
             });
             debug('account opened');
 
@@ -418,8 +405,9 @@ async function createAttributesFromBody(params: {
         });
     }
 
-    const makesOffer = [
-        {
+    const makesOffer: cinerinoapi.factory.seller.IMakesOffer[] = [];
+    if (movieTheaterFromChevre !== undefined) {
+        makesOffer.push({
             typeOf: <'Offer'>'Offer',
             priceCurrency: cinerinoapi.factory.priceCurrency.JPY,
             offeredThrough: {
@@ -436,28 +424,37 @@ async function createAttributesFromBody(params: {
                     }
                 }
             }
-        }
-    ];
+        });
+    }
 
     return {
         typeOf: body.typeOf,
         name: {
-            ja: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja,
-            en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
+            ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,
+            en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
         },
-        legalName: movieTheaterFromChevre.name,
+        legalName: {
+            ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,
+            en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
+        },
         parentOrganization: params.project.parentOrganization,
-        location: {
-            typeOf: movieTheaterFromChevre.typeOf,
-            branchCode: movieTheaterFromChevre.branchCode,
-            name: movieTheaterFromChevre.name
-        },
-        telephone: (body.telephone !== '') ? body.telephone : movieTheaterFromChevre.telephone,
+        telephone: (body.telephone !== undefined && body.telephone !== '')
+            ? body.telephone
+            : (movieTheaterFromChevre !== undefined) ? movieTheaterFromChevre.telephone : '',
         url: body.url,
         paymentAccepted: paymentAccepted,
         hasPOS: hasPOS,
         areaServed: areaServed,
-        makesOffer: makesOffer
+        makesOffer: makesOffer,
+        ...(movieTheaterFromChevre !== undefined)
+            ? {
+                location: {
+                    typeOf: movieTheaterFromChevre.typeOf,
+                    branchCode: movieTheaterFromChevre.branchCode,
+                    name: movieTheaterFromChevre.name
+                }
+            }
+            : { $unset: { location: 1 } }
     };
 }
 

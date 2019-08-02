@@ -183,21 +183,8 @@ function createAttributesFromBody(params) {
         const authClient = params.req.user.chevreAuthClient;
         const webAPIIdentifier = body.makesOffer.offeredThrough.identifier;
         const branchCode = body.branchCode;
-        const initialName = `${params.project.id}-${cinerinoapi.factory.chevre.placeType.MovieTheater}-${branchCode}`;
-        let movieTheaterFromChevre = {
-            project: params.req.project,
-            typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
-            branchCode: branchCode,
-            name: {
-                ja: initialName,
-                en: initialName
-            },
-            telephone: (params.project.telephone !== undefined) ? params.project.telephone : '',
-            screenCount: 0,
-            kanaName: '',
-            id: '',
-            containsPlace: [] // 使用しないので適当に
-        };
+        const initialName = `${params.project.id}-${cinerinoapi.factory.chevre.placeType.MovieTheater}`;
+        let movieTheaterFromChevre;
         try {
             switch (webAPIIdentifier) {
                 case cinerinoapi.factory.service.webAPI.Identifier.COA:
@@ -231,8 +218,8 @@ function createAttributesFromBody(params) {
                             typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
                             branchCode: theaterFromCOA.theaterCode,
                             name: {
-                                ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : '',
-                                en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : ''
+                                ja: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterName : initialName,
+                                en: (theaterFromCOA !== undefined) ? theaterFromCOA.theaterNameEng : initialName
                             },
                             telephone: formatedPhoneNumber,
                             screenCount: 0,
@@ -259,7 +246,8 @@ function createAttributesFromBody(params) {
                     movieTheaterFromChevre = yield placeService.findMovieTheaterById({ id: movieTheater.id });
                     break;
                 default:
-                    throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
+                // no op
+                // throw new Error(`Unsupported WebAPI identifier: ${webAPIIdentifier}`);
             }
         }
         catch (error) {
@@ -295,7 +283,7 @@ function createAttributesFromBody(params) {
                 });
                 const account = yield accountService.open({
                     accountType: cinerinoapi.factory.accountType.Coin,
-                    name: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja
+                    name: (body.name.ja !== '') ? body.name.ja : initialName
                 });
                 debug('account opened');
                 paymentAccepted.push({
@@ -322,7 +310,7 @@ function createAttributesFromBody(params) {
                 });
                 const account = yield accountService.open({
                     accountType: cinerinoapi.factory.accountType.Point,
-                    name: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja
+                    name: (body.name.ja !== '') ? body.name.ja : initialName
                 });
                 debug('account opened');
                 paymentAccepted.push({
@@ -382,8 +370,9 @@ function createAttributesFromBody(params) {
                 }
             });
         }
-        const makesOffer = [
-            {
+        const makesOffer = [];
+        if (movieTheaterFromChevre !== undefined) {
+            makesOffer.push({
                 typeOf: 'Offer',
                 priceCurrency: cinerinoapi.factory.priceCurrency.JPY,
                 offeredThrough: {
@@ -400,28 +389,25 @@ function createAttributesFromBody(params) {
                         }
                     }
                 }
+            });
+        }
+        return Object.assign({ typeOf: body.typeOf, name: {
+                ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,
+                en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
+            }, legalName: {
+                ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,
+                en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
+            }, parentOrganization: params.project.parentOrganization, telephone: (body.telephone !== undefined && body.telephone !== '')
+                ? body.telephone
+                : (movieTheaterFromChevre !== undefined) ? movieTheaterFromChevre.telephone : '', url: body.url, paymentAccepted: paymentAccepted, hasPOS: hasPOS, areaServed: areaServed, makesOffer: makesOffer }, (movieTheaterFromChevre !== undefined)
+            ? {
+                location: {
+                    typeOf: movieTheaterFromChevre.typeOf,
+                    branchCode: movieTheaterFromChevre.branchCode,
+                    name: movieTheaterFromChevre.name
+                }
             }
-        ];
-        return {
-            typeOf: body.typeOf,
-            name: {
-                ja: (body.name.ja !== '') ? body.name.ja : movieTheaterFromChevre.name.ja,
-                en: (body.name.en !== '') ? body.name.en : movieTheaterFromChevre.name.en
-            },
-            legalName: movieTheaterFromChevre.name,
-            parentOrganization: params.project.parentOrganization,
-            location: {
-                typeOf: movieTheaterFromChevre.typeOf,
-                branchCode: movieTheaterFromChevre.branchCode,
-                name: movieTheaterFromChevre.name
-            },
-            telephone: (body.telephone !== '') ? body.telephone : movieTheaterFromChevre.telephone,
-            url: body.url,
-            paymentAccepted: paymentAccepted,
-            hasPOS: hasPOS,
-            areaServed: areaServed,
-            makesOffer: makesOffer
-        };
+            : { $unset: { location: 1 } });
     });
 }
 /**

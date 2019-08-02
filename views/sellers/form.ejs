@@ -36,9 +36,11 @@ if (seller !== undefined) {
         <% }) %>
     </select>
 </div>
+
 <div class="form-group">
     <label for="branchCode">販売イベント供給サービス</label>
     <select class="form-control" name="makesOffer[offeredThrough][identifier]">
+        <option value="">---</option>
         <% Object.values(WebAPIIdentifier).forEach(function (identifier) { %>
         <%
         var selected = false;
@@ -52,49 +54,58 @@ if (seller !== undefined) {
         <% }) %>
     </select>
 </div>
+
 <div class="form-group">
-    <label for="branchCode">販売イベント劇場枝番号</label>
+    <label for="branchCode">販売イベント場所ブランチコード</label>
     <input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="販売イベント劇場枝番号"
         value="<%= (seller !== undefined && seller.location !== undefined && seller.location !== null) ?  seller.location.branchCode : '' %>">
 </div>
+
 <div class="form-group">
     <label for="name[ja]">日本語名称</label>
     <input type="text" class="form-control" id="name[ja]" name="name[ja]" placeholder="日本語名称"
         value="<%= (seller !== undefined) ?  seller.name.ja : '' %>">
 </div>
+
 <div class="form-group">
     <label for="name[en]">英語名称</label>
     <input type="text" class="form-control" id="name[en]" name="name[en]" placeholder="英語名称"
         value="<%= (seller !== undefined) ?  seller.name.en : '' %>">
 </div>
+
 <div class="form-group">
     <label for="telephone">Telephone</label>
     <input type="text" class="form-control" id="telephone" name="telephone" placeholder="telephone"
         value="<%= (seller !== undefined) ?  seller.telephone : '' %>">
 </div>
+
 <div class="form-group">
     <label for="url">URL</label>
     <input type="text" class="form-control" id="url" name="url" placeholder="URL"
         value="<%= (seller !== undefined) ?  seller.url : '' %>">
 </div>
+
 <hr>
 <div class="form-group">
     <label for="gmoInfo[shopId]">GMOショップID</label>
     <input type="text" class="form-control" id="gmoInfo[shopId]" name="gmoInfo[shopId]" placeholder="GMOショップID"
         value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopId : '' %>">
 </div>
+
 <div class="form-group">
     <label for="gmoInfo[shopPass]">GMOショップPASS</label>
     <input type="password" class="form-control" id="gmoInfo[shopPass]" name="gmoInfo[shopPass]"
         placeholder="GMOショップPASS"
         value="<%= (creditCardPayment !== undefined) ? creditCardPayment.gmoInfo.shopPass : '' %>">
 </div>
+
 <hr>
 <div class="form-check">
     <input type="checkbox" class="form-check-input" id="movieTicketPaymentAccepted" name="movieTicketPaymentAccepted"
         <%=(movieTicketPayment !==　undefined) ? ' checked' : '' %>>
     <label class="form-check-label" for="movieTicketPaymentAccepted">ムビチケ決済を許可</label>
 </div>
+
 <div class="form-group">
     <label for="movieTicketInfo[kgygishCd]">ムビチケ興行会社コード</label>
     <input type="text" class="form-control" id="movieTicketInfo[kgygishCd]" disabled placeholder="ムビチケ興行会社コード"
@@ -102,6 +113,7 @@ if (seller !== undefined) {
     <input type="hidden" name="movieTicketInfo[kgygishCd]"
         value="<%= (req.project.settings.mvtkReserve !== undefined) ? req.project.settings.mvtkReserve.companyCode : '' %>">
 </div>
+
 <div class="form-group">
     <label for="gmoInfo[shopId]">ムビチケサイトコード</label>
     <input type="text" class="form-control" id="movieTicketInfo[stCd]" name="movieTicketInfo[stCd]"
