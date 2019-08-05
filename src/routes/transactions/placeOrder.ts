@@ -209,6 +209,14 @@ placeOrderTransactionsRouter.get(
                         name: transaction.seller.name.ja,
                         url: `/projects/${req.project.id}/sellers/${a.agent.id}`
                     };
+                } else {
+                    agent = {
+                        id: a.agent.id,
+                        name: (a.agent.name !== undefined && a.agent.name !== null)
+                            ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
+                            : '',
+                        url: `/projects/${req.project.id}/sellers/${a.agent.id}`
+                    };
                 }
 
                 let actionName: string;
