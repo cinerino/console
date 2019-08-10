@@ -357,10 +357,10 @@ ordersRouter.get('/:orderNumber',
                 if (Array.isArray(a.object)) {
                     switch (a.object[0].typeOf) {
                         case 'PaymentMethod':
-                            object = a.object[0].paymentMethod.name;
+                            object = { name: a.object[0].paymentMethod.name };
                             break;
                         case cinerinoapi.factory.actionType.PayAction:
-                            object = a.object[0].object.paymentMethod.typeOf;
+                            object = { name: a.object[0].object.paymentMethod.typeOf };
                             break;
                         default:
                             object = a.object[0].typeOf;
@@ -369,33 +369,57 @@ ordersRouter.get('/:orderNumber',
                 else {
                     switch (a.object.typeOf) {
                         case 'Order':
-                            object = '注文';
+                            object = { name: '注文' };
                             break;
                         case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                            object = 'ポイント';
+                            object = { name: 'ポイント' };
                             break;
                         case cinerinoapi.factory.actionType.SendAction:
                             if (a.object.typeOf === 'Order') {
-                                object = '配送';
+                                object = { name: '配送' };
                             }
                             else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                                object = '送信';
+                                object = { name: '送信' };
                             }
                             else {
-                                object = '送信';
+                                object = { name: '送信' };
                             }
                             break;
                         case cinerinoapi.factory.creativeWorkType.EmailMessage:
-                            object = 'Eメール';
+                            object = { name: 'Eメール' };
                             break;
                         case 'PaymentMethod':
-                            object = a.object.object[0].paymentMethod.name;
+                            object = { name: a.object.object[0].paymentMethod.name };
                             break;
                         case cinerinoapi.factory.actionType.PayAction:
-                            object = a.object.object[0].paymentMethod.typeOf;
+                            object = { name: a.object.object[0].paymentMethod.typeOf };
                             break;
                         default:
-                            object = a.object.typeOf;
+                            object = { name: a.object.typeOf };
+                    }
+                }
+                let purpose;
+                if (Array.isArray(a.purpose)) {
+                    purpose = { name: 'Array' };
+                }
+                else if (a.purpose !== undefined && a.purpose !== null) {
+                    switch (a.purpose.typeOf) {
+                        case 'Order':
+                            purpose = {
+                                name: '注文',
+                                url: `/projects/${req.project.id}/orders/${a.purpose.orderNumber}`
+                            };
+                            break;
+                        case cinerinoapi.factory.transactionType.MoneyTransfer:
+                        case cinerinoapi.factory.transactionType.PlaceOrder:
+                        case cinerinoapi.factory.transactionType.ReturnOrder:
+                            purpose = {
+                                name: '取引',
+                                url: `/projects/${req.project.id}/transactions/${a.purpose.typeOf}/${a.purpose.id}`
+                            };
+                            break;
+                        default:
+                            purpose = { name: a.purpose.typeOf };
                     }
                 }
                 return {
@@ -403,6 +427,7 @@ ordersRouter.get('/:orderNumber',
                     agent,
                     actionName,
                     object,
+                    purpose,
                     startDate: a.startDate,
                     actionStatus: a.actionStatus,
                     result: a.result

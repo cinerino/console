@@ -3,14 +3,14 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>注文取引詳細</h1>
+                <h1>通貨転送取引詳細</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
                         <a href="/">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">注文取引詳細</li>
+                    <li class="breadcrumb-item active">通貨転送取引詳細</li>
                 </ol>
             </div>
         </div>
@@ -99,12 +99,8 @@
                             <!-- <b>Invoice #007612</b>
                                 <br>
                                 <br> -->
-                            <b>注文:</b>
+                            <b>結果:</b>
                             <% if (transaction.result !== undefined) { %>
-                            <a target="_blank"
-                                href="/projects/<%= req.project.id %>/orders/<%= transaction.result.order.orderNumber %>">
-                                <%= transaction.result.order.orderNumber %>
-                            </a>
                             <% } %>
                             <!-- <br>
                                     <b>Payment Due:</b> 2/22/2014 -->
@@ -169,16 +165,10 @@
                                             <h3 class="timeline-header">
                                                 <a href="<%= timeline.agent.url %>" target="_blank">
                                                     <%= timeline.agent.name %></a> が
-
-                                                <% if (timeline.object.url !== undefined) { %>
-                                                <a href="<%= timeline.object.url %>"
-                                                    target="_blank"><span><%= timeline.object.name %></span>
-                                                </a> を
-                                                <% } else { %>
-                                                <span><%= timeline.object.name %></span> を
-                                                <% } %>
-
-                                                <span><%= timeline.actionName %></span> しました
+                                                <span>
+                                                    <%= timeline.object %></span> を
+                                                <span>
+                                                    <%= timeline.actionName %></span> しました
                                             </h3>
 
                                             <div class="timeline-body">

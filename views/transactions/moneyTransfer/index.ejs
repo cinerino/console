@@ -1,0 +1,198 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">通貨転送取引検索</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">通貨転送取引検索</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <!-- <div class="card-header">
+                        <h3 class="card-title">Quick Example</h3>
+                    </div> -->
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form role="form" method="get">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="agent[ids]">Agent ID</label>
+                                        <input type="text" class="form-control" id="agent[ids]" name="agent[ids]"
+                                            placeholder="Agent ID"
+                                            value="<%= (Array.isArray(searchConditions.agent.ids)) ? searchConditions.agent.ids.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="agent[familyName]"
+                                            name="agent[familyName]" placeholder="Family Name"
+                                            value="<%= searchConditions.agent.familyName %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="agent[givenName]"
+                                            name="agent[givenName]" placeholder="Given Name"
+                                            value="<%= searchConditions.agent.givenName %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="agent[email]" name="agent[email]"
+                                            placeholder="test@example.com" value="<%= searchConditions.agent.email %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="agent[telephone]"
+                                            name="agent[telephone]" placeholder="+819012345678"
+                                            value="<%= searchConditions.agent.telephone %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>販売者</label>
+                                        <select multiple class="form-control" name="seller[ids][]" size="10">
+                                            <% sellers.forEach(function (seller) { %>
+                                            <% var selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf(seller.id) >= 0; %>
+                                            <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                                <%= seller.name.ja %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>取引開始日時</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="startRange" id="startRange"
+                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label>ステータス</label>
+                                        <select multiple class="form-control" name="statuses[]">
+                                            <% Object.values(TransactionStatusType).forEach(function (transactionStatus) { %>
+                                            <% var selected = Array.isArray(searchConditions.statuses) && searchConditions.statuses.indexOf(transactionStatus) >= 0; %>
+                                            <option value="<%= transactionStatus %>" <% if (selected) { %> selected
+                                                <% } %>>
+                                                <%= transactionStatus %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>タスクエクスポートステータス</label>
+                                        <select multiple class="form-control" name="tasksExportationStatuses[]">
+                                            <% Object.values(TransactionTasksExportationStatus).forEach(function (status) { %>
+                                            <% var selected = Array.isArray(searchConditions.tasksExportationStatuses) && searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
+                                            <option value="<%= status %>" <% if (selected) { %> selected <% } %>>
+                                                <%= status %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <div class="btn-group float-right">
+                                <button type="button" class="btn btn-info search">検索</button>
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                    <a class="dropdown-item search" href="#">検索</a>
+                                    <a class="dropdown-item downloadCSV" href="#">CSVダウンロード</a>
+                                    <a class="dropdown-item downloadJson" href="#">JSONダウンロード</a>
+                                    <!-- <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Results</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive">
+                        <table id="transactions-table" class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>ID<br>Status<br>Start / End / Expires</th>
+                                    <th>Agent</th>
+                                    <th>Recipient</th>
+                                    <th>Seller</th>
+                                    <th>Result</th>
+                                    <th>Export Task</th>
+                                    <th>Required Time<br>Task Latency</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>ID<br>Status<br>Start / End / Expires</th>
+                                    <th>Agent</th>
+                                    <th>Recipient</th>
+                                    <th>Seller</th>
+                                    <th>Result</th>
+                                    <th>Export Task</th>
+                                    <th>Required Time<br>Task Latency</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<!-- DataTables -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
+
+<!-- daterange picker -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css">
+
+<script src="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/js/transactions/moneyTransfer/index.js"></script>

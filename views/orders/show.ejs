@@ -317,8 +317,25 @@
                                             <h3 class="timeline-header">
                                                 <a href="<%= timeline.agent.url %>" target="_blank">
                                                     <%= timeline.agent.name %></a> が
-                                                <span>
-                                                    <%= timeline.object %></span> を
+
+                                                <% if (timeline.purpose !== undefined) { %>
+                                                <% if (timeline.purpose.url !== undefined) { %>
+                                                <a href="<%= timeline.purpose.url %>"
+                                                    target="_blank"><span><%= timeline.purpose.name %></span>
+                                                </a> のために
+                                                <% } else { %>
+                                                <span><%= timeline.purpose.name %></span> のために
+                                                <% } %>
+                                                <% } %>
+
+                                                <% if (timeline.object.url !== undefined) { %>
+                                                <a href="<%= timeline.object.url %>"
+                                                    target="_blank"><span><%= timeline.object.name %></span>
+                                                </a> を
+                                                <% } else { %>
+                                                <span><%= timeline.object.name %></span> を
+                                                <% } %>
+
                                                 <span>
                                                     <%= timeline.actionName %></span> しました
                                             </h3>

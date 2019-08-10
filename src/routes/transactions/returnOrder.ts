@@ -129,7 +129,8 @@ returnOrderTransactionsRouter.get(
             //     transactionId: transaction.id,
             //     sort: { endDate: cinerinoapi.factory.sortType.Ascending }
             // });
-            const timelines = [{
+
+            let timelines = [{
                 action: {},
                 agent: {
                     id: transaction.agent.id,
@@ -249,6 +250,9 @@ returnOrderTransactionsRouter.get(
                     default:
                 }
             }
+
+            timelines = timelines.sort((a, b) => Number(a.startDate > b.startDate));
+
             res.render('transactions/returnOrder/show', {
                 moment: moment,
                 transaction: transaction,

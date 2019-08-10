@@ -9,23 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 注文取引ルーター
+ * 通貨転送取引ルーター
  */
 const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
 const cinerinoapi = require("../../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
-const placeOrderTransactionsRouter = express.Router();
+const moneyTransferTransactionsRouter = express.Router();
 /**
  * 検索
  */
-placeOrderTransactionsRouter.get('', 
+moneyTransferTransactionsRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
-        const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
+        const moneyTransferService = new cinerinoapi.service.transaction.MoneyTransfer({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
@@ -38,7 +38,7 @@ placeOrderTransactionsRouter.get('',
             limit: req.query.limit,
             page: req.query.page,
             sort: { startDate: cinerinoapi.factory.sortType.Descending },
-            typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
+            typeOf: cinerinoapi.factory.transactionType.MoneyTransfer,
             ids: (Array.isArray(req.query.ids)) ? req.query.ids : undefined,
             statuses: (req.query.statuses !== undefined) ? req.query.statuses : undefined,
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
@@ -85,14 +85,14 @@ placeOrderTransactionsRouter.get('',
             },
             object: {},
             result: {
-                order: {
-                    orderNumbers: (req.query.result !== undefined
-                        && req.query.result.order !== undefined
-                        && req.query.result.order.orderNumbers !== '')
-                        ? req.query.result.order.orderNumbers.split(',')
-                            .map((v) => v.trim())
-                        : undefined
-                }
+            // order: {
+            //     orderNumbers: (req.query.result !== undefined
+            //         && req.query.result.order !== undefined
+            //         && req.query.result.order.orderNumbers !== '')
+            //         ? (<string>req.query.result.order.orderNumbers).split(',')
+            //             .map((v) => v.trim())
+            //         : undefined
+            // }
             },
             tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)
                 ? req.query.tasksExportationStatuses
@@ -100,7 +100,7 @@ placeOrderTransactionsRouter.get('',
         };
         debug('searchConditions:', searchConditions);
         if (req.query.format === 'datatable') {
-            const searchScreeningEventsResult = yield placeOrderService.search(searchConditions);
+            const searchScreeningEventsResult = yield moneyTransferService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchScreeningEventsResult.totalCount,
@@ -109,21 +109,29 @@ placeOrderTransactionsRouter.get('',
             });
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
-            const stream = yield placeOrderService.stream(Object.assign({}, searchConditions, { format: cinerinoapi.factory.encodingFormat.Text.csv }));
-            const filename = 'TransactionReport';
-            res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
-            res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
-            stream.pipe(res);
+            throw new cinerinoapi.factory.errors.NotImplemented();
+            // const stream = <NodeJS.ReadableStream>await moneyTransferService.stream({
+            //     ...searchConditions,
+            //     format: cinerinoapi.factory.encodingFormat.Text.csv
+            // });
+            // const filename = 'TransactionReport';
+            // res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
+            // res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
+            // stream.pipe(res);
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
-            const stream = yield placeOrderService.stream(Object.assign({}, searchConditions, { format: cinerinoapi.factory.encodingFormat.Application.json }));
-            const filename = 'TransactionReport';
-            res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.json`)}`);
-            res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);
-            stream.pipe(res);
+            throw new cinerinoapi.factory.errors.NotImplemented();
+            // const stream = <NodeJS.ReadableStream>await moneyTransferService.stream({
+            //     ...searchConditions,
+            //     format: cinerinoapi.factory.encodingFormat.Application.json
+            // });
+            // const filename = 'TransactionReport';
+            // res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.json`)}`);
+            // res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);
+            // stream.pipe(res);
         }
         else {
-            res.render('transactions/placeOrder/index', {
+            res.render('transactions/moneyTransfer/index', {
                 moment: moment,
                 sellers: searchSellersResult.data,
                 TransactionStatusType: cinerinoapi.factory.transactionStatusType,
@@ -139,16 +147,16 @@ placeOrderTransactionsRouter.get('',
 /**
  * 取引詳細
  */
-placeOrderTransactionsRouter.get('/:transactionId', 
+moneyTransferTransactionsRouter.get('/:transactionId', 
 // tslint:disable-next-line:max-func-body-length
 (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
+        const moneyTransferService = new cinerinoapi.service.transaction.MoneyTransfer({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchTransactionsResult = yield placeOrderService.search({
-            typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
+        const searchTransactionsResult = yield moneyTransferService.search({
+            typeOf: cinerinoapi.factory.transactionType.MoneyTransfer,
             ids: [req.params.transactionId]
         });
         const transaction = searchTransactionsResult.data.shift();
@@ -157,7 +165,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
         }
         let actionsOnTransaction = [];
         try {
-            actionsOnTransaction = yield placeOrderService.searchActionsByTransactionId({
+            actionsOnTransaction = yield moneyTransferService.searchActionsByTransactionId({
                 id: transaction.id,
                 sort: { startDate: cinerinoapi.factory.sortType.Ascending }
             });
@@ -179,9 +187,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                     url: transactionAgentUrl
                 },
                 actionName: '開始',
-                object: {
-                    name: '取引'
-                },
+                object: '取引',
                 startDate: transaction.startDate,
                 actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
                 result: undefined
@@ -229,22 +235,19 @@ placeOrderTransactionsRouter.get('/:transactionId',
             let object;
             switch (a.object.typeOf) {
                 case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
-                    object = { name: '座席予約' };
+                    object = '座席予約';
                     break;
                 case cinerinoapi.factory.paymentMethodType.CreditCard:
-                    object = { name: 'クレジットカード決済' };
+                    object = 'クレジットカード決済';
                     break;
                 case cinerinoapi.factory.paymentMethodType.Account:
-                    object = { name: '口座決済' };
+                    object = '口座決済';
                     break;
                 case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
-                    object = { name: 'ポイントインセンティブ' };
-                    break;
-                case 'Order':
-                    object = { name: '注文', url: `/projects/${req.project.id}/orders/${a.object.orderNumber}` };
+                    object = 'ポイントインセンティブ';
                     break;
                 default:
-                    object = { name: a.object.typeOf };
+                    object = a.object.typeOf;
             }
             return {
                 action: a,
@@ -267,7 +270,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                             url: transactionAgentUrl
                         },
                         actionName: '中止',
-                        object: { name: '取引' },
+                        object: '取引',
                         startDate: transaction.endDate,
                         actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
                         result: undefined
@@ -282,7 +285,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                             url: transactionAgentUrl
                         },
                         actionName: '確定',
-                        object: { name: '取引' },
+                        object: '取引',
                         startDate: transaction.endDate,
                         actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
                         result: undefined
@@ -297,7 +300,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                             url: '#'
                         },
                         actionName: '終了',
-                        object: { name: '取引' },
+                        object: '取引',
                         startDate: transaction.endDate,
                         actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
                         result: undefined
@@ -307,7 +310,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
             }
         }
         timelines = timelines.sort((a, b) => Number(a.startDate > b.startDate));
-        res.render('transactions/placeOrder/show', {
+        res.render('transactions/moneyTransfer/show', {
             moment: moment,
             transaction: transaction,
             timelines: timelines,
@@ -318,4 +321,4 @@ placeOrderTransactionsRouter.get('/:transactionId',
         next(error);
     }
 }));
-exports.default = placeOrderTransactionsRouter;
+exports.default = moneyTransferTransactionsRouter;

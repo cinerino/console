@@ -151,24 +151,6 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/projects/<%= req.project.id %>/transactions/placeOrder" class="nav-link">
-                                        <i class="nav-icon fa fa-table"></i>
-                                        <p>
-                                            注文取引
-                                            <span class="badge badge-info right"></span>
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/projects/<%= req.project.id %>/transactions/returnOrder" class="nav-link">
-                                        <i class="nav-icon fa fa-table"></i>
-                                        <p>
-                                            注文返品取引
-                                            <span class="badge badge-info right"></span>
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="/projects/<%= req.project.id %>/invoices" class="nav-link">
                                         <i class="nav-icon fa fa-receipt"></i>
                                         <p>
@@ -223,15 +205,6 @@
                                 <p>
                                     予約
                                     <span class="badge badge-danger right"></span>
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/tasks" class="nav-link">
-                                <i class="nav-icon fa fa-tasks"></i>
-                                <p>
-                                    タスク
-                                    <span class="badge badge-info right"></span>
                                 </p>
                             </a>
                         </li>
@@ -291,12 +264,60 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-table"></i>
+                                <p>
+                                    取引
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/transactions/placeOrder" class="nav-link">
+                                        <i class="nav-icon fa fa-table"></i>
+                                        <p>
+                                            注文取引
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/transactions/returnOrder" class="nav-link">
+                                        <i class="nav-icon fa fa-table"></i>
+                                        <p>
+                                            注文返品取引
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/transactions/moneyTransfer"
+                                        class="nav-link">
+                                        <i class="nav-icon fa fa-table"></i>
+                                        <p>
+                                            通貨転送取引
+                                            <span class="badge badge-danger right">New</span>
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             <a href="/projects/<%= req.project.id %>/actions" class="nav-link">
-                                <i class="nav-icon fa fa-tasks"></i>
+                                <i class="nav-icon fa fa-table"></i>
                                 <p>
                                     アクション
                                     <span class="badge badge-danger right">New</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/projects/<%= req.project.id %>/tasks" class="nav-link">
+                                <i class="nav-icon fa fa-tasks"></i>
+                                <p>
+                                    タスク
+                                    <span class="badge badge-info right"></span>
                                 </p>
                             </a>
                         </li>
