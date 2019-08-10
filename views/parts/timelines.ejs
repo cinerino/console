@@ -1,0 +1,111 @@
+<!-- The timeline -->
+<ul class="timeline timeline-inverse">
+    <!-- /.timeline-label -->
+    <% timelines.forEach(function(timeline, index){ %>
+    <% if (index === 0) { %>
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-success">
+            <%= moment(timeline.startDate).format('LL') %>
+        </span>
+    </li>
+    <% } %>
+    <!-- timeline item -->
+    <li>
+        <i class="fa fa-envelope bg-primary"></i>
+        <!-- <i class="fa fa-user bg-info"></i> -->
+        <!-- <i class="fa fa-camera bg-purple"></i> -->
+        <!-- <i class="fa fa-comments bg-warning"></i> -->
+
+        <div class="timeline-item">
+            <span class="time">
+                <i class="fa fa-clock"></i>
+                <%= moment(timeline.startDate).toISOString() %>
+            </span>
+
+            <h3 class="timeline-header">
+                <a href="<%= timeline.agent.url %>" target="_blank"><%= timeline.agent.name %></a> が
+
+                <% if (timeline.purpose !== undefined) { %>
+                <% if (timeline.purpose.url !== undefined) { %>
+                <a href="<%= timeline.purpose.url %>" target="_blank">
+                    <span><%= timeline.purpose.name %></span>
+                </a> のために
+                <% } else { %>
+                <span><%= timeline.purpose.name %></span> のために
+                <% } %>
+                <% } %>
+
+                <% if (timeline.object.url !== undefined) { %>
+                <a href="<%= timeline.object.url %>" target="_blank">
+                    <span><%= timeline.object.name %></span>
+                </a> を
+                <% } else { %>
+                <span><%= timeline.object.name %></span> を
+                <% } %>
+
+                <span><%= timeline.actionName %></span>
+                <span><%= timeline.actionStatusDescription %></span>
+            </h3>
+
+            <div class="timeline-body">
+                <span class="badge <%= timeline.actionStatus %>"><%= timeline.actionStatus %></span>
+            </div>
+            <div class="timeline-footer">
+                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#modal-action-<%= timeline.action.id %>">Read more</a>
+                <a href="#" class="btn btn-warning btn-sm" data-toggle="modal"
+                    data-target="#modal-actionResult-<%= timeline.action.id %>">See
+                    results</a>
+            </div>
+        </div>
+    </li>
+    <% }) %>
+    <li>
+        <i class="fa fa-clock bg-gray"></i>
+    </li>
+</ul>
+
+<% timelines.forEach(function(timeline, index){ %>
+<div class="modal" id="modal-action-<%= timeline.action.id %>" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <textarea rows="40" class="form-control" placeholder=""
+                    disabled=""><%= JSON.stringify(timeline.action, null, '\t') %></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal" id="modal-actionResult-<%= timeline.action.id %>" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Action Result</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <textarea rows="40" class="form-control" placeholder=""
+                    disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<% }) %>

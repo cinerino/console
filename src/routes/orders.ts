@@ -8,6 +8,8 @@ import * as moment from 'moment';
 
 import * as cinerinoapi from '../cinerinoapi';
 
+import * as TimelineFactory from '../factory/timeline';
+
 const debug = createDebug('cinerino-console:routes');
 const ordersRouter = express.Router();
 /**
@@ -284,182 +286,19 @@ ordersRouter.get(
             }
 
             let actionsOnOrder: any[] = [];
-            let timelines: {
-                action: any;
-                agent: {
-                    id: string;
-                    name: string;
-                    url: string;
-                };
-                actionName: string;
-                object: {
-                    name: string;
-                    url?: string;
-                };
-                purpose?: {
-                    name: string;
-                    url?: string;
-                };
-                startDate: Date;
-                actionStatus: string;
-                result: any;
-            }[] = [];
+            let timelines: TimelineFactory.ITimeline[] = [];
             try {
                 actionsOnOrder = await orderService.searchActionsByOrderNumber({
                     orderNumber: order.orderNumber,
                     sort: { startDate: cinerinoapi.factory.sortType.Ascending }
                 });
 
-                // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
+                // tslint:disable-next-line:max-func-body-length
                 timelines = actionsOnOrder.map((a) => {
-                    let agent: any;
-                    if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
-                        let userPoolId = '';
-                        let tokenIssuer = '';
-                        if (Array.isArray(a.agent.identifier)) {
-                            const tokenIssuerIdentifier = a.agent.identifier.find((i: any) => i.name === 'tokenIssuer');
-                            if (tokenIssuerIdentifier !== undefined) {
-                                tokenIssuer = tokenIssuerIdentifier.value;
-                                userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
-                            }
-                        }
-
-                        const url = (a.agent.memberOf !== undefined)
-                            ? `/projects/${req.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
-                            : `/projects/${req.project.id}/userPools/${userPoolId}/clients/${a.agent.id}`;
-
-                        agent = {
-                            id: a.agent.id,
-                            name: order.customer.name,
-                            url: url
-                        };
-                    } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
-                        agent = {
-                            id: a.agent.id,
-                            name: order.seller.name,
-                            url: `/projects/${req.project.id}/sellers/${a.agent.id}`
-                        };
-                    }
-
-                    let actionName: string;
-                    switch (a.typeOf) {
-                        case cinerinoapi.factory.actionType.OrderAction:
-                            actionName = '注文';
-                            break;
-                        case cinerinoapi.factory.actionType.GiveAction:
-                            actionName = '付与';
-                            break;
-                        case cinerinoapi.factory.actionType.SendAction:
-                            if (a.object.typeOf === 'Order') {
-                                actionName = '配送';
-                            } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                                actionName = '送信';
-                            } else {
-                                actionName = '送信';
-                            }
-                            break;
-                        case cinerinoapi.factory.actionType.PayAction:
-                            actionName = '支払';
-                            break;
-                        case cinerinoapi.factory.actionType.ReturnAction:
-                            if (a.object.typeOf === 'Order') {
-                                actionName = '返品';
-                            } else {
-                                actionName = '返却';
-                            }
-                            break;
-                        case cinerinoapi.factory.actionType.RefundAction:
-                            actionName = '返金';
-                            break;
-                        default:
-                            actionName = a.typeOf;
-                    }
-
-                    let object: {
-                        name: string;
-                        url?: string;
-                    };
-                    if (Array.isArray(a.object)) {
-                        switch (a.object[0].typeOf) {
-                            case 'PaymentMethod':
-                                object = { name: a.object[0].paymentMethod.name };
-                                break;
-                            case cinerinoapi.factory.actionType.PayAction:
-                                object = { name: a.object[0].object.paymentMethod.typeOf };
-                                break;
-                            default:
-                                object = a.object[0].typeOf;
-                        }
-                    } else {
-                        switch (a.object.typeOf) {
-                            case 'Order':
-                                object = { name: '注文' };
-                                break;
-                            case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                                object = { name: 'ポイント' };
-                                break;
-                            case cinerinoapi.factory.actionType.SendAction:
-                                if (a.object.typeOf === 'Order') {
-                                    object = { name: '配送' };
-                                } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                                    object = { name: '送信' };
-                                } else {
-                                    object = { name: '送信' };
-                                }
-                                break;
-                            case cinerinoapi.factory.creativeWorkType.EmailMessage:
-                                object = { name: 'Eメール' };
-                                break;
-                            case 'PaymentMethod':
-                                object = { name: a.object.object[0].paymentMethod.name };
-                                break;
-                            case cinerinoapi.factory.actionType.PayAction:
-                                object = { name: a.object.object[0].paymentMethod.typeOf };
-                                break;
-                            default:
-                                object = { name: a.object.typeOf };
-                        }
-                    }
-
-                    let purpose: {
-                        name: string;
-                        url?: string;
-                    } | undefined;
-                    if (Array.isArray(a.purpose)) {
-                        purpose = { name: 'Array' };
-                    } else if (a.purpose !== undefined && a.purpose !== null) {
-                        switch (a.purpose.typeOf) {
-                            case 'Order':
-                                purpose = {
-                                    name: '注文',
-                                    url: `/projects/${req.project.id}/orders/${a.purpose.orderNumber}`
-                                };
-                                break;
-
-                            case cinerinoapi.factory.transactionType.MoneyTransfer:
-                            case cinerinoapi.factory.transactionType.PlaceOrder:
-                            case cinerinoapi.factory.transactionType.ReturnOrder:
-                                purpose = {
-                                    name: '取引',
-                                    url: `/projects/${req.project.id}/transactions/${a.purpose.typeOf}/${a.purpose.id}`
-                                };
-                                break;
-
-                            default:
-                                purpose = { name: a.purpose.typeOf };
-                        }
-                    }
-
-                    return {
-                        action: a,
-                        agent,
-                        actionName,
-                        object,
-                        purpose,
-                        startDate: a.startDate,
-                        actionStatus: a.actionStatus,
-                        result: a.result
-                    };
+                    return TimelineFactory.createFromAction({
+                        project: req.project,
+                        action: a
+                    });
                 });
             } catch (error) {
                 // no op

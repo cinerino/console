@@ -15,6 +15,7 @@ const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
 const cinerinoapi = require("../../cinerinoapi");
+const TimelineFactory = require("../../factory/timeline");
 const debug = createDebug('cinerino-console:routes');
 const placeOrderTransactionsRouter = express.Router();
 /**
@@ -184,77 +185,14 @@ placeOrderTransactionsRouter.get('/:transactionId',
                 },
                 startDate: transaction.startDate,
                 actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                actionStatusDescription: 'しました',
                 result: undefined
             }];
-        // tslint:disable-next-line:cyclomatic-complexity
         timelines.push(...actionsOnTransaction.map((a) => {
-            let agent;
-            if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
-                const url = (a.agent.memberOf !== undefined)
-                    ? `/projects/${req.project.id}/people/${a.agent.id}`
-                    : (req.project.settings.cognito !== undefined)
-                        // tslint:disable-next-line:max-line-length
-                        ? `/projects/${req.project.id}/userPools/${req.project.settings.cognito.customerUserPool.id}/clients/${a.agent.id}`
-                        : '#';
-                agent = {
-                    id: a.agent.id,
-                    name: a.agent.id,
-                    url: url
-                };
-            }
-            else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater) {
-                agent = {
-                    id: a.agent.id,
-                    name: transaction.seller.name.ja,
-                    url: `/projects/${req.project.id}/sellers/${a.agent.id}`
-                };
-            }
-            else {
-                agent = {
-                    id: a.agent.id,
-                    name: (a.agent.name !== undefined && a.agent.name !== null)
-                        ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
-                        : '',
-                    url: `/projects/${req.project.id}/sellers/${a.agent.id}`
-                };
-            }
-            let actionName;
-            switch (a.typeOf) {
-                case cinerinoapi.factory.actionType.AuthorizeAction:
-                    actionName = '承認';
-                    break;
-                default:
-                    actionName = a.typeOf;
-            }
-            let object;
-            switch (a.object.typeOf) {
-                case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
-                    object = { name: '座席予約' };
-                    break;
-                case cinerinoapi.factory.paymentMethodType.CreditCard:
-                    object = { name: 'クレジットカード決済' };
-                    break;
-                case cinerinoapi.factory.paymentMethodType.Account:
-                    object = { name: '口座決済' };
-                    break;
-                case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
-                    object = { name: 'ポイントインセンティブ' };
-                    break;
-                case 'Order':
-                    object = { name: '注文', url: `/projects/${req.project.id}/orders/${a.object.orderNumber}` };
-                    break;
-                default:
-                    object = { name: a.object.typeOf };
-            }
-            return {
-                action: a,
-                agent,
-                actionName,
-                object,
-                startDate: a.startDate,
-                actionStatus: a.actionStatus,
-                result: a.result
-            };
+            return TimelineFactory.createFromAction({
+                project: req.project,
+                action: a
+            });
         }));
         if (transaction.endDate !== undefined) {
             switch (transaction.status) {
@@ -270,6 +208,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                         object: { name: '取引' },
                         startDate: transaction.endDate,
                         actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                        actionStatusDescription: 'しました',
                         result: undefined
                     });
                     break;
@@ -285,6 +224,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                         object: { name: '取引' },
                         startDate: transaction.endDate,
                         actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                        actionStatusDescription: 'しました',
                         result: undefined
                     });
                     break;
@@ -300,6 +240,7 @@ placeOrderTransactionsRouter.get('/:transactionId',
                         object: { name: '取引' },
                         startDate: transaction.endDate,
                         actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                        actionStatusDescription: 'しました',
                         result: undefined
                     });
                     break;
