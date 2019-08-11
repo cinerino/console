@@ -85,6 +85,33 @@ actionsRouter.get(
                                     .map((v) => v.trim())
                                 : undefined
                         }
+                    },
+                    event: {
+                        id: {
+                            $in: (req.query.object !== undefined
+                                && req.query.object.event !== undefined
+                                && req.query.object.event.id !== undefined
+                                && req.query.object.event.id.$in !== undefined
+                                && req.query.object.event.id.$in !== '')
+                                ? (<string>req.query.object.event.id.$in).split(',')
+                                    .map((v) => v.trim())
+                                : undefined
+                        }
+                    },
+                    acceptedOffer: {
+                        ticketedSeat: {
+                            seatNumber: {
+                                $in: (req.query.object !== undefined
+                                    && req.query.object.acceptedOffer !== undefined
+                                    && req.query.object.acceptedOffer.ticketedSeat !== undefined
+                                    && req.query.object.acceptedOffer.ticketedSeat.seatNumber !== undefined
+                                    && req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in !== undefined
+                                    && req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in !== '')
+                                    ? (<string>req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in).split(',')
+                                        .map((v) => v.trim())
+                                    : undefined
+                            }
+                        }
                     }
                 },
                 purpose: {

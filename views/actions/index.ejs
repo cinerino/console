@@ -44,7 +44,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Action Type</label>
-                                        <select class="form-control" name="typeOf" size="4">
+                                        <select class="form-control" name="typeOf" size="8">
                                             <% Object.values(ActionType).forEach(function (actionType) { %>
                                             <%
                                             var selected = searchConditions.typeOf === actionType;
@@ -119,6 +119,42 @@
                                             name="object[paymentMethod][paymentMethodId][$in]"
                                             placeholder="Object Payment Method ID"
                                             value="<%= (searchConditions.object !== undefined && searchConditions.object.paymentMethod !== undefined && searchConditions.object.paymentMethod.paymentMethodId !== undefined && Array.isArray(searchConditions.object.paymentMethod.paymentMethodId.$in)) ? searchConditions.object.paymentMethod.paymentMethodId.$in.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="object[event][id][$in]">Object Event ID</label>
+                                        <%
+                                        let objectEventIdValue = '';
+                                        if (searchConditions.object !== undefined 
+                                            && searchConditions.object.event !== undefined 
+                                            && searchConditions.object.event.id !== undefined 
+                                            && Array.isArray(searchConditions.object.event.id.$in)) {
+                                            objectEventIdValue = searchConditions.object.event.id.$in.join(',');
+                                        }
+                                        %>
+                                        <input type="text" class="form-control" id="object[event][id][$in]"
+                                            name="object[event][id][$in]" placeholder="Object Event ID"
+                                            value="<%= objectEventIdValue %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="object[acceptedOffer][ticketedSeat][seatNumber][$in]">Object
+                                            Accepted Offer Seat Number</label>
+                                        <%
+                                        let objectAcceptedOfferTicketedSeatAeatNumberValue = '';
+                                        if (searchConditions.object !== undefined 
+                                            && searchConditions.object.acceptedOffer !== undefined 
+                                            && searchConditions.object.acceptedOffer.ticketedSeat !== undefined 
+                                            && searchConditions.object.acceptedOffer.ticketedSeat.seatNumber !== undefined 
+                                            && Array.isArray(searchConditions.object.acceptedOffer.ticketedSeat.seatNumber.$in)) {
+                                                objectAcceptedOfferTicketedSeatAeatNumberValue = searchConditions.object.acceptedOffer.ticketedSeat.seatNumber.$in.join(',');
+                                        }
+                                        %>
+                                        <input type="text" class="form-control"
+                                            id="object[acceptedOffer][ticketedSeat][seatNumber][$in]"
+                                            name="object[acceptedOffer][ticketedSeat][seatNumber][$in]"
+                                            placeholder="Object Accepted Offer Seat Number"
+                                            value="<%= objectAcceptedOfferTicketedSeatAeatNumberValue %>">
                                     </div>
                                 </div>
 
