@@ -179,9 +179,7 @@
                                             name="purpose[orderNumber][$in]" placeholder="Purpose Order Number"
                                             value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.orderNumber !== undefined && Array.isArray(searchConditions.purpose.orderNumber.$in)) ? searchConditions.purpose.orderNumber.$in.join(',') : '' %>">
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="result[typeOf][$in]">Result Type</label>
                                         <input type="text" class="form-control" id="result[typeOf][$in]"
@@ -201,6 +199,41 @@
                                         <input type="text" class="form-control" id="result[orderNumber][$in]"
                                             name="result[orderNumber][$in]" placeholder="Result Order Number"
                                             value="<%= (searchConditions.result !== undefined && searchConditions.result.orderNumber !== undefined && Array.isArray(searchConditions.result.orderNumber.$in)) ? searchConditions.result.orderNumber.$in.join(',') : '' %>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="fromLocation[accountNumber][$in]">From Location Account
+                                            Number</label>
+                                        <%
+                                        let fromLocationAccountNumberValue = '';
+                                        if (searchConditions.fromLocation !== undefined 
+                                            && searchConditions.fromLocation.accountNumber !== undefined 
+                                            && Array.isArray(searchConditions.fromLocation.accountNumber.$in)) {
+                                                fromLocationAccountNumberValue = searchConditions.fromLocation.accountNumber.$in.join(',');
+                                        }
+                                        %>
+                                        <input type="text" class="form-control" id="fromLocation[accountNumber][$in]"
+                                            name="fromLocation[accountNumber][$in]"
+                                            placeholder="From Location Account Number"
+                                            value="<%= fromLocationAccountNumberValue %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="toLocation[accountNumber][$in]">To Location Account Number</label>
+                                        <%
+                                        let toLocationAccountNumberValue = '';
+                                        if (searchConditions.toLocation !== undefined 
+                                            && searchConditions.toLocation.accountNumber !== undefined 
+                                            && Array.isArray(searchConditions.toLocation.accountNumber.$in)) {
+                                                toLocationAccountNumberValue = searchConditions.toLocation.accountNumber.$in.join(',');
+                                        }
+                                        %>
+                                        <input type="text" class="form-control" id="toLocation[accountNumber][$in]"
+                                            name="toLocation[accountNumber][$in]"
+                                            placeholder="To Location Account Number"
+                                            value="<%= toLocationAccountNumberValue %>">
                                     </div>
                                 </div>
                             </div>

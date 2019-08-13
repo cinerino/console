@@ -28,7 +28,7 @@ actionsRouter.get(
             const searchConditions: cinerinoapi.factory.action.ISearchConditions<any> = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                sort: { startDate: cinerinoapi.factory.sortType.Descending },
                 typeOf: (req.query.typeOf !== undefined && req.query.typeOf !== '')
                     ? <string>req.query.typeOf
                     : undefined,
@@ -168,6 +168,28 @@ actionsRouter.get(
                             && req.query.result.orderNumber.$in !== undefined
                             && req.query.result.orderNumber.$in !== '')
                             ? (<string>req.query.result.orderNumber.$in).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    }
+                },
+                fromLocation: {
+                    accountNumber: {
+                        $in: (req.query.fromLocation !== undefined
+                            && req.query.fromLocation.accountNumber !== undefined
+                            && req.query.fromLocation.accountNumber.$in !== undefined
+                            && req.query.fromLocation.accountNumber.$in !== '')
+                            ? (<string>req.query.fromLocation.accountNumber.$in).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    }
+                },
+                toLocation: {
+                    accountNumber: {
+                        $in: (req.query.toLocation !== undefined
+                            && req.query.toLocation.accountNumber !== undefined
+                            && req.query.toLocation.accountNumber.$in !== undefined
+                            && req.query.toLocation.accountNumber.$in !== '')
+                            ? (<string>req.query.toLocation.accountNumber.$in).split(',')
                                 .map((v) => v.trim())
                             : undefined
                     }
