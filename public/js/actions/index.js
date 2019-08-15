@@ -36,8 +36,27 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     html += '<li><span class="badge badge-secondary">' + data.agent.typeOf + '</span></li>'
-                        + '<li><span class="text-muted">' + data.agent.id + '</span></li>';
+                        + '<li><span class="text-muted">' + data.agent.id + '</span></li>'
+                        + '<li><span class="">' + data.agent.name + '</span></li>';
                     html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a><li>';
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.recipient !== undefined && data.recipient !== null && Object.keys(data.recipient).length > 0) {
+                        html += '<li><span class="badge badge-secondary">' + data.recipient.typeOf + '</span></li>'
+                            + '<li><span class="text-muted">' + data.recipient.id + '</span></li>'
+                            + '<li><span class="">' + data.recipient.name + '</span></li>';
+                    }
+
+                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showRecipient" data-id="' + data.id + '">詳細</a><li>';
+
                     html += '</ul>';
 
                     return html;
@@ -72,8 +91,17 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     if (data.purpose !== undefined && data.purpose !== null) {
+                        var purposeId = data.purpose.id;
+                        var url = '';
+                        if (data.purpose.typeOf === 'Order') {
+                            purposeId = data.purpose.orderNumber;
+                            url = '/projects/' + PROJECT_ID + '/orders/' + data.purpose.orderNumber;
+                        } else {
+                            url = '/projects/' + PROJECT_ID + '/transactions/' + data.purpose.typeOf + '/' + data.purpose.id;
+                        }
+
                         html += '<li><span class="badge badge-secondary">' + data.purpose.typeOf + '</span></li>'
-                            + '<li><span class="text-muted">' + data.purpose.id + '</span></li>';
+                            + '<li><a target="_blank" href="' + url + '"><span class="">' + purposeId + '</span></a></li>';
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳細</a><li>';
                     }
 
@@ -202,6 +230,13 @@ $(function () {
         showAgent(id);
     });
 
+    $(document).on('click', '.showRecipient', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showRecipient(id);
+    });
+
     $(document).on('click', '.showObject', function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
@@ -243,6 +278,25 @@ $(function () {
         var title = 'Action `' + action.id + '` Agent';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(action.agent, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+
+    function showRecipient(id) {
+        var actions = table
+            .rows()
+            .data()
+            .toArray();
+        var action = actions.find(function (o) {
+            return o.id === id
+        })
+
+        var modal = $('#modal-action');
+        var title = 'Action `' + action.id + '` Recipient';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(action.recipient, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
