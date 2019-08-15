@@ -8,6 +8,23 @@ import * as express from 'express';
 const accountsRouter = express.Router();
 
 /**
+ * 口座詳細
+ */
+accountsRouter.get(
+    '/:accountType/:accountNumber',
+    async (req, res, next) => {
+        try {
+            const redirect =
+                `${req.project.settings.PECORINO_CONSOLE_ENDPOINT}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
+
+            res.redirect(redirect);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
  * 口座検索
  */
 // accountsRouter.get(

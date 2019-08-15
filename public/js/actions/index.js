@@ -37,7 +37,7 @@ $(function () {
 
                     html += '<li><span class="badge badge-secondary">' + data.agent.typeOf + '</span></li>'
                         + '<li><span class="text-muted">' + data.agent.id + '</span></li>';
-                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳しく見る</a><li>';
+                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a><li>';
                     html += '</ul>';
 
                     return html;
@@ -58,7 +58,7 @@ $(function () {
                             html += '<li><span class="badge badge-secondary">' + data.object.typeOf + '</span></li>'
                                 + '<li><span class="text-muted">' + data.object.id + '</span></li>';
                         }
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showObject" data-id="' + data.id + '">詳しく見る</a><li>';
+                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showObject" data-id="' + data.id + '">詳細</a><li>';
                     }
 
                     html += '</ul>';
@@ -74,7 +74,7 @@ $(function () {
                     if (data.purpose !== undefined && data.purpose !== null) {
                         html += '<li><span class="badge badge-secondary">' + data.purpose.typeOf + '</span></li>'
                             + '<li><span class="text-muted">' + data.purpose.id + '</span></li>';
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳しく見る</a><li>';
+                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳細</a><li>';
                     }
 
                     html += '</ul>';
@@ -87,11 +87,68 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (data.result !== undefined && data.result !== null) {
+                    if (typeof data.amount === 'number') {
+                        html += '<li>' + data.amount + '</li>'
+                    }
+
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.fromLocation !== undefined && data.fromLocation !== null) {
+                        html += '<li><span class="badge badge-secondary ' + data.fromLocation.typeOf + '">' + data.fromLocation.typeOf + '</span></li>'
+                            + '<li><span class="font-weight-light font-italic">' + data.fromLocation.name + '</span></li>';
+
+                        if (data.fromLocation.typeOf === 'Account') {
+                            var url = '/projects/' + PROJECT_ID + '/accounts/' + data.fromLocation.accountType + '/' + data.fromLocation.accountNumber;
+                            html += '<li><span class="badge badge-pill badge-dark">' + data.fromLocation.accountType + '</span></li>'
+                                + '<li><a target="_blank" href="' + url + '"><span class="">' + data.fromLocation.accountNumber + '</span></a></li>';
+                        }
+                    }
+
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.toLocation !== undefined && data.toLocation !== null) {
+                        html += '<li><span class="badge badge-secondary ' + data.toLocation.typeOf + '">' + data.toLocation.typeOf + '</span></li>'
+                            + '<li><span class="font-weight-light font-italic">' + data.toLocation.name + '</span></li>';
+
+                        if (data.toLocation.typeOf === 'Account') {
+                            var url = '/projects/' + PROJECT_ID + '/accounts/' + data.toLocation.accountType + '/' + data.toLocation.accountNumber;
+                            html += '<li><span class="badge badge-pill badge-dark">' + data.toLocation.accountType + '</span></li>'
+                                + '<li><a target="_blank" href="' + url + '"><span class="">' + data.toLocation.accountNumber + '</span></a></li>';
+                        }
+                    }
+
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.result !== undefined && data.result !== null && Object.keys(data.result).length > 0) {
                         html += '<li><span class="badge badge-secondary">' + data.result.typeOf + '</span></li>'
                             + '<li><span class="text-muted">' + data.result.id + '</span></li>';
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showResult" data-id="' + data.id + '">詳しく見る</a><li>';
                     }
+
+                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showResult" data-id="' + data.id + '">詳細</a><li>';
 
                     html += '</ul>';
 
@@ -103,11 +160,12 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (data.error !== undefined && data.error !== null) {
+                    if (data.error !== undefined && data.error !== null && Object.keys(data.error).length > 0) {
                         html += '<li><span class="badge badge-danger">' + data.error.name + '</span></li>'
                             + '<li>' + data.error.message + '</li>';
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳しく見る</a><li>';
                     }
+
+                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳細</a><li>';
 
                     html += '</ul>';
 
