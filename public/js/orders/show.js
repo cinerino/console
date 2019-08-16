@@ -52,9 +52,9 @@ $(function () {
         button.addClass('disabled');
         $.ajax({
             url: '/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '/return',
-            type: 'POST'
-            // dataType: 'json'
-            // data: $('form').serialize()
+            type: 'POST',
+            // dataType: 'json',
+            data: $('form', $('#modal-confirmReturnOrder')).serialize()
         }).done(function () {
             alert('返品処理を開始しました');
             location.reload();

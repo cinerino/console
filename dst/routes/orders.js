@@ -330,7 +330,16 @@ ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(this, vo
                 }
             }
         });
-        yield returnOrderService.confirm(returnOrderTransaction);
+        yield returnOrderService.confirm({
+            id: returnOrderTransaction.id,
+            potentialActions: {
+                returnOrder: {
+                    potentialActions: {
+                        refundMovieTicket: (req.body.refundMovieTicket === 'on')
+                    }
+                }
+            }
+        });
         res.status(http_status_1.ACCEPTED)
             .end();
     }

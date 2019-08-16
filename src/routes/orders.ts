@@ -336,7 +336,17 @@ ordersRouter.post(
                     }
                 }
             });
-            await returnOrderService.confirm(returnOrderTransaction);
+            await returnOrderService.confirm({
+                id: returnOrderTransaction.id,
+                potentialActions: {
+                    returnOrder: {
+                        potentialActions: {
+                            refundMovieTicket: (req.body.refundMovieTicket === 'on')
+                        }
+                    }
+                }
+            });
+
             res.status(ACCEPTED)
                 .end();
         } catch (error) {

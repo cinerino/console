@@ -333,6 +333,17 @@
                         <input type="text" class="form-control" id="confirmReturnOrder" placeholder="注文番号"
                             data-expected="<%= order.orderNumber %>">
                     </div>
+
+                    <hr>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="refundCreditCard" name="refundCreditCard"
+                            checked>
+                        <label class="form-check-label" for="refundCreditCard">クレジットカード決済を返金する</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="refundMovieTicket" name="refundMovieTicket">
+                        <label class="form-check-label" for="refundMovieTicket">ムビチケ着券を取り消す(注文確定後10分間有効)</label>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
