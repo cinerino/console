@@ -18,6 +18,7 @@ import movieTicketPaymentMethodRouter from './paymentMethods/movieTicket';
 import pecorinoRouter from './pecorino';
 import peopleRouter from './people';
 import reservationsRouter from './reservations';
+import resourcesRouter from './resources';
 import sellersRouter from './sellers';
 import tasksRouter from './tasks';
 import transactionsRouter from './transactions';
@@ -84,6 +85,7 @@ projectsRouter.use('/:id/paymentMethods/movieTicket', movieTicketPaymentMethodRo
 projectsRouter.use('/:id/pecorino', pecorinoRouter);
 projectsRouter.use('/:id/people', peopleRouter);
 projectsRouter.use('/:id/reservations', reservationsRouter);
+projectsRouter.use('/:id/resources', resourcesRouter);
 projectsRouter.use('/:id/sellers', sellersRouter);
 projectsRouter.use('/:id/tasks', tasksRouter);
 projectsRouter.use('/:id/transactions', transactionsRouter);

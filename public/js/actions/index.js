@@ -35,9 +35,23 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
+                    var userPoolId = '';
+                    if (Array.isArray(data.agent.identifier)) {
+                        var tokenIssuerIdentifier = data.agent.identifier.find((i) => i.name === 'tokenIssuer');
+                        if (tokenIssuerIdentifier !== undefined) {
+                            userPoolId = tokenIssuerIdentifier.value.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                        }
+                    }
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
+
+                    var agentName = data.agent.name;
+                    if (typeof data.agent.name === 'object' && data.agent.name !== undefined) {
+                        agentName = data.agent.name.ja;
+                    }
+
                     html += '<li><span class="badge badge-secondary">' + data.agent.typeOf + '</span></li>'
-                        + '<li><span class="text-muted">' + data.agent.id + '</span></li>'
-                        + '<li><span class="">' + data.agent.name + '</span></li>';
+                        + '<li><a target="_blank" href="' + url + '">' + data.agent.id + '</a></li>'
+                        + '<li><span class="">' + agentName + '</span></li>';
                     html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a><li>';
                     html += '</ul>';
 
@@ -50,9 +64,23 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     if (data.recipient !== undefined && data.recipient !== null && Object.keys(data.recipient).length > 0) {
+                        var userPoolId = '';
+                        if (Array.isArray(data.recipient.identifier)) {
+                            var tokenIssuerIdentifier = data.recipient.identifier.find((i) => i.name === 'tokenIssuer');
+                            if (tokenIssuerIdentifier !== undefined) {
+                                userPoolId = tokenIssuerIdentifier.value.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                            }
+                        }
+                        var url = '/projects/' + PROJECT_ID + '/resources/' + data.recipient.typeOf + '/' + data.recipient.id + '?userPoolId=' + userPoolId;
+
+                        var recipientName = data.recipient.name;
+                        if (typeof data.recipient.name === 'object' && data.recipient.name !== undefined) {
+                            recipientName = data.recipient.name.ja;
+                        }
+
                         html += '<li><span class="badge badge-secondary">' + data.recipient.typeOf + '</span></li>'
-                            + '<li><span class="text-muted">' + data.recipient.id + '</span></li>'
-                            + '<li><span class="">' + data.recipient.name + '</span></li>';
+                            + '<li><a target="_blank" href="' + url + '">' + data.recipient.id + '</a></li>'
+                            + '<li><span class="">' + recipientName + '</span></li>';
                     }
 
                     html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showRecipient" data-id="' + data.id + '">詳細</a><li>';
@@ -92,13 +120,10 @@ $(function () {
 
                     if (data.purpose !== undefined && data.purpose !== null) {
                         var purposeId = data.purpose.id;
-                        var url = '';
                         if (data.purpose.typeOf === 'Order') {
                             purposeId = data.purpose.orderNumber;
-                            url = '/projects/' + PROJECT_ID + '/orders/' + data.purpose.orderNumber;
-                        } else {
-                            url = '/projects/' + PROJECT_ID + '/transactions/' + data.purpose.typeOf + '/' + data.purpose.id;
                         }
+                        var url = '/projects/' + PROJECT_ID + '/resources/' + data.purpose.typeOf + '/' + purposeId;
 
                         html += '<li><span class="badge badge-secondary">' + data.purpose.typeOf + '</span></li>'
                             + '<li><a target="_blank" href="' + url + '"><span class="">' + purposeId + '</span></a></li>';
