@@ -31,37 +31,31 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var userPoolId = '';
-                    if (data.object.clientUser !== undefined) {
-                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
-                    }
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>';
-
-                    if (data.agent.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>'
-                            + '<li>' + data.agent.memberOf.membershipNumber + '</li>';
-                    } else {
-                        html += '<li>' + data.agent.id + '</li>';
-                    }
-
-                    html += '<li>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</li>'
-                        + '<li>' + String(data.agent.email) + '</li>'
-                        + '<li>' + String(data.agent.telephone) + '</li>';
-
-                    var userPoolId = '';
-                    var iss = '';
+                    var tokenIssuer = '';
                     var clientId = '';
-                    if (data.object.clientUser !== undefined) {
-                        userPoolId = data.object.clientUser.iss.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
-                        iss = data.object.clientUser.iss;
-                        clientId = data.object.clientUser.client_id;
+                    if (Array.isArray(data.agent.identifier)) {
+                        var tokenIssuerIdentifier = data.agent.identifier.find((i) => i.name === 'tokenIssuer');
+                        var clienIdIdentifier = data.agent.identifier.find((i) => i.name === 'clientId');
+                        if (tokenIssuerIdentifier !== undefined) {
+                            tokenIssuer = tokenIssuerIdentifier.value;
+                            userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                        }
+                        if (clienIdIdentifier !== undefined) {
+                            clientId = clienIdIdentifier.value;
+                        }
                     }
-                    html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '">' + iss + '</a></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
 
-                    if (data.agent.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.agent.id + '">' + data.agent.id + '</a></li>';
-                    }
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
+
+                    var html = '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>'
+                        + '<li><span class="badge badge-warning">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span></li>'
+                        + '<li><a target="_blank" href="' + url + '">' + data.agent.id + '</a></li>'
+                        + '<li>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</li>'
+                        + '<li>' + String(data.agent.email) + '</li>'
+                        + '<li>' + String(data.agent.telephone) + '</li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '">' + tokenIssuer + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
 
                     html += '</ul>';
 
@@ -71,12 +65,15 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
+                    var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/sellers/' + data.seller.id + '">' + data.seller.name.ja + '</a></li>'
+                        + '<li><a target="_blank" href="' + url + '">' + data.seller.name.ja + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
                         + '<li>' + data.seller.url + '</li>'
                         + '</ul>';
+
+                    return html;
                 }
             },
             {

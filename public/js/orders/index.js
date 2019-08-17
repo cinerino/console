@@ -54,13 +54,9 @@ $(function () {
                         + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
                         + '</li>';
 
-                    if (data.customer.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.customer.id + '">' + data.customer.id + '</a></li>';
-                    } else {
-                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + data.customer.id + '">' + data.customer.id + '</a></li>';
-                    }
-
-                    html += '<li>' + data.customer.name + '</li>'
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.customer.typeOf + '/' + data.customer.id + '?userPoolId=' + userPoolId;
+                    html += '<li><a target="_blank" href="' + url + '">' + data.customer.id + '</a></li>'
+                        + '<li>' + data.customer.name + '</li>'
                         + '<li>' + data.customer.email + '</li>'
                         + '<li>' + data.customer.telephone + '</li>';
 
@@ -80,13 +76,16 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
+                    var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-info">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/sellers/' + data.seller.id + '">' + data.seller.id + '</a></li>'
+                        + '<li><a target="_blank" href="' + url + '">' + data.seller.id + '</a></li>'
                         + '<li>' + data.seller.name + '</li>'
                         + '<li><a target="_blank" href="' + data.seller.url + '">' + data.seller.url + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
                         + '</ul>';
+
+                    return html;
                 }
             },
             {

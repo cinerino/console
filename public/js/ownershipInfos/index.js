@@ -43,6 +43,8 @@ $(function () {
                         }
                     }
 
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.ownedBy.typeOf + '/' + data.ownedBy.id + '?userPoolId=' + userPoolId;
+
                     var html = '<ul class="list-unstyled">';
 
                     html += '<li><span class="badge badge-info">' + data.ownedBy.typeOf + '</span></li>'
@@ -50,15 +52,9 @@ $(function () {
                         + '<li>'
                         + '<a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
                         + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
-                        + '</li>';
-
-                    if (data.ownedBy.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/people/' + data.ownedBy.id + '">' + data.ownedBy.id + '</a></li>';
-                    } else {
-                        html += '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + data.ownedBy.id + '">' + data.ownedBy.id + '</a></li>';
-                    }
-
-                    html += '<li>' + data.ownedBy.name + '</li>'
+                        + '</li>'
+                        + '<li><a target="_blank" href="' + url + '">' + data.ownedBy.id + '</a></li>'
+                        + '<li>' + data.ownedBy.name + '</li>'
                         + '<li>' + data.ownedBy.email + '</li>'
                         + '<li>' + data.ownedBy.telephone + '</li>';
 
