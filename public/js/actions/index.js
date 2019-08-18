@@ -44,14 +44,13 @@ $(function () {
                     }
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
 
-                    var agentName = data.agent.name;
+                    var agentName = String(data.agent.name);
                     if (typeof data.agent.name === 'object' && data.agent.name !== undefined) {
                         agentName = data.agent.name.ja;
                     }
 
                     html += '<li><span class="badge badge-secondary">' + data.agent.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.agent.id + '</a></li>'
-                        + '<li><span class="">' + agentName + '</span></li>';
+                        + '<li><a target="_blank" href="' + url + '">' + agentName + '</a></li>';
                     html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a><li>';
                     html += '</ul>';
 
@@ -73,14 +72,13 @@ $(function () {
                         }
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.recipient.typeOf + '/' + data.recipient.id + '?userPoolId=' + userPoolId;
 
-                        var recipientName = data.recipient.name;
+                        var recipientName = String(data.recipient.name);
                         if (typeof data.recipient.name === 'object' && data.recipient.name !== undefined) {
                             recipientName = data.recipient.name.ja;
                         }
 
                         html += '<li><span class="badge badge-secondary">' + data.recipient.typeOf + '</span></li>'
-                            + '<li><a target="_blank" href="' + url + '">' + data.recipient.id + '</a></li>'
-                            + '<li><span class="">' + recipientName + '</span></li>';
+                            + '<li><a target="_blank" href="' + url + '">' + recipientName + '</a></li>';
                     }
 
                     html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showRecipient" data-id="' + data.id + '">詳細</a><li>';
@@ -198,27 +196,17 @@ $(function () {
 
                     if (data.result !== undefined && data.result !== null && Object.keys(data.result).length > 0) {
                         html += '<li><span class="badge badge-secondary">' + data.result.typeOf + '</span></li>'
-                            + '<li><span class="text-muted">' + data.result.id + '</span></li>';
+                            + '<li><span class="text-muted">' + data.result.id + '</span></li>'
+                            + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showResult" data-id="' + data.id + '">詳細</a><li>';
+                    } else {
                     }
-
-                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showResult" data-id="' + data.id + '">詳細</a><li>';
-
-                    html += '</ul>';
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
 
                     if (data.error !== undefined && data.error !== null && Object.keys(data.error).length > 0) {
                         html += '<li><span class="badge badge-danger">' + data.error.name + '</span></li>'
-                            + '<li>' + data.error.message + '</li>';
+                            + '<li>' + data.error.message + '</li>'
+                            + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳細</a><li>';
+                    } else {
                     }
-
-                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳細</a><li>';
 
                     html += '</ul>';
 
