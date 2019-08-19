@@ -76,7 +76,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
         });
         const person = yield personService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
-            // 何もしない
+            yield personService.deletById({ id: person.id });
             res.status(http_status_1.NO_CONTENT)
                 .end();
             return;
@@ -101,15 +101,9 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
                 message = error.message;
             }
         }
-        let creditCards = [];
+        const creditCards = [];
         let coinAccounts = [];
         let pointAccounts = [];
-        try {
-            creditCards = yield personOwnershipInfoService.searchCreditCards({ id: req.params.id });
-        }
-        catch (error) {
-            // no op
-        }
         try {
             const searchCoinAccountsResult = yield personOwnershipInfoService.search({
                 id: req.params.id,
@@ -225,6 +219,42 @@ peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(this, 
         });
         debug(searchResult.totalCount, 'programMemberships found.');
         res.json(searchResult);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * クレジットカード検索
+ */
+peopleRouter.get('/:id/creditCards', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const creditCards = yield personOwnershipInfoService.searchCreditCards({ id: req.params.id });
+        res.json(creditCards);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * クレジットカード削除
+ */
+peopleRouter.delete('/:id/creditCards/:cardSeq', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        yield personOwnershipInfoService.deleteCreditCard({
+            id: req.params.id,
+            cardSeq: req.params.cardSeq
+        });
+        res.status(http_status_1.NO_CONTENT)
+            .end();
     }
     catch (error) {
         next(error);

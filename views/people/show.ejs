@@ -32,7 +32,6 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5>
                 <i class="icon fa fa-info"></i> 機能追加</h5>
-            Settingsタブから会員の基本情報を編集することができるようになりました！メールアドレスを失ったユーザーの一時的な権限回収等に使用できます。
         </div>
 
         <% if (messages.message) { %>
@@ -102,15 +101,6 @@
                         </p>
                         <hr>
 
-                        <strong><i class="fa fa-credit-card mr-1"></i> クレジットカード</strong>
-                        <p class="text-muted">
-                            <% creditCards.forEach((creditCard) => { %>
-                            <%= creditCard.holderName %><br>
-                            <%= creditCard.cardNo %><br>
-                            <% }) %>
-                        </p>
-                        <hr>
-
                         <strong><i class="fa fa-piggy-bank mr-1"></i> 口座</strong>
                         <p class="text-muted">
                             <% coinAccounts.forEach((ownershipInfo) => { %>
@@ -153,18 +143,25 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">注文履歴</a>
+                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">
+                                    <i class="nav-icon fa fa-shopping-cart"></i>
+                                </a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#reservations" data-toggle="tab">予約</a>
+                            <li class="nav-item"><a class="nav-link" href="#reservations" data-toggle="tab">
+                                    <i class="nav-icon fa fa-ticket-alt"></i></a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#programMemberships"
-                                    data-toggle="tab">会員プログラム</a>
+                            <li class="nav-item"><a class="nav-link" href="#programMemberships" data-toggle="tab">
+                                    <i class="nav-icon fa fa-award"></i></a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
-                                    Viewer</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                            <li class="nav-item"><a class="nav-link creditCards" href="#creditCards" data-toggle="tab">
+                                    <i class="nav-icon far fa-credit-card"></i></a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#others" data-toggle="tab">その他の操作</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">
+                                    <i class="nav-icon fa fa-code"></i></a></li>
+                            <li class="nav-item"><a class="nav-link settings" href="#settings" data-toggle="tab">
+                                    <i class="nav-icon fa fa-cog"></i></a></li>
+                            <li class="nav-item"><a class="nav-link others" href="#others" data-toggle="tab">その他の操作</a>
+                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -224,17 +221,32 @@
                                 <!-- /.table-responsive -->
                             </div>
 
+                            <div class="tab-pane" id="creditCards">
+                                <div class="table-responsive">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th>CardName</th>
+                                                <th>HolderName</th>
+                                                <th>CardNo</th>
+                                                <th>Expire</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+
                             <div class="tab-pane" id="jsonViewer">
                                 <h4>Person</h4>
                                 <div class="form-group">
                                     <textarea class="form-control person" rows="20" placeholder=""
                                         disabled=""><%= JSON.stringify(person, null, '\t') %></textarea>
                                 </div>
-                                <h4>クレジットカード</h4>
-                                <div class="form-group">
-                                    <textarea class="form-control" rows="20" placeholder=""
-                                        disabled=""><%= JSON.stringify(creditCards, null, '\t') %></textarea>
-                                </div>
+
                                 <h4>口座</h4>
                                 <div class="form-group">
                                     <textarea class="form-control" rows="20" placeholder=""
@@ -270,9 +282,11 @@
                                     </div> -->
                                     <!-- /.card-header -->
 
-                                    <!-- <div class="card-body">
-                                        <button type="button" class="delete btn btn-danger">削除する</button>
-                                    </div> -->
+                                    <div class="card-body">
+                                        <a href="#" class="btn btn-danger" data-toggle="modal"
+                                            data-target="#modal-confirmDelete"><i class="fa fa-trash-alt"></i> 削除する</a>
+                                        <!-- <button type="button" class="delete btn btn-danger">削除する</button> -->
+                                    </div>
                                     <!-- /.card-body -->
                                     <!-- <div class="card-footer">
                                         </div> -->
@@ -320,6 +334,44 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
                 <!-- <button type="submit" class="btn btn-primary">更新</button> -->
                 <button type="button" class="btn btn-primary disabled updateProfile" disabled>更新する</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-confirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%= person.givenName %>
+                    <%= person.familyName %>を削除しますか？</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-warning">
+                    <i class="icon fa fa-exclamation-triangle"></i>
+                    この操作は元には戻せません。<br>
+                    削除後、ユーザーによってこれまで作成されたリソースは削除されませんが、本ユーザーとしてリソースにアクセスすることは永久的にできなくなります。<br>
+                    また、同ユーザーネームを他人が使用することが可能になります。<br>
+                </p>
+                <p>
+                    <%= person.givenName %>
+                    <%= person.familyName %>を削除するには、ユーザーネーム「<b><%= person.memberOf.membershipNumber %></b>」を入力してください。
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="confirmDelete" placeholder="ユーザーネーム"
+                            data-expected="<%= person.memberOf.membershipNumber %>">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-danger disabled delete" disabled>削除する</button>
             </div>
         </div>
     </div>

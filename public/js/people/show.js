@@ -24,6 +24,11 @@ $(function () {
     searchProgramMemberships(1, function () {
     });
 
+    // クレジットカード検索
+    console.log('searching creditCards...');
+    searchCreditCards(function () {
+    });
+
     // プロフィール更新
     var updateProfileButton = $('button.updateProfile');
     $('#modal-updateProfile').on('shown.bs.modal', function () {
@@ -44,6 +49,97 @@ $(function () {
     updateProfileButton.click(function () {
         $('#settings form').submit();
     });
+
+    // 削除
+    var deleteButton = $('button.delete');
+    $('#modal-confirmDelete').on('shown.bs.modal', function () {
+        $('#confirmDelete').val('');
+        deleteButton.prop('disabled', true);
+        deleteButton.addClass('disabled');
+    });
+    $('#confirmDelete').keyup(function () {
+        var validValue = ($(this).val() === $(this).data('expected'));
+        if (validValue) {
+            deleteButton.prop('disabled', false);
+            deleteButton.removeClass('disabled');
+        } else {
+            deleteButton.prop('disabled', true);
+            deleteButton.addClass('disabled');
+        }
+    });
+    deleteButton.click(function () {
+        // クレジットカード所有確認
+        searchCreditCards(function (creditCards) {
+            if (Array.isArray(creditCards) && creditCards.length > 0) {
+                alert('会員を削除する前にクレジットカードを削除してください');
+
+                return;
+            }
+
+            var button = $(this);
+            button.addClass('disabled');
+            $.ajax({
+                url: '/projects/' + PROJECT_ID + '/people/' + person.id,
+                type: 'DELETE',
+                // dataType: 'json',
+                // data: $('form', $('#modal-confirmReturnOrder')).serialize()
+            }).done(function () {
+                alert('削除しました');
+                location.href = '/projects/' + PROJECT_ID + '/people';
+            }).fail(function (xhr) {
+                var res = $.parseJSON(xhr.responseText);
+                alert('処理を開始できませんでした\n' + res.error.message);
+            }).always(function () {
+                button.removeClass('disabled');
+            });
+        });
+    });
+
+    $(document).on('click', 'a.deleteCreditCard', function () {
+        var cardNo = $(this).data('cardno');
+        var cardSeq = $(this).data('cardseq');
+        console.log('deleting...', cardNo, cardSeq);
+
+        if (window.confirm('元には戻せません。本当に ' + cardNo + ' を削除しますか？')) {
+            $.ajax({
+                url: '/projects/' + PROJECT_ID + '/people/' + person.id + '/creditCards/' + cardSeq,
+                type: 'DELETE'
+            }).done(function () {
+                alert('削除しました');
+                location.reload();
+            }).fail(function () {
+                alert('削除できませんでした');
+            }).always(function () {
+            });
+        } else {
+        }
+    });
+
+    $('.nav-link.creditCards')
+        .popover({
+            title: '',
+            content: 'クレジットカード管理が可能です',
+            placement: 'bottom',
+            trigger: 'hover'
+        });
+
+    $('.nav-link.settings')
+        .popover({
+            title: '設定',
+            content: '会員の基本情報を編集することができます',
+            placement: 'bottom',
+            trigger: 'hover'
+        });
+
+    $('.nav-link.others')
+        .popover({
+            html: true,
+            title: '<span class="badge badge-danger right">New</span>',
+            content: '会員の削除が可能になりました',
+            placement: 'bottom',
+            trigger: 'hover'
+        })
+        .popover('show');
 });
 
 function searchOrders(page, cb) {
@@ -144,5 +240,25 @@ function searchProgramMemberships(page, cb) {
         }
     }).fail(function () {
         console.error('会員プログラムを検索できませんでした')
+    });
+}
+
+function searchCreditCards(cb) {
+    $.getJSON(
+        '/projects/' + PROJECT_ID + '/people/' + person.id + '/creditCards'
+    ).done(function (data) {
+        $("#creditCards tbody").empty();
+        $.each(data, function (key, creditCard) {
+            var html = '<td>' + '<a href="#">' + creditCard.cardName + '</a>' + '</td>'
+                + '<td>' + creditCard.holderName + '</td>'
+                + '<td>' + creditCard.cardNo + '</td>'
+                + '<td>' + creditCard.expire + '</td>'
+                + '<td><a href="javascript:void(0)" class="text-muted deleteCreditCard" data-cardSeq="' + creditCard.cardSeq + '" data-cardNo="' + creditCard.cardNo + '"><i class="fas fa-trash-alt"></i></a></td>';
+            $('<tr>').html(html).appendTo("#creditCards tbody");
+        });
+
+        cb(data);
+    }).fail(function () {
+        console.error('クレジットカードを検索できませんでした')
     });
 }

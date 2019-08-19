@@ -77,7 +77,8 @@ peopleRouter.all(
             const person = await personService.findById({ id: req.params.id });
 
             if (req.method === 'DELETE') {
-                // 何もしない
+                await personService.deletById({ id: person.id });
+
                 res.status(NO_CONTENT)
                     .end();
 
@@ -111,15 +112,9 @@ peopleRouter.all(
                 }
             }
 
-            let creditCards: cinerinoapi.factory.paymentMethod.paymentCard.creditCard.ICheckedCard[] = [];
+            const creditCards: cinerinoapi.factory.paymentMethod.paymentCard.creditCard.ICheckedCard[] = [];
             let coinAccounts: IAccountOwnershipInfo[] = [];
             let pointAccounts: IAccountOwnershipInfo[] = [];
-
-            try {
-                creditCards = await personOwnershipInfoService.searchCreditCards({ id: req.params.id });
-            } catch (error) {
-                // no op
-            }
 
             try {
                 const searchCoinAccountsResult =
@@ -251,6 +246,50 @@ peopleRouter.get(
                 });
             debug(searchResult.totalCount, 'programMemberships found.');
             res.json(searchResult);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * クレジットカード検索
+ */
+peopleRouter.get(
+    '/:id/creditCards',
+    async (req, res, next) => {
+        try {
+            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const creditCards = await personOwnershipInfoService.searchCreditCards({ id: req.params.id });
+
+            res.json(creditCards);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * クレジットカード削除
+ */
+peopleRouter.delete(
+    '/:id/creditCards/:cardSeq',
+    async (req, res, next) => {
+        try {
+            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            await personOwnershipInfoService.deleteCreditCard({
+                id: req.params.id,
+                cardSeq: req.params.cardSeq
+            });
+
+            res.status(NO_CONTENT)
+                .end();
         } catch (error) {
             next(error);
         }
