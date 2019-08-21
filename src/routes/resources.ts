@@ -49,6 +49,26 @@ resourcesRouter.get(
 
                     break;
 
+                // 会員プログラム
+                case 'ProgramMembership':
+                    res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
+                    break;
+
+                // 口座
+                case cinerinoapi.factory.pecorino.account.TypeOf.Account:
+                    let accountType = cinerinoapi.factory.accountType.Coin;
+                    if (typeof req.query.accountType === 'string' && req.query.accountType !== '') {
+                        accountType = req.query.accountType;
+                    }
+
+                    res.redirect(`${req.project.settings.PECORINO_CONSOLE_ENDPOINT}/accounts/${accountType}/${req.params.resourceId}`);
+                    break;
+
+                // 所有権
+                case 'OwnershipInfo':
+                    res.redirect(`/projects/${req.project.id}/ownershipInfos/${req.params.resourceId}`);
+                    break;
+
                 default:
                     throw new Error(`Unknown resource type ${req.params.resourceType}`);
             }

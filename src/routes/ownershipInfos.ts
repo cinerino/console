@@ -99,4 +99,33 @@ ownershipInfosRouter.get(
     }
 );
 
+ownershipInfosRouter.all(
+    '/:id',
+    async (req, res, next) => {
+        try {
+            const message = undefined;
+
+            const ownershipInfoService = new cinerinoapi.service.OwnershipInfo({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const searchOwnershipInfosResult = await ownershipInfoService.search({
+                limit: 1,
+                ids: [<string>req.params.id]
+            });
+            const ownershipInfo = searchOwnershipInfosResult.data.shift();
+            if (ownershipInfo === undefined) {
+                throw new cinerinoapi.factory.errors.NotFound('OwnershipInfo');
+            }
+
+            res.render('ownershipInfos/edit', {
+                message: message,
+                ownershipInfo: ownershipInfo
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 export default ownershipInfosRouter;

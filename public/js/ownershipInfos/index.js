@@ -18,8 +18,11 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOf + '/' + data.id;
+
                     return '<ul class="list-unstyled">'
-                        + '<li><a href="#">' + data.id + '</a></li>'
+                        + '<li><span class="badge badge-secondary">' + data.typeOf + '</span></li>'
+                        + '<li><a target="_blank" href="' + url + '">' + data.id + '</a></li>'
                         + '<li>' + data.ownedFrom + '</li>'
                         + '<li>' + data.ownedThrough + '</li>'
                         + '</ul>';
@@ -77,13 +80,14 @@ $(function () {
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-primary">' + data.typeOfGood.typeOf + '</span></li>';
 
-                    var reservationUrl = '#';
-                    if (data.typeOfGood.typeOf === 'EventReservation') {
-                        reservationUrl = '/projects/' + PROJECT_ID + '/reservations?ids=' + data.typeOfGood.id;
+                    var resourceId = data.typeOfGood.id;
+                    if (data.typeOfGood.typeOf === 'Account') {
+                        resourceId = data.typeOfGood.accountNumber;
                     }
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOfGood.typeOf + '/' + resourceId + '?accountType=' + data.typeOfGood.accountType;
 
-                    html += '<li><a target="_blank" href="' + reservationUrl + '">' + data.typeOfGood.id + '</a></li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showTypeOfGood" data-id="' + data.id + '">所有物をより詳しく見る</a><li>'
+                    html += '<li><a target="_blank" href="' + url + '">' + resourceId + '</a></li>'
+                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showTypeOfGood" data-id="' + data.id + '">詳しく</a><li>'
                         + '</ul>';
 
                     return html;
