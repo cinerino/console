@@ -18,9 +18,12 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOf + '/' + data.id;
 
                     return '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
                         + '<li><span class="badge badge-secondary">' + data.typeOf + '</span></li>'
                         + '<li><a target="_blank" href="' + url + '">' + data.id + '</a></li>'
                         + '<li>' + data.ownedFrom + '</li>'

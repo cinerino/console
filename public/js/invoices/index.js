@@ -18,12 +18,15 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
                     var accountId = '---';
                     if (data.accountId !== undefined && data.accountId !== null && data.accountId !== '') {
                         accountId = data.accountId;
                     }
 
                     return '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
                         + '<li>' + accountId + '<li>'
                         + '<li>' + data.confirmationNumber + '<li>'
                         + '<li><span class="badge ' + data.paymentMethod + '">' + data.paymentMethod + '</span></li>'

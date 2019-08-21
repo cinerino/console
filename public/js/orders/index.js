@@ -18,7 +18,10 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
                     return '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
                         + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
                         + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
                         + '<li>' + data.orderDate + '</li>'

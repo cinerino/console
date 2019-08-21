@@ -18,6 +18,8 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
                     var orderFrom = moment(data.bookingTime).add(-1, 'day').toISOString();
                     var orderThrough = moment(data.bookingTime).add(1, 'minute').toISOString();
 
@@ -30,6 +32,7 @@ $(function () {
                         + '&orderDateRange=' + orderFrom + ' - ' + orderThrough;
 
                     var html = '<ul class="list-unstyled">'
+                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
                         + '<li><a target="_blank" href="' + orderUrl + '">' + data.id + '</a></li>'
                         + '<li><a target="_blank" href="' + orderUrl4reservationNumber + '">' + data.reservationNumber + '</a></li>'
                         + '<li><span class="badge badge-secondary ' + data.reservationStatus + '">' + data.reservationStatus + '</span></li>'

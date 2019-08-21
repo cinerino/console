@@ -30,6 +30,8 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
                     var thumbnailImageUrl = (data.workPerformed.thumbnailUrl !== undefined)
                         ? data.workPerformed.thumbnailUrl
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrhpsOJOcLBwc1SPD9sWlinildy4S05-I2Wf6z2wRXnSxbmtRz';
@@ -40,6 +42,7 @@ $(function () {
                     }
 
                     return '<ul class="products-list">'
+                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
                         + '<li class="item">'
                         + '<div class="product-img">'
                         + '<img src="' + thumbnailImageUrl + '" alt="Product Image" class="img-size-50">'
