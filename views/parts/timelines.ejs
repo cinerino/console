@@ -46,6 +46,15 @@
 
                 <span><%= timeline.actionName %></span>
                 <span><%= timeline.actionStatusDescription %></span>
+
+                <% if (Array.isArray(timeline.result)) { %>
+                (<% timeline.result.forEach((result) => { %>
+                <a href="<%= result.url %>" target="_blank">
+                    <span><%= result.name %></span>
+                </a>&nbsp;
+                <% }) %> が発生しました)
+                <% } %>
+
             </h3>
 
             <div class="timeline-body">
@@ -98,7 +107,7 @@
             </div>
             <div class="modal-body">
                 <textarea rows="40" class="form-control" placeholder=""
-                    disabled=""><%= JSON.stringify(timeline.result, null, '\t') %></textarea>
+                    disabled=""><%= JSON.stringify(timeline.action.result, null, '\t') %></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

@@ -169,6 +169,34 @@ function createFromAction(params) {
                 purpose = { name: a.purpose.typeOf };
         }
     }
+    let result;
+    if (a.result !== undefined && a.result !== null) {
+        switch (a.typeOf) {
+            case cinerinoapi.factory.actionType.SendAction:
+                if (a.object.typeOf === 'Order') {
+                    if (Array.isArray(a.result.ownershipInfos)) {
+                        result = a.result.ownershipInfos.map((o) => {
+                            return {
+                                name: '所有権',
+                                url: `/projects/${params.project.id}/resources/${o.typeOf}/${o.id}`
+                            };
+                        });
+                    }
+                }
+                break;
+            case cinerinoapi.factory.actionType.AuthorizeAction:
+                if (a.object.typeOf === 'OwnershipInfo') {
+                    if (typeof a.result.code === 'string') {
+                        result = [{
+                                name: '所有権コード',
+                                url: `/projects/${params.project.id}/authorizations/${a.result.code}`
+                            }];
+                    }
+                }
+                break;
+            default:
+        }
+    }
     let actionStatusDescription;
     switch (a.actionStatus) {
         case cinerinoapi.factory.actionStatusType.ActiveActionStatus:
@@ -198,7 +226,7 @@ function createFromAction(params) {
         startDate: a.startDate,
         actionStatus: a.actionStatus,
         actionStatusDescription: actionStatusDescription,
-        result: a.result
+        result
     };
 }
 exports.createFromAction = createFromAction;

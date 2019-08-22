@@ -206,6 +206,39 @@ export function createFromAction(params: {
         }
     }
 
+    let result: any;
+    if (a.result !== undefined && a.result !== null) {
+        switch (a.typeOf) {
+            case cinerinoapi.factory.actionType.SendAction:
+                if (a.object.typeOf === 'Order') {
+                    if (Array.isArray(a.result.ownershipInfos)) {
+                        result = a.result.ownershipInfos.map((o: any) => {
+                            return {
+                                name: '所有権',
+                                url: `/projects/${params.project.id}/resources/${o.typeOf}/${o.id}`
+                            };
+                        });
+                    }
+                }
+
+                break;
+
+            case cinerinoapi.factory.actionType.AuthorizeAction:
+                if (a.object.typeOf === 'OwnershipInfo') {
+                    if (typeof a.result.code === 'string') {
+                        result = [{
+                            name: '所有権コード',
+                            url: `/projects/${params.project.id}/authorizations/${a.result.code}`
+                        }];
+                    }
+                }
+
+                break;
+
+            default:
+        }
+    }
+
     let actionStatusDescription: string;
     switch (a.actionStatus) {
         case cinerinoapi.factory.actionStatusType.ActiveActionStatus:
@@ -236,6 +269,6 @@ export function createFromAction(params: {
         startDate: a.startDate,
         actionStatus: a.actionStatus,
         actionStatusDescription: actionStatusDescription,
-        result: a.result
+        result
     };
 }
