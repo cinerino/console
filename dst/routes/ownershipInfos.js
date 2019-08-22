@@ -177,6 +177,7 @@ ownershipInfosRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, voi
             // no op
         }
         res.render('ownershipInfos/edit', {
+            moment: moment,
             message: message,
             ownershipInfo: ownershipInfo,
             timelines: timelines

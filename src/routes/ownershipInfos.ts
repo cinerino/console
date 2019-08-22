@@ -182,6 +182,7 @@ ownershipInfosRouter.all(
             }
 
             res.render('ownershipInfos/edit', {
+                moment: moment,
                 message: message,
                 ownershipInfo: ownershipInfo,
                 timelines: timelines
