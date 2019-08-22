@@ -103,15 +103,12 @@ ownershipInfosRouter.get(
 
 ownershipInfosRouter.all(
     '/:id',
+    // tslint:disable-next-line:max-func-body-length
     async (req, res, next) => {
         try {
             const message = undefined;
 
             const actionService = new cinerinoapi.service.Action({
-                endpoint: req.project.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const authorizationService = new cinerinoapi.service.Authorization({
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
@@ -133,34 +130,32 @@ ownershipInfosRouter.all(
             const timelines: TimelineFactory.ITimeline[] = [];
 
             try {
-                // コード発行(チェックイン)
-                const searchAuthorizationsResult = await authorizationService.search({
+                // 注文配送
+                const searchSendActionsResult = await actionService.search({
                     limit: 100,
-                    sort: { validFrom: cinerinoapi.factory.sortType.Ascending },
-                    object: {
-                        typeOfs: [ownershipInfo.typeOf],
-                        ids: [ownershipInfo.id]
+                    sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                    typeOf: cinerinoapi.factory.actionType.SendAction,
+                    result: {
+                        typeOf: { $in: [ownershipInfo.typeOf] },
+                        id: { $in: [ownershipInfo.id] }
                     }
                 });
+                actionsOnOwnershipInfos.push(...searchSendActionsResult.data);
 
-                actionsOnOwnershipInfos.push(...searchAuthorizationsResult.data.map((authorization) => {
-                    return {
-                        project: authorization.project,
-                        id: 'unknown',
-                        typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
-                        agent: <any>{},
-                        object: authorization.object,
-                        startDate: authorization.validFrom,
-                        endDate: authorization.validFrom,
-                        actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
-                        result: {
-                            code: authorization.code
-                        }
-                    };
-                }));
+                // コード発行(チェックイン)
+                const searchAuthorizeActionsResult = await actionService.search({
+                    limit: 100,
+                    sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                    typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
+                    object: {
+                        typeOf: { $in: [ownershipInfo.typeOf] },
+                        id: { $in: [ownershipInfo.id] }
+                    }
+                });
+                actionsOnOwnershipInfos.push(...searchAuthorizeActionsResult.data);
 
                 // トークンチェック(入場)
-                const searchActionsResult = await actionService.search({
+                const searchCheckActionsResult = await actionService.search({
                     limit: 100,
                     sort: { startDate: cinerinoapi.factory.sortType.Ascending },
                     typeOf: cinerinoapi.factory.actionType.CheckAction,
@@ -169,7 +164,7 @@ ownershipInfosRouter.all(
                         id: { $in: [ownershipInfo.id] }
                     }
                 });
-                actionsOnOwnershipInfos.push(...searchActionsResult.data);
+                actionsOnOwnershipInfos.push(...searchCheckActionsResult.data);
 
                 timelines.push(...actionsOnOwnershipInfos.map((a) => {
                     return TimelineFactory.createFromAction({

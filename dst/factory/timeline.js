@@ -18,7 +18,7 @@ function createFromAction(params) {
         const url = (a.agent.memberOf !== undefined)
             ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
             : `/projects/${params.project.id}/userPools/${userPoolId}/clients/${a.agent.id}`;
-        let agentName = 'Unknown';
+        let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
         if (a.agent.name !== undefined) {
             agentName = a.agent.name;
         }
@@ -174,7 +174,15 @@ function createFromAction(params) {
         switch (a.typeOf) {
             case cinerinoapi.factory.actionType.SendAction:
                 if (a.object.typeOf === 'Order') {
-                    if (Array.isArray(a.result.ownershipInfos)) {
+                    if (Array.isArray(a.result)) {
+                        result = a.result.map((o) => {
+                            return {
+                                name: '所有権',
+                                url: `/projects/${params.project.id}/resources/${o.typeOf}/${o.id}`
+                            };
+                        });
+                    }
+                    else if (Array.isArray(a.result.ownershipInfos)) {
                         result = a.result.ownershipInfos.map((o) => {
                             return {
                                 name: '所有権',
