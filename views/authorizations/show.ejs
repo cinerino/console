@@ -1,0 +1,122 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">認可詳細</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/projects/<%= req.project.id %>/dashboard">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/projects/<%= req.project.id %>/authorizations">認可検索</a>
+                    </li>
+                    <li class="breadcrumb-item active">認可詳細</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <!-- <div class="callout callout-info">
+                        <h5>
+                            <i class="fa fa-info"></i> Note:</h5>
+                        This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
+                    </div> -->
+
+                <!-- Main content -->
+                <div class="invoice p-3 mb-3">
+                    <!-- title row -->
+                    <div class="row">
+                        <!-- <div class="col-12">
+                            <h4>
+                                <i class="fa fa-film"></i>
+                                <%= '' %>
+                                <small class="float-right">Date:
+                                </small>
+                            </h4>
+                        </div> -->
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                    </div>
+                    <!-- /.row -->
+
+                    <!-- this row will not appear when printing -->
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <!-- <a href="javascript:void(0)" onclick="window.print(); return false;"
+                                class="btn btn-default">
+                                <i class="fa fa-print"></i> Print</a>
+                            <button type="button" class="btn btn-default float-right disabled">
+                                <i class="fa fa-undo"></i> アクション
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.invoice -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- ./col -->
+            <div class="col-md-12 no-print">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#timeline"
+                                    data-toggle="tab">Timeline</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
+                                    Viewer</a></li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="timeline">
+                                <%- include('../parts/timelines', {timelines: timelines}) %>
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="jsonViewer">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(authorization, null, '\t') %></textarea>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script src="/js/authorizations/show.js"></script>

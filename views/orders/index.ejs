@@ -43,6 +43,50 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label for="confirmationNumbers">確認番号</label>
+                                        <input type="text" class="form-control" id="confirmationNumbers"
+                                            name="confirmationNumbers" placeholder="確認番号"
+                                            value="<%= (Array.isArray(searchConditions.confirmationNumbers)) ? searchConditions.confirmationNumbers.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="orderNumbers">注文番号</label>
+                                        <input type="text" class="form-control" id="orderNumbers" name="orderNumbers"
+                                            placeholder="注文番号"
+                                            value="<%= (Array.isArray(searchConditions.orderNumbers)) ? searchConditions.orderNumbers.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>注文日時</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="orderDateRange"
+                                                id="orderDateRange"
+                                                value="<%= moment(searchConditions.orderDateFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.orderDateThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label>注文ステータス</label>
+                                        <select multiple class="form-control" name="orderStatuses[]" size="10">
+                                            <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
+                                            <% 
+                                            var selected = false;
+                                            selected = Array.isArray(searchConditions.orderStatuses) && searchConditions.orderStatuses.indexOf(orderStatus) >= 0;
+                                            %>
+                                            <option value="<%= orderStatus %>" <% if (selected) { %> selected <% } %>>
+                                                <%= orderStatus %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label for="customer[membershipNumbers]">顧客会員番号</label>
                                         <input type="text" class="form-control" id="customer[membershipNumbers]"
                                             name="customer[membershipNumbers]" placeholder="username1234"
@@ -231,50 +275,6 @@
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             placeholder="予約作品コード"
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers)) ? searchConditions.acceptedOffers.itemOffered.reservationFor.superEvent.workPerformed.identifiers.join(',') : '' %>">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="confirmationNumbers">確認番号</label>
-                                        <input type="text" class="form-control" id="confirmationNumbers"
-                                            name="confirmationNumbers" placeholder="確認番号"
-                                            value="<%= (Array.isArray(searchConditions.confirmationNumbers)) ? searchConditions.confirmationNumbers.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="orderNumbers">注文番号</label>
-                                        <input type="text" class="form-control" id="orderNumbers" name="orderNumbers"
-                                            placeholder="注文番号"
-                                            value="<%= (Array.isArray(searchConditions.orderNumbers)) ? searchConditions.orderNumbers.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>注文日時</label>
-
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="orderDateRange"
-                                                id="orderDateRange"
-                                                value="<%= moment(searchConditions.orderDateFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.orderDateThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                    <div class="form-group">
-                                        <label>注文ステータス</label>
-                                        <select multiple class="form-control" name="orderStatuses[]" size="10">
-                                            <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
-                                            <% 
-                                            var selected = false;
-                                            selected = Array.isArray(searchConditions.orderStatuses) && searchConditions.orderStatuses.indexOf(orderStatus) >= 0;
-                                            %>
-                                            <option value="<%= orderStatus %>" <% if (selected) { %> selected <% } %>>
-                                                <%= orderStatus %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
                                     </div>
                                 </div>
                             </div>

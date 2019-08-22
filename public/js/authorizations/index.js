@@ -18,17 +18,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+                    var url = '/projects/' + PROJECT_ID + '/authorizations/' + data.id;
+
                     return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary">' + data.project.typeOf + '</span></li>'
-                        + '<li>' + data.project.id + '</li>'
-                        + '</ul>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-dark">' + data.code + '</span></li>'
+                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
+                        + '<li><span class="badge badge-secondary">' + data.typeOf + '</span></li>'
+                        + '<li><a target="_blank" href="' + url + '"><span class="">' + data.code + '</span></a></li>'
                         + '<li>' + data.validFrom + '</li>'
                         + '<li>' + data.validUntil + '</li>'
                         + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showQRCode" data-id="' + data.id + '">QRコード表示</a><li>'

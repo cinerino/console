@@ -16,6 +16,7 @@ const express = require("express");
 // import { ACCEPTED, CREATED } from 'http-status';
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
+const TimelineFactory = require("../factory/timeline");
 const debug = createDebug('cinerino-console:routes');
 const authorizationsRouter = express.Router();
 /**
@@ -96,6 +97,63 @@ authorizationsRouter.get('',
                 searchConditions: searchConditions
             });
         }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+authorizationsRouter.all('/:id', 
+// tslint:disable-next-line:max-func-body-length
+(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const message = undefined;
+        const actionService = new cinerinoapi.service.Action({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const authorizationService = new cinerinoapi.service.Authorization({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchAuthorizationsResult = yield authorizationService.search({
+            limit: 1,
+            id: { $in: [req.params.id] }
+        });
+        const authorization = searchAuthorizationsResult.data.shift();
+        if (authorization === undefined) {
+            throw new cinerinoapi.factory.errors.NotFound('Authorization');
+        }
+        // アクション
+        const actionsOnAuthorizations = [];
+        const timelines = [];
+        try {
+            // コード発行
+            const searchAuthorizeActionsResult = yield actionService.search({
+                limit: 100,
+                sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
+                result: {
+                    typeOf: { $in: ['Authorization'] },
+                    id: { $in: [authorization.id] }
+                }
+            });
+            actionsOnAuthorizations.push(...searchAuthorizeActionsResult.data);
+            timelines.push(...actionsOnAuthorizations.map((a) => {
+                return TimelineFactory.createFromAction({
+                    project: req.project,
+                    action: a
+                });
+            }));
+        }
+        catch (error) {
+            // no op
+        }
+        res.render('authorizations/show', {
+            moment: moment,
+            message: message,
+            authorization: authorization,
+            timelines: timelines
+        });
     }
     catch (error) {
         next(error);

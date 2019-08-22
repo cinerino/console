@@ -151,6 +151,9 @@ export function createFromAction(params: {
             case 'Order':
                 object = { name: '注文', url: `/projects/${params.project.id}/orders/${a.object.orderNumber}` };
                 break;
+            case 'OwnershipInfo':
+                object = { name: '所有権', url: `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}` };
+                break;
             case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
                 object = { name: 'ポイント' };
                 break;
@@ -235,7 +238,7 @@ export function createFromAction(params: {
                     if (typeof a.result.code === 'string') {
                         result = [{
                             name: '所有権コード',
-                            url: `/projects/${params.project.id}/authorizations/${a.result.code}`
+                            url: `/projects/${params.project.id}/authorizations/${a.result.id}`
                         }];
                     }
                 }
