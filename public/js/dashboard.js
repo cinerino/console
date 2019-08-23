@@ -9,6 +9,7 @@ var waiterRules = [];
 
 var orders = [];
 var searchedAllOrders = false;
+var timlines = [];
 var limit = 10;
 var page = 0;
 var numVisitorsChart;
@@ -232,6 +233,8 @@ function updateCharts() {
     updateNumOrderItemsChart();
     searchLatestOrders(function () {
     });
+    searchLRecentActions(function () {
+    });
 }
 function updateSalesAmountChart() {
     searchSalesAmount(createSalesAmountChart);
@@ -444,30 +447,7 @@ function searchNumPlaceOrder(cb) {
         console.error('取引数を取得できませんでした')
     });
 }
-function searchOrders(cb) {
-    page += 1;
-    $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/orders',
-        {
-            limit: limit,
-            page: page,
-            orderDateFrom: moment().add(-1, 'month').toISOString(),
-            orderDateThrough: moment().toISOString()
-        }
-    ).done(function (data) {
-        searchedAllOrders = (data.data.length < limit);
-        $.each(data.data, function (_, order) {
-            orders.push(order);
-        });
-        if (!searchedAllOrders) {
-            searchOrders(cb);
-        } else {
-            cb();
-        }
-    }).fail(function () {
-        console.error('注文履歴を取得できませんでした')
-    });
-}
+
 function createNumPlaceOrderChart(datas) {
     var statuses = ['Confirmed', 'Canceled', 'Expired'];
 
@@ -783,6 +763,48 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
         }
     });
 }
+
+function searchLRecentActions(cb) {
+    $.getJSON(
+        '/projects/' + PROJECT_ID + '/dashboard/timelines',
+        {
+            // limit: 10,
+            // page: 1,
+            // sort: { orderDate: -1 },
+            // orderDateFrom: moment().add(-1, 'day').toISOString(),
+            // orderDateThrough: moment().toISOString()
+        }
+    ).done(function (data) {
+        console.log('timeline found', data);
+        timlines = data;
+
+        $('.products-list').empty();
+        $.each(data, function (_, timeline) {
+
+            $('<li>').html(
+                '<div class="product-img">'
+                // + '<img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">'
+                + '</div>'
+                + '<div class="product-info">'
+                + '<a target="_blank" href="' + timeline.agent.url + '" class="product-title">' + timeline.agent.name
+                + '<span class="badge ' + timeline.action.actionStatus + ' float-right">' + timeline.action.actionStatus + '</span>'
+                + '</a>'
+                + '<span class="product-description">'
+                + '<a href="' + timeline.object.url + '" target="_blank">'
+                + '<span>' + timeline.object.name + '</span>'
+                + '</a> を'
+                + '<span>' + timeline.actionName + '</span>'
+                + '<span>' + timeline.actionStatusDescription + '</span>'
+                + '</span>'
+                + '</div>'
+            ).addClass('item').appendTo('.products-list');
+        });
+        cb();
+    }).fail(function () {
+        console.error('最近のアクションを取得できませんでした')
+    });
+}
+
 function searchLatestOrders(cb) {
     $.getJSON(
         '/projects/' + PROJECT_ID + '/dashboard/orders',
@@ -823,6 +845,7 @@ function searchLatestOrders(cb) {
         console.error('最近の注文を取得できませんでした')
     });
 }
+
 function countNewOrder(cb) {
     $.getJSON(
         '/projects/' + PROJECT_ID + '/dashboard/countNewOrder',

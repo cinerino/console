@@ -164,8 +164,9 @@
             <input type="hidden" name="waiterEndpoint" value="<%= process.env.WAITER_ENDPOINT %>">
             <input type="hidden" name="telemetryEndpoint" value="<%= process.env.TELEMETRY_API_ENDPOINT %>">
             <input type="hidden" name="projectId" value="<%= req.project.id %>">
+
             <!-- Left col -->
-            <section class="col-lg-7 connectedSortable">
+            <section class="col-lg-8 connectedSortable">
                 <!-- solid sales graph -->
                 <div class="card bg-dark-gradient" id="visitors">
                     <div class="card-header no-border">
@@ -201,7 +202,11 @@
                     <!-- /.card-footer -->
                 </div>
                 <!-- /.card -->
+            </section>
+            <!-- /.Left col -->
 
+            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+            <section class="col-lg-4 connectedSortable">
                 <!-- solid sales graph -->
                 <div class="card bg-dark-gradient" id="numPlaceOrder">
                     <div class="card-header no-border">
@@ -235,81 +240,14 @@
                     </div>
                 </div>
                 <!-- /.card -->
-
-                <div class="card bg-dark-gradient" id="numTransactions2salesAmount">
-                    <div class="card-header no-border">
-                        <h3 class="card-title">
-                            <i class="fa fa-th mr-1"></i>
-                            来客数と売上高
-                        </h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-dark btn-sm daterange" data-toggle="tooltip"
-                                title="Date range">
-                                <i class="fa fa-calendar"></i>
-                            </button>
-                            <button type="button" class="btn bg-dark btn-sm" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn bg-dark btn-sm" data-widget="remove">
-                                <i class="fa fa-times"></i>
-                            </button>
-                        </div>
-                    </div><!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="tab-content p-0">
-                            <canvas id="numTransactions2salesAmountChart" height="250"></canvas>
-                        </div>
-                    </div><!-- /.card-body -->
-                </div>
-
-                <!-- TABLE: LATEST ORDERS -->
-                <div class="card latestOrders">
-                    <div class="card-header border-transparent">
-                        <h3 class="card-title">最近の注文</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-widget="remove">
-                                <i class="fa fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table m-0">
-                                <thead>
-                                    <tr>
-                                        <th>Order Number</th>
-                                        <th>Date</th>
-                                        <th>Item</th>
-                                        <th>Payment Method</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-                        <!-- <a href="#" class="btn btn-sm btn-info float-left">Place New Order</a> -->
-                        <a target="_blank" href="/projects/<%= req.project.id %>/orders"
-                            class="btn btn-sm btn-secondary float-right">View All
-                            Orders</a>
-                    </div>
-                    <!-- /.card-footer -->
-                </div>
-                <!-- /.card -->
             </section>
-            <!-- /.Left col -->
+            <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
 
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
-            <section class="col-lg-5 connectedSortable">
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-4 connectedSortable">
                 <!-- solid sales graph -->
                 <div class="card bg-primary-gradient" id="salesAmount">
                     <div class="card-header no-border">
@@ -430,6 +368,11 @@
                 </div>
                 <!-- /.card -->
 
+            </section>
+            <!-- /.Left col -->
+
+            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+            <section class="col-lg-4 connectedSortable">
                 <!-- solid sales graph -->
                 <div class="card bg-info-gradient" id="numOrderItems">
                     <div class="card-header no-border">
@@ -553,50 +496,118 @@
                 </div>
                 <!-- /.card -->
 
-                <!-- Calendar -->
-                <div class="card bg-success-gradient">
-                    <div class="card-header no-border">
+            </section>
+            <!-- right col -->
 
-                        <h3 class="card-title">
-                            <i class="fa fa-calendar"></i>
-                            Calendar
-                        </h3>
-                        <!-- tools card -->
+            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+            <section class="col-lg-4 connectedSortable">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Actions</h3>
+
                         <div class="card-tools">
-                            <!-- button with a dropdown -->
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success btn-sm dropdown-toggle"
-                                    data-toggle="dropdown">
-                                    <i class="fa fa-bars"></i></button>
-                                <div class="dropdown-menu float-right" role="menu">
-                                    <a href="#" class="dropdown-item">Add new event</a>
-                                    <a href="#" class="dropdown-item">Clear events</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="#" class="dropdown-item">View calendar</a>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-success btn-sm" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fas fa-minus"></i>
                             </button>
-                            <button type="button" class="btn btn-success btn-sm" data-widget="remove">
-                                <i class="fa fa-times"></i>
+                            <button type="button" class="btn btn-tool" data-widget="remove">
+                                <i class="fas fa-times"></i>
                             </button>
                         </div>
-                        <!-- /. tools -->
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">
-                        <!--The calendar -->
-                        <div id="calendar" style="width: 100%"></div>
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                        </ul>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer text-center">
+                        <a href="/projects/<%= req.project.id %>/actions" class="uppercase">View All Actions</a>
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
-                <!-- /.card -->
             </section>
             <!-- right col -->
         </div>
-        <!-- /.row (main row) -->
 
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-8 connectedSortable">
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="card latestOrders">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">最近の注文</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order Number</th>
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Payment Method</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <!-- <a href="#" class="btn btn-sm btn-info float-left">Place New Order</a> -->
+                        <a target="_blank" href="/projects/<%= req.project.id %>/orders"
+                            class="btn btn-sm btn-secondary float-right">View All
+                            Orders</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </section>
+            <!-- /.Left col -->
+
+            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+            <section class="col-lg-4 connectedSortable">
+                <div class="card bg-dark-gradient" id="numTransactions2salesAmount">
+                    <div class="card-header no-border">
+                        <h3 class="card-title">
+                            <i class="fa fa-th mr-1"></i>
+                            来客数と売上高
+                        </h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-dark btn-sm daterange" data-toggle="tooltip"
+                                title="Date range">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                            <button type="button" class="btn bg-dark btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn bg-dark btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content p-0">
+                            <canvas id="numTransactions2salesAmountChart" height="250"></canvas>
+                        </div>
+                    </div><!-- /.card-body -->
+                </div>
+            </section>
+            <!-- right col -->
+        </div>
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->

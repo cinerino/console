@@ -16,6 +16,7 @@ const express = require("express");
 const http_status_1 = require("http-status");
 const moment = require("moment-timezone");
 const cinerinoapi = require("../cinerinoapi");
+const TimelineFactory = require("../factory/timeline");
 // const debug = createDebug('cinerino-console:routes');
 const dashboardRouter = express.Router();
 dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +59,9 @@ dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, func
             adminUserPool: adminUserPool,
             adminUserPoolClients: adminUserPoolClients,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
-            sellers: searchSellersResult.data
+            sellers: searchSellersResult.data,
+            moment: moment,
+            timelines: []
         });
     }
     catch (error) {
@@ -150,6 +153,40 @@ dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(this, 
         res.json({
             totalCount: searchResult.totalCount
         });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+dashboardRouter.get('/timelines', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const timelines = [];
+        const actionService = new cinerinoapi.service.Action({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        try {
+            const searchActionsResult = yield actionService.search({
+                limit: 10,
+                sort: { startDate: cinerinoapi.factory.sortType.Descending },
+                startFrom: moment()
+                    .add(-1, 'day')
+                    .toDate(),
+                startThrough: moment()
+                    .toDate()
+            });
+            timelines.push(...searchActionsResult.data.map((a) => {
+                return TimelineFactory.createFromAction({
+                    project: req.project,
+                    action: a
+                });
+            }));
+        }
+        catch (error) {
+            // no op
+            console.error(error);
+        }
+        res.json(timelines);
     }
     catch (error) {
         next(error);

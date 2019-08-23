@@ -8,6 +8,8 @@ import * as moment from 'moment-timezone';
 
 import * as cinerinoapi from '../cinerinoapi';
 
+import * as TimelineFactory from '../factory/timeline';
+
 // const debug = createDebug('cinerino-console:routes');
 const dashboardRouter = express.Router();
 
@@ -59,7 +61,9 @@ dashboardRouter.get(
                 adminUserPool: adminUserPool,
                 adminUserPoolClients: adminUserPoolClients,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
-                sellers: searchSellersResult.data
+                sellers: searchSellersResult.data,
+                moment: moment,
+                timelines: []
             });
         } catch (error) {
             next(error);
@@ -164,6 +168,44 @@ dashboardRouter.get(
             res.json({
                 totalCount: searchResult.totalCount
             });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+dashboardRouter.get(
+    '/timelines',
+    async (req, res, next) => {
+        try {
+            const timelines: TimelineFactory.ITimeline[] = [];
+            const actionService = new cinerinoapi.service.Action({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+
+            try {
+                const searchActionsResult = await actionService.search({
+                    limit: 10,
+                    sort: { startDate: cinerinoapi.factory.sortType.Descending },
+                    startFrom: moment()
+                        .add(-1, 'day')
+                        .toDate(),
+                    startThrough: moment()
+                        .toDate()
+                });
+                timelines.push(...searchActionsResult.data.map((a) => {
+                    return TimelineFactory.createFromAction({
+                        project: req.project,
+                        action: a
+                    });
+                }));
+            } catch (error) {
+                // no op
+                console.error(error);
+            }
+
+            res.json(timelines);
         } catch (error) {
             next(error);
         }
