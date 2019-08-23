@@ -54,6 +54,9 @@ function createFromAction(params) {
         case cinerinoapi.factory.actionType.AuthorizeAction:
             actionName = '承認';
             break;
+        case cinerinoapi.factory.actionType.ConfirmAction:
+            actionName = '確定';
+            break;
         case cinerinoapi.factory.actionType.OrderAction:
             actionName = '注文';
             break;
@@ -63,9 +66,6 @@ function createFromAction(params) {
         case cinerinoapi.factory.actionType.SendAction:
             if (a.object.typeOf === 'Order') {
                 actionName = '配送';
-            }
-            else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                actionName = '送信';
             }
             else {
                 actionName = '送信';

@@ -127,9 +127,9 @@
                                                 href="/projects/<%= req.project.id %>/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
                                                 <%= acceptedOffer.itemOffered.reservationFor.name.ja %>
                                                 <br>
-                                                <%= moment(acceptedOffer.itemOffered.reservationFor.startDate).format('YY-MM-DD hh:mm') %>
+                                                <%= moment(acceptedOffer.itemOffered.reservationFor.startDate).format('lllZ') %>
                                                 -
-                                                <%= moment(acceptedOffer.itemOffered.reservationFor.endDate).format('hh:mm') %>
+                                                <%= moment(acceptedOffer.itemOffered.reservationFor.endDate).format('lllZ') %>
                                                 <br>@
                                                 <%= acceptedOffer.itemOffered.reservationFor.superEvent.location.name.ja %>
                                                 <%= acceptedOffer.itemOffered.reservationFor.location.name.ja %>

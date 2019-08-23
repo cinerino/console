@@ -873,7 +873,7 @@ function aggregateExitRate(cb) {
         '/projects/' + PROJECT_ID + '/dashboard/aggregateExitRate',
         {}
     ).done(function (data) {
-        $('#exitRate').html(data.rate.toString());
+        $('.exitRate').html(data.rate.toString());
         cb();
     }).fail(function () {
         console.error('離脱率を取得できませんでした')
@@ -895,7 +895,7 @@ function countNewTransaction(cb) {
         '/projects/' + PROJECT_ID + '/dashboard/countNewTransaction',
         {}
     ).done(function (data) {
-        $('#newTransactionCount').html(data.totalCount.toString());
+        $('.newTransactionCount').html(data.totalCount.toString());
         cb();
     }).fail(function () {
         console.error('新規取引数を取得できませんでした')
