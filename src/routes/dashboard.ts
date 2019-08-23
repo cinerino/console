@@ -189,7 +189,7 @@ dashboardRouter.get(
                     limit: 10,
                     sort: { startDate: cinerinoapi.factory.sortType.Descending },
                     startFrom: moment()
-                        .add(-1, 'day')
+                        .add(-1, 'hour')
                         .toDate(),
                     startThrough: moment()
                         .toDate()

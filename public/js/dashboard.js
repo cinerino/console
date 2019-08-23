@@ -204,6 +204,14 @@ $(function () {
         30000
     );
 
+    updateActivities();
+    setInterval(
+        function () {
+            updateActivities();
+        },
+        5000
+    );
+
     $.getJSON(
         WAITER_ENDPOINT + '/projects/' + PROJECT_ID + '/rules',
         {}
@@ -231,11 +239,15 @@ function updateCharts() {
     updateSalesAmountChart();
     updateNumTransactions2salesAmountChart();
     updateNumOrderItemsChart();
+}
+
+function updateActivities() {
     searchLatestOrders(function () {
     });
-    searchLRecentActions(function () {
+    searchRecentActions(function () {
     });
 }
+
 function updateSalesAmountChart() {
     searchSalesAmount(createSalesAmountChart);
     searchSalesAmountByClient(createSalesAmountByClientChart);
@@ -764,7 +776,7 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
     });
 }
 
-function searchLRecentActions(cb) {
+function searchRecentActions(cb) {
     $.getJSON(
         '/projects/' + PROJECT_ID + '/dashboard/timelines',
         {
@@ -775,7 +787,6 @@ function searchLRecentActions(cb) {
             // orderDateThrough: moment().toISOString()
         }
     ).done(function (data) {
-        console.log('timeline found', data);
         timlines = data;
 
         $('.products-list').empty();
