@@ -792,23 +792,30 @@ function searchRecentActions(cb) {
         $('.products-list').empty();
         $.each(data, function (_, timeline) {
 
-            $('<li>').html(
-                '<div class="product-img">'
-                // + '<img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">'
+            var html = '<div class="product-img">'
+                // + '<img src="/img/cinerino.png" alt="Product Image" class="img-size-50">'
                 + '</div>'
-                + '<div class="product-info">'
+                + '<div class="product-info ml-2">'
                 + '<a target="_blank" href="' + timeline.agent.url + '" class="product-title">' + timeline.agent.name
-                + '<span class="badge ' + timeline.action.actionStatus + ' float-right">' + timeline.action.actionStatus + '</span>'
-                + '</a>'
-                + '<span class="product-description">'
-                + '<a href="' + timeline.object.url + '" target="_blank">'
+                + '<span class="badge ' + timeline.action.actionStatus + ' float-right">' + moment(timeline.action.startDate).fromNow() + '</span>'
+                + '</a>が';
+
+            html += '<span class="product-description overflow-auto" style="white-space: normal;">';
+
+            if (timeline.purpose !== undefined) {
+                html += '<a href="' + timeline.purpose.url + '" target="_blank">'
+                    + '<span>' + timeline.purpose.name + '</span>'
+                    + '</a> のために';
+            }
+
+            html += '<a href="' + timeline.object.url + '" target="_blank">'
                 + '<span>' + timeline.object.name + '</span>'
                 + '</a> を'
                 + '<span>' + timeline.actionName + '</span>'
                 + '<span>' + timeline.actionStatusDescription + '</span>'
                 + '</span>'
-                + '</div>'
-            ).addClass('item').appendTo('.products-list');
+                + '</div>';
+            $('<li>').html(html).addClass('item').appendTo('.products-list');
         });
         cb();
     }).fail(function () {
