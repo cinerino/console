@@ -10,6 +10,8 @@ var waiterRules = [];
 var orders = [];
 var searchedAllOrders = false;
 var timlines = [];
+var searchingRecentActions = false;
+var searchingLatestOrders = false;
 var limit = 10;
 var page = 0;
 var numVisitorsChart;
@@ -53,7 +55,6 @@ $(function () {
         startDate: initialChartStartDate,
         endDate: initialChartEndDate
     }, function (start, end) {
-        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         updateSalesAmountChart();
     });
 
@@ -69,7 +70,7 @@ $(function () {
         startDate: initialChartStartDate,
         endDate: initialChartEndDate
     }, function (start, end) {
-        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        // console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         updateNumTransactions2salesAmountChart();
     });
 
@@ -85,7 +86,7 @@ $(function () {
         startDate: initialChartStartDate,
         endDate: initialChartEndDate
     }, function (start, end) {
-        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        // console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         updateNumOrderItemsChart();
     });
 
@@ -101,7 +102,6 @@ $(function () {
         startDate: initialChartStartDate,
         endDate: initialChartEndDate
     }, function (start, end) {
-        console.log('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         searchNumPlaceOrder(
             createNumPlaceOrderChart
         );
@@ -209,7 +209,7 @@ $(function () {
         function () {
             updateActivities();
         },
-        5000
+        1000
     );
 
     $.getJSON(
@@ -492,7 +492,6 @@ function createNumPlaceOrderChart(datas) {
     });
 }
 function createSalesAmountChart(datas) {
-    console.log('creating salesAmountChart...datas:', datas.length);
     var line = new Morris.Line({
         element: 'salesAmountChart',
         resize: true,
@@ -597,7 +596,6 @@ function createSalesAmountBySellerChart(datas) {
     });
 }
 function createNumOrderItemsChart(datas) {
-    console.log('creating NumOrderItemsChart...datas:', datas.length);
     var line = new Morris.Line({
         element: 'numOrderItemsChart',
         resize: true,
@@ -702,7 +700,6 @@ function createNumOrderItemsBySellerChart(datas) {
     });
 }
 function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStartedTransactionsByType) {
-    console.log('creating SalesAmountNumTransactionsChart...', datasSalesAmount.length, datasNumStartedTransactionsByType.length);
     // 売上散布チャート
     var chartDate = datasSalesAmount.map(function (dataSalesAmount) {
         var dataNumStartedTransactions = datasNumStartedTransactionsByType.find(function (data) {
@@ -777,91 +774,120 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
 }
 
 function searchRecentActions(cb) {
-    $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/timelines',
-        {
-            // limit: 10,
-            // page: 1,
-            // sort: { orderDate: -1 },
-            // orderDateFrom: moment().add(-1, 'day').toISOString(),
-            // orderDateThrough: moment().toISOString()
+    if (searchingRecentActions) {
+        return cb();
+    }
+
+    $.ajax({
+        url: '/projects/' + PROJECT_ID + '/dashboard/timelines',
+        data: {
+            startFrom: moment()
+                .add(-1, 'day')
+                .toDate(),
+            startThrough: moment()
+                .toDate()
+        },
+        dataType: 'json',
+        beforeSend: function () {
+            searchingRecentActions = true;
         }
-    ).done(function (data) {
-        timlines = data;
+    })
+        .done(function (data) {
+            timlines = data;
 
-        $('.products-list').empty();
-        $.each(data, function (_, timeline) {
+            $('.products-list').empty();
+            $.each(data, function (_, timeline) {
 
-            var html = '<div class="product-img">'
-                // + '<img src="/img/cinerino.png" alt="Product Image" class="img-size-50">'
-                + '</div>'
-                + '<div class="product-info ml-2">'
-                + '<a target="_blank" href="' + timeline.agent.url + '" class="product-title">' + timeline.agent.name
-                + '<span class="badge ' + timeline.action.actionStatus + ' float-right">' + moment(timeline.action.startDate).fromNow() + '</span>'
-                + '</a>が';
+                var html = '<div class="product-img">'
+                    // + '<img src="/img/cinerino.png" alt="Product Image" class="img-size-50">'
+                    + '</div>'
+                    + '<div class="product-info ml-2">'
+                    + '<a target="_blank" href="' + timeline.agent.url + '" class="product-title">' + timeline.agent.name
+                    + '<span class="badge ' + timeline.action.actionStatus + ' float-right">' + moment(timeline.action.startDate).fromNow() + '</span>'
+                    + '</a>が';
 
-            html += '<span class="product-description overflow-auto" style="white-space: normal;">';
+                html += '<span class="product-description overflow-auto" style="white-space: normal;">';
 
-            if (timeline.purpose !== undefined) {
-                html += '<a href="' + timeline.purpose.url + '" target="_blank">'
-                    + '<span>' + timeline.purpose.name + '</span>'
-                    + '</a> のために';
-            }
+                if (timeline.purpose !== undefined) {
+                    html += '<a href="' + timeline.purpose.url + '" target="_blank">'
+                        + '<span>' + timeline.purpose.name + '</span>'
+                        + '</a> のために';
+                }
 
-            html += '<a href="' + timeline.object.url + '" target="_blank">'
-                + '<span>' + timeline.object.name + '</span>'
-                + '</a> を'
-                + '<span>' + timeline.actionName + '</span>'
-                + '<span>' + timeline.actionStatusDescription + '</span>'
-                + '</span>'
-                + '</div>';
-            $('<li>').html(html).addClass('item').appendTo('.products-list');
+                html += '<a href="' + timeline.object.url + '" target="_blank">'
+                    + '<span>' + timeline.object.name + '</span>'
+                    + '</a> を'
+                    + '<span>' + timeline.actionName + '</span>'
+                    + '<span>' + timeline.actionStatusDescription + '</span>'
+                    + '</span>'
+                    + '</div>';
+                $('<li>').html(html).addClass('item').appendTo('.products-list');
+            });
+            cb();
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error('最近のアクションを取得できませんでした', errorThrown)
+        })
+        .always(function () {
+            searchingRecentActions = false;
         });
-        cb();
-    }).fail(function () {
-        console.error('最近のアクションを取得できませんでした')
-    });
 }
 
 function searchLatestOrders(cb) {
-    $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/orders',
-        {
+    if (searchingLatestOrders) {
+        return cb();
+    }
+
+    $.ajax({
+        url: '/projects/' + PROJECT_ID + '/dashboard/orders',
+        data: {
             limit: 10,
             page: 1,
             sort: { orderDate: -1 },
-            orderDateFrom: moment().add(-1, 'day').toISOString(),
-            orderDateThrough: moment().toISOString()
+            orderDateFrom: moment()
+                .add(-1, 'day')
+                .toISOString(),
+            orderDateThrough: moment()
+                .toISOString()
+        },
+        dataType: 'json',
+        beforeSend: function () {
+            searchingLatestOrders = true;
         }
-    ).done(function (data) {
-        orders = data.data;
+    })
+        .done(function (data) {
+            orders = data.data;
 
-        $('.latestOrders tbody').empty();
-        $.each(data.data, function (_, order) {
-            var numDisplayItems = 4;
+            $('.latestOrders tbody').empty();
+            $.each(data.data, function (_, order) {
+                var numDisplayItems = 4;
 
-            $('<tr>').html(
-                '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
-                + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
-                + '<td>'
-                + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {
-                    if (o.itemOffered.reservedTicket !== undefined && o.itemOffered.reservedTicket.ticketedSeat !== undefined) {
-                        return o.itemOffered.reservedTicket.ticketedSeat.seatNumber
-                    }
-                    return o.itemOffered.typeOf;
-                }).join('<br>')
-                + order.acceptedOffers.slice(numDisplayItems, numDisplayItems + 1).map(() => '<br>...').join('')
-                + '</td>'
-                + '<td>' + order.paymentMethods.map(function (paymentMethod) {
-                    return '<span class="badge badge-secondary ' + paymentMethod.typeOf + '">' + paymentMethod.typeOf + '</span>';
-                }).join('&nbsp;') + '</td>'
-                + '<td>' + '<span class="badge badge-secondary  ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
-            ).appendTo('.latestOrders tbody');
+                $('<tr>').html(
+                    '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
+                    + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
+                    + '<td>'
+                    + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {
+                        if (o.itemOffered.reservedTicket !== undefined && o.itemOffered.reservedTicket.ticketedSeat !== undefined) {
+                            return o.itemOffered.reservedTicket.ticketedSeat.seatNumber
+                        }
+                        return o.itemOffered.typeOf;
+                    }).join('<br>')
+                    + order.acceptedOffers.slice(numDisplayItems, numDisplayItems + 1).map(() => '<br>...').join('')
+                    + '</td>'
+                    + '<td>' + order.paymentMethods.map(function (paymentMethod) {
+                        return '<span class="badge badge-secondary ' + paymentMethod.typeOf + '">' + paymentMethod.typeOf + '</span>';
+                    }).join('&nbsp;') + '</td>'
+                    + '<td>' + '<span class="badge badge-secondary  ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
+                ).appendTo('.latestOrders tbody');
+            });
+            cb();
+        })
+        .fail(function () {
+            console.error('最近の注文を取得できませんでした')
+        })
+        .always(function () {
+            searchingLatestOrders = false;
         });
-        cb();
-    }).fail(function () {
-        console.error('最近の注文を取得できませんでした')
-    });
 }
 
 function countNewOrder(cb) {
@@ -1009,7 +1035,6 @@ function updateHealth(cb) {
         '/projects/' + PROJECT_ID + '/dashboard/health',
         {}
     ).done(function (data) {
-        console.log('health:', data);
         $('.health').removeClass('text-danger').text(data.status);
         $('.version').text('v' + data.version);
 
@@ -1026,7 +1051,6 @@ function updateDbStats(cb) {
         '/projects/' + PROJECT_ID + '/dashboard/dbStats',
         {}
     ).done(function (data) {
-        console.log('stats:', data);
         var usedSpaceStr = Math.floor(Number(data.fsUsedSize) / GB)
             + '/'
             + Math.floor(Number(data.fsTotalSize) / GB);
@@ -1047,7 +1071,6 @@ function updateQueueCount(cb) {
         '/projects/' + PROJECT_ID + '/dashboard/queueCount',
         {}
     ).done(function (data) {
-        console.log('QueueCount:', data);
         $('.queueCount').removeClass('text-danger').text(data.totalCount);
 
         cb();

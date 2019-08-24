@@ -188,10 +188,9 @@ dashboardRouter.get(
                 const searchActionsResult = await actionService.search({
                     limit: 10,
                     sort: { startDate: cinerinoapi.factory.sortType.Descending },
-                    startFrom: moment()
-                        .add(-1, 'hour')
+                    startFrom: moment(req.query.startFrom)
                         .toDate(),
-                    startThrough: moment()
+                    startThrough: moment(req.query.startThrough)
                         .toDate()
                 });
                 timelines.push(...searchActionsResult.data.map((a) => {
