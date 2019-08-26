@@ -134,12 +134,30 @@ dashboardRouter.get(
 
 dashboardRouter.get(
     '/countNewUser',
-    async (_, res, next) => {
+    async (req, res, next) => {
         try {
-            // 未実装
+            const actionService = new cinerinoapi.service.Action({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+
+            const searchResult = await actionService.search({
+                limit: 1,
+                page: 1,
+                typeOf: cinerinoapi.factory.actionType.RegisterAction,
+                object: {
+                    typeOf: { $in: ['ProgramMembership'] }
+                    // id: { $in: [''] }
+                },
+                actionStatusTypes: [cinerinoapi.factory.actionStatusType.CompletedActionStatus],
+                startFrom: moment()
+                    .tz('Asia/Tokyo')
+                    .startOf('day')
+                    .toDate()
+            });
 
             res.json({
-                totalCount: 0
+                totalCount: searchResult.totalCount
             });
         } catch (error) {
             next(error);

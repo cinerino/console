@@ -123,11 +123,28 @@ dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(this, vo
         next(error);
     }
 }));
-dashboardRouter.get('/countNewUser', (_, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        // 未実装
+        const actionService = new cinerinoapi.service.Action({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchResult = yield actionService.search({
+            limit: 1,
+            page: 1,
+            typeOf: cinerinoapi.factory.actionType.RegisterAction,
+            object: {
+                typeOf: { $in: ['ProgramMembership'] }
+                // id: { $in: [''] }
+            },
+            actionStatusTypes: [cinerinoapi.factory.actionStatusType.CompletedActionStatus],
+            startFrom: moment()
+                .tz('Asia/Tokyo')
+                .startOf('day')
+                .toDate()
+        });
         res.json({
-            totalCount: 0
+            totalCount: searchResult.totalCount
         });
     }
     catch (error) {
