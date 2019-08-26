@@ -47,7 +47,7 @@ $(function () {
                     }
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
 
-                    var agentName = String(data.agent.name);
+                    var agentName = (typeof data.agent.name === 'string') ? data.agent.name : data.agent.id;
                     if (typeof data.agent.name === 'object' && data.agent.name !== undefined) {
                         agentName = data.agent.name.ja;
                     }
@@ -75,7 +75,7 @@ $(function () {
                         }
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.recipient.typeOf + '/' + data.recipient.id + '?userPoolId=' + userPoolId;
 
-                        var recipientName = String(data.recipient.name);
+                        var recipientName = (typeof data.recipient.name === 'string') ? data.recipient.name : data.recipient.id;
                         if (typeof data.recipient.name === 'object' && data.recipient.name !== undefined) {
                             recipientName = data.recipient.name.ja;
                         }
@@ -103,9 +103,23 @@ $(function () {
                                     + '<li><span class="text-muted">' + o.id + '</span></li>';
                             });
                         } else {
+                            var userPoolId = '';
+                            if (Array.isArray(data.object.identifier)) {
+                                var tokenIssuerIdentifier = data.object.identifier.find((i) => i.name === 'tokenIssuer');
+                                if (tokenIssuerIdentifier !== undefined) {
+                                    userPoolId = tokenIssuerIdentifier.value.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                                }
+                            }
+                            var objectId = data.object.id;
+                            if (data.object.typeOf === 'Order') {
+                                objectId = data.object.orderNumber;
+                            }
+                            var url = '/projects/' + PROJECT_ID + '/resources/' + data.object.typeOf + '/' + objectId + '?userPoolId=' + userPoolId;
+
                             html += '<li><span class="badge badge-secondary">' + data.object.typeOf + '</span></li>'
-                                + '<li><span class="text-muted">' + data.object.id + '</span></li>';
+                                + '<li><a target="_blank" href="' + url + '">' + objectId + '</a></li>';
                         }
+
                         html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showObject" data-id="' + data.id + '">詳細</a><li>';
                     }
 
@@ -127,8 +141,8 @@ $(function () {
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.purpose.typeOf + '/' + purposeId;
 
                         html += '<li><span class="badge badge-secondary">' + data.purpose.typeOf + '</span></li>'
-                            + '<li><a target="_blank" href="' + url + '"><span class="">' + purposeId + '</span></a></li>';
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳細</a><li>';
+                            + '<li><a target="_blank" href="' + url + '">' + purposeId + '</a></li>'
+                            + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳細</a><li>';
                     }
 
                     html += '</ul>';
