@@ -38,23 +38,26 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    var userPoolId = '';
-                    if (Array.isArray(data.agent.identifier)) {
-                        var tokenIssuerIdentifier = data.agent.identifier.find((i) => i.name === 'tokenIssuer');
-                        if (tokenIssuerIdentifier !== undefined) {
-                            userPoolId = tokenIssuerIdentifier.value.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    if (data.agent !== undefined && data.agent !== null && Object.keys(data.agent).length > 0) {
+                        var userPoolId = '';
+                        if (Array.isArray(data.agent.identifier)) {
+                            var tokenIssuerIdentifier = data.agent.identifier.find((i) => i.name === 'tokenIssuer');
+                            if (tokenIssuerIdentifier !== undefined) {
+                                userPoolId = tokenIssuerIdentifier.value.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                            }
                         }
-                    }
-                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
+                        var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
 
-                    var agentName = (typeof data.agent.name === 'string') ? data.agent.name : data.agent.id;
-                    if (typeof data.agent.name === 'object' && data.agent.name !== undefined) {
-                        agentName = data.agent.name.ja;
+                        var agentName = (typeof data.agent.name === 'string') ? data.agent.name : data.agent.id;
+                        if (typeof data.agent.name === 'object' && data.agent.name !== undefined) {
+                            agentName = data.agent.name.ja;
+                        }
+
+                        html += '<li><span class="badge badge-secondary">' + data.agent.typeOf + '</span></li>'
+                            + '<li><a target="_blank" href="' + url + '">' + agentName + '</a></li>';
+                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a><li>';
                     }
 
-                    html += '<li><span class="badge badge-secondary">' + data.agent.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + agentName + '</a></li>';
-                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a><li>';
                     html += '</ul>';
 
                     return html;
@@ -82,9 +85,9 @@ $(function () {
 
                         html += '<li><span class="badge badge-secondary">' + data.recipient.typeOf + '</span></li>'
                             + '<li><a target="_blank" href="' + url + '">' + recipientName + '</a></li>';
-                    }
 
-                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showRecipient" data-id="' + data.id + '">詳細</a><li>';
+                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showRecipient" data-id="' + data.id + '">詳細</a><li>';
+                    }
 
                     html += '</ul>';
 

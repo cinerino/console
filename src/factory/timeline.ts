@@ -36,50 +36,56 @@ export function createFromAction(params: {
         id: string;
         name: string;
         url?: string;
+    } = {
+        id: '',
+        name: 'Unknown'
     };
-    if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
-        let userPoolId = '';
-        let tokenIssuer = '';
-        if (Array.isArray(a.agent.identifier)) {
-            const tokenIssuerIdentifier = a.agent.identifier.find((i: any) => i.name === 'tokenIssuer');
-            if (tokenIssuerIdentifier !== undefined) {
-                tokenIssuer = tokenIssuerIdentifier.value;
-                userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+
+    if (a.agent !== undefined && a.agent !== null) {
+        if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
+            let userPoolId = '';
+            let tokenIssuer = '';
+            if (Array.isArray(a.agent.identifier)) {
+                const tokenIssuerIdentifier = a.agent.identifier.find((i: any) => i.name === 'tokenIssuer');
+                if (tokenIssuerIdentifier !== undefined) {
+                    tokenIssuer = tokenIssuerIdentifier.value;
+                    userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                }
             }
-        }
 
-        const url = (a.agent.memberOf !== undefined)
-            ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
-            : `/projects/${params.project.id}/userPools/${userPoolId}/clients/${a.agent.id}`;
+            const url = (a.agent.memberOf !== undefined)
+                ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
+                : `/projects/${params.project.id}/userPools/${userPoolId}/clients/${a.agent.id}`;
 
-        let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
-        if (a.agent.name !== undefined) {
-            agentName = a.agent.name;
+            let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
+            if (a.agent.name !== undefined) {
+                agentName = a.agent.name;
+            } else {
+                if (a.agent.familyName !== undefined) {
+                    agentName = `${a.agent.givenName} ${a.agent.familyName}`;
+                }
+            }
+
+            agent = {
+                id: a.agent.id,
+                name: agentName,
+                url: url
+            };
+        } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater
+            || a.agent.typeOf === cinerinoapi.factory.organizationType.Corporation) {
+            agent = {
+                id: a.agent.id,
+                name: (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja,
+                url: `/projects/${params.project.id}/sellers/${a.agent.id}`
+            };
         } else {
-            if (a.agent.familyName !== undefined) {
-                agentName = `${a.agent.givenName} ${a.agent.familyName}`;
-            }
+            agent = {
+                id: a.agent.id,
+                name: (a.agent.name !== undefined && a.agent.name !== null)
+                    ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
+                    : ''
+            };
         }
-
-        agent = {
-            id: a.agent.id,
-            name: agentName,
-            url: url
-        };
-    } else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater
-        || a.agent.typeOf === cinerinoapi.factory.organizationType.Corporation) {
-        agent = {
-            id: a.agent.id,
-            name: (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja,
-            url: `/projects/${params.project.id}/sellers/${a.agent.id}`
-        };
-    } else {
-        agent = {
-            id: a.agent.id,
-            name: (a.agent.name !== undefined && a.agent.name !== null)
-                ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
-                : ''
-        };
     }
 
     let actionName: string;
@@ -123,61 +129,66 @@ export function createFromAction(params: {
     let object: {
         name: string;
         url?: string;
-    };
-    if (Array.isArray(a.object)) {
-        switch (a.object[0].typeOf) {
-            case 'PaymentMethod':
-                object = { name: a.object[0].paymentMethod.name };
-                break;
-            case cinerinoapi.factory.actionType.PayAction:
-                object = { name: a.object[0].object.paymentMethod.typeOf };
-                break;
-            default:
-                object = a.object[0].typeOf;
-        }
-    } else {
-        switch (a.object.typeOf) {
-            case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
-                object = { name: '座席予約' };
-                break;
-            case cinerinoapi.factory.paymentMethodType.CreditCard:
-                object = { name: 'クレジットカード決済' };
-                break;
-            case cinerinoapi.factory.paymentMethodType.Account:
-                object = { name: '口座決済' };
-                break;
-            case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
-                object = { name: 'ポイントインセンティブ' };
-                break;
-            case 'Order':
-                object = { name: '注文', url: `/projects/${params.project.id}/orders/${a.object.orderNumber}` };
-                break;
-            case 'OwnershipInfo':
-                object = { name: '所有権', url: `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}` };
-                break;
-            case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                object = { name: 'ポイント' };
-                break;
-            case cinerinoapi.factory.actionType.SendAction:
-                if (a.object.typeOf === 'Order') {
-                    object = { name: '配送' };
-                } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                    object = { name: '送信' };
-                } else {
-                    object = { name: '送信' };
-                }
-                break;
-            case cinerinoapi.factory.creativeWorkType.EmailMessage:
-                object = { name: 'Eメール' };
-                break;
-            case 'PaymentMethod':
-                object = { name: a.object.object[0].paymentMethod.name };
-                break;
-            case cinerinoapi.factory.actionType.PayAction:
-                object = { name: a.object.object[0].paymentMethod.typeOf };
-                break;
-            default:
-                object = { name: a.object.typeOf };
+    } = { name: 'Unknown' };
+    if (a.object !== undefined && a.object !== null) {
+        if (Array.isArray(a.object)) {
+            switch (a.object[0].typeOf) {
+                case 'PaymentMethod':
+                    object = { name: a.object[0].paymentMethod.name };
+                    break;
+                case cinerinoapi.factory.actionType.PayAction:
+                    object = { name: a.object[0].object.paymentMethod.typeOf };
+                    break;
+                default:
+                    object = a.object[0].typeOf;
+            }
+        } else {
+            switch (a.object.typeOf) {
+                case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
+                    object = { name: '座席予約' };
+                    break;
+                case cinerinoapi.factory.paymentMethodType.CreditCard:
+                    object = { name: 'クレジットカード決済' };
+                    break;
+                case cinerinoapi.factory.paymentMethodType.Account:
+                    object = { name: '口座決済' };
+                    break;
+                case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
+                    object = { name: 'ポイントインセンティブ' };
+                    break;
+                case 'Order':
+                    object = { name: '注文', url: `/projects/${params.project.id}/orders/${a.object.orderNumber}` };
+                    break;
+                case 'OwnershipInfo':
+                    object = { name: '所有権', url: `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}` };
+                    break;
+                case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
+                    object = { name: 'ポイント' };
+                    break;
+                case cinerinoapi.factory.actionType.SendAction:
+                    if (a.object.typeOf === 'Order') {
+                        object = { name: '配送' };
+                    } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
+                        object = { name: '送信' };
+                    } else {
+                        object = { name: '送信' };
+                    }
+                    break;
+                case cinerinoapi.factory.creativeWorkType.EmailMessage:
+                    object = { name: 'Eメール' };
+                    break;
+                case 'PaymentMethod':
+                    object = { name: a.object.object[0].paymentMethod.name };
+                    break;
+                case cinerinoapi.factory.actionType.PayAction:
+                    object = { name: a.object.object[0].paymentMethod.typeOf };
+                    break;
+                case cinerinoapi.factory.chevre.transactionType.Reserve:
+                    object = { name: '予約取引' };
+                    break;
+                default:
+                    object = { name: a.object.typeOf };
+            }
         }
     }
 
