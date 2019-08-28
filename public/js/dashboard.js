@@ -209,7 +209,7 @@ $(function () {
         function () {
             updateActivities();
         },
-        1000
+        3000
     );
 
     $.getJSON(
@@ -221,7 +221,18 @@ $(function () {
     }).fail(function () {
     });
 });
+
 function updateCharts() {
+    updateDbStats(function () {
+    });
+    updateHealth(function () {
+    });
+    updateSalesAmountChart();
+    updateNumTransactions2salesAmountChart();
+    updateNumOrderItemsChart();
+}
+
+function updateActivities() {
     countNewOrder(function () {
     });
     aggregateExitRate(function () {
@@ -230,18 +241,8 @@ function updateCharts() {
     });
     countNewTransaction(function () {
     });
-    updateDbStats(function () {
-    });
-    updateHealth(function () {
-    });
     updateQueueCount(function () {
     });
-    updateSalesAmountChart();
-    updateNumTransactions2salesAmountChart();
-    updateNumOrderItemsChart();
-}
-
-function updateActivities() {
     searchLatestOrders(function () {
     });
     searchRecentActions(function () {
