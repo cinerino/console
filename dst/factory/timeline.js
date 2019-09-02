@@ -205,6 +205,18 @@ function createFromAction(params) {
                     }
                 }
                 break;
+            case cinerinoapi.factory.actionType.ReturnAction:
+                if (a.object.typeOf === 'Order') {
+                    if (Array.isArray(a.result)) {
+                        result = a.result.map((o) => {
+                            return {
+                                name: '所有権',
+                                url: `/projects/${params.project.id}/resources/${o.typeOf}/${o.id}`
+                            };
+                        });
+                    }
+                }
+                break;
             case cinerinoapi.factory.actionType.AuthorizeAction:
                 if (a.object.typeOf === 'OwnershipInfo') {
                     if (typeof a.result.code === 'string') {

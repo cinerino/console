@@ -48,11 +48,11 @@
                 <span><%= timeline.actionStatusDescription %></span>
 
                 <% if (Array.isArray(timeline.result)) { %>
-                (<% timeline.result.forEach((result) => { %>
+                (結果: <% timeline.result.forEach((result) => { %>
                 <a href="<%= result.url %>" target="_blank">
                     <span><%= result.name %></span>
                 </a>&nbsp;
-                <% }) %> が発生しました)
+                <% }) %>)
                 <% } %>
 
             </h3>

@@ -127,7 +127,7 @@ ownershipInfosRouter.all('/:id',
         }
         // アクション
         const actionsOnOwnershipInfos = [];
-        const timelines = [];
+        let timelines = [];
         try {
             // 注文配送
             const searchSendActionsResult = yield actionService.search({
@@ -140,6 +140,17 @@ ownershipInfosRouter.all('/:id',
                 }
             });
             actionsOnOwnershipInfos.push(...searchSendActionsResult.data);
+            // 注文返品
+            const searchReturnActionsResult = yield actionService.search({
+                limit: 100,
+                sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                typeOf: cinerinoapi.factory.actionType.ReturnAction,
+                result: {
+                    typeOf: { $in: [ownershipInfo.typeOf] },
+                    id: { $in: [ownershipInfo.id] }
+                }
+            });
+            actionsOnOwnershipInfos.push(...searchReturnActionsResult.data);
             // コード発行(チェックイン)
             const searchAuthorizeActionsResult = yield actionService.search({
                 limit: 100,
@@ -172,6 +183,7 @@ ownershipInfosRouter.all('/:id',
         catch (error) {
             // no op
         }
+        timelines = timelines.sort((a, b) => Number(a.startDate > b.startDate));
         res.render('ownershipInfos/edit', {
             moment: moment,
             message: message,

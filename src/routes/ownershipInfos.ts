@@ -127,7 +127,7 @@ ownershipInfosRouter.all(
 
             // アクション
             const actionsOnOwnershipInfos: cinerinoapi.factory.action.IAction<cinerinoapi.factory.action.IAttributes<any, any, any>>[] = [];
-            const timelines: TimelineFactory.ITimeline[] = [];
+            let timelines: TimelineFactory.ITimeline[] = [];
 
             try {
                 // 注文配送
@@ -141,6 +141,18 @@ ownershipInfosRouter.all(
                     }
                 });
                 actionsOnOwnershipInfos.push(...searchSendActionsResult.data);
+
+                // 注文返品
+                const searchReturnActionsResult = await actionService.search({
+                    limit: 100,
+                    sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                    typeOf: cinerinoapi.factory.actionType.ReturnAction,
+                    result: {
+                        typeOf: { $in: [ownershipInfo.typeOf] },
+                        id: { $in: [ownershipInfo.id] }
+                    }
+                });
+                actionsOnOwnershipInfos.push(...searchReturnActionsResult.data);
 
                 // コード発行(チェックイン)
                 const searchAuthorizeActionsResult = await actionService.search({
@@ -175,6 +187,8 @@ ownershipInfosRouter.all(
             } catch (error) {
                 // no op
             }
+
+            timelines = timelines.sort((a, b) => Number(a.startDate > b.startDate));
 
             res.render('ownershipInfos/edit', {
                 moment: moment,
