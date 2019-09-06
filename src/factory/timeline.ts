@@ -94,23 +94,22 @@ export function createFromAction(params: {
             actionName = '承認';
             break;
         case cinerinoapi.factory.actionType.ConfirmAction:
-            actionName = '確定';
-            break;
-        case cinerinoapi.factory.actionType.OrderAction:
             actionName = '注文';
             break;
         case cinerinoapi.factory.actionType.GiveAction:
-            actionName = '付与';
+            actionName = '確定';
             break;
-        case cinerinoapi.factory.actionType.SendAction:
-            if (a.object.typeOf === 'Order') {
-                actionName = '配送';
-            } else {
-                actionName = '送信';
-            }
+        case cinerinoapi.factory.actionType.InformAction:
+            actionName = '通知';
+            break;
+        case cinerinoapi.factory.actionType.OrderAction:
+            actionName = '付与';
             break;
         case cinerinoapi.factory.actionType.PayAction:
             actionName = '支払';
+            break;
+        case cinerinoapi.factory.actionType.RegisterAction:
+            actionName = '登録';
             break;
         case cinerinoapi.factory.actionType.ReturnAction:
             if (a.object.typeOf === 'Order') {
@@ -121,6 +120,16 @@ export function createFromAction(params: {
             break;
         case cinerinoapi.factory.actionType.RefundAction:
             actionName = '返金';
+            break;
+        case cinerinoapi.factory.actionType.SendAction:
+            if (a.object.typeOf === 'Order') {
+                actionName = '配送';
+            } else {
+                actionName = '送信';
+            }
+            break;
+        case cinerinoapi.factory.actionType.UnRegisterAction:
+            actionName = '登録解除';
             break;
         default:
             actionName = a.typeOf;
@@ -185,6 +194,9 @@ export function createFromAction(params: {
                     break;
                 case cinerinoapi.factory.chevre.transactionType.Reserve:
                     object = { name: '予約取引' };
+                    break;
+                case 'ProgramMembership':
+                    object = { name: '会員プログラム' };
                     break;
                 default:
                     object = { name: a.object.typeOf };
