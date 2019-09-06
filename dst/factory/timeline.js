@@ -59,20 +59,29 @@ function createFromAction(params) {
         case cinerinoapi.factory.actionType.AuthorizeAction:
             actionName = '承認';
             break;
-        case cinerinoapi.factory.actionType.ConfirmAction:
+        case cinerinoapi.factory.actionType.CheckAction:
+            actionName = '確認';
+            break;
+        case cinerinoapi.factory.actionType.DeleteAction:
+            actionName = '削除';
+            break;
+        case cinerinoapi.factory.actionType.OrderAction:
             actionName = '注文';
             break;
-        case cinerinoapi.factory.actionType.GiveAction:
+        case cinerinoapi.factory.actionType.ConfirmAction:
             actionName = '確定';
+            break;
+        case cinerinoapi.factory.actionType.GiveAction:
+            actionName = '付与';
             break;
         case cinerinoapi.factory.actionType.InformAction:
             actionName = '通知';
             break;
-        case cinerinoapi.factory.actionType.OrderAction:
-            actionName = '付与';
-            break;
         case cinerinoapi.factory.actionType.PayAction:
             actionName = '支払';
+            break;
+        case cinerinoapi.factory.actionType.PrintAction:
+            actionName = '印刷';
             break;
         case cinerinoapi.factory.actionType.RegisterAction:
             actionName = '登録';
@@ -104,6 +113,10 @@ function createFromAction(params) {
     }
     let object = { name: 'Unknown' };
     if (a.object !== undefined && a.object !== null) {
+        let url;
+        if (typeof a.object.typeOf === 'string' && typeof a.object.id === 'string') {
+            url = `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}`;
+        }
         if (Array.isArray(a.object)) {
             switch (a.object[0].typeOf) {
                 case 'PaymentMethod':
@@ -131,10 +144,11 @@ function createFromAction(params) {
                     object = { name: 'ポイントインセンティブ' };
                     break;
                 case 'Order':
-                    object = { name: '注文', url: `/projects/${params.project.id}/orders/${a.object.orderNumber}` };
+                    url = `/projects/${params.project.id}/orders/${a.object.orderNumber}`;
+                    object = { name: '注文' };
                     break;
                 case 'OwnershipInfo':
-                    object = { name: '所有権', url: `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}` };
+                    object = { name: '所有権' };
                     break;
                 case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
                     object = { name: 'ポイント' };
@@ -169,6 +183,7 @@ function createFromAction(params) {
                     object = { name: a.object.typeOf };
             }
         }
+        object.url = url;
     }
     let purpose;
     if (Array.isArray(a.purpose)) {
