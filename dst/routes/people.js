@@ -76,7 +76,8 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
         });
         const person = yield personService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
-            yield personService.deletById({ id: person.id });
+            const physically = req.body.physically === 'on';
+            yield personService.deletById({ id: person.id, physically: physically });
             res.status(http_status_1.NO_CONTENT)
                 .end();
             return;

@@ -77,7 +77,8 @@ peopleRouter.all(
             const person = await personService.findById({ id: req.params.id });
 
             if (req.method === 'DELETE') {
-                await personService.deletById({ id: person.id });
+                const physically = req.body.physically === 'on';
+                await personService.deletById({ id: person.id, physically: physically });
 
                 res.status(NO_CONTENT)
                     .end();

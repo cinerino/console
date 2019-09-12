@@ -391,7 +391,7 @@ function createAttributesFromBody(params) {
                 }
             });
         }
-        return Object.assign({ typeOf: body.typeOf, name: {
+        return Object.assign({ project: { typeOf: params.project.typeOf, id: params.project.id }, typeOf: body.typeOf, name: {
                 ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,
                 en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
             }, legalName: {

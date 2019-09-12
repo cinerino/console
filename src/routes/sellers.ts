@@ -428,6 +428,7 @@ async function createAttributesFromBody(params: {
     }
 
     return {
+        project: { typeOf: params.project.typeOf, id: params.project.id },
         typeOf: body.typeOf,
         name: {
             ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,

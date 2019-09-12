@@ -78,11 +78,12 @@ $(function () {
 
             var button = $(this);
             button.addClass('disabled');
+
             $.ajax({
                 url: '/projects/' + PROJECT_ID + '/people/' + person.id,
                 type: 'DELETE',
                 // dataType: 'json',
-                // data: $('form', $('#modal-confirmReturnOrder')).serialize()
+                data: $('form', $('#modal-confirmDelete')).serialize()
             }).done(function () {
                 alert('削除しました');
                 location.href = '/projects/' + PROJECT_ID + '/people';

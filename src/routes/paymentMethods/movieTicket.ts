@@ -99,6 +99,7 @@ movieTicketPaymentMethodRouter.all(
                 const checkAction = await paymentService.checkMovieTicket({
                     typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
                     movieTickets: [{
+                        project: { typeOf: req.project.typeOf, id: req.project.id },
                         typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
                         identifier: searchConditions.identifier,
                         accessCode: searchConditions.accessCode,

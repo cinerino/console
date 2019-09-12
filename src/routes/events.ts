@@ -153,19 +153,21 @@ eventsRouter.post(
                             a.push(...b.makesOffer.map(
                                 (offer) => {
                                     return {
+                                        data: {
+                                            importFrom: startFrom,
+                                            importThrough: startThrough,
+                                            locationBranchCode: offer.itemOffered.reservationFor.location.branchCode,
+                                            offeredThrough: offer.offeredThrough,
+                                            project: { typeOf: req.project.typeOf, id: req.project.id }
+                                        },
+                                        executionResults: [],
                                         name: <cinerinoapi.factory.taskName.ImportScreeningEvents>
                                             cinerinoapi.factory.taskName.ImportScreeningEvents,
-                                        status: cinerinoapi.factory.taskStatus.Ready,
-                                        runsAt: new Date(),
-                                        remainingNumberOfTries: 1,
                                         numberOfTried: 0,
-                                        executionResults: [],
-                                        data: {
-                                            offeredThrough: offer.offeredThrough,
-                                            locationBranchCode: offer.itemOffered.reservationFor.location.branchCode,
-                                            importFrom: startFrom,
-                                            importThrough: startThrough
-                                        }
+                                        project: { typeOf: req.project.typeOf, id: req.project.id },
+                                        remainingNumberOfTries: 1,
+                                        runsAt: new Date(),
+                                        status: cinerinoapi.factory.taskStatus.Ready
                                     };
                                 }
                             ));

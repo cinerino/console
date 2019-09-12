@@ -397,20 +397,28 @@ ordersRouter.post(
             if (sendEmailMessageActionAttributes === undefined) {
                 throw new cinerinoapi.factory.errors.NotFound('SendEmailMessage actionAttributes');
             }
-            const taskAttributes: cinerinoapi.factory.task.IAttributes<cinerinoapi.factory.taskName.SendEmailMessage> = {
-                name: cinerinoapi.factory.taskName.SendEmailMessage,
-                status: cinerinoapi.factory.taskStatus.Ready,
-                runsAt: new Date(),
-                remainingNumberOfTries: 3,
-                numberOfTried: 0,
-                executionResults: [],
-                data: {
-                    actionAttributes: sendEmailMessageActionAttributes
-                }
-            };
-            const task = await taskService.create(taskAttributes);
+            const taskAttributes: cinerinoapi.factory.task.IAttributes<cinerinoapi.factory.taskName.SendEmailMessage>[] =
+                sendEmailMessageActionAttributes.map((a) => {
+                    return {
+                        data: {
+                            actionAttributes: a
+                        },
+                        executionResults: [],
+                        name: cinerinoapi.factory.taskName.SendEmailMessage,
+                        numberOfTried: 0,
+                        project: { typeOf: req.project.typeOf, id: req.project.id },
+                        remainingNumberOfTries: 3,
+                        runsAt: new Date(),
+                        status: cinerinoapi.factory.taskStatus.Ready
+                    };
+                });
+
+            const tasks = await Promise.all(taskAttributes.map(async (t) => {
+                return taskService.create(t);
+            }));
+
             res.status(CREATED)
-                .json(task);
+                .json(tasks[0]);
         } catch (error) {
             next(error);
         }
