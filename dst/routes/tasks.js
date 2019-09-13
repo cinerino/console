@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const createDebug = require("debug");
 const express = require("express");
+const http_status_1 = require("http-status");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
@@ -71,6 +72,54 @@ tasksRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function
                 taskStatusChoices: taskStatusChoices
             });
         }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+tasksRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const message = undefined;
+        const taskService = new cinerinoapi.service.Task({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const task = yield taskService.findById({
+            name: req.query.name,
+            id: req.params.id
+        });
+        res.render('tasks/show', {
+            message: message,
+            task: task
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+tasksRouter.post('/:id/retry', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const taskService = new cinerinoapi.service.Task({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const task = yield taskService.findById({
+            name: req.query.name,
+            id: req.params.id
+        });
+        const newTaskAttributes = {
+            data: task.data,
+            executionResults: [],
+            name: task.name,
+            numberOfTried: 0,
+            project: task.project,
+            remainingNumberOfTries: 1,
+            runsAt: new Date(),
+            status: cinerinoapi.factory.taskStatus.Ready
+        };
+        const newTask = yield taskService.create(newTaskAttributes);
+        res.status(http_status_1.CREATED)
+            .json(newTask);
     }
     catch (error) {
         next(error);

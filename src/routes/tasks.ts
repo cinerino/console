@@ -3,12 +3,14 @@
  */
 import * as createDebug from 'debug';
 import * as express from 'express';
+import { CREATED } from 'http-status';
 import * as moment from 'moment';
 
 import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
 const tasksRouter = express.Router();
+
 /**
  * タスク検索
  */
@@ -68,5 +70,65 @@ tasksRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
+
+tasksRouter.all(
+    '/:id',
+    async (req, res, next) => {
+        try {
+            const message = undefined;
+
+            const taskService = new cinerinoapi.service.Task({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const task = await taskService.findById({
+                name: req.query.name,
+                id: req.params.id
+            });
+
+            res.render('tasks/show', {
+                message: message,
+                task: task
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+tasksRouter.post(
+    '/:id/retry',
+    async (req, res, next) => {
+        try {
+            const taskService = new cinerinoapi.service.Task({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const task = await taskService.findById({
+                name: req.query.name,
+                id: req.params.id
+            });
+
+            const newTaskAttributes: cinerinoapi.factory.task.IAttributes<any> = {
+                data: task.data,
+                executionResults: [],
+                name: task.name,
+                numberOfTried: 0,
+                project: task.project,
+                remainingNumberOfTries: 1,
+                runsAt: new Date(),
+                status: cinerinoapi.factory.taskStatus.Ready
+            };
+            const newTask = await taskService.create(newTaskAttributes);
+
+            res.status(CREATED)
+                .json(newTask);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 export default tasksRouter;
