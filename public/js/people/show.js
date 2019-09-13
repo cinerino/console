@@ -68,15 +68,16 @@ $(function () {
         }
     });
     deleteButton.click(function () {
+        var button = $(this);
+
         // クレジットカード所有確認
         searchCreditCards(function (creditCards) {
-            if (Array.isArray(creditCards) && creditCards.length > 0) {
-                alert('会員を削除する前にクレジットカードを削除してください');
+            // if (Array.isArray(creditCards) && creditCards.length > 0) {
+            //     alert('会員を削除する前にクレジットカードを削除してください');
 
-                return;
-            }
+            //     return;
+            // }
 
-            var button = $(this);
             button.addClass('disabled');
 
             $.ajax({

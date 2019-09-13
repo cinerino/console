@@ -128,51 +128,35 @@ ownershipInfosRouter.all('/:id',
         // アクション
         const actionsOnOwnershipInfos = [];
         let timelines = [];
+        const ownedFrom = moment(ownershipInfo.ownedFrom)
+            .toDate();
         try {
-            // 注文配送
+            // resultが所有権
             const searchSendActionsResult = yield actionService.search({
                 limit: 100,
                 sort: { startDate: cinerinoapi.factory.sortType.Ascending },
-                typeOf: cinerinoapi.factory.actionType.SendAction,
+                startFrom: ownedFrom,
+                // typeOf: cinerinoapi.factory.actionType.CheckAction,
+                // typeOf: cinerinoapi.factory.actionType.ReturnAction,
+                // typeOf: cinerinoapi.factory.actionType.SendAction,
                 result: {
                     typeOf: { $in: [ownershipInfo.typeOf] },
                     id: { $in: [ownershipInfo.id] }
                 }
             });
             actionsOnOwnershipInfos.push(...searchSendActionsResult.data);
-            // 注文返品
-            const searchReturnActionsResult = yield actionService.search({
-                limit: 100,
-                sort: { startDate: cinerinoapi.factory.sortType.Ascending },
-                typeOf: cinerinoapi.factory.actionType.ReturnAction,
-                result: {
-                    typeOf: { $in: [ownershipInfo.typeOf] },
-                    id: { $in: [ownershipInfo.id] }
-                }
-            });
-            actionsOnOwnershipInfos.push(...searchReturnActionsResult.data);
-            // コード発行(チェックイン)
+            // objectが所有権
             const searchAuthorizeActionsResult = yield actionService.search({
                 limit: 100,
                 sort: { startDate: cinerinoapi.factory.sortType.Ascending },
-                typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
+                startFrom: ownedFrom,
+                // typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
                 object: {
                     typeOf: { $in: [ownershipInfo.typeOf] },
                     id: { $in: [ownershipInfo.id] }
                 }
             });
             actionsOnOwnershipInfos.push(...searchAuthorizeActionsResult.data);
-            // トークンチェック(入場)
-            const searchCheckActionsResult = yield actionService.search({
-                limit: 100,
-                sort: { startDate: cinerinoapi.factory.sortType.Ascending },
-                typeOf: cinerinoapi.factory.actionType.CheckAction,
-                result: {
-                    typeOf: { $in: [ownershipInfo.typeOf] },
-                    id: { $in: [ownershipInfo.id] }
-                }
-            });
-            actionsOnOwnershipInfos.push(...searchCheckActionsResult.data);
             timelines.push(...actionsOnOwnershipInfos.map((a) => {
                 return TimelineFactory.createFromAction({
                     project: req.project,
