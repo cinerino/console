@@ -211,7 +211,7 @@ peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(this, 
             page: req.query.page,
             id: req.params.id,
             typeOfGood: {
-                typeOf: 'ProgramMembership'
+                typeOf: cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership
             },
             ownedFrom: moment()
                 .add(-1, 'month')

@@ -58,6 +58,8 @@ $(function () {
                         + '<br>'
                         + '<i class="fa fa-user"></i> ' + data.remainingAttendeeCapacity + ' remaining'
                         + '<br>'
+                        + '<span class="badge badge-secondary ' + data.eventStatus + '">' + data.eventStatus + '</span>'
+                        + '<br>'
                         + '</div>'
                         + '</li>'
                         + '</ul>';

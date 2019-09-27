@@ -95,3 +95,10 @@
 .badge.ReservationCancelled {
     @extend .badge-danger;
 }
+
+.badge.EventScheduled {
+    @extend .badge-success;
+}
+.badge.EventCancelled {
+    @extend .badge-danger;
+}

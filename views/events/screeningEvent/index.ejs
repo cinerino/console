@@ -39,36 +39,60 @@
                         <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint"
                             value="<%= req.project.settings.CHEVRE_BACKEND_ENDPOINT %>">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="name">イベント名</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="イベント名"
-                                    value="<%= searchConditions.name %>">
-                            </div>
-                            <div class="form-group">
-                                <label>販売者</label>
-                                <select multiple class="form-control" name="seller[ids][]">
-                                    <% sellers.forEach(function (seller) { %>
-                                    <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
-                                        Array.isArray(searchConditions.seller.ids) &&
-                                        searchConditions.seller.ids.indexOf(seller.id)>=
-                                        0) ? 'selected' : '' %>><%= seller.name.ja %></option>
-                                    <% }) %>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>開催日</label>
-
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name"
+                                            value="<%= searchConditions.name %>">
                                     </div>
-                                    <input type="text" class="form-control" name="startRange" id="reservation"
-                                        value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+
+                                    <div class="form-group">
+                                        <label>開催日</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="startRange" id="reservation"
+                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
                                 </div>
-                                <!-- /.input group -->
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Event Status</label>
+                                        <select multiple class="form-control" name="eventStatuses[]" size="10">
+                                            <% Object.values(EventStatusType).forEach(function (eventStatus) { %>
+                                            <% 
+                                                var selected = false;
+                                                selected = Array.isArray(searchConditions.eventStatuses) && searchConditions.eventStatuses.indexOf(eventStatus) >= 0;
+                                                %>
+                                            <option value="<%= eventStatus %>" <% if (selected) { %> selected <% } %>>
+                                                <%= eventStatus %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>販売者</label>
+                                        <select multiple class="form-control" name="seller[ids][]">
+                                            <% sellers.forEach(function (seller) { %>
+                                            <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
+                                                Array.isArray(searchConditions.seller.ids) &&
+                                                searchConditions.seller.ids.indexOf(seller.id)>=
+                                                0) ? 'selected' : '' %>><%= seller.name.ja %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -99,18 +123,18 @@
                         <table id="events-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>イベント</th>
-                                    <th>場所</th>
-                                    <th>作品</th>
-                                    <th>オファー</th>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Work Performed</th>
+                                    <th>Offers</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>イベント</th>
-                                    <th>場所</th>
-                                    <th>作品</th>
-                                    <th>オファー</th>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Work Performed</th>
+                                    <th>Offers</th>
                                 </tr>
                             </tfoot>
                         </table>

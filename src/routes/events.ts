@@ -59,6 +59,9 @@ eventsRouter.get(
             const searchConditions: cinerinoapi.factory.chevre.event.screeningEvent.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
+                eventStatuses: (req.query.eventStatuses !== undefined)
+                    ? req.query.eventStatuses
+                    : undefined,
                 typeOf: cinerinoapi.factory.chevre.eventType.ScreeningEvent,
                 superEvent: {
                     locationBranchCodes: superEventLocationBranchCodes
@@ -88,6 +91,7 @@ eventsRouter.get(
                 });
             } else {
                 res.render('events/screeningEvent/index', {
+                    EventStatusType: cinerinoapi.factory.chevre.eventStatusType,
                     moment: moment,
                     sellers: searchSellersResult.data,
                     searchConditions: searchConditions
