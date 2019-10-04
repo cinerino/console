@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -19,7 +20,7 @@ const movieTicketPaymentMethodRouter = express.Router();
 /**
  * 検索
  */
-movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const paymentMethodService = new cinerinoapi.service.PaymentMethod({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -59,7 +60,7 @@ movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(this, void 
 /**
  * ムビチケ認証
  */
-movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const paymentService = new cinerinoapi.service.Payment({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -146,7 +147,7 @@ movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(this,
 /**
  * ムビチケ詳細
  */
-movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const message = undefined;
         const paymentMethodService = new cinerinoapi.service.PaymentMethod({
@@ -175,7 +176,7 @@ movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter
 /**
  * ムビチケの注文検索
  */
-movieTicketPaymentMethodRouter.get('/:identifier/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+movieTicketPaymentMethodRouter.get('/:identifier/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,

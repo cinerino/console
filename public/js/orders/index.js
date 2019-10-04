@@ -63,13 +63,12 @@ $(function () {
                         + '<li>' + data.customer.email + '</li>'
                         + '<li>' + data.customer.telephone + '</li>';
 
+                    html += '<li>'
+                        + '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomer" data-orderNumber="' + data.orderNumber + '">詳細</a>';
                     if (Array.isArray(data.customer.identifier)) {
-                        // data.customer.identifier.slice(0, 2).forEach(function (i) {
-                        //     html += '<li>' + '<span class="badge badge-secondary">' + i.name + '</span> ' + i.value.toString() + '</li>';
-                        // });
-
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
+                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
                     }
+                    html += '<li>';
 
                     html += '</ul>';
 
@@ -86,6 +85,7 @@ $(function () {
                         + '<li>' + data.seller.name + '</li>'
                         + '<li><a target="_blank" href="' + data.seller.url + '">' + data.seller.url + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
+                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSeller" data-orderNumber="' + data.orderNumber + '">詳細</a><li>'
                         + '</ul>';
 
                     return html;
@@ -118,6 +118,8 @@ $(function () {
                             if (payment.totalPaymentDue !== undefined) {
                                 listHtml += '<li><span>' + payment.totalPaymentDue.value + ' ' + payment.totalPaymentDue.currency + '</span></li>'
                             }
+
+                            listHtml += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPaymentMethods" data-orderNumber="' + data.orderNumber + '">詳細</a><li>';
 
                             return listHtml;
                         }).join('')
@@ -164,10 +166,16 @@ $(function () {
         .popover('show');
 
     $(document).on('click', '.showCustomerIdentifier', function () {
-        var orderNumber = $(this).data('ordernumber');
-        console.log('showing... orderNumber:', orderNumber);
-
-        showCustomerIdentifier(orderNumber);
+        showCustomerIdentifier($(this).data('ordernumber'));
+    });
+    $(document).on('click', '.showCustomer', function () {
+        showCustomer($(this).data('ordernumber'));
+    });
+    $(document).on('click', '.showSeller', function () {
+        showSeller($(this).data('ordernumber'));
+    });
+    $(document).on('click', '.showPaymentMethods', function () {
+        showPaymentMethods($(this).data('ordernumber'));
     });
 
     /**
@@ -186,6 +194,60 @@ $(function () {
         var title = 'Order `' + order.orderNumber + '` Customer Identifier';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.customer.identifier, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+    function showCustomer(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-customer-identifier');
+        var title = 'Order `' + order.orderNumber + '` Customer';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.customer, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+    function showSeller(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-customer-identifier');
+        var title = 'Order `' + order.orderNumber + '` Seller';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.seller, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+    function showPaymentMethods(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-customer-identifier');
+        var title = 'Order `' + order.orderNumber + '` Payment Methods';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.paymentMethods, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);

@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -23,7 +24,7 @@ const peopleRouter = express.Router();
  */
 peopleRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         const personService = new cinerinoapi.service.Person({
@@ -63,7 +64,7 @@ peopleRouter.get('',
 /**
  * 会員編集
  */
-peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message = '';
         const personService = new cinerinoapi.service.Person({
@@ -92,7 +93,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
                     name: 'email_verified',
                     value: 'true'
                 });
-                const profile = Object.assign({}, req.body, { additionalProperty: additionalProperty });
+                const profile = Object.assign(Object.assign({}, req.body), { additionalProperty: additionalProperty });
                 yield personService.updateProfile(Object.assign({ id: req.params.id }, profile));
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
@@ -144,7 +145,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fun
 /**
  * 会員注文検索
  */
-peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -172,7 +173,7 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void
 /**
  * 予約検索
  */
-peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -200,7 +201,7 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(this, void 0
 /**
  * 会員プログラム検索
  */
-peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -228,7 +229,7 @@ peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(this, 
 /**
  * クレジットカード検索
  */
-peopleRouter.get('/:id/creditCards', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.get('/:id/creditCards', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -244,7 +245,7 @@ peopleRouter.get('/:id/creditCards', (req, res, next) => __awaiter(this, void 0,
 /**
  * クレジットカード削除
  */
-peopleRouter.delete('/:id/creditCards/:cardSeq', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+peopleRouter.delete('/:id/creditCards/:cardSeq', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
             endpoint: req.project.settings.API_ENDPOINT,

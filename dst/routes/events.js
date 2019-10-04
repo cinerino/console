@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -24,7 +25,7 @@ const eventsRouter = express.Router();
 /**
  * 上映イベント検索
  */
-eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         const eventService = new cinerinoapi.service.Event({
@@ -102,7 +103,7 @@ eventsRouter.post('/screeningEvent/import', ...[
         .not()
         .isEmpty()
         .withMessage((_, options) => `${options.path} is required`)
-], validator_1.default, (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+], validator_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const sellerService = new cinerinoapi.service.Seller({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -155,7 +156,7 @@ eventsRouter.post('/screeningEvent/import', ...[
             }
             return a;
         }, []);
-        const tasks = yield Promise.all(taskAttributes.map((a) => __awaiter(this, void 0, void 0, function* () {
+        const tasks = yield Promise.all(taskAttributes.map((a) => __awaiter(void 0, void 0, void 0, function* () {
             return taskService.create(a);
         })));
         res.status(http_status_1.CREATED)
@@ -168,7 +169,7 @@ eventsRouter.post('/screeningEvent/import', ...[
 /**
  * 上映イベント詳細
  */
-eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -191,7 +192,7 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(this, void
 /**
  * 上映イベントの注文検索
  */
-eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
             endpoint: req.project.settings.API_ENDPOINT,

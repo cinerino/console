@@ -118,7 +118,7 @@ ownershipInfosRouter.all(
             });
             const searchOwnershipInfosResult = await ownershipInfoService.search({
                 limit: 1,
-                ids: [<string>req.params.id]
+                ids: [req.params.id]
             });
             const ownershipInfo = searchOwnershipInfosResult.data.shift();
             if (ownershipInfo === undefined) {

@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -19,7 +20,7 @@ const cinerinoapi = require("../cinerinoapi");
 const TimelineFactory = require("../factory/timeline");
 // const debug = createDebug('cinerino-console:routes');
 const dashboardRouter = express.Router();
-dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -68,7 +69,7 @@ dashboardRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, func
         next(error);
     }
 }));
-dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -91,7 +92,7 @@ dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(this, void 0
         next(error);
     }
 }));
-dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -123,7 +124,7 @@ dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(this, vo
         next(error);
     }
 }));
-dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const actionService = new cinerinoapi.service.Action({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -151,7 +152,7 @@ dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(this, void 0,
         next(error);
     }
 }));
-dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -175,7 +176,7 @@ dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(this, 
         next(error);
     }
 }));
-dashboardRouter.get('/timelines', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/timelines', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const timelines = [];
         const actionService = new cinerinoapi.service.Action({
@@ -208,7 +209,7 @@ dashboardRouter.get('/timelines', (req, res, next) => __awaiter(this, void 0, vo
         next(error);
     }
 }));
-dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -229,7 +230,7 @@ dashboardRouter.get('/orders', (req, res, next) => __awaiter(this, void 0, void 
         next(error);
     }
 }));
-dashboardRouter.get('/dbStats', (req, res) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/dbStats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -241,7 +242,7 @@ dashboardRouter.get('/dbStats', (req, res) => __awaiter(this, void 0, void 0, fu
             // tslint:disable-next-line:no-magic-numbers
             expectedStatusCodes: [200]
         })
-            .then((response) => __awaiter(this, void 0, void 0, function* () {
+            .then((response) => __awaiter(void 0, void 0, void 0, function* () {
             return response.json();
         }));
         res.json(stats);
@@ -253,7 +254,7 @@ dashboardRouter.get('/dbStats', (req, res) => __awaiter(this, void 0, void 0, fu
         });
     }
 }));
-dashboardRouter.get('/health', (req, res) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/health', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -265,7 +266,7 @@ dashboardRouter.get('/health', (req, res) => __awaiter(this, void 0, void 0, fun
             // tslint:disable-next-line:no-magic-numbers
             expectedStatusCodes: [200]
         })
-            .then((response) => __awaiter(this, void 0, void 0, function* () {
+            .then((response) => __awaiter(void 0, void 0, void 0, function* () {
             const version = response.headers.get('X-API-Version');
             return {
                 version: version,
@@ -281,7 +282,7 @@ dashboardRouter.get('/health', (req, res) => __awaiter(this, void 0, void 0, fun
         });
     }
 }));
-dashboardRouter.get('/queueCount', (req, res) => __awaiter(this, void 0, void 0, function* () {
+dashboardRouter.get('/queueCount', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
             endpoint: req.project.settings.API_ENDPOINT,

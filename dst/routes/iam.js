@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -21,7 +22,7 @@ const iamRouter = express.Router();
 /**
  * IAMユーザー検索
  */
-iamRouter.get('/users', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+iamRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         const iamService = new cinerinoapi.service.IAM({
@@ -61,7 +62,7 @@ iamRouter.get('/users', (req, res, next) => __awaiter(this, void 0, void 0, func
 /**
  * IAMユーザー編集
  */
-iamRouter.all('/users/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message = '';
         const iamService = new cinerinoapi.service.IAM({
@@ -114,7 +115,7 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(this, void 0, void 0, 
 /**
  * ユーザー注文検索
  */
-iamRouter.get('/users/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+iamRouter.get('/users/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,

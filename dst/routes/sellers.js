@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -24,7 +25,7 @@ const sellersRouter = express.Router();
 /**
  * 販売者検索
  */
-sellersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const sellerService = new cinerinoapi.service.Seller({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -57,7 +58,7 @@ sellersRouter.get('', (req, res, next) => __awaiter(this, void 0, void 0, functi
 /**
  * 販売者追加
  */
-sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         let attributes;
@@ -103,7 +104,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(this, void 0, void 0, fu
 /**
  * 販売者編集
  */
-sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
         let attributes;
@@ -126,7 +127,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, fu
                     auth: req.user.authClient
                 });
                 const accountPaymentsAccepted = seller.paymentAccepted.filter((p) => p.paymentMethodType === cinerinoapi.factory.paymentMethodType.Account);
-                yield Promise.all(accountPaymentsAccepted.map((paymentAccepted) => __awaiter(this, void 0, void 0, function* () {
+                yield Promise.all(accountPaymentsAccepted.map((paymentAccepted) => __awaiter(void 0, void 0, void 0, function* () {
                     debug('closing account...', paymentAccepted);
                     yield accountService.close({
                         accountType: paymentAccepted.accountType,
@@ -413,7 +414,7 @@ function createAttributesFromBody(params) {
 /**
  * 劇場の注文検索
  */
-sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,

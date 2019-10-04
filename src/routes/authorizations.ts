@@ -117,7 +117,7 @@ authorizationsRouter.all(
 
             const searchAuthorizationsResult = await authorizationService.search({
                 limit: 1,
-                id: { $in: [<string>req.params.id] }
+                id: { $in: [req.params.id] }
             });
             const authorization = searchAuthorizationsResult.data.shift();
             if (authorization === undefined) {

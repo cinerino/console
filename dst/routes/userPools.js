@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -23,7 +24,7 @@ const userPoolsRouter = express.Router();
 userPoolsRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         if (req.query.format === 'datatable') {
@@ -56,7 +57,7 @@ userPoolsRouter.get('',
 }));
 userPoolsRouter.get('/:userPoolId', 
 // tslint:disable-next-line:max-func-body-length
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -79,7 +80,7 @@ userPoolsRouter.get('/:userPoolId',
 /**
  * ユーザープールの注文検索
  */
-userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -111,7 +112,7 @@ userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(this, v
 }));
 userPoolsRouter.get('/:userPoolId/clients/:clientId', 
 // tslint:disable-next-line:max-func-body-length
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -133,7 +134,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId',
 /**
  * クライアントの注文検索
  */
-userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -165,7 +166,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) =>
 }));
 userPoolsRouter.get('/:userPoolId/people/:id', 
 // tslint:disable-next-line:max-func-body-length
-(req, res, next) => __awaiter(this, void 0, void 0, function* () {
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (req.project.settings.cognito !== undefined) {
             switch (req.params.userPoolId) {

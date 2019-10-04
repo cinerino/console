@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,7 +36,7 @@ const userPools_1 = require("./userPools");
 const waiter_1 = require("./waiter");
 const projects = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
 const projectsRouter = express.Router();
-projectsRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const message = '';
         const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
@@ -44,7 +45,7 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, f
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: projectFromEnvironment.id });
-        req.project = Object.assign({}, project, { settings: Object.assign({}, project.settings, projectFromEnvironment.settings) });
+        req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), projectFromEnvironment.settings) });
         res.render('projects/edit', {
             message: message,
             project: req.project
@@ -54,7 +55,7 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(this, void 0, void 0, f
         next(error);
     }
 }));
-projectsRouter.all('/:id/*', (req, _, next) => __awaiter(this, void 0, void 0, function* () {
+projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     // ルーティングからプロジェクトをセット
     const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
     const projectService = new cinerinoapi.service.Project({
@@ -62,7 +63,7 @@ projectsRouter.all('/:id/*', (req, _, next) => __awaiter(this, void 0, void 0, f
         auth: req.user.authClient
     });
     const project = yield projectService.findById({ id: projectFromEnvironment.id });
-    req.project = Object.assign({}, project, { settings: Object.assign({}, project.settings, projectFromEnvironment.settings) });
+    req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), projectFromEnvironment.settings) });
     next();
 }));
 projectsRouter.use('/:id/accounts', accounts_1.default);
