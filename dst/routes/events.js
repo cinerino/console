@@ -69,7 +69,7 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(void 0, void 0
             seller: req.query.seller
         });
         if (req.query.format === 'datatable') {
-            const searchScreeningEventsResult = yield eventService.searchScreeningEvents(searchConditions);
+            const searchScreeningEventsResult = yield eventService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchScreeningEventsResult.totalCount,
@@ -175,7 +175,7 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, vo
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const event = yield eventService.findScreeningEventById({
+        const event = yield eventService.findById({
             id: req.params.id
         });
         res.render('events/screeningEvent/show', {
@@ -202,7 +202,7 @@ eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(voi
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const event = yield eventService.findScreeningEventById({
+        const event = yield eventService.findById({
             id: req.params.id
         });
         // const reservationStartDate = moment(`${event.coaInfo.rsvStartDate} 00:00:00+09:00`, 'YYYYMMDD HH:mm:ssZ').toDate();

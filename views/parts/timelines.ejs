@@ -26,6 +26,10 @@
             <h3 class="timeline-header">
                 <a href="<%= timeline.agent.url %>" target="_blank"><%= timeline.agent.name %></a> が
 
+                <% if (timeline.recipient !== undefined) { %>
+                <a href="<%= timeline.recipient.url %>" target="_blank"><%= timeline.recipient.name %></a> に
+                <% } %>
+
                 <% if (timeline.purpose !== undefined) { %>
                 <% if (timeline.purpose.url !== undefined) { %>
                 <a href="<%= timeline.purpose.url %>" target="_blank">

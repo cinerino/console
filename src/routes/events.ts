@@ -13,6 +13,7 @@ import validator from '../middlewares/validator';
 
 const debug = createDebug('cinerino-console:routes:events');
 const eventsRouter = express.Router();
+
 /**
  * 上映イベント検索
  */
@@ -82,7 +83,7 @@ eventsRouter.get(
                 }
             };
             if (req.query.format === 'datatable') {
-                const searchScreeningEventsResult = await eventService.searchScreeningEvents(searchConditions);
+                const searchScreeningEventsResult = await eventService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
                     recordsTotal: searchScreeningEventsResult.totalCount,
@@ -100,7 +101,9 @@ eventsRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
+
 /**
  * 上映イベントインポート
  */
@@ -190,7 +193,9 @@ eventsRouter.post(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
+
 /**
  * 上映イベント詳細
  */
@@ -202,7 +207,7 @@ eventsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const event = await eventService.findScreeningEventById({
+            const event = await eventService.findById({
                 id: req.params.id
             });
             res.render('events/screeningEvent/show', {
@@ -214,7 +219,9 @@ eventsRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
+
 /**
  * 上映イベントの注文検索
  */
@@ -230,7 +237,7 @@ eventsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const event = await eventService.findScreeningEventById({
+            const event = await eventService.findById({
                 id: req.params.id
             });
             // const reservationStartDate = moment(`${event.coaInfo.rsvStartDate} 00:00:00+09:00`, 'YYYYMMDD HH:mm:ssZ').toDate();
@@ -254,5 +261,7 @@ eventsRouter.get(
         } catch (error) {
             next(error);
         }
-    });
+    }
+);
+
 export default eventsRouter;

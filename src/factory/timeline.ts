@@ -10,6 +10,11 @@ export interface ITimeline {
         name: string;
         url?: string;
     };
+    recipient?: {
+        id: string;
+        name: string;
+        url?: string;
+    };
     actionName: string;
     object: {
         name: string;
@@ -84,6 +89,62 @@ export function createFromAction(params: {
                 name: (a.agent.name !== undefined && a.agent.name !== null)
                     ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
                     : ''
+            };
+        }
+    }
+
+    let recipient: {
+        id: string;
+        name: string;
+        url?: string;
+    } | undefined;
+
+    if (a.recipient !== undefined && a.recipient !== null) {
+        if (a.recipient.typeOf === cinerinoapi.factory.personType.Person) {
+            let userPoolId = '';
+            let tokenIssuer = '';
+            if (Array.isArray(a.recipient.identifier)) {
+                const tokenIssuerIdentifier = a.recipient.identifier.find((i: any) => i.name === 'tokenIssuer');
+                if (tokenIssuerIdentifier !== undefined) {
+                    tokenIssuer = tokenIssuerIdentifier.value;
+                    userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                }
+            }
+
+            const url = (a.recipient.memberOf !== undefined)
+                ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.recipient.id}`
+                : `/projects/${params.project.id}/userPools/${userPoolId}/clients/${a.recipient.id}`;
+
+            let recipientName = (typeof a.recipient.url === 'string') ? a.recipient.url
+                : (typeof a.recipient.id === 'string') ? a.recipient.id : a.recipient.typeOf;
+            if (a.recipient.name !== undefined) {
+                recipientName = a.recipient.name;
+            } else {
+                if (a.recipient.familyName !== undefined) {
+                    recipientName = `${a.recipient.givenName} ${a.recipient.familyName}`;
+                }
+            }
+
+            recipient = {
+                id: a.recipient.id,
+                name: recipientName,
+                url: url
+            };
+        } else if (a.recipient.typeOf === cinerinoapi.factory.organizationType.MovieTheater
+            || a.recipient.typeOf === cinerinoapi.factory.organizationType.Corporation) {
+            recipient = {
+                id: a.recipient.id,
+                name: (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja,
+                url: (typeof a.recipient.url === 'string') ? a.recipient.url : `/projects/${params.project.id}/sellers/${a.recipient.id}`
+
+            };
+        } else {
+            recipient = {
+                id: a.recipient.id,
+                name: (a.recipient.name !== undefined && a.recipient.name !== null)
+                    ? (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja
+                    : (typeof a.recipient.url === 'string') ? a.recipient.url : a.recipient.id,
+                url: a.recipient.url
             };
         }
     }
@@ -328,6 +389,7 @@ export function createFromAction(params: {
     return {
         action: a,
         agent,
+        recipient,
         actionName,
         object,
         purpose,

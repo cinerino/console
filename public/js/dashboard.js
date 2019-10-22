@@ -809,6 +809,16 @@ function searchRecentActions(cb) {
 
                 html += '<span class="product-description overflow-auto" style="white-space: normal;">';
 
+                if (timeline.recipient !== undefined) {
+                    var recipientName = String(timeline.recipient.name);
+                    if (recipientName.length > 40) {
+                        recipientName = String(timeline.recipient.name).slice(0, 40) + '...';
+                    }
+                    html += '<a href="' + timeline.recipient.url + '" target="_blank">'
+                        + '<span>' + recipientName + '</span>'
+                        + '</a> に';
+                }
+
                 if (timeline.purpose !== undefined) {
                     html += '<a href="' + timeline.purpose.url + '" target="_blank">'
                         + '<span>' + timeline.purpose.name + '</span>'

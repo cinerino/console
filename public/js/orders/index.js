@@ -25,6 +25,7 @@ $(function () {
                         + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
                         + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
                         + '<li>' + data.orderDate + '</li>'
+                        + '<li>' + data.dateReturned + '</li>'
                         + '<li><span class="badge ' + data.orderStatus + '">' + data.orderStatus + '</span></li>'
                         + '</ul>';
 
@@ -129,9 +130,48 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + JSON.stringify(data.discounts) + '</li>'
-                        + '</ul>';
+                    var html = '<ul class="list-unstyled">';
+
+                    if (data.returner !== undefined && data.returner !== null) {
+                        var userPoolId = '';
+                        var tokenIssuer = '';
+                        var clientId = '';
+                        if (Array.isArray(data.returner.identifier)) {
+                            var tokenIssuerIdentifier = data.returner.identifier.find((i) => i.name === 'tokenIssuer');
+                            var clienIdIdentifier = data.returner.identifier.find((i) => i.name === 'clientId');
+                            if (tokenIssuerIdentifier !== undefined) {
+                                tokenIssuer = tokenIssuerIdentifier.value;
+                                userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                            }
+                            if (clienIdIdentifier !== undefined) {
+                                clientId = clienIdIdentifier.value;
+                            }
+                        }
+
+                        html += '<li><span class="badge badge-info">' + data.returner.typeOf + '</span></li>'
+                            + '<li><span class="badge badge-warning">' + ((data.returner.memberOf !== undefined) ? data.returner.memberOf.membershipNumber : '') + '</span></li>'
+                            + '<li>'
+                            + '<a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
+                            + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
+                            + '</li>';
+
+                        var url = '/projects/' + PROJECT_ID + '/resources/' + data.returner.typeOf + '/' + data.returner.id + '?userPoolId=' + userPoolId;
+                        html += '<li><a target="_blank" href="' + url + '">' + data.returner.id + '</a></li>'
+                            + '<li>' + data.returner.name + '</li>'
+                            + '<li>' + data.returner.email + '</li>'
+                            + '<li>' + data.returner.telephone + '</li>';
+
+                        html += '<li>'
+                            + '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturner" data-orderNumber="' + data.orderNumber + '">詳細</a>';
+                        if (Array.isArray(data.returner.identifier)) {
+                            html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturnerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
+                        }
+                        html += '<li>';
+                    }
+
+                    html += '</ul>';
+
+                    return html;
                 }
             }
         ]
@@ -177,6 +217,12 @@ $(function () {
     $(document).on('click', '.showPaymentMethods', function () {
         showPaymentMethods($(this).data('ordernumber'));
     });
+    $(document).on('click', '.showReturnerIdentifier', function () {
+        showReturnerIdentifier($(this).data('ordernumber'));
+    });
+    $(document).on('click', '.showReturner', function () {
+        showReturner($(this).data('ordernumber'));
+    });
 
     /**
      * 注文のCustomer Identifierを表示する
@@ -190,7 +236,7 @@ $(function () {
             return order.orderNumber === orderNumber
         })
 
-        var modal = $('#modal-customer-identifier');
+        var modal = $('#modal-order');
         var title = 'Order `' + order.orderNumber + '` Customer Identifier';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.customer.identifier, null, '\t')
@@ -208,7 +254,7 @@ $(function () {
             return order.orderNumber === orderNumber
         })
 
-        var modal = $('#modal-customer-identifier');
+        var modal = $('#modal-order');
         var title = 'Order `' + order.orderNumber + '` Customer';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.customer, null, '\t')
@@ -226,7 +272,7 @@ $(function () {
             return order.orderNumber === orderNumber
         })
 
-        var modal = $('#modal-customer-identifier');
+        var modal = $('#modal-order');
         var title = 'Order `' + order.orderNumber + '` Seller';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.seller, null, '\t')
@@ -244,10 +290,46 @@ $(function () {
             return order.orderNumber === orderNumber
         })
 
-        var modal = $('#modal-customer-identifier');
+        var modal = $('#modal-order');
         var title = 'Order `' + order.orderNumber + '` Payment Methods';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.paymentMethods, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+    function showReturnerIdentifier(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-order');
+        var title = 'Order `' + order.orderNumber + '` Returner Identifier';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.returner.identifier, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+    function showReturner(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-order');
+        var title = 'Order `' + order.orderNumber + '` Returner';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.returner, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
