@@ -41,6 +41,9 @@ $(function () {
                         + '<li><span class="text-muted">' + data.additionalTicketText + '</span></li>';
 
                     html += '<li>'
+                    if (Array.isArray(data.identifier)) {
+                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showIdentifier" data-id="' + data.id + '">識別子</a>';
+                    }
                     if (Array.isArray(data.additionalProperty)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAdditionalProperty" data-id="' + data.id + '">追加特性</a>';
                     }
@@ -145,6 +148,13 @@ $(function () {
         showUnderNameIdentifier(id);
     });
 
+    $(document).on('click', '.showIdentifier', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showIdentifier(id);
+    });
+
     $(document).on('click', '.showAdditionalProperty', function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
@@ -181,6 +191,25 @@ $(function () {
         modal.modal();
     }
 
+    function showIdentifier(id) {
+        var reservations = table
+            .rows()
+            .data()
+            .toArray();
+        var reservation = reservations.find(function (r) {
+            return r.id === id
+        })
+
+        var modal = $('#modal-additionalProperty');
+        var title = 'Reservation `' + reservation.id + '` Identifier';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(reservation.identifier, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+
     /**
      * 予約追加特性を表示する
      */
@@ -202,6 +231,7 @@ $(function () {
         modal.find('.modal-body').html(body);
         modal.modal();
     }
+
     /**
      * 予約価格仕様を表示する
      */

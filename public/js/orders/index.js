@@ -69,6 +69,9 @@ $(function () {
                     if (Array.isArray(data.customer.identifier)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
                     }
+                    if (Array.isArray(data.customer.additionalProperty)) {
+                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerAdditionalProperty" data-orderNumber="' + data.orderNumber + '">追加特性</a>';
+                    }
                     html += '<li>';
 
                     html += '</ul>';
@@ -208,6 +211,9 @@ $(function () {
     $(document).on('click', '.showCustomerIdentifier', function () {
         showCustomerIdentifier($(this).data('ordernumber'));
     });
+    $(document).on('click', '.showCustomerAdditionalProperty', function () {
+        showCustomerAdditionalProperty($(this).data('ordernumber'));
+    });
     $(document).on('click', '.showCustomer', function () {
         showCustomer($(this).data('ordernumber'));
     });
@@ -245,6 +251,26 @@ $(function () {
         modal.find('.modal-body').html(body);
         modal.modal();
     }
+
+    function showCustomerAdditionalProperty(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-order');
+        var title = 'Order `' + order.orderNumber + '` Customer AdditionalProperty';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.customer.additionalProperty, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+
     function showCustomer(orderNumber) {
         var orders = table
             .rows()
