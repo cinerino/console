@@ -72,7 +72,7 @@ $(function () {
                     if (Array.isArray(data.customer.additionalProperty)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerAdditionalProperty" data-orderNumber="' + data.orderNumber + '">追加特性</a>';
                     }
-                    html += '<li>';
+                    html += '</li>';
 
                     html += '</ul>';
 
@@ -89,7 +89,7 @@ $(function () {
                         + '<li>' + data.seller.name + '</li>'
                         + '<li><a target="_blank" href="' + data.seller.url + '">' + data.seller.url + '</a></li>'
                         + '<li>' + data.seller.telephone + '</li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSeller" data-orderNumber="' + data.orderNumber + '">詳細</a><li>'
+                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSeller" data-orderNumber="' + data.orderNumber + '">詳細</a></li>'
                         + '</ul>';
 
                     return html;
@@ -123,7 +123,7 @@ $(function () {
                                 listHtml += '<li><span>' + payment.totalPaymentDue.value + ' ' + payment.totalPaymentDue.currency + '</span></li>'
                             }
 
-                            listHtml += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPaymentMethods" data-orderNumber="' + data.orderNumber + '">詳細</a><li>';
+                            listHtml += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPaymentMethods" data-orderNumber="' + data.orderNumber + '">詳細</a></li>';
 
                             return listHtml;
                         }).join('')
@@ -169,7 +169,7 @@ $(function () {
                         if (Array.isArray(data.returner.identifier)) {
                             html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturnerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
                         }
-                        html += '<li>';
+                        html += '</li>';
                     }
 
                     html += '</ul>';
