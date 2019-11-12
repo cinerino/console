@@ -215,7 +215,7 @@ function createAttributesFromBody(params) {
                             }
                         }
                         movieTheaterFromChevre = {
-                            project: params.req.project,
+                            project: { typeOf: params.req.project.typeOf, id: params.req.project.id },
                             typeOf: cinerinoapi.factory.chevre.placeType.MovieTheater,
                             branchCode: theaterFromCOA.theaterCode,
                             name: {

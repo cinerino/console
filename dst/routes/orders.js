@@ -60,9 +60,23 @@ ordersRouter.get('',
             // no op
         }
         let identifiers;
+        let customerIdentifiers;
+        if (req.query.identifier !== undefined) {
+            if (req.query.identifier.$in !== '') {
+                const splitted = req.query.identifier.$in.split(':');
+                if (splitted.length > 1) {
+                    identifiers = [
+                        {
+                            name: splitted[0],
+                            value: splitted[1]
+                        }
+                    ];
+                }
+            }
+        }
         if (req.query.customer !== undefined) {
             if (Array.isArray(req.query.customer.userPoolClients)) {
-                identifiers = req.query.customer.userPoolClients.map((userPoolClient) => {
+                customerIdentifiers = req.query.customer.userPoolClients.map((userPoolClient) => {
                     return {
                         name: 'clientId',
                         value: userPoolClient
@@ -72,7 +86,7 @@ ordersRouter.get('',
             if (req.query.customer.identifiers !== '') {
                 const splitted = req.query.customer.identifiers.split(':');
                 if (splitted.length > 1) {
-                    identifiers = [
+                    customerIdentifiers = [
                         {
                             name: splitted[0],
                             value: splitted[1]
@@ -86,13 +100,12 @@ ordersRouter.get('',
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
             seller: {
-                // typeOf: cinerinoapi.factory.organizationType.MovieTheater,
                 ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                     ? req.query.seller.ids
                     : undefined
             },
+            identifier: { $in: identifiers },
             customer: {
-                // typeOf: cinerinoapi.factory.personType.Person,
                 ids: (req.query.customer !== undefined && req.query.customer.ids !== undefined && req.query.customer.ids !== '')
                     ? req.query.customer.ids.split(',')
                         .map((v) => v.trim())
@@ -103,7 +116,7 @@ ordersRouter.get('',
                     ? req.query.customer.membershipNumbers.split(',')
                         .map((v) => v.trim())
                     : undefined,
-                identifiers: identifiers,
+                identifiers: customerIdentifiers,
                 // : [
                 //     ...searchUserPoolClientsResult.data.map((userPoolClient) => {
                 //         return {

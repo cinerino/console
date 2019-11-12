@@ -83,6 +83,12 @@
                                             <% }) %>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="identifier[$in]">識別子</label>
+                                        <input type="text" class="form-control" id="identifier[$in]"
+                                            name="identifier[$in]" placeholder="confirmationPass:cinerino"
+                                            value="<%= (Array.isArray(searchConditions.identifier.$in)) ? `${searchConditions.identifier.$in[0].name}:${searchConditions.identifier.$in[0].value}` : '' %>">
+                                    </div>
                                 </div>
 
                                 <div class="col-md-3">

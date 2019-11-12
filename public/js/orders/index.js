@@ -20,14 +20,23 @@ $(function () {
                 render: function (data, type, row) {
                     var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
 
-                    return '<ul class="list-unstyled">'
+                    var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-light">' + projectId + '</span></li>'
                         + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
+                        + '<li><span class="badge ' + data.orderStatus + '">' + data.orderStatus + '</span></li>'
                         + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
                         + '<li>' + data.orderDate + '</li>'
-                        + '<li>' + data.dateReturned + '</li>'
-                        + '<li><span class="badge ' + data.orderStatus + '">' + data.orderStatus + '</span></li>'
-                        + '</ul>';
+                        + '<li>' + data.dateReturned + '</li>';
+
+                    html += '<li>';
+                    if (Array.isArray(data.identifier)) {
+                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
+                    }
+                    html += '</li>';
+
+                    html += '</ul>';
+
+                    return html;
 
                 }
             },
@@ -208,6 +217,9 @@ $(function () {
         })
         .popover('show');
 
+    $(document).on('click', '.showIdentifier', function () {
+        showIdentifier($(this).data('ordernumber'));
+    });
     $(document).on('click', '.showCustomerIdentifier', function () {
         showCustomerIdentifier($(this).data('ordernumber'));
     });
@@ -229,6 +241,25 @@ $(function () {
     $(document).on('click', '.showReturner', function () {
         showReturner($(this).data('ordernumber'));
     });
+
+    function showIdentifier(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-order');
+        var title = 'Order `' + order.orderNumber + '` Identifier';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.identifier, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
 
     /**
      * 注文のCustomer Identifierを表示する
