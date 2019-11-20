@@ -11,7 +11,9 @@ import * as cinerinoapi from '../cinerinoapi';
 import * as TimelineFactory from '../factory/timeline';
 
 const debug = createDebug('cinerino-console:routes');
+
 const ordersRouter = express.Router();
+
 /**
  * 注文検索
  */
@@ -300,6 +302,7 @@ ordersRouter.get(
         }
     }
 );
+
 /**
  * 注文詳細
  */
@@ -312,15 +315,9 @@ ordersRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const searchOrdersResult = await orderService.search({
-                orderNumbers: [req.params.orderNumber],
-                orderDateFrom: moment('2017-04-20T00:00:00+09:00')
-                    .toDate()
+            const order = await orderService.findByOrderNumber({
+                orderNumber: req.params.orderNumber
             });
-            const order = searchOrdersResult.data.shift();
-            if (order === undefined) {
-                throw new cinerinoapi.factory.errors.NotFound('Order');
-            }
 
             let actionsOnOrder: any[] = [];
             let timelines: TimelineFactory.ITimeline[] = [];
@@ -352,6 +349,7 @@ ordersRouter.get(
         }
     }
 );
+
 /**
  * 注文返品
  */
@@ -391,6 +389,7 @@ ordersRouter.post(
         }
     }
 );
+
 /**
  * 注文配送メール送信
  */
@@ -461,4 +460,5 @@ ordersRouter.post(
         }
     }
 );
+
 export default ordersRouter;

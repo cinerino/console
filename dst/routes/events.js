@@ -212,7 +212,7 @@ eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(voi
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
             orderDateFrom: moment(event.startDate)
                 // tslint:disable-next-line:no-magic-numbers
-                .add(-3, 'months')
+                .add(-1, 'months')
                 .toDate(),
             orderDateThrough: new Date(),
             acceptedOffers: {

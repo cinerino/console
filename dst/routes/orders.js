@@ -301,15 +301,9 @@ ordersRouter.get('/:orderNumber',
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const searchOrdersResult = yield orderService.search({
-            orderNumbers: [req.params.orderNumber],
-            orderDateFrom: moment('2017-04-20T00:00:00+09:00')
-                .toDate()
+        const order = yield orderService.findByOrderNumber({
+            orderNumber: req.params.orderNumber
         });
-        const order = searchOrdersResult.data.shift();
-        if (order === undefined) {
-            throw new cinerinoapi.factory.errors.NotFound('Order');
-        }
         let actionsOnOrder = [];
         let timelines = [];
         try {
