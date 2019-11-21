@@ -76,7 +76,7 @@ projectsRouter.all(
 
 projectsRouter.get(
     '/:id/logo',
-    async (req, res) => {]
+    async (req, res) => {
         let logo = 'https://s3-ap-northeast-1.amazonaws.com/cinerino/logos/cinerino.png';
 
         try {
