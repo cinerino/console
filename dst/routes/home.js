@@ -27,7 +27,18 @@ homeRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                     endpoint: p.settings.API_ENDPOINT,
                     auth: req.user.authClient
                 });
-                return projectService.findById({ id: p.id });
+                let project;
+                return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
+                    setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                        if (project === undefined) {
+                            reject(new Error('Couldn\'t get project details'));
+                        }
+                    }), 
+                    // tslint:disable-next-line:no-magic-numbers
+                    5000);
+                    project = yield projectService.findById({ id: p.id });
+                    resolve(project);
+                }));
             }
             catch (error) {
                 return p;

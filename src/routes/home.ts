@@ -23,7 +23,23 @@ homeRouter.get(
                         auth: req.user.authClient
                     });
 
-                    return projectService.findById({ id: p.id });
+                    let project: cinerinoapi.factory.project.IProject | undefined;
+
+                    return new Promise<cinerinoapi.factory.project.IProject>(async (resolve, reject) => {
+                        setTimeout(
+                            async () => {
+                                if (project === undefined) {
+                                    reject(new Error('Couldn\'t get project details'));
+                                }
+                            },
+                            // tslint:disable-next-line:no-magic-numbers
+                            5000
+                        );
+
+                        project = await projectService.findById({ id: p.id });
+
+                        resolve(project);
+                    });
                 } catch (error) {
                     return p;
                 }
