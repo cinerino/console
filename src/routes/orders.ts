@@ -36,18 +36,24 @@ ordersRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
 
             const searchSellersResult = await sellerService.search({});
 
             let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             try {
-                if (req.project.settings.cognito !== undefined) {
+                const project = await projectService.findById({ id: req.project.id });
+
+                if (project.settings !== undefined && project.settings.cognito !== undefined) {
                     const searchUserPoolClientsResult = await userPoolService.searchClients({
-                        userPoolId: req.project.settings.cognito.customerUserPool.id
+                        userPoolId: project.settings.cognito.customerUserPool.id
                     });
                     const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
-                        userPoolId: req.project.settings.cognito.adminUserPool.id
+                        userPoolId: project.settings.cognito.adminUserPool.id
                     });
                     userPoolClients = searchUserPoolClientsResult.data;
                     adminUserPoolClients = searchAdminUserPoolClientsResult.data;

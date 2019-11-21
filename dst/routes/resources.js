@@ -17,6 +17,11 @@ const cinerinoapi = require("../cinerinoapi");
 const resourcesRouter = express.Router();
 resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
         switch (req.params.resourceType) {
             // 注文
             case 'Order':
@@ -35,10 +40,10 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
                 break;
             // 人
             case cinerinoapi.factory.personType.Person:
-                if (req.project.settings.cognito !== undefined) {
+                if (project.settings !== undefined && project.settings.cognito !== undefined) {
                     let userPoolId = req.query.userPoolId;
                     if (userPoolId === undefined) {
-                        userPoolId = req.project.settings.cognito.customerUserPool.id;
+                        userPoolId = project.settings.cognito.customerUserPool.id;
                     }
                     if (/-/.test(req.params.resourceId)) {
                         res.redirect(`/projects/${req.project.id}/userPools/${userPoolId}/people/${req.params.resourceId}`);

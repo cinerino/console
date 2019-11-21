@@ -152,6 +152,13 @@ placeOrderTransactionsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+
+            const project = await projectService.findById({ id: req.project.id });
+
             const searchTransactionsResult = await placeOrderService.search({
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 ids: [req.params.transactionId]
@@ -173,9 +180,9 @@ placeOrderTransactionsRouter.get(
 
             const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
                 ? `/projects/${req.project.id}/people/${transaction.agent.id}`
-                : (req.project.settings.cognito !== undefined)
+                : (project.settings !== undefined && project.settings.cognito !== undefined)
                     // tslint:disable-next-line:max-line-length
-                    ? `/projects/${req.project.id}/userPools/${req.project.settings.cognito.customerUserPool.id}/clients/${transaction.agent.id}`
+                    ? `/projects/${req.project.id}/userPools/${project.settings.cognito.customerUserPool.id}/clients/${transaction.agent.id}`
                     : '#';
 
             let timelines: TimelineFactory.ITimeline[] = [{

@@ -17,7 +17,12 @@ declare global {
         // tslint:disable-next-line:interface-name
         export interface Request {
             user: User;
-            project: cinerino.factory.project.IProject & {
+            // project: cinerino.factory.project.IProject & {
+            //     settings: ISettings;
+            // };
+            project: {
+                typeOf: 'Project';
+                id: string;
                 settings: ISettings;
             };
         }

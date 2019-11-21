@@ -30,19 +30,24 @@ dashboardRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
         let userPool;
         const userPoolClients = [];
         let adminUserPool;
         const adminUserPoolClients = [];
         try {
-            if (req.project.settings.cognito !== undefined) {
+            if (project.settings !== undefined && project.settings.cognito !== undefined) {
                 userPool = yield userPoolService.findById({
-                    userPoolId: req.project.settings.cognito.customerUserPool.id
+                    userPoolId: project.settings.cognito.customerUserPool.id
                 });
                 // const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
                 // userPoolClients = searchUserPoolClientsResult.data;
                 adminUserPool = yield userPoolService.findById({
-                    userPoolId: req.project.settings.cognito.adminUserPool.id
+                    userPoolId: project.settings.cognito.adminUserPool.id
                 });
                 // tslint:disable-next-line:max-line-length
                 // const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });

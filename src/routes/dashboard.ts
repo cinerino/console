@@ -25,6 +25,12 @@ dashboardRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+
+            const project = await projectService.findById({ id: req.project.id });
 
             let userPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
             const userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
@@ -32,16 +38,16 @@ dashboardRouter.get(
             const adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
 
             try {
-                if (req.project.settings.cognito !== undefined) {
+                if (project.settings !== undefined && project.settings.cognito !== undefined) {
                     userPool = await userPoolService.findById({
-                        userPoolId: req.project.settings.cognito.customerUserPool.id
+                        userPoolId: project.settings.cognito.customerUserPool.id
                     });
 
                     // const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
                     // userPoolClients = searchUserPoolClientsResult.data;
 
                     adminUserPool = await userPoolService.findById({
-                        userPoolId: req.project.settings.cognito.adminUserPool.id
+                        userPoolId: project.settings.cognito.adminUserPool.id
                     });
 
                     // tslint:disable-next-line:max-line-length

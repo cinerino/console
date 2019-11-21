@@ -93,7 +93,8 @@ sellersRouter.all(
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 OrganizationType: cinerinoapi.factory.organizationType,
                 PlaceType: cinerinoapi.factory.placeType,
-                WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier
+                WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
+                project: project
             });
         } catch (error) {
             next(error);
@@ -174,7 +175,8 @@ sellersRouter.all(
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 OrganizationType: cinerinoapi.factory.organizationType,
                 PlaceType: cinerinoapi.factory.placeType,
-                WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier
+                WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
+                project: project
             });
         } catch (error) {
             next(error);

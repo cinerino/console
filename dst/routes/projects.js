@@ -58,13 +58,31 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0,
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     // ルーティングからプロジェクトをセット
     const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
-    const projectService = new cinerinoapi.service.Project({
-        endpoint: projectFromEnvironment.settings.API_ENDPOINT,
-        auth: req.user.authClient
-    });
-    const project = yield projectService.findById({ id: projectFromEnvironment.id });
-    req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), projectFromEnvironment.settings) });
+    // const projectService = new cinerinoapi.service.Project({
+    //     endpoint: projectFromEnvironment.settings.API_ENDPOINT,
+    //     auth: req.user.authClient
+    // });
+    // const project = await projectService.findById({ id: projectFromEnvironment.id });
+    // req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
+    req.project = projectFromEnvironment;
     next();
+}));
+projectsRouter.get('/:id/logo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let logo = 'https://s3-ap-northeast-1.amazonaws.com/cinerino/logos/cinerino.png';
+    try {
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
+        if (typeof project.logo === 'string') {
+            logo = project.logo;
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    res.redirect(logo);
 }));
 projectsRouter.use('/:id/accounts', accounts_1.default);
 projectsRouter.use('/:id/actions', actions_1.default);

@@ -22,19 +22,23 @@ const userPoolsRouter = express.Router();
  * ユーザープール検索
  */
 userPoolsRouter.get('', 
-// tslint:disable-next-line:cyclomatic-complexity
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
         debug('req.query:', req.query);
         if (req.query.format === 'datatable') {
-            const userPools = (req.project.settings.cognito !== undefined) ? [
+            const userPools = (project.settings !== undefined && project.settings.cognito !== undefined) ? [
                 {
-                    id: req.project.settings.cognito.customerUserPool.id,
+                    id: project.settings.cognito.customerUserPool.id,
                     name: 'Customerユーザープール'
                 },
                 {
-                    id: req.project.settings.cognito.adminUserPool.id,
+                    id: project.settings.cognito.adminUserPool.id,
                     name: 'Adminユーザープール'
                 }
             ] : [];
@@ -168,12 +172,17 @@ userPoolsRouter.get('/:userPoolId/people/:id',
 // tslint:disable-next-line:max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (req.project.settings.cognito !== undefined) {
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const project = yield projectService.findById({ id: req.project.id });
+        if (project.settings !== undefined && project.settings.cognito !== undefined) {
             switch (req.params.userPoolId) {
-                case req.project.settings.cognito.customerUserPool.id:
+                case project.settings.cognito.customerUserPool.id:
                     res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
                     break;
-                case req.project.settings.cognito.adminUserPool.id:
+                case project.settings.cognito.adminUserPool.id:
                     res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
                     break;
                 default:

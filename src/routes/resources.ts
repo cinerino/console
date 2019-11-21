@@ -11,6 +11,12 @@ resourcesRouter.get(
     '/:resourceType/:resourceId',
     async (req, res, next) => {
         try {
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
             switch (req.params.resourceType) {
                 // 注文
                 case 'Order':
@@ -32,10 +38,10 @@ resourcesRouter.get(
 
                 // 人
                 case cinerinoapi.factory.personType.Person:
-                    if (req.project.settings.cognito !== undefined) {
+                    if (project.settings !== undefined && project.settings.cognito !== undefined) {
                         let userPoolId = req.query.userPoolId;
                         if (userPoolId === undefined) {
-                            userPoolId = req.project.settings.cognito.customerUserPool.id;
+                            userPoolId = project.settings.cognito.customerUserPool.id;
                         }
 
                         if (/-/.test(req.params.resourceId)) {

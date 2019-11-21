@@ -41,16 +41,21 @@ ordersRouter.get('',
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient
+        });
         const searchSellersResult = yield sellerService.search({});
         let userPoolClients = [];
         let adminUserPoolClients = [];
         try {
-            if (req.project.settings.cognito !== undefined) {
+            const project = yield projectService.findById({ id: req.project.id });
+            if (project.settings !== undefined && project.settings.cognito !== undefined) {
                 const searchUserPoolClientsResult = yield userPoolService.searchClients({
-                    userPoolId: req.project.settings.cognito.customerUserPool.id
+                    userPoolId: project.settings.cognito.customerUserPool.id
                 });
                 const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({
-                    userPoolId: req.project.settings.cognito.adminUserPool.id
+                    userPoolId: project.settings.cognito.adminUserPool.id
                 });
                 userPoolClients = searchUserPoolClientsResult.data;
                 adminUserPoolClients = searchAdminUserPoolClientsResult.data;

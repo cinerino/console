@@ -32,7 +32,7 @@ export interface ITimeline {
 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 export function createFromAction(params: {
-    project: cinerinoapi.factory.project.IProject;
+    project: { id: string };
     action: cinerinoapi.factory.action.IAction<cinerinoapi.factory.action.IAttributes<any, any, any>>;
 }): ITimeline {
     const a = params.action;

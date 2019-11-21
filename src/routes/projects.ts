@@ -61,15 +61,39 @@ projectsRouter.all(
         // ルーティングからプロジェクトをセット
         const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
 
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: projectFromEnvironment.settings.API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const project = await projectService.findById({ id: projectFromEnvironment.id });
+        // const projectService = new cinerinoapi.service.Project({
+        //     endpoint: projectFromEnvironment.settings.API_ENDPOINT,
+        //     auth: req.user.authClient
+        // });
+        // const project = await projectService.findById({ id: projectFromEnvironment.id });
 
-        req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
+        // req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
+        req.project = projectFromEnvironment;
 
         next();
+    }
+);
+
+projectsRouter.get(
+    '/:id/logo',
+    async (req, res) => {]
+        let logo = 'https://s3-ap-northeast-1.amazonaws.com/cinerino/logos/cinerino.png';
+
+        try {
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
+            if (typeof project.logo === 'string') {
+                logo = project.logo;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+        res.redirect(logo);
     }
 );
 

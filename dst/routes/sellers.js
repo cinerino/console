@@ -94,7 +94,8 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, 
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             OrganizationType: cinerinoapi.factory.organizationType,
             PlaceType: cinerinoapi.factory.placeType,
-            WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier
+            WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
+            project: project
         });
     }
     catch (error) {
@@ -161,7 +162,8 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             OrganizationType: cinerinoapi.factory.organizationType,
             PlaceType: cinerinoapi.factory.placeType,
-            WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier
+            WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
+            project: project
         });
     }
     catch (error) {
