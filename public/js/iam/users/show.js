@@ -22,7 +22,7 @@ $(function () {
         updateProfileButton.addClass('disabled');
     });
     $('#confirmUpdateProfile').keyup(function () {
-        var validValue = ($(this).val() === $(this).data('expected'));
+        var validValue = (String($(this).val()) === String($(this).data('expected')));
         if (validValue) {
             updateProfileButton.prop('disabled', false);
             updateProfileButton.removeClass('disabled');

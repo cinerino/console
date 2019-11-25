@@ -38,7 +38,7 @@ $(function () {
         returnOrderButton.addClass('disabled');
     });
     $('#confirmReturnOrder').keyup(function () {
-        var validValue = ($(this).val() === $(this).data('expected'));
+        var validValue = (String($(this).val()) === String($(this).data('expected')));
         if (validValue) {
             returnOrderButton.prop('disabled', false);
             returnOrderButton.removeClass('disabled');
