@@ -83,15 +83,15 @@ iamRouter.all(
                         name: 'email_verified',
                         value: 'true'
                     });
-                    // const profile = {
-                    //     ...req.body,
-                    //     additionalProperty: additionalProperty
-                    // };
+                    const profile = {
+                        ...req.body,
+                        additionalProperty: additionalProperty
+                    };
 
-                    // await personService.updateProfile({
-                    //     id: req.params.id,
-                    //     ...profile
-                    // });
+                    await iamService.updateUserProfile({
+                        id: req.params.id,
+                        ...profile
+                    });
 
                     req.flash('message', '更新しました');
                     res.redirect(req.originalUrl);

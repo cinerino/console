@@ -86,14 +86,8 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0
                     name: 'email_verified',
                     value: 'true'
                 });
-                // const profile = {
-                //     ...req.body,
-                //     additionalProperty: additionalProperty
-                // };
-                // await personService.updateProfile({
-                //     id: req.params.id,
-                //     ...profile
-                // });
+                const profile = Object.assign(Object.assign({}, req.body), { additionalProperty: additionalProperty });
+                yield iamService.updateUserProfile(Object.assign({ id: req.params.id }, profile));
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);
                 return;
