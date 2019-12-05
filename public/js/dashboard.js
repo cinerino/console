@@ -784,9 +784,9 @@ function searchRecentActions(cb) {
         data: {
             startFrom: moment()
                 .add(-1, 'day')
-                .toDate(),
+                .toISOString(),
             startThrough: moment()
-                .toDate()
+                .toISOString()
         },
         dataType: 'json',
         beforeSend: function () {
