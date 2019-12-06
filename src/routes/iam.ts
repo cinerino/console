@@ -20,7 +20,7 @@ iamRouter.get(
         try {
             debug('req.query:', req.query);
             const iamService = new cinerinoapi.service.IAM({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions = {
@@ -62,7 +62,7 @@ iamRouter.all(
         try {
             let message = '';
             const iamService = new cinerinoapi.service.IAM({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const user = await iamService.findUserById({ id: req.params.id });
@@ -121,7 +121,7 @@ iamRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({

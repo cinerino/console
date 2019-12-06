@@ -60,7 +60,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const userPool = await userPoolService.findById({
@@ -86,7 +86,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -120,7 +120,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const userPoolClient = await userPoolService.findClientById({
@@ -145,7 +145,7 @@ userPoolsRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({

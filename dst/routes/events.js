@@ -29,11 +29,11 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(void 0, void 0
     try {
         debug('req.query:', req.query);
         const eventService = new cinerinoapi.service.Event({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchSellersResult = yield sellerService.search({});
@@ -106,11 +106,11 @@ eventsRouter.post('/screeningEvent/import', ...[
 ], validator_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const taskService = new cinerinoapi.service.Task({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const sellerIds = req.body.seller.ids;
@@ -172,7 +172,7 @@ eventsRouter.post('/screeningEvent/import', ...[
 eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const event = yield eventService.findById({
@@ -195,11 +195,11 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, vo
 eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const event = yield eventService.findById({

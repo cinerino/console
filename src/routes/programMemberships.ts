@@ -12,7 +12,7 @@ programMembershipsRouter.get(
     async (req, res, next) => {
         try {
             const programMembershipService = new cinerinoapi.service.ProgramMembership({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions: any = {
@@ -47,7 +47,7 @@ programMembershipsRouter.all(
             const message = undefined;
 
             const programMembershipService = new cinerinoapi.service.ProgramMembership({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchProgramMembershipsResult = await programMembershipService.search({ id: req.params.id });

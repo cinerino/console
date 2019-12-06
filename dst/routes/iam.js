@@ -26,7 +26,7 @@ iamRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     try {
         debug('req.query:', req.query);
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -66,7 +66,7 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         let message = '';
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const user = yield iamService.findUserById({ id: req.params.id });
@@ -112,7 +112,7 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0
 iamRouter.get('/users/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({

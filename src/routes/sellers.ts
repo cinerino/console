@@ -22,7 +22,7 @@ sellersRouter.get(
     async (req, res, next) => {
         try {
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions: cinerinoapi.factory.seller.ISearchConditions = {
@@ -60,7 +60,7 @@ sellersRouter.all(
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
             const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
@@ -73,7 +73,7 @@ sellersRouter.all(
                     });
                     debug('creating organization...', attributes);
                     const sellerService = new cinerinoapi.service.Seller({
-                        endpoint: req.project.settings.API_ENDPOINT,
+                        endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                         auth: req.user.authClient
                     });
                     const seller = await sellerService.create<cinerinoapi.factory.organizationType>(attributes);
@@ -113,13 +113,13 @@ sellersRouter.all(
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
             const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
 
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const seller = await sellerService.findById({ id: req.params.id });
@@ -130,7 +130,7 @@ sellersRouter.all(
                 if (Array.isArray(seller.paymentAccepted)) {
                     // 口座があれば解約
                     const accountService = new cinerinoapi.service.Account({
-                        endpoint: req.project.settings.API_ENDPOINT,
+                        endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                         auth: req.user.authClient
                     });
 
@@ -308,7 +308,7 @@ async function createAttributesFromBody(params: {
         if (body.coinAccountPayment.accountNumber === '') {
             // 口座番号の指定がなければ自動開設
             const accountService = new cinerinoapi.service.Account({
-                endpoint: params.req.project.settings.API_ENDPOINT,
+                endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
                 auth: params.req.user.authClient
             });
             const account = await accountService.open({
@@ -336,7 +336,7 @@ async function createAttributesFromBody(params: {
         if (body.pointAccountPayment.accountNumber === '') {
             // 口座番号の指定がなければ自動開設
             const accountService = new cinerinoapi.service.Account({
-                endpoint: params.req.project.settings.API_ENDPOINT,
+                endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
                 auth: params.req.user.authClient
             });
             const account = await accountService.open({
@@ -469,7 +469,7 @@ sellersRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({

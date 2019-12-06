@@ -25,15 +25,15 @@ ordersRouter.get(
         try {
             debug('req.query:', req.query);
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const projectService = new cinerinoapi.service.Project({
@@ -318,7 +318,7 @@ ordersRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const order = await orderService.findByOrderNumber({
@@ -364,7 +364,7 @@ ordersRouter.post(
     async (req, res, next) => {
         try {
             const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const returnOrderTransaction = await returnOrderService.start({
@@ -404,11 +404,11 @@ ordersRouter.post(
     async (req, res, next) => {
         try {
             const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const taskService = new cinerinoapi.service.Task({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchTransactionsResult = await placeOrderService.search({

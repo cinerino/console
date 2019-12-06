@@ -28,7 +28,7 @@ peopleRouter.get('',
     try {
         debug('req.query:', req.query);
         const personService = new cinerinoapi.service.Person({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -68,11 +68,11 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
     try {
         let message = '';
         const personService = new cinerinoapi.service.Person({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const person = yield personService.findById({ id: req.params.id });
@@ -148,7 +148,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
 peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -176,7 +176,7 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, vo
 peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchResult = yield personOwnershipInfoService.search({
@@ -204,7 +204,7 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void
 peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchResult = yield personOwnershipInfoService.search({
@@ -232,7 +232,7 @@ peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0
 peopleRouter.get('/:id/creditCards', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const creditCards = yield personOwnershipInfoService.searchCreditCards({ id: req.params.id });
@@ -248,7 +248,7 @@ peopleRouter.get('/:id/creditCards', (req, res, next) => __awaiter(void 0, void 
 peopleRouter.delete('/:id/creditCards/:cardSeq', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         yield personOwnershipInfoService.deleteCreditCard({

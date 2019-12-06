@@ -17,6 +17,10 @@ homeRouter.get(
     async (req, res, next) => {
         try {
             const projects = await Promise.all(projectsFromEnvironment.map(async (p) => {
+                if (typeof p.settings.API_ENDPOINT !== 'string') {
+                    p.settings.API_ENDPOINT = process.env.API_ENDPOINT;
+                }
+
                 try {
                     const projectService = new cinerinoapi.service.Project({
                         endpoint: p.settings.API_ENDPOINT,

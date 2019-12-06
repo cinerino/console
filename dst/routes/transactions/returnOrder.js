@@ -27,7 +27,7 @@ returnOrderTransactionsRouter.get('',
     try {
         debug('req.query:', req.query);
         const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const transactionStatusChoices = [
@@ -120,7 +120,7 @@ returnOrderTransactionsRouter.get('/:transactionId',
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchTransactionsResult = yield returnOrderService.search({

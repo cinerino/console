@@ -24,7 +24,7 @@ authorizationsRouter.get(
         try {
             debug('req.query:', req.query);
             const authorizationService = new cinerinoapi.service.Authorization({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -107,11 +107,11 @@ authorizationsRouter.all(
             const message = undefined;
 
             const actionService = new cinerinoapi.service.Action({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const authorizationService = new cinerinoapi.service.Authorization({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 

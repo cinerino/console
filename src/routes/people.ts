@@ -25,7 +25,7 @@ peopleRouter.get(
         try {
             debug('req.query:', req.query);
             const personService = new cinerinoapi.service.Person({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions = {
@@ -67,11 +67,11 @@ peopleRouter.all(
         try {
             let message = '';
             const personService = new cinerinoapi.service.Person({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const person = await personService.findById({ id: req.params.id });
@@ -166,7 +166,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -197,7 +197,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchResult =
@@ -229,7 +229,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchResult =
@@ -261,7 +261,7 @@ peopleRouter.get(
     async (req, res, next) => {
         try {
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const creditCards = await personOwnershipInfoService.searchCreditCards({ id: req.params.id });
@@ -281,7 +281,7 @@ peopleRouter.delete(
     async (req, res, next) => {
         try {
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             await personOwnershipInfoService.deleteCreditCard({

@@ -22,6 +22,9 @@ const homeRouter = express.Router();
 homeRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const projects = yield Promise.all(projectsFromEnvironment.map((p) => __awaiter(void 0, void 0, void 0, function* () {
+            if (typeof p.settings.API_ENDPOINT !== 'string') {
+                p.settings.API_ENDPOINT = process.env.API_ENDPOINT;
+            }
             try {
                 const projectService = new cinerinoapi.service.Project({
                     endpoint: p.settings.API_ENDPOINT,

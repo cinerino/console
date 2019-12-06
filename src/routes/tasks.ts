@@ -20,7 +20,7 @@ tasksRouter.get(
         try {
             debug('req.query:', req.query);
             const taskService = new cinerinoapi.service.Task({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const taskNameChoices = Object.values(cinerinoapi.factory.taskName);
@@ -80,7 +80,7 @@ tasksRouter.all(
             const message = undefined;
 
             const taskService = new cinerinoapi.service.Task({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const task = await taskService.findById({
@@ -103,7 +103,7 @@ tasksRouter.post(
     async (req, res, next) => {
         try {
             const taskService = new cinerinoapi.service.Task({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const task = await taskService.findById({

@@ -24,7 +24,7 @@ ownershipInfosRouter.get(
         try {
             debug('req.query:', req.query);
             const ownershipInfoService = new cinerinoapi.service.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -109,11 +109,11 @@ ownershipInfosRouter.all(
             const message = undefined;
 
             const actionService = new cinerinoapi.service.Action({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const ownershipInfoService = new cinerinoapi.service.OwnershipInfo({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOwnershipInfosResult = await ownershipInfoService.search({

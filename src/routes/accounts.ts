@@ -17,7 +17,7 @@ accountsRouter.get(
     async (req, res, next) => {
         try {
             const accountService = new cinerinoapi.service.Account({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -85,7 +85,7 @@ accountsRouter.get(
     async (req, res, next) => {
         try {
             const accountService = new cinerinoapi.service.Account({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 

@@ -18,11 +18,11 @@ dashboardRouter.get(
     async (req, res, next) => {
         try {
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const projectService = new cinerinoapi.service.Project({
@@ -82,7 +82,7 @@ dashboardRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
@@ -108,7 +108,7 @@ dashboardRouter.get(
     async (req, res, next) => {
         try {
             const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions: cinerinoapi.factory.transaction.ISearchConditions<cinerinoapi.factory.transactionType.PlaceOrder> = {
@@ -143,7 +143,7 @@ dashboardRouter.get(
     async (req, res, next) => {
         try {
             const actionService = new cinerinoapi.service.Action({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -176,7 +176,7 @@ dashboardRouter.get(
     async (req, res, next) => {
         try {
             const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchConditions: cinerinoapi.factory.transaction.ISearchConditions<cinerinoapi.factory.transactionType.PlaceOrder> = {
@@ -204,7 +204,7 @@ dashboardRouter.get(
         try {
             const timelines: TimelineFactory.ITimeline[] = [];
             const actionService = new cinerinoapi.service.Action({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -240,7 +240,7 @@ dashboardRouter.get(
     async (req, res, next) => {
         try {
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const searchOrdersResult = await orderService.search({
@@ -264,7 +264,7 @@ dashboardRouter.get(
     async (req, res) => {
         try {
             const eventService = new cinerinoapi.service.Event({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}`,
                 auth: req.user.authClient
             });
             const stats = await eventService.fetch({
@@ -292,7 +292,7 @@ dashboardRouter.get(
     async (req, res) => {
         try {
             const eventService = new cinerinoapi.service.Event({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}`,
                 auth: req.user.authClient
             });
             const stats = await eventService.fetch({
@@ -325,7 +325,7 @@ dashboardRouter.get(
     async (req, res) => {
         try {
             const taskService = new cinerinoapi.service.Task({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const result = await taskService.search({

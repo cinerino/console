@@ -18,7 +18,7 @@ const programMembershipsRouter = express.Router();
 programMembershipsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const programMembershipService = new cinerinoapi.service.ProgramMembership({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = Object.assign(Object.assign({}, req.query), { limit: req.query.limit, page: req.query.page });
@@ -45,7 +45,7 @@ programMembershipsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 
     try {
         const message = undefined;
         const programMembershipService = new cinerinoapi.service.ProgramMembership({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchProgramMembershipsResult = yield programMembershipService.search({ id: req.params.id });

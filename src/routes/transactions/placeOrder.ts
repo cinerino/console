@@ -22,11 +22,11 @@ placeOrderTransactionsRouter.get(
         try {
             debug('req.query:', req.query);
             const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -149,7 +149,7 @@ placeOrderTransactionsRouter.get(
     async (req, res, next) => {
         try {
             const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const projectService = new cinerinoapi.service.Project({

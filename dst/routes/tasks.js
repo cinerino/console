@@ -26,7 +26,7 @@ tasksRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         debug('req.query:', req.query);
         const taskService = new cinerinoapi.service.Task({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const taskNameChoices = Object.values(cinerinoapi.factory.taskName);
@@ -82,7 +82,7 @@ tasksRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     try {
         const message = undefined;
         const taskService = new cinerinoapi.service.Task({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const task = yield taskService.findById({
@@ -101,7 +101,7 @@ tasksRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 tasksRouter.post('/:id/retry', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const task = yield taskService.findById({

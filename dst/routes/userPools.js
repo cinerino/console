@@ -64,7 +64,7 @@ userPoolsRouter.get('/:userPoolId',
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const userPool = yield userPoolService.findById({
@@ -87,7 +87,7 @@ userPoolsRouter.get('/:userPoolId',
 userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -119,7 +119,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId',
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const userPoolClient = yield userPoolService.findClientById({
@@ -141,7 +141,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId',
 userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({

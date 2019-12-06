@@ -23,11 +23,11 @@ const dashboardRouter = express.Router();
 dashboardRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const projectService = new cinerinoapi.service.Project({
@@ -77,7 +77,7 @@ dashboardRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -100,7 +100,7 @@ dashboardRouter.get('/countNewOrder', (req, res, next) => __awaiter(void 0, void
 dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -132,7 +132,7 @@ dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(void 0, 
 dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const actionService = new cinerinoapi.service.Action({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchResult = yield actionService.search({
@@ -160,7 +160,7 @@ dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 
 dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -185,7 +185,7 @@ dashboardRouter.get('/timelines', (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const timelines = [];
         const actionService = new cinerinoapi.service.Action({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         try {
@@ -217,7 +217,7 @@ dashboardRouter.get('/timelines', (req, res, next) => __awaiter(void 0, void 0, 
 dashboardRouter.get('/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({
@@ -238,7 +238,7 @@ dashboardRouter.get('/orders', (req, res, next) => __awaiter(void 0, void 0, voi
 dashboardRouter.get('/dbStats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}`,
             auth: req.user.authClient
         });
         const stats = yield eventService.fetch({
@@ -262,7 +262,7 @@ dashboardRouter.get('/dbStats', (req, res) => __awaiter(void 0, void 0, void 0, 
 dashboardRouter.get('/health', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}`,
             auth: req.user.authClient
         });
         const stats = yield eventService.fetch({
@@ -290,7 +290,7 @@ dashboardRouter.get('/health', (req, res) => __awaiter(void 0, void 0, void 0, f
 dashboardRouter.get('/queueCount', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const result = yield taskService.search({

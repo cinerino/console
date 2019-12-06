@@ -23,11 +23,11 @@ eventsRouter.get(
         try {
             debug('req.query:', req.query);
             const eventService = new cinerinoapi.service.Event({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -124,11 +124,11 @@ eventsRouter.post(
     async (req, res, next) => {
         try {
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const taskService = new cinerinoapi.service.Task({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -204,7 +204,7 @@ eventsRouter.get(
     async (req, res, next) => {
         try {
             const eventService = new cinerinoapi.service.Event({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const event = await eventService.findById({
@@ -230,11 +230,11 @@ eventsRouter.get(
     async (req, res, next) => {
         try {
             const eventService = new cinerinoapi.service.Event({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const orderService = new cinerinoapi.service.Order({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const event = await eventService.findById({

@@ -24,7 +24,7 @@ const accountsRouter = express.Router();
 accountsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new cinerinoapi.service.Account({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -83,7 +83,7 @@ accountsRouter.get('/point', (_, res, next) => __awaiter(void 0, void 0, void 0,
 accountsRouter.get('/actions/MoneyTransfer', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountService = new cinerinoapi.service.Account({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {

@@ -28,7 +28,7 @@ const sellersRouter = express.Router();
 sellersRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchConditions = {
@@ -63,7 +63,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         let message;
         let attributes;
         const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });
@@ -75,7 +75,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, 
                 });
                 debug('creating organization...', attributes);
                 const sellerService = new cinerinoapi.service.Seller({
-                    endpoint: req.project.settings.API_ENDPOINT,
+                    endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                     auth: req.user.authClient
                 });
                 const seller = yield sellerService.create(attributes);
@@ -110,12 +110,12 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         let message;
         let attributes;
         const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const seller = yield sellerService.findById({ id: req.params.id });
@@ -124,7 +124,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
             if (Array.isArray(seller.paymentAccepted)) {
                 // 口座があれば解約
                 const accountService = new cinerinoapi.service.Account({
-                    endpoint: req.project.settings.API_ENDPOINT,
+                    endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                     auth: req.user.authClient
                 });
                 const accountPaymentsAccepted = seller.paymentAccepted.filter((p) => p.paymentMethodType === cinerinoapi.factory.paymentMethodType.Account);
@@ -281,7 +281,7 @@ function createAttributesFromBody(params) {
             if (body.coinAccountPayment.accountNumber === '') {
                 // 口座番号の指定がなければ自動開設
                 const accountService = new cinerinoapi.service.Account({
-                    endpoint: params.req.project.settings.API_ENDPOINT,
+                    endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
                     auth: params.req.user.authClient
                 });
                 const account = yield accountService.open({
@@ -308,7 +308,7 @@ function createAttributesFromBody(params) {
             if (body.pointAccountPayment.accountNumber === '') {
                 // 口座番号の指定がなければ自動開設
                 const accountService = new cinerinoapi.service.Account({
-                    endpoint: params.req.project.settings.API_ENDPOINT,
+                    endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
                     auth: params.req.user.authClient
                 });
                 const account = yield accountService.open({
@@ -419,7 +419,7 @@ function createAttributesFromBody(params) {
 sellersRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchOrdersResult = yield orderService.search({

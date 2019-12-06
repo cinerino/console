@@ -35,6 +35,9 @@ projectsRouter.all(
         try {
             const message: string = '';
             const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
+            if (typeof projectFromEnvironment.settings.API_ENDPOINT !== 'string') {
+                projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
+            }
 
             const projectService = new cinerinoapi.service.Project({
                 endpoint: projectFromEnvironment.settings.API_ENDPOINT,
@@ -59,6 +62,9 @@ projectsRouter.all(
     async (req, _, next) => {
         // ルーティングからプロジェクトをセット
         const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
+        if (typeof projectFromEnvironment.settings.API_ENDPOINT !== 'string') {
+            projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
+        }
 
         // const projectService = new cinerinoapi.service.Project({
         //     endpoint: projectFromEnvironment.settings.API_ENDPOINT,

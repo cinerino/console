@@ -22,11 +22,11 @@ moneyTransferTransactionsRouter.get(
         try {
             debug('req.query:', req.query);
             const moneyTransferService = new cinerinoapi.service.transaction.MoneyTransfer({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
 
@@ -151,7 +151,7 @@ moneyTransferTransactionsRouter.get(
     async (req, res, next) => {
         try {
             const moneyTransferService = new cinerinoapi.service.transaction.MoneyTransfer({
-                endpoint: req.project.settings.API_ENDPOINT,
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
             const projectService = new cinerinoapi.service.Project({

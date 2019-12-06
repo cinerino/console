@@ -30,15 +30,15 @@ ordersRouter.get('',
     try {
         debug('req.query:', req.query);
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const projectService = new cinerinoapi.service.Project({
@@ -303,7 +303,7 @@ ordersRouter.get('/:orderNumber',
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const order = yield orderService.findByOrderNumber({
@@ -344,7 +344,7 @@ ordersRouter.get('/:orderNumber',
 ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const returnOrderService = new cinerinoapi.service.txn.ReturnOrder({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const returnOrderTransaction = yield returnOrderService.start({
@@ -380,11 +380,11 @@ ordersRouter.post('/:orderNumber/return', (req, res, next) => __awaiter(void 0, 
 ordersRouter.post('/:orderNumber/sendEmailMessage', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const placeOrderService = new cinerinoapi.service.transaction.PlaceOrder({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const taskService = new cinerinoapi.service.Task({
-            endpoint: req.project.settings.API_ENDPOINT,
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
         const searchTransactionsResult = yield placeOrderService.search({
