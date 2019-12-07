@@ -37,7 +37,7 @@
                     <!-- form start -->
                     <form role="form" method="get">
                         <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint"
-                            value="<%= req.project.settings.CHEVRE_BACKEND_ENDPOINT %>">
+                            value="/projects/<%= req.project.id %>/events/chevreBackend">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4">

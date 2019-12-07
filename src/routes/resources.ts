@@ -67,7 +67,7 @@ resourcesRouter.get(
                         accountType = req.query.accountType;
                     }
 
-                    res.redirect(`${req.project.settings.PECORINO_CONSOLE_ENDPOINT}/accounts/${accountType}/${req.params.resourceId}`);
+                    res.redirect(`/projects/${req.project.id}/accounts/${accountType}/${req.params.resourceId}`);
                     break;
 
                 // 所有権

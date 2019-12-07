@@ -14,6 +14,34 @@ import validator from '../middlewares/validator';
 const debug = createDebug('cinerino-console:routes:events');
 const eventsRouter = express.Router();
 
+eventsRouter.get(
+    '/chevreBackend',
+    async (req, res, next) => {
+        try {
+            let url = '';
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
+            if (project.settings !== undefined
+                && project.settings.chevre !== undefined
+                && (<any>project.settings.chevre).backend !== undefined
+                && typeof (<any>project.settings.chevre).backend.url === 'string'
+            ) {
+                url = (<any>project.settings.chevre).backend.url;
+            }
+
+            res.redirect(url);
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
+);
+
 /**
  * 上映イベント検索
  */

@@ -7,8 +7,6 @@ import * as express from 'express';
 export interface ISettings {
     id: string;
     API_ENDPOINT: string;
-    CHEVRE_BACKEND_ENDPOINT: string;
-    PECORINO_CONSOLE_ENDPOINT: string;
 }
 
 import User from '../user';

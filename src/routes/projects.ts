@@ -66,13 +66,6 @@ projectsRouter.all(
             projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
         }
 
-        // const projectService = new cinerinoapi.service.Project({
-        //     endpoint: projectFromEnvironment.settings.API_ENDPOINT,
-        //     auth: req.user.authClient
-        // });
-        // const project = await projectService.findById({ id: projectFromEnvironment.id });
-
-        // req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
         req.project = projectFromEnvironment;
 
         next();

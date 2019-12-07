@@ -53,10 +53,27 @@ accountsRouter.get(
 
 accountsRouter.get(
     '/coin',
-    async (_, res, next) => {
+    async (req, res, next) => {
         try {
+            let consoleUrl = '';
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
+            if (project.settings !== undefined
+                && project.settings.chevre !== undefined
+                && (<any>project.settings.pecorino).console !== undefined
+                && typeof (<any>project.settings.pecorino).console.url === 'string'
+            ) {
+                consoleUrl = (<any>project.settings.pecorino).console.url;
+            }
+
             res.render('accounts/coin/index', {
-                moment: moment
+                moment: moment,
+                consoleUrl: consoleUrl
             });
         } catch (error) {
             next(error);
@@ -66,10 +83,27 @@ accountsRouter.get(
 
 accountsRouter.get(
     '/point',
-    async (_, res, next) => {
+    async (req, res, next) => {
         try {
+            let consoleUrl = '';
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
+            if (project.settings !== undefined
+                && project.settings.chevre !== undefined
+                && (<any>project.settings.pecorino).console !== undefined
+                && typeof (<any>project.settings.pecorino).console.url === 'string'
+            ) {
+                consoleUrl = (<any>project.settings.pecorino).console.url;
+            }
+
             res.render('accounts/point/index', {
-                moment: moment
+                moment: moment,
+                consoleUrl: consoleUrl
             });
         } catch (error) {
             next(error);
@@ -126,8 +160,24 @@ accountsRouter.get(
     '/:accountType/:accountNumber',
     async (req, res, next) => {
         try {
+            let consoleUrl = '';
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+            const project = await projectService.findById({ id: req.project.id });
+
+            if (project.settings !== undefined
+                && project.settings.chevre !== undefined
+                && (<any>project.settings.pecorino).console !== undefined
+                && typeof (<any>project.settings.pecorino).console.url === 'string'
+            ) {
+                consoleUrl = (<any>project.settings.pecorino).console.url;
+            }
+
             const redirect =
-                `${req.project.settings.PECORINO_CONSOLE_ENDPOINT}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
+                `${consoleUrl}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
 
             res.redirect(redirect);
         } catch (error) {

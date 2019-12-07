@@ -66,7 +66,7 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
                 if (typeof req.query.accountType === 'string' && req.query.accountType !== '') {
                     accountType = req.query.accountType;
                 }
-                res.redirect(`${req.project.settings.PECORINO_CONSOLE_ENDPOINT}/accounts/${accountType}/${req.params.resourceId}`);
+                res.redirect(`/projects/${req.project.id}/accounts/${accountType}/${req.params.resourceId}`);
                 break;
             // 所有権
             case 'OwnershipInfo':
