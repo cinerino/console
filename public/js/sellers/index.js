@@ -101,7 +101,11 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
                     if (Array.isArray(data.areaServed)) {
                         html += data.areaServed.map(function (area) {
-                            return '<li><span class="mr-1 badge badge-secondary">' + area.typeOf + '</span>' + area.name + '</li>';
+                            var url = '/projects/' + PROJECT_ID + '/applications/' + area.id;
+                            return '<li>'
+                                + '<span class="mr-1 badge badge-secondary">' + area.typeOf + '</span>'
+                                + '<a target="_blank" href="' + url + '">' + area.name + '</a>'
+                                + '</li>';
                         }).join('')
                     }
 

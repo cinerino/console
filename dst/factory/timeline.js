@@ -19,9 +19,7 @@ function createFromAction(params) {
                     userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
                 }
             }
-            const url = (a.agent.memberOf !== undefined)
-                ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
-                : `/projects/${params.project.id}/applications/${a.agent.id}`;
+            const url = `/projects/${params.project.id}/resources/${a.agent.typeOf}/${a.agent.id}?userPoolId=${userPoolId}`;
             let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
             if (a.agent.name !== undefined) {
                 agentName = a.agent.name;
@@ -66,9 +64,7 @@ function createFromAction(params) {
                     userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
                 }
             }
-            const url = (a.recipient.memberOf !== undefined)
-                ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.recipient.id}`
-                : `/projects/${params.project.id}/applications/${a.recipient.id}`;
+            const url = `/projects/${params.project.id}/resources/${a.recipient.typeOf}/${a.recipient.id}?userPoolId=${userPoolId}`;
             let recipientName = (typeof a.recipient.url === 'string') ? a.recipient.url
                 : (typeof a.recipient.id === 'string') ? a.recipient.id : a.recipient.typeOf;
             if (a.recipient.name !== undefined) {

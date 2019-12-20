@@ -70,11 +70,8 @@ $(function () {
 
                     html += '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>';
 
-                    if (data.customer.memberOf !== undefined) {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/people/' + data.customer.id + '">' + data.customer.id + '</a></li>';
-                    } else {
-                        html += '<li><a target="_blank" href="/userPools/' + userPoolId + '/clients/' + data.customer.id + '">' + data.customer.id + '</a></li>';
-                    }
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.customer.typeOf + '/' + data.customer.id + '?userPoolId=' + userPoolId;
+                    html += '<li><a target="_blank" href="' + url + '">' + data.customer.id + '</a></li>';
 
                     html += '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
                         + '<li>' + data.customer.name + '</li>'

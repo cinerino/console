@@ -63,8 +63,7 @@ $(function () {
                     html += '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>'
                         + '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
                         + '<li>'
-                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
-                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
+                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
                         + '</li>';
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.customer.typeOf + '/' + data.customer.id + '?userPoolId=' + userPoolId;
@@ -163,8 +162,7 @@ $(function () {
                         html += '<li><span class="badge badge-info">' + data.returner.typeOf + '</span></li>'
                             + '<li><span class="badge badge-warning">' + ((data.returner.memberOf !== undefined) ? data.returner.memberOf.membershipNumber : '') + '</span></li>'
                             + '<li>'
-                            + '<a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '"><span class="badge badge-secondary">Issuer</span></a>'
-                            + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '"><span class="badge badge-secondary">Client</span></a>'
+                            + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
                             + '</li>';
 
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.returner.typeOf + '/' + data.returner.id + '?userPoolId=' + userPoolId;

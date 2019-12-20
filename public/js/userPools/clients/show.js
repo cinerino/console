@@ -14,7 +14,7 @@ $(function () {
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/userPools/' + userPoolClient.UserPoolId + '/clients/' + userPoolClient.ClientId + '/orders',
+        '/projects/' + PROJECT_ID + '/applications/' + userPoolClient.ClientId + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
         $('#orderCount').html(data.totalCount.toString());

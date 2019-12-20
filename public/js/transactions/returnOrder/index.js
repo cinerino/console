@@ -53,12 +53,13 @@ $(function () {
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>'
                         + '<li><span class="badge badge-warning">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span></li>'
+                        + '<li>'
+                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
+                        + '</li>'
                         + '<li><a target="_blank" href="' + url + '">' + data.agent.id + '</a></li>'
                         + '<li>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</li>'
                         + '<li>' + String(data.agent.email) + '</li>'
-                        + '<li>' + String(data.agent.telephone) + '</li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '">' + tokenIssuer + '</a></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/userPools/' + userPoolId + '/clients/' + clientId + '">' + clientId + '</a></li>';
+                        + '<li>' + String(data.agent.telephone) + '</li>';
 
                     html += '</ul>';
 
