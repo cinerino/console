@@ -29,6 +29,11 @@ $(function () {
     searchCreditCards(function () {
     });
 
+    // 口座検索
+    console.log('searching creditCards...');
+    searchAccounts(function () {
+    });
+
     // プロフィール更新
     var updateProfileButton = $('button.updateProfile');
     $('#modal-updateProfile').on('shown.bs.modal', function () {
@@ -122,6 +127,14 @@ $(function () {
         .popover({
             title: '',
             content: 'クレジットカード管理が可能です',
+            placement: 'bottom',
+            trigger: 'hover'
+        });
+
+    $('.nav-link.accounts')
+        .popover({
+            title: '',
+            content: '口座管理',
             placement: 'bottom',
             trigger: 'hover'
         });
@@ -263,5 +276,50 @@ function searchCreditCards(cb) {
         cb(data);
     }).fail(function () {
         console.error('クレジットカードを検索できませんでした')
+    });
+}
+
+function searchAccounts(cb) {
+    $.getJSON(
+        '/projects/' + PROJECT_ID + '/people/' + person.id + '/accounts'
+    ).done(function (data) {
+        $("#accounts tbody").empty();
+        $.each(data, function (key, ownershipInfo) {
+            var account = ownershipInfo.typeOfGood;
+
+            var href = '/projects/' + PROJECT_ID + '/accounts/' + account.accountType + '/' + account.accountNumber;
+            var html = '<td>'
+                + '<span class="badge badge-secondary ' + account.accountType + '">'
+                + account.accountType
+                + '</span>'
+                + '</td>'
+                + '<td>'
+                + '<a target="_blank" href="' + href + '">'
+                + account.accountNumber
+                + '</a>'
+                + '</td>'
+                + '<td>'
+                + account.name
+                + '</td>'
+                + '<td>'
+                + '<span class="badge badge-secondary ' + account.status + '">'
+                + account.status
+                + '</span>'
+                + '</td>'
+                + '<td>'
+                + account.availableBalance
+                + '</td>'
+                + '<td></td>';
+            // var html = '<td>' + '<a href="#">' + account.accountType + '</a>' + '</td>'
+            //     + '<td>' + account.accountNumber + '</td>'
+            //     + '<td>' + account.name + '</td>'
+            //     + '<td>' + account.status + '</td>'
+            //     + '<td></td>';
+            $('<tr>').html(html).appendTo("#accounts tbody");
+        });
+
+        cb(data);
+    }).fail(function () {
+        console.error('口座を検索できませんでした')
     });
 }

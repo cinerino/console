@@ -70,10 +70,7 @@ peopleRouter.all(
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
-            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
-            });
+
             const person = await personService.findById({ id: req.params.id });
 
             if (req.method === 'DELETE') {
@@ -113,44 +110,10 @@ peopleRouter.all(
                 }
             }
 
-            const creditCards: cinerinoapi.factory.paymentMethod.paymentCard.creditCard.ICheckedCard[] = [];
-            let coinAccounts: IAccountOwnershipInfo[] = [];
-            let pointAccounts: IAccountOwnershipInfo[] = [];
-
-            try {
-                const searchCoinAccountsResult =
-                    await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
-                        id: req.params.id,
-                        typeOfGood: {
-                            typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                            accountType: cinerinoapi.factory.accountType.Coin
-                        }
-                    });
-
-                const searchPointAccountsResult =
-                    await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
-                        id: req.params.id,
-                        typeOfGood: {
-                            typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                            accountType: cinerinoapi.factory.accountType.Point
-                        }
-                    });
-
-                coinAccounts = searchCoinAccountsResult.data;
-                pointAccounts = searchPointAccountsResult.data;
-            } catch (error) {
-                // no op
-                debug(error);
-                message = `所有権検索で問題が発生しました:${error.message}`;
-            }
-
             res.render('people/show', {
                 message: message,
                 moment: moment,
-                person: person,
-                creditCards: creditCards,
-                coinAccounts: coinAccounts,
-                pointAccounts: pointAccounts
+                person: person
             });
         } catch (error) {
             next(error);
@@ -165,6 +128,8 @@ peopleRouter.get(
     '/:id/orders',
     async (req, res, next) => {
         try {
+            const now = new Date();
+
             const orderService = new cinerinoapi.service.Order({
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
@@ -173,10 +138,10 @@ peopleRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-                orderDateFrom: moment()
+                orderDateFrom: moment(now)
                     .add(-1, 'months')
                     .toDate(),
-                orderDateThrough: new Date(),
+                orderDateThrough: now,
                 customer: {
                     ids: [req.params.id]
                 }
@@ -196,6 +161,8 @@ peopleRouter.get(
     '/:id/reservations',
     async (req, res, next) => {
         try {
+            const now = new Date();
+
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
@@ -208,10 +175,10 @@ peopleRouter.get(
                     typeOfGood: {
                         typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation
                     },
-                    ownedFrom: moment()
+                    ownedFrom: moment(now)
                         .add(-1, 'month')
                         .toDate(),
-                    ownedThrough: new Date()
+                    ownedThrough: now
                 });
             debug(searchResult.totalCount, 'reservations found.');
             res.json(searchResult);
@@ -228,6 +195,8 @@ peopleRouter.get(
     '/:id/programMemberships',
     async (req, res, next) => {
         try {
+            const now = new Date();
+
             const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
@@ -240,10 +209,10 @@ peopleRouter.get(
                     typeOfGood: {
                         typeOf: cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership
                     },
-                    ownedFrom: moment()
+                    ownedFrom: moment(now)
                         .add(-1, 'month')
                         .toDate(),
-                    ownedThrough: new Date()
+                    ownedThrough: now
                 });
             debug(searchResult.totalCount, 'programMemberships found.');
             res.json(searchResult);
@@ -291,6 +260,49 @@ peopleRouter.delete(
 
             res.status(NO_CONTENT)
                 .end();
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * 口座検索
+ */
+peopleRouter.get(
+    '/:id/accounts',
+    async (req, res, next) => {
+        try {
+            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                auth: req.user.authClient
+            });
+
+            let coinAccounts: IAccountOwnershipInfo[] = [];
+            let pointAccounts: IAccountOwnershipInfo[] = [];
+
+            const searchCoinAccountsResult =
+                await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+                    id: req.params.id,
+                    typeOfGood: {
+                        typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                        accountType: cinerinoapi.factory.accountType.Coin
+                    }
+                });
+
+            const searchPointAccountsResult =
+                await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+                    id: req.params.id,
+                    typeOfGood: {
+                        typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                        accountType: cinerinoapi.factory.accountType.Point
+                    }
+                });
+
+            coinAccounts = searchCoinAccountsResult.data;
+            pointAccounts = searchPointAccountsResult.data;
+
+            res.json([...coinAccounts, ...pointAccounts]);
         } catch (error) {
             next(error);
         }

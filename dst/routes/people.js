@@ -71,10 +71,6 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
-        const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
-        });
         const person = yield personService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
             const physically = req.body.physically === 'on';
@@ -103,39 +99,10 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
                 message = error.message;
             }
         }
-        const creditCards = [];
-        let coinAccounts = [];
-        let pointAccounts = [];
-        try {
-            const searchCoinAccountsResult = yield personOwnershipInfoService.search({
-                id: req.params.id,
-                typeOfGood: {
-                    typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                    accountType: cinerinoapi.factory.accountType.Coin
-                }
-            });
-            const searchPointAccountsResult = yield personOwnershipInfoService.search({
-                id: req.params.id,
-                typeOfGood: {
-                    typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                    accountType: cinerinoapi.factory.accountType.Point
-                }
-            });
-            coinAccounts = searchCoinAccountsResult.data;
-            pointAccounts = searchPointAccountsResult.data;
-        }
-        catch (error) {
-            // no op
-            debug(error);
-            message = `所有権検索で問題が発生しました:${error.message}`;
-        }
         res.render('people/show', {
             message: message,
             moment: moment,
-            person: person,
-            creditCards: creditCards,
-            coinAccounts: coinAccounts,
-            pointAccounts: pointAccounts
+            person: person
         });
     }
     catch (error) {
@@ -147,6 +114,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
  */
 peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const now = new Date();
         const orderService = new cinerinoapi.service.Order({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
@@ -155,10 +123,10 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, vo
             limit: req.query.limit,
             page: req.query.page,
             sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-            orderDateFrom: moment()
+            orderDateFrom: moment(now)
                 .add(-1, 'months')
                 .toDate(),
-            orderDateThrough: new Date(),
+            orderDateThrough: now,
             customer: {
                 ids: [req.params.id]
             }
@@ -175,6 +143,7 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, vo
  */
 peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const now = new Date();
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
@@ -186,10 +155,10 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void
             typeOfGood: {
                 typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation
             },
-            ownedFrom: moment()
+            ownedFrom: moment(now)
                 .add(-1, 'month')
                 .toDate(),
-            ownedThrough: new Date()
+            ownedThrough: now
         });
         debug(searchResult.totalCount, 'reservations found.');
         res.json(searchResult);
@@ -203,6 +172,7 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void
  */
 peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const now = new Date();
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
@@ -214,10 +184,10 @@ peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0
             typeOfGood: {
                 typeOf: cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership
             },
-            ownedFrom: moment()
+            ownedFrom: moment(now)
                 .add(-1, 'month')
                 .toDate(),
-            ownedThrough: new Date()
+            ownedThrough: now
         });
         debug(searchResult.totalCount, 'programMemberships found.');
         res.json(searchResult);
@@ -257,6 +227,39 @@ peopleRouter.delete('/:id/creditCards/:cardSeq', (req, res, next) => __awaiter(v
         });
         res.status(http_status_1.NO_CONTENT)
             .end();
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 口座検索
+ */
+peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        let coinAccounts = [];
+        let pointAccounts = [];
+        const searchCoinAccountsResult = yield personOwnershipInfoService.search({
+            id: req.params.id,
+            typeOfGood: {
+                typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                accountType: cinerinoapi.factory.accountType.Coin
+            }
+        });
+        const searchPointAccountsResult = yield personOwnershipInfoService.search({
+            id: req.params.id,
+            typeOfGood: {
+                typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                accountType: cinerinoapi.factory.accountType.Point
+            }
+        });
+        coinAccounts = searchCoinAccountsResult.data;
+        pointAccounts = searchPointAccountsResult.data;
+        res.json([...coinAccounts, ...pointAccounts]);
     }
     catch (error) {
         next(error);
