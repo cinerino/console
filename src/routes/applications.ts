@@ -1,5 +1,5 @@
 /**
- * ユーザープールルーター
+ * アプリケーションルーター
  */
 import * as createDebug from 'debug';
 import * as express from 'express';
@@ -9,6 +9,55 @@ import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
 const applicationsRouter = express.Router();
+
+/**
+ * アプリケーション検索
+ */
+applicationsRouter.get(
+    '',
+    async (req, res, next) => {
+        try {
+            const userPoolService = new cinerinoapi.service.UserPool({
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                auth: req.user.authClient
+            });
+
+            const searchConditions: any = {
+                limit: req.query.limit,
+                page: req.query.page,
+                name: req.query.name
+            };
+            if (req.query.format === 'datatable') {
+                const searchApplicationsResult = await userPoolService.fetch({
+                    uri: '/applications',
+                    method: 'GET',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [200],
+                    qs: searchConditions
+                })
+                    .then(async (response) => {
+                        return {
+                            totalCount: Number(<string>response.headers.get('X-Total-Count')),
+                            data: await response.json()
+                        };
+                    });
+
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: searchApplicationsResult.totalCount,
+                    recordsFiltered: searchApplicationsResult.totalCount,
+                    data: searchApplicationsResult.data
+                });
+            } else {
+                res.render('applications/index', {
+                    searchConditions: searchConditions
+                });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 applicationsRouter.get(
     '/:id',

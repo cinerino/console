@@ -36,28 +36,26 @@ ordersRouter.get(
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
 
             const searchSellersResult = await sellerService.search({});
 
-            let userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
-            let adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            let applications: any[] = [];
             try {
-                const project = await projectService.findById({ id: req.project.id });
-
-                if (project.settings !== undefined && project.settings.cognito !== undefined) {
-                    const searchUserPoolClientsResult = await userPoolService.searchClients({
-                        userPoolId: project.settings.cognito.customerUserPool.id
+                // アプリケーション検索
+                const searchApplicationsResult = await userPoolService.fetch({
+                    uri: '/applications',
+                    method: 'GET',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [200],
+                    qs: { limit: 100 }
+                })
+                    .then(async (response) => {
+                        return {
+                            totalCount: Number(<string>response.headers.get('X-Total-Count')),
+                            data: await response.json()
+                        };
                     });
-                    const searchAdminUserPoolClientsResult = await userPoolService.searchClients({
-                        userPoolId: project.settings.cognito.adminUserPool.id
-                    });
-                    userPoolClients = searchUserPoolClientsResult.data;
-                    adminUserPoolClients = searchAdminUserPoolClientsResult.data;
-                }
+                applications = searchApplicationsResult.data;
             } catch (error) {
                 // no op
             }
@@ -296,8 +294,7 @@ ordersRouter.get(
                 res.render('orders/index', {
                     moment: moment,
                     sellers: searchSellersResult.data,
-                    userPoolClients: userPoolClients,
-                    adminUserPoolClients: adminUserPoolClients,
+                    applications: applications,
                     searchConditions: searchConditions,
                     OrderStatus: cinerinoapi.factory.orderStatus,
                     PaymentMethodType: cinerinoapi.factory.paymentMethodType

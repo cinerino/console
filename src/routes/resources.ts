@@ -47,7 +47,7 @@ resourcesRouter.get(
                         if (/-/.test(req.params.resourceId)) {
                             res.redirect(`/projects/${req.project.id}/userPools/${userPoolId}/people/${req.params.resourceId}`);
                         } else {
-                            res.redirect(`/projects/${req.project.id}/userPools/${userPoolId}/clients/${req.params.resourceId}`);
+                            res.redirect(`/projects/${req.project.id}/applications/${req.params.resourceId}`);
                         }
                     } else {
                         throw new Error('Cognito settings undefined');

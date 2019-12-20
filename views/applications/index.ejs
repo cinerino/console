@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">販売者検索</h1>
+                <h1 class="m-0 text-dark">アプリケーション検索</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/projects/<%= req.project.id %>/dashboard">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">販売者検索</li>
+                    <li class="breadcrumb-item active">アプリケーション検索</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -37,17 +37,12 @@
                     <!-- form start -->
                     <form role="form" method="get">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="name">名称</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="名称"
-                                    value="<%= searchConditions.name %>">
-                            </div>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
-                            <button type="button" class="btn btn-primary"
-                                onclick="location.href='/projects/<%= req.project.id %>/sellers/new'">
-                                <i class="fa fa-plus"></i> 販売者追加</button>
+                            <!-- <button type="button" class="btn btn-primary"
+                                onclick="location.href='/projects/<%= req.project.id %>/applications/new'">
+                                <i class="fa fa-plus"></i> アプリケーション作成</button> -->
                             <button type="submit" class="btn btn-secondary float-right">検索</button>
                         </div>
                     </form>
@@ -66,23 +61,17 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table id="sellers-table" class="table table-bordered table-hover dataTable">
+                        <table id="applications-table" class="table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>Profile</th>
-                                    <th>Location</th>
-                                    <th>Payment Accepted</th>
-                                    <th>Makes Offer</th>
-                                    <th>Area Served</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Profile</th>
-                                    <th>Location</th>
-                                    <th>Payment Accepted</th>
-                                    <th>Makes Offer</th>
-                                    <th>Area Served</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -99,7 +88,7 @@
 </section>
 <!-- /.content -->
 
-<div class="modal" id="modal-seller" tabindex="-1" role="dialog">
+<div class="modal" id="modal-application" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -118,4 +107,4 @@
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
-<script src="/js/sellers/index.js"></script>
+<script src="/js/applications/index.js"></script>

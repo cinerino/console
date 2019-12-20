@@ -60,7 +60,7 @@ export function createFromAction(params: {
 
             const url = (a.agent.memberOf !== undefined)
                 ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.agent.id}`
-                : `/projects/${params.project.id}/userPools/${userPoolId}/clients/${a.agent.id}`;
+                : `/projects/${params.project.id}/applications/${a.agent.id}`;
 
             let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
             if (a.agent.name !== undefined) {
@@ -113,7 +113,7 @@ export function createFromAction(params: {
 
             const url = (a.recipient.memberOf !== undefined)
                 ? `/projects/${params.project.id}/userPools/${userPoolId}/people/${a.recipient.id}`
-                : `/projects/${params.project.id}/userPools/${userPoolId}/clients/${a.recipient.id}`;
+                : `/projects/${params.project.id}/applications/${a.recipient.id}`;
 
             let recipientName = (typeof a.recipient.url === 'string') ? a.recipient.url
                 : (typeof a.recipient.id === 'string') ? a.recipient.id : a.recipient.typeOf;

@@ -36,23 +36,32 @@ dashboardRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         });
         const project = yield projectService.findById({ id: req.project.id });
         let userPool;
-        const userPoolClients = [];
         let adminUserPool;
-        const adminUserPoolClients = [];
+        let applications = [];
         try {
             if (project.settings !== undefined && project.settings.cognito !== undefined) {
                 userPool = yield userPoolService.findById({
                     userPoolId: project.settings.cognito.customerUserPool.id
                 });
-                // const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
-                // userPoolClients = searchUserPoolClientsResult.data;
                 adminUserPool = yield userPoolService.findById({
                     userPoolId: project.settings.cognito.adminUserPool.id
                 });
-                // tslint:disable-next-line:max-line-length
-                // const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
-                // adminUserPoolClients = searchAdminUserPoolClientsResult.data;
             }
+            // アプリケーション検索
+            const searchApplicationsResult = yield userPoolService.fetch({
+                uri: '/applications',
+                method: 'GET',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [200],
+                qs: { limit: 100 }
+            })
+                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+                return {
+                    totalCount: Number(response.headers.get('X-Total-Count')),
+                    data: yield response.json()
+                };
+            }));
+            applications = searchApplicationsResult.data;
         }
         catch (error) {
             // no op
@@ -61,9 +70,8 @@ dashboardRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         res.render('index', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
-            userPoolClients: userPoolClients,
+            applications: applications,
             adminUserPool: adminUserPool,
-            adminUserPoolClients: adminUserPoolClients,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             sellers: searchSellersResult.data,
             moment: moment,

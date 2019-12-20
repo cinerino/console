@@ -218,26 +218,13 @@
                                     </div>
                                     <div class="chart tab-pane" id="salesAmountByClient">
                                         <div class="row">
-                                            <% userPoolClients.forEach(function(userPoolClient) { %>
+                                            <% applications.forEach(function(application) { %>
                                             <div class="col-4 text-center">
                                                 <input type="text" class="knob byClient"
-                                                    data-clientId="<%= userPoolClient.ClientId %>" data-readonly="true"
-                                                    value="0" data-width="60" data-height="60" data-fgColor="#86c0ff">
+                                                    data-clientId="<%= application.id %>" data-readonly="true" value="0"
+                                                    data-width="60" data-height="60" data-fgColor="#86c0ff">
                                                 <div class="text-white">
-                                                    Customer -
-                                                    <%= userPoolClient.ClientName %>
-                                                </div>
-                                            </div>
-                                            <!-- ./col -->
-                                            <% }) %>
-                                            <% adminUserPoolClients.forEach(function(userPoolClient) { %>
-                                            <div class="col-4 text-center">
-                                                <input type="text" class="knob byClient"
-                                                    data-clientId="<%= userPoolClient.ClientId %>" data-readonly="true"
-                                                    value="0" data-width="60" data-height="60" data-fgColor="#86c0ff">
-                                                <div class="text-white">
-                                                    Admin -
-                                                    <%= userPoolClient.ClientName %>
+                                                    <%= application.name %>
                                                 </div>
                                             </div>
                                             <!-- ./col -->
@@ -341,26 +328,13 @@
                                     </div>
                                     <div class="chart tab-pane" id="numOrderItemsByClient">
                                         <div class="row">
-                                            <% userPoolClients.forEach(function(userPoolClient) { %>
+                                            <% applications.forEach(function(application) { %>
                                             <div class="col-4 text-center">
                                                 <input type="text" class="knob byClient"
-                                                    data-clientId="<%= userPoolClient.ClientId %>" data-readonly="true"
-                                                    value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
+                                                    data-clientId="<%= application.id %>" data-readonly="true" value="0"
+                                                    data-width="60" data-height="60" data-fgColor="#39CCCC">
                                                 <div class="text-white">
-                                                    Customer -
-                                                    <%= userPoolClient.ClientName %>
-                                                </div>
-                                            </div>
-                                            <!-- ./col -->
-                                            <% }) %>
-                                            <% adminUserPoolClients.forEach(function(userPoolClient) { %>
-                                            <div class="col-4 text-center">
-                                                <input type="text" class="knob byClient"
-                                                    data-clientId="<%= userPoolClient.ClientId %>" data-readonly="true"
-                                                    value="0" data-width="60" data-height="60" data-fgColor="#39CCCC">
-                                                <div class="text-white">
-                                                    Admin -
-                                                    <%= userPoolClient.ClientName %>
+                                                    <%= application.name %>
                                                 </div>
                                             </div>
                                             <!-- ./col -->

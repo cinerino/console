@@ -33,9 +33,8 @@ dashboardRouter.get(
             const project = await projectService.findById({ id: req.project.id });
 
             let userPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
-            const userPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
             let adminUserPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
-            const adminUserPoolClients: cinerinoapi.factory.cognito.UserPoolClientListType = [];
+            let applications: any[] = [];
 
             try {
                 if (project.settings !== undefined && project.settings.cognito !== undefined) {
@@ -43,17 +42,26 @@ dashboardRouter.get(
                         userPoolId: project.settings.cognito.customerUserPool.id
                     });
 
-                    // const searchUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>userPool.Id });
-                    // userPoolClients = searchUserPoolClientsResult.data;
-
                     adminUserPool = await userPoolService.findById({
                         userPoolId: project.settings.cognito.adminUserPool.id
                     });
-
-                    // tslint:disable-next-line:max-line-length
-                    // const searchAdminUserPoolClientsResult = await userPoolService.searchClients({ userPoolId: <string>adminUserPool.Id });
-                    // adminUserPoolClients = searchAdminUserPoolClientsResult.data;
                 }
+
+                // アプリケーション検索
+                const searchApplicationsResult = await userPoolService.fetch({
+                    uri: '/applications',
+                    method: 'GET',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [200],
+                    qs: { limit: 100 }
+                })
+                    .then(async (response) => {
+                        return {
+                            totalCount: Number(<string>response.headers.get('X-Total-Count')),
+                            data: await response.json()
+                        };
+                    });
+                applications = searchApplicationsResult.data;
             } catch (error) {
                 // no op
             }
@@ -63,9 +71,8 @@ dashboardRouter.get(
             res.render('index', {
                 message: 'Welcome to Cinerino Console!',
                 userPool: userPool,
-                userPoolClients: userPoolClients,
+                applications: applications,
                 adminUserPool: adminUserPool,
-                adminUserPoolClients: adminUserPoolClients,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 sellers: searchSellersResult.data,
                 moment: moment,

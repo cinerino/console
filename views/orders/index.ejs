@@ -133,31 +133,16 @@
                                         <label>クライアント</label>
                                         <select multiple class="form-control" name="customer[userPoolClients][]"
                                             size="6">
-                                            <% userPoolClients.forEach(function (userPoolClient) { %>
+                                            <% applications.forEach(function (application) { %>
                                             <% 
                                             var selected = false;
                                             if (searchConditions.customer !== undefined && searchConditions.customer.identifiers !== undefined) {
-                                                selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
+                                                selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===application.id).length > 0;
                                             }
                                             %>
-                                            <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
-                                                selected <% } %>>
-                                                Customer -
-                                                <%= userPoolClient.ClientName %>
-                                            </option>
-                                            <% }) %>
-
-                                            <% adminUserPoolClients.forEach(function (userPoolClient) { %>
-                                            <% 
-                                            var selected = false;
-                                            if (searchConditions.customer !== undefined && searchConditions.customer.identifiers !== undefined) {
-                                                selected = searchConditions.customer.identifiers.filter((identifier)=>identifier.name==='clientId'&& identifier.value===userPoolClient.ClientId).length > 0;
-                                            }
-                                            %>
-                                            <option value="<%= userPoolClient.ClientId %>" <% if (selected) { %>
-                                                selected <% } %>>
-                                                Admin -
-                                                <%= userPoolClient.ClientName %>
+                                            <option value="<%= application.id %>" <% if (selected) { %> selected
+                                                <% } %>>
+                                                <%= application.name %>
                                             </option>
                                             <% }) %>
                                         </select>

@@ -183,8 +183,7 @@ moneyTransferTransactionsRouter.get('/:transactionId',
         const transactionAgentUrl = (transaction.agent.memberOf !== undefined)
             ? `/projects/${req.project.id}/people/${transaction.agent.id}`
             : (project.settings !== undefined && project.settings.cognito !== undefined)
-                // tslint:disable-next-line:max-line-length
-                ? `/projects/${req.project.id}/userPools/${project.settings.cognito.customerUserPool.id}/clients/${transaction.agent.id}`
+                ? `/projects/${req.project.id}/applications/${transaction.agent.id}`
                 : '#';
         let timelines = [{
                 action: {},

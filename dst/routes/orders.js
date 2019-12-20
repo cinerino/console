@@ -41,25 +41,24 @@ ordersRouter.get('',
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
-            auth: req.user.authClient
-        });
         const searchSellersResult = yield sellerService.search({});
-        let userPoolClients = [];
-        let adminUserPoolClients = [];
+        let applications = [];
         try {
-            const project = yield projectService.findById({ id: req.project.id });
-            if (project.settings !== undefined && project.settings.cognito !== undefined) {
-                const searchUserPoolClientsResult = yield userPoolService.searchClients({
-                    userPoolId: project.settings.cognito.customerUserPool.id
-                });
-                const searchAdminUserPoolClientsResult = yield userPoolService.searchClients({
-                    userPoolId: project.settings.cognito.adminUserPool.id
-                });
-                userPoolClients = searchUserPoolClientsResult.data;
-                adminUserPoolClients = searchAdminUserPoolClientsResult.data;
-            }
+            // アプリケーション検索
+            const searchApplicationsResult = yield userPoolService.fetch({
+                uri: '/applications',
+                method: 'GET',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [200],
+                qs: { limit: 100 }
+            })
+                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+                return {
+                    totalCount: Number(response.headers.get('X-Total-Count')),
+                    data: yield response.json()
+                };
+            }));
+            applications = searchApplicationsResult.data;
         }
         catch (error) {
             // no op
@@ -283,8 +282,7 @@ ordersRouter.get('',
             res.render('orders/index', {
                 moment: moment,
                 sellers: searchSellersResult.data,
-                userPoolClients: userPoolClients,
-                adminUserPoolClients: adminUserPoolClients,
+                applications: applications,
                 searchConditions: searchConditions,
                 OrderStatus: cinerinoapi.factory.orderStatus,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType

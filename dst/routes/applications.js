@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * ユーザープールルーター
+ * アプリケーションルーター
  */
 const createDebug = require("debug");
 const express = require("express");
@@ -18,6 +18,51 @@ const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
 const applicationsRouter = express.Router();
+/**
+ * アプリケーション検索
+ */
+applicationsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userPoolService = new cinerinoapi.service.UserPool({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const searchConditions = {
+            limit: req.query.limit,
+            page: req.query.page,
+            name: req.query.name
+        };
+        if (req.query.format === 'datatable') {
+            const searchApplicationsResult = yield userPoolService.fetch({
+                uri: '/applications',
+                method: 'GET',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [200],
+                qs: searchConditions
+            })
+                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+                return {
+                    totalCount: Number(response.headers.get('X-Total-Count')),
+                    data: yield response.json()
+                };
+            }));
+            res.json({
+                draw: req.query.draw,
+                recordsTotal: searchApplicationsResult.totalCount,
+                recordsFiltered: searchApplicationsResult.totalCount,
+                data: searchApplicationsResult.data
+            });
+        }
+        else {
+            res.render('applications/index', {
+                searchConditions: searchConditions
+            });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 applicationsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userPoolService = new cinerinoapi.service.UserPool({
