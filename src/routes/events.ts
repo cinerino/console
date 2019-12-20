@@ -274,10 +274,10 @@ eventsRouter.get(
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
                 orderDateFrom: moment(event.startDate)
-                    // tslint:disable-next-line:no-magic-numbers
                     .add(-1, 'months')
                     .toDate(),
-                orderDateThrough: new Date(),
+                orderDateThrough: moment(event.startDate)
+                    .toDate(),
                 acceptedOffers: {
                     itemOffered: {
                         reservationFor: { ids: [event.id] }

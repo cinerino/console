@@ -16,6 +16,7 @@ const express = require("express");
 const cinerinoapi = require("../cinerinoapi");
 const accounts_1 = require("./accounts");
 const actions_1 = require("./actions");
+const applications_1 = require("./applications");
 const authorizations_1 = require("./authorizations");
 const dashboard_1 = require("./dashboard");
 const events_1 = require("./events");
@@ -85,6 +86,7 @@ projectsRouter.get('/:id/logo', (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 projectsRouter.use('/:id/accounts', accounts_1.default);
 projectsRouter.use('/:id/actions', actions_1.default);
+projectsRouter.use('/:id/applications', applications_1.default);
 projectsRouter.use('/:id/authorizations', authorizations_1.default);
 projectsRouter.use('/:id/dashboard', dashboard_1.default);
 projectsRouter.use('/:id/events', events_1.default);
