@@ -168,8 +168,11 @@ export function createFromAction(params: {
         case cinerinoapi.factory.actionType.InformAction:
             actionName = '通知';
             break;
+        case cinerinoapi.factory.actionType.MoneyTransfer:
+            actionName = '転送';
+            break;
         case cinerinoapi.factory.actionType.PayAction:
-            actionName = '支払';
+            actionName = '決済';
             break;
         case cinerinoapi.factory.actionType.PrintAction:
             actionName = '印刷';
@@ -272,6 +275,15 @@ export function createFromAction(params: {
                     break;
                 default:
                     object = { name: a.object.typeOf };
+            }
+
+            if (a.typeOf === cinerinoapi.factory.actionType.MoneyTransfer) {
+                const amount = (<cinerinoapi.factory.action.transfer.moneyTransfer.IAction<any>>a).amount;
+                if (typeof amount === 'number') {
+                    object = { name: String(amount) };
+                } else {
+                    object = { name: `${(<any>amount).value} ${(<any>amount).currency}` };
+                }
             }
         }
 

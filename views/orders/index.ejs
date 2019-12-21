@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>注文ステータス</label>
-                                        <select multiple class="form-control" name="orderStatuses[]" size="10">
+                                        <select multiple class="form-control" name="orderStatuses[]" size="6">
                                             <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
                                             <% 
                                             var selected = false;
@@ -84,7 +84,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="identifier[$in]">識別子</label>
+                                        <label for="identifier[$in]">注文識別子</label>
                                         <input type="text" class="form-control" id="identifier[$in]"
                                             name="identifier[$in]" placeholder="confirmationPass:cinerino"
                                             value="<%= (Array.isArray(searchConditions.identifier.$in)) ? `${searchConditions.identifier.$in[0].name}:${searchConditions.identifier.$in[0].value}` : '' %>">
@@ -93,13 +93,13 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="customer[membershipNumbers]">顧客会員番号</label>
+                                        <label for="customer[membershipNumbers]">Username</label>
                                         <input type="text" class="form-control" id="customer[membershipNumbers]"
                                             name="customer[membershipNumbers]" placeholder="username1234"
                                             value="<%= (Array.isArray(searchConditions.customer.membershipNumbers)) ? searchConditions.customer.membershipNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">顧客ID</label>
+                                        <label for="customer[ids]">User ID</label>
                                         <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
                                             placeholder="Customer ID"
                                             value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
@@ -130,7 +130,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>クライアント</label>
+                                        <label>アプリケーション</label>
                                         <select multiple class="form-control" name="customer[userPoolClients][]"
                                             size="6">
                                             <% applications.forEach(function (application) { %>
@@ -148,7 +148,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[identifiers]">顧客識別子</label>
+                                        <label for="customer[identifiers]">ユーザー識別子</label>
                                         <input type="text" class="form-control" id="customer[identifiers]"
                                             name="customer[identifiers]" placeholder="username:cinerino"
                                             value="<%= (Array.isArray(searchConditions.customer.identifiers)) ? `${searchConditions.customer.identifiers[0].name}:${searchConditions.customer.identifiers[0].value}` : '' %>">
@@ -158,7 +158,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>販売者</label>
-                                        <select multiple class="form-control" name="seller[ids][]" size="10">
+                                        <select multiple class="form-control" name="seller[ids][]" size="6">
                                             <% sellers.forEach(function (seller) { %>
                                             <% 
                                             var selected = false;
@@ -172,8 +172,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>決済方法</label>
-                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]"
-                                            size="10">
+                                        <select multiple class="form-control" name="paymentMethods[typeOfs][]" size="6">
                                             <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
                                             <%
                                             var selected = false;

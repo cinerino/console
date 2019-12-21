@@ -51,7 +51,7 @@
                                     <div class="form-group">
                                         <label for="ownedBy[id]">所有者ID</label>
                                         <input type="text" class="form-control" id="ownedBy[id]" name="ownedBy[id]"
-                                            placeholder="顧客ID,クライアントIDなど"
+                                            placeholder="ユーザーID,アプリケーションIDなど"
                                             value="<%= (searchConditions.ownedBy !== undefined) ? searchConditions.ownedBy.id : '' %>">
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>所有物タイプ</label>
-                                        <select class="form-control" name="typeOfGood[typeOf]" size="">
+                                        <select class="form-control" name="typeOfGood[typeOf]" size="6">
                                             <option value="">---</option>
                                             <% GoodTypeChoices.forEach(function (GoodTypeChoice) { %>
                                             <%

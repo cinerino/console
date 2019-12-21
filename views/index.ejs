@@ -177,12 +177,12 @@
                                 <div class="row mb-2">
                                     <ul class="nav nav-pills ml-auto mr-auto">
                                         <li class="nav-item">
-                                            <a class="nav-link bg-transparent active show"
-                                                href="#salesAmountByPaymentMethod" data-toggle="tab">決済方法</a>
+                                            <a class="nav-link bg-transparent" href="#salesAmountByPaymentMethod"
+                                                data-toggle="tab">決済方法</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link bg-transparent" href="#salesAmountByClient"
-                                                data-toggle="tab">クライアント</a>
+                                            <a class="nav-link bg-transparent active show" href="#salesAmountByClient"
+                                                data-toggle="tab">アプリケーション</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link bg-transparent" href="#salesAmountBySeller"
@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="tab-content p-0">
                                     <!-- Morris chart - Sales -->
-                                    <div class="chart tab-pane active show" id="salesAmountByPaymentMethod">
+                                    <div class="chart tab-pane" id="salesAmountByPaymentMethod">
                                         <div class="row">
                                             <% Object.values(PaymentMethodType).forEach(function(paymentMethod) { %>
                                             <div class="col-4 text-center">
@@ -216,7 +216,7 @@
                                             <!-- ./col -->
                                         </div>
                                     </div>
-                                    <div class="chart tab-pane" id="salesAmountByClient">
+                                    <div class="chart tab-pane active show" id="salesAmountByClient">
                                         <div class="row">
                                             <% applications.forEach(function(application) { %>
                                             <div class="col-4 text-center">
@@ -286,12 +286,12 @@
                                 <div class="row mb-2">
                                     <ul class="nav nav-pills ml-auto mr-auto">
                                         <li class="nav-item">
-                                            <a class="nav-link bg-transparent active show"
-                                                href="#numOrderItemsByPaymentMethod" data-toggle="tab">決済方法</a>
+                                            <a class="nav-link bg-transparent" href="#numOrderItemsByPaymentMethod"
+                                                data-toggle="tab">決済方法</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link bg-transparent" href="#numOrderItemsByClient"
-                                                data-toggle="tab">クライアント</a>
+                                            <a class="nav-link bg-transparent active show" href="#numOrderItemsByClient"
+                                                data-toggle="tab">アプリケーション</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link bg-transparent" href="#numOrderItemsBySeller"
@@ -301,7 +301,7 @@
                                 </div>
                                 <div class="tab-content p-0">
                                     <!-- Morris chart - Sales -->
-                                    <div class="chart tab-pane active show" id="numOrderItemsByPaymentMethod">
+                                    <div class="chart tab-pane" id="numOrderItemsByPaymentMethod">
                                         <div class="row">
                                             <% Object.values(PaymentMethodType).forEach(function(paymentMethod) { %>
                                             <div class="col-4 text-center">
@@ -326,7 +326,7 @@
                                         </div>
                                         <!-- /.row -->
                                     </div>
-                                    <div class="chart tab-pane" id="numOrderItemsByClient">
+                                    <div class="chart tab-pane active show" id="numOrderItemsByClient">
                                         <div class="row">
                                             <% applications.forEach(function(application) { %>
                                             <div class="col-4 text-center">

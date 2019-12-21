@@ -71,7 +71,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>タスク名</label>
-                                        <select size="10" class="form-control" name="name">
+                                        <select size="6" class="form-control" name="name">
                                             <% taskNameChoices.forEach(function (taskName) { %>
                                             <% var selected = searchConditions.name === taskName %>
                                             <option value="<%= taskName %>" <% if (selected) { %> selected <% } %>>

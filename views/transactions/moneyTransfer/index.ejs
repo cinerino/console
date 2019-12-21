@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>販売者</label>
-                                        <select multiple class="form-control" name="seller[ids][]" size="10">
+                                        <select multiple class="form-control" name="seller[ids][]" size="6">
                                             <% sellers.forEach(function (seller) { %>
                                             <% var selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf(seller.id) >= 0; %>
                                             <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
