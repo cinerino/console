@@ -158,8 +158,13 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<ul class="list-unstyled">';
 
-                    if (typeof data.amount === 'number') {
-                        html += '<li>' + data.amount + '</li>'
+                    if (data.amount !== undefined && data.amount !== null) {
+                        if (typeof data.amount === 'number') {
+                            html += '<li>' + data.amount + '</li>';
+                        } else {
+                            html += '<li>' + data.amount.value + '</li>'
+                                + '<li>' + data.amount.currency + '</li>';
+                        }
                     }
 
                     html += '</ul>';

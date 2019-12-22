@@ -230,17 +230,17 @@ function createFromAction(params) {
                 default:
                     object = { name: a.object.typeOf };
             }
-            if (a.typeOf === cinerinoapi.factory.actionType.MoneyTransfer) {
-                const amount = a.amount;
-                if (typeof amount === 'number') {
-                    object = { name: String(amount) };
-                }
-                else {
-                    object = { name: `${amount.value} ${amount.currency}` };
-                }
-            }
         }
         object.url = url;
+    }
+    if (a.typeOf === cinerinoapi.factory.actionType.MoneyTransfer) {
+        const amount = a.amount;
+        if (typeof amount === 'number') {
+            object = { name: String(amount) };
+        }
+        else {
+            object = { name: `${amount.value} ${amount.currency}` };
+        }
     }
     let purpose;
     if (Array.isArray(a.purpose)) {

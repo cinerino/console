@@ -276,18 +276,18 @@ export function createFromAction(params: {
                 default:
                     object = { name: a.object.typeOf };
             }
-
-            if (a.typeOf === cinerinoapi.factory.actionType.MoneyTransfer) {
-                const amount = (<cinerinoapi.factory.action.transfer.moneyTransfer.IAction<any>>a).amount;
-                if (typeof amount === 'number') {
-                    object = { name: String(amount) };
-                } else {
-                    object = { name: `${(<any>amount).value} ${(<any>amount).currency}` };
-                }
-            }
         }
 
         object.url = url;
+    }
+
+    if (a.typeOf === cinerinoapi.factory.actionType.MoneyTransfer) {
+        const amount = (<cinerinoapi.factory.action.transfer.moneyTransfer.IAction<any>>a).amount;
+        if (typeof amount === 'number') {
+            object = { name: String(amount) };
+        } else {
+            object = { name: `${(<any>amount).value} ${(<any>amount).currency}` };
+        }
     }
 
     let purpose: {
