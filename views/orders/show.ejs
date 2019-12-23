@@ -137,6 +137,8 @@
                                             <% } %>
                                             <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
                                             <%= acceptedOffer.itemOffered.programName %>
+                                            <% } else { %>
+                                            <%= `${acceptedOffer.itemOffered.typeOf} ${acceptedOffer.itemOffered.name}` %>
                                             <% } %>
                                         </td>
                                         <td>
@@ -178,7 +180,6 @@
                                             <% } %>
                                         </td>
                                     </tr>
-
                                     <% }) %>
                                 </tbody>
                             </table>

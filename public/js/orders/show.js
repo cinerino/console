@@ -2,8 +2,6 @@
 var order = JSON.parse($('#jsonViewer textarea').val());
 
 $(function () {
-    console.log('order:', order);
-
     // 配送メール送信
     $('button.sendEmailMessage').click(function () {
         var button = $(this);
