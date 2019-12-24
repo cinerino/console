@@ -78,7 +78,7 @@
                         <strong><i class="fa fa-info mr-1"></i> サポートIDプロバイダー</strong>
 
                         <p class="text-muted">
-                            <%= userPoolClient.SupportedIdentityProviders.join(',') %>
+                            <%- (Array.isArray(userPoolClient.SupportedIdentityProviders)) ? userPoolClient.SupportedIdentityProviders.join('<br>') : '' %>
                         </p>
 
                         <hr>
@@ -86,7 +86,7 @@
                         <strong><i class="fa fa-info mr-1"></i> 許可OAuthフロー</strong>
 
                         <p class="text-muted">
-                            <%= userPoolClient.AllowedOAuthFlows.join(',') %>
+                            <%- (Array.isArray(userPoolClient.AllowedOAuthFlows)) ? userPoolClient.AllowedOAuthFlows.join('<br>') : '' %>
                         </p>
 
                         <hr>
@@ -94,7 +94,7 @@
                         <strong><i class="fa fa-info mr-1"></i> 許可OAuthスコープ</strong>
 
                         <p class="text-muted">
-                            <%- userPoolClient.AllowedOAuthScopes.join('<br>') %>
+                            <%- (Array.isArray(userPoolClient.AllowedOAuthScopes)) ? userPoolClient.AllowedOAuthScopes.join('<br>') : '' %>
                         </p>
                     </div>
                     <!-- /.card-body -->
