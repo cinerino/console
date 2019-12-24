@@ -57,7 +57,6 @@ returnOrderTransactionsRouter.get(
                 endThrough: (req.query.endThrough !== undefined) ? moment(req.query.endThrough)
                     .toDate() : undefined,
                 agent: {
-                    typeOf: cinerinoapi.factory.personType.Person,
                     ids: (req.query.agent !== undefined && req.query.agent.ids !== '')
                         ? (<string>req.query.agent.ids).split(',')
                             .map((v) => v.trim())

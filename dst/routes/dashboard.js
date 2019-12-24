@@ -118,7 +118,12 @@ dashboardRouter.get('/aggregateExitRate', (req, res, next) => __awaiter(void 0, 
             startFrom: moment()
                 .tz('Asia/Tokyo')
                 .startOf('day')
-                .toDate()
+                .toDate(),
+            statuses: [
+                cinerinoapi.factory.transactionStatusType.Confirmed,
+                cinerinoapi.factory.transactionStatusType.Canceled,
+                cinerinoapi.factory.transactionStatusType.Expired
+            ]
         };
         const searchResult = yield placeOrderService.search(searchConditions);
         searchConditions.statuses = [
@@ -143,12 +148,12 @@ dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
-        const searchResult = yield actionService.search({
+        const { totalCount } = yield actionService.search({
             limit: 1,
             page: 1,
             typeOf: cinerinoapi.factory.actionType.RegisterAction,
             object: {
-                typeOf: { $in: ['ProgramMembership'] }
+                typeOf: { $in: [cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership] }
                 // id: { $in: [''] }
             },
             actionStatusTypes: [cinerinoapi.factory.actionStatusType.CompletedActionStatus],
@@ -158,7 +163,7 @@ dashboardRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 
                 .toDate()
         });
         res.json({
-            totalCount: searchResult.totalCount
+            totalCount: totalCount
         });
     }
     catch (error) {
@@ -180,9 +185,9 @@ dashboardRouter.get('/countNewTransaction', (req, res, next) => __awaiter(void 0
                 .startOf('day')
                 .toDate()
         };
-        const searchResult = yield placeOrderService.search(searchConditions);
+        const { totalCount } = yield placeOrderService.search(searchConditions);
         res.json({
-            totalCount: searchResult.totalCount
+            totalCount: totalCount
         });
     }
     catch (error) {

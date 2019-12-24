@@ -209,7 +209,7 @@ $(function () {
         function () {
             updateActivities();
         },
-        3000
+        10000
     );
 
     $.getJSON(

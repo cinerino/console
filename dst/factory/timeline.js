@@ -9,94 +9,98 @@ function createFromAction(params) {
         name: 'Unknown'
     };
     if (a.agent !== undefined && a.agent !== null) {
-        if (a.agent.typeOf === cinerinoapi.factory.personType.Person) {
-            let userPoolId = '';
-            let tokenIssuer = '';
-            if (Array.isArray(a.agent.identifier)) {
-                const tokenIssuerIdentifier = a.agent.identifier.find((i) => i.name === 'tokenIssuer');
-                if (tokenIssuerIdentifier !== undefined) {
-                    tokenIssuer = tokenIssuerIdentifier.value;
-                    userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+        switch (a.agent.typeOf) {
+            case cinerinoapi.factory.personType.Person:
+            case 'WebApplication':
+                let userPoolId = '';
+                let tokenIssuer = '';
+                if (Array.isArray(a.agent.identifier)) {
+                    const tokenIssuerIdentifier = a.agent.identifier.find((i) => i.name === 'tokenIssuer');
+                    if (tokenIssuerIdentifier !== undefined) {
+                        tokenIssuer = tokenIssuerIdentifier.value;
+                        userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    }
                 }
-            }
-            const url = `/projects/${params.project.id}/resources/${a.agent.typeOf}/${a.agent.id}?userPoolId=${userPoolId}`;
-            let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
-            if (a.agent.name !== undefined) {
-                agentName = a.agent.name;
-            }
-            else {
-                if (a.agent.familyName !== undefined) {
-                    agentName = `${a.agent.givenName} ${a.agent.familyName}`;
+                const url = `/projects/${params.project.id}/resources/${a.agent.typeOf}/${a.agent.id}?userPoolId=${userPoolId}`;
+                let agentName = (typeof a.agent.id === 'string') ? a.agent.id : a.agent.typeOf;
+                if (a.agent.name !== undefined) {
+                    agentName = a.agent.name;
                 }
-            }
-            agent = {
-                id: a.agent.id,
-                name: agentName,
-                url: url
-            };
-        }
-        else if (a.agent.typeOf === cinerinoapi.factory.organizationType.MovieTheater
-            || a.agent.typeOf === cinerinoapi.factory.organizationType.Corporation) {
-            agent = {
-                id: a.agent.id,
-                name: (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja,
-                url: `/projects/${params.project.id}/sellers/${a.agent.id}`
-            };
-        }
-        else {
-            agent = {
-                id: a.agent.id,
-                name: (a.agent.name !== undefined && a.agent.name !== null)
-                    ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
-                    : ''
-            };
+                else {
+                    if (a.agent.familyName !== undefined) {
+                        agentName = `${a.agent.givenName} ${a.agent.familyName}`;
+                    }
+                }
+                agent = {
+                    id: a.agent.id,
+                    name: agentName,
+                    url: url
+                };
+                break;
+            case cinerinoapi.factory.organizationType.MovieTheater:
+            case cinerinoapi.factory.organizationType.Corporation:
+                agent = {
+                    id: a.agent.id,
+                    name: (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja,
+                    url: `/projects/${params.project.id}/sellers/${a.agent.id}`
+                };
+                break;
+            default:
+                agent = {
+                    id: a.agent.id,
+                    name: (a.agent.name !== undefined && a.agent.name !== null)
+                        ? (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja
+                        : ''
+                };
         }
     }
     let recipient;
     if (a.recipient !== undefined && a.recipient !== null) {
-        if (a.recipient.typeOf === cinerinoapi.factory.personType.Person) {
-            let userPoolId = '';
-            let tokenIssuer = '';
-            if (Array.isArray(a.recipient.identifier)) {
-                const tokenIssuerIdentifier = a.recipient.identifier.find((i) => i.name === 'tokenIssuer');
-                if (tokenIssuerIdentifier !== undefined) {
-                    tokenIssuer = tokenIssuerIdentifier.value;
-                    userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+        switch (a.recipient.typeOf) {
+            case cinerinoapi.factory.personType.Person:
+            case 'WebApplication':
+                let userPoolId = '';
+                let tokenIssuer = '';
+                if (Array.isArray(a.recipient.identifier)) {
+                    const tokenIssuerIdentifier = a.recipient.identifier.find((i) => i.name === 'tokenIssuer');
+                    if (tokenIssuerIdentifier !== undefined) {
+                        tokenIssuer = tokenIssuerIdentifier.value;
+                        userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                    }
                 }
-            }
-            const url = `/projects/${params.project.id}/resources/${a.recipient.typeOf}/${a.recipient.id}?userPoolId=${userPoolId}`;
-            let recipientName = (typeof a.recipient.url === 'string') ? a.recipient.url
-                : (typeof a.recipient.id === 'string') ? a.recipient.id : a.recipient.typeOf;
-            if (a.recipient.name !== undefined) {
-                recipientName = a.recipient.name;
-            }
-            else {
-                if (a.recipient.familyName !== undefined) {
-                    recipientName = `${a.recipient.givenName} ${a.recipient.familyName}`;
+                const url = `/projects/${params.project.id}/resources/${a.recipient.typeOf}/${a.recipient.id}?userPoolId=${userPoolId}`;
+                let recipientName = (typeof a.recipient.url === 'string') ? a.recipient.url
+                    : (typeof a.recipient.id === 'string') ? a.recipient.id : a.recipient.typeOf;
+                if (a.recipient.name !== undefined) {
+                    recipientName = a.recipient.name;
                 }
-            }
-            recipient = {
-                id: a.recipient.id,
-                name: recipientName,
-                url: url
-            };
-        }
-        else if (a.recipient.typeOf === cinerinoapi.factory.organizationType.MovieTheater
-            || a.recipient.typeOf === cinerinoapi.factory.organizationType.Corporation) {
-            recipient = {
-                id: a.recipient.id,
-                name: (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja,
-                url: (typeof a.recipient.url === 'string') ? a.recipient.url : `/projects/${params.project.id}/sellers/${a.recipient.id}`
-            };
-        }
-        else {
-            recipient = {
-                id: a.recipient.id,
-                name: (a.recipient.name !== undefined && a.recipient.name !== null)
-                    ? (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja
-                    : (typeof a.recipient.url === 'string') ? a.recipient.url : a.recipient.id,
-                url: a.recipient.url
-            };
+                else {
+                    if (a.recipient.familyName !== undefined) {
+                        recipientName = `${a.recipient.givenName} ${a.recipient.familyName}`;
+                    }
+                }
+                recipient = {
+                    id: a.recipient.id,
+                    name: recipientName,
+                    url: url
+                };
+                break;
+            case cinerinoapi.factory.organizationType.MovieTheater:
+            case cinerinoapi.factory.organizationType.Corporation:
+                recipient = {
+                    id: a.recipient.id,
+                    name: (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja,
+                    url: (typeof a.recipient.url === 'string') ? a.recipient.url : `/projects/${params.project.id}/sellers/${a.recipient.id}`
+                };
+                break;
+            default:
+                recipient = {
+                    id: a.recipient.id,
+                    name: (a.recipient.name !== undefined && a.recipient.name !== null)
+                        ? (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja
+                        : (typeof a.recipient.url === 'string') ? a.recipient.url : a.recipient.id,
+                    url: a.recipient.url
+                };
         }
     }
     let actionName;
@@ -224,7 +228,7 @@ function createFromAction(params) {
                 case cinerinoapi.factory.chevre.transactionType.Reserve:
                     object = { name: '予約取引' };
                     break;
-                case 'ProgramMembership':
+                case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
                     object = { name: '会員プログラム' };
                     break;
                 default:

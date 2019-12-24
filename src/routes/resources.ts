@@ -36,6 +36,12 @@ resourcesRouter.get(
                     res.redirect(`/projects/${req.project.id}/sellers/${req.params.resourceId}`);
                     break;
 
+                // アプリケーション
+                case 'WebApplication':
+                    res.redirect(`/projects/${req.project.id}/applications/${req.params.resourceId}`);
+
+                    break;
+
                 // 人
                 case cinerinoapi.factory.personType.Person:
                     if (project.settings !== undefined && project.settings.cognito !== undefined) {
@@ -56,7 +62,7 @@ resourcesRouter.get(
                     break;
 
                 // 会員プログラム
-                case 'ProgramMembership':
+                case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
                     res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
                     break;
 

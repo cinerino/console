@@ -125,7 +125,12 @@ dashboardRouter.get(
                 startFrom: moment()
                     .tz('Asia/Tokyo')
                     .startOf('day')
-                    .toDate()
+                    .toDate(),
+                statuses: [
+                    cinerinoapi.factory.transactionStatusType.Confirmed,
+                    cinerinoapi.factory.transactionStatusType.Canceled,
+                    cinerinoapi.factory.transactionStatusType.Expired
+                ]
             };
             const searchResult = await placeOrderService.search(searchConditions);
             searchConditions.statuses = [
@@ -154,12 +159,12 @@ dashboardRouter.get(
                 auth: req.user.authClient
             });
 
-            const searchResult = await actionService.search({
+            const { totalCount } = await actionService.search({
                 limit: 1,
                 page: 1,
                 typeOf: cinerinoapi.factory.actionType.RegisterAction,
                 object: {
-                    typeOf: { $in: ['ProgramMembership'] }
+                    typeOf: { $in: [cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership] }
                     // id: { $in: [''] }
                 },
                 actionStatusTypes: [cinerinoapi.factory.actionStatusType.CompletedActionStatus],
@@ -170,7 +175,7 @@ dashboardRouter.get(
             });
 
             res.json({
-                totalCount: searchResult.totalCount
+                totalCount: totalCount
             });
         } catch (error) {
             next(error);
@@ -195,9 +200,9 @@ dashboardRouter.get(
                     .startOf('day')
                     .toDate()
             };
-            const searchResult = await placeOrderService.search(searchConditions);
+            const { totalCount } = await placeOrderService.search(searchConditions);
             res.json({
-                totalCount: searchResult.totalCount
+                totalCount: totalCount
             });
         } catch (error) {
             next(error);

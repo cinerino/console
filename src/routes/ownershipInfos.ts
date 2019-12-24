@@ -91,7 +91,7 @@ ownershipInfosRouter.get(
                     GoodTypeChoices: [
                         cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
                         cinerinoapi.factory.chevre.reservationType.EventReservation,
-                        'ProgramMembership'
+                        cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership
                     ]
                 });
             }
