@@ -124,7 +124,7 @@
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
                                             <% if (acceptedOffer.itemOffered.reservationFor !== undefined) { %>
                                             <a target="_blank"
-                                                href="/projects/<%= req.project.id %>/events/screeningEvent/<%= acceptedOffer.itemOffered.reservationFor.id %>">
+                                                href="/projects/<%= req.project.id %>/events/<%= acceptedOffer.itemOffered.reservationFor.id %>">
                                                 <%= acceptedOffer.itemOffered.reservationFor.name.ja %>
                                                 <br>
                                                 <%= moment(acceptedOffer.itemOffered.reservationFor.startDate).format('lllZ') %>

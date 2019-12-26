@@ -46,7 +46,7 @@ eventsRouter.get('/chevreBackend', (req, res, next) => __awaiter(void 0, void 0,
 /**
  * 上映イベント検索
  */
-eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+eventsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         debug('req.query:', req.query);
         const eventService = new cinerinoapi.service.Event({
@@ -99,7 +99,7 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(void 0, void 0
             });
         }
         else {
-            res.render('events/screeningEvent/index', {
+            res.render('events/index', {
                 EventStatusType: cinerinoapi.factory.chevre.eventStatusType,
                 moment: moment,
                 sellers: searchSellersResult.data,
@@ -114,7 +114,7 @@ eventsRouter.get('/screeningEvent', (req, res, next) => __awaiter(void 0, void 0
 /**
  * 上映イベントインポート
  */
-eventsRouter.post('/screeningEvent/import', ...[
+eventsRouter.post('/import', ...[
     check_1.body('seller.ids')
         .not()
         .isEmpty()
@@ -190,7 +190,7 @@ eventsRouter.post('/screeningEvent/import', ...[
 /**
  * 上映イベント詳細
  */
-eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+eventsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
@@ -199,7 +199,7 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, vo
         const event = yield eventService.findById({
             id: req.params.id
         });
-        res.render('events/screeningEvent/show', {
+        res.render('events/show', {
             message: '',
             moment: moment,
             event: event,
@@ -213,7 +213,7 @@ eventsRouter.get('/screeningEvent/:id', (req, res, next) => __awaiter(void 0, vo
 /**
  * 上映イベントの注文検索
  */
-eventsRouter.get('/screeningEvent/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+eventsRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventService = new cinerinoapi.service.Event({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,

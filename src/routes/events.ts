@@ -46,7 +46,7 @@ eventsRouter.get(
  * 上映イベント検索
  */
 eventsRouter.get(
-    '/screeningEvent',
+    '',
     async (req, res, next) => {
         try {
             debug('req.query:', req.query);
@@ -119,7 +119,7 @@ eventsRouter.get(
                     data: searchScreeningEventsResult.data
                 });
             } else {
-                res.render('events/screeningEvent/index', {
+                res.render('events/index', {
                     EventStatusType: cinerinoapi.factory.chevre.eventStatusType,
                     moment: moment,
                     sellers: searchSellersResult.data,
@@ -136,7 +136,7 @@ eventsRouter.get(
  * 上映イベントインポート
  */
 eventsRouter.post(
-    '/screeningEvent/import',
+    '/import',
     ...[
         body('seller.ids')
             .not()
@@ -228,7 +228,7 @@ eventsRouter.post(
  * 上映イベント詳細
  */
 eventsRouter.get(
-    '/screeningEvent/:id',
+    '/:id',
     async (req, res, next) => {
         try {
             const eventService = new cinerinoapi.service.Event({
@@ -238,7 +238,7 @@ eventsRouter.get(
             const event = await eventService.findById({
                 id: req.params.id
             });
-            res.render('events/screeningEvent/show', {
+            res.render('events/show', {
                 message: '',
                 moment: moment,
                 event: event,
@@ -254,7 +254,7 @@ eventsRouter.get(
  * 上映イベントの注文検索
  */
 eventsRouter.get(
-    '/screeningEvent/:id/orders',
+    '/:id/orders',
     async (req, res, next) => {
         try {
             const eventService = new cinerinoapi.service.Event({

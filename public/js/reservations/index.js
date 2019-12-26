@@ -63,7 +63,7 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     html += '<li><span class="badge badge-secondary">' + data.reservationFor.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/events/screeningEvent/' + data.reservationFor.id + '">' + data.reservationFor.name.ja + '</a></li>'
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + data.reservationFor.id + '">' + data.reservationFor.name.ja + '</a></li>'
                         + '<li>' + data.reservationFor.startDate + '</li>'
                         + '<li>' + data.reservationFor.superEvent.location.name.ja + '</li>'
                         + '<li>' + data.reservationFor.location.name.ja + '</li>';
