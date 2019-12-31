@@ -34,21 +34,17 @@ const tasks_1 = require("./tasks");
 const transactions_1 = require("./transactions");
 const userPools_1 = require("./userPools");
 const waiter_1 = require("./waiter");
-const projects = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
+const API_ENDPOINT = process.env.API_ENDPOINT;
 const projectsRouter = express.Router();
 projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const message = '';
-        const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
-        if (typeof projectFromEnvironment.settings.API_ENDPOINT !== 'string') {
-            projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
-        }
         const projectService = new cinerinoapi.service.Project({
-            endpoint: projectFromEnvironment.settings.API_ENDPOINT,
+            endpoint: API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: projectFromEnvironment.id });
-        req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), projectFromEnvironment.settings) });
+        const project = yield projectService.findById({ id: req.params.id });
+        req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), { id: project.id, API_ENDPOINT: API_ENDPOINT }) });
         res.render('projects/edit', {
             message: message,
             project: req.project
@@ -59,12 +55,11 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 }));
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // ルーティングからプロジェクトをセット
-    const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
-    if (typeof projectFromEnvironment.settings.API_ENDPOINT !== 'string') {
-        projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
-    }
-    req.project = projectFromEnvironment;
+    req.project = {
+        typeOf: 'Project',
+        id: req.params.id,
+        settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
+    };
     next();
 }));
 projectsRouter.get('/:id/logo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

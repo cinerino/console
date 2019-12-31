@@ -26,7 +26,7 @@ import transactionsRouter from './transactions';
 import userPoolsRouter from './userPools';
 import waiterRouter from './waiter';
 
-const projects: any[] = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
+const API_ENDPOINT = <string>process.env.API_ENDPOINT;
 
 const projectsRouter = express.Router();
 
@@ -35,18 +35,14 @@ projectsRouter.all(
     async (req, res, next) => {
         try {
             const message: string = '';
-            const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
-            if (typeof projectFromEnvironment.settings.API_ENDPOINT !== 'string') {
-                projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
-            }
 
             const projectService = new cinerinoapi.service.Project({
-                endpoint: projectFromEnvironment.settings.API_ENDPOINT,
+                endpoint: API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: projectFromEnvironment.id });
+            const project = await projectService.findById({ id: req.params.id });
 
-            req.project = { ...project, settings: { ...project.settings, ...projectFromEnvironment.settings } };
+            req.project = { ...project, settings: { ...project.settings, id: project.id, API_ENDPOINT: API_ENDPOINT } };
 
             res.render('projects/edit', {
                 message: message,
@@ -61,13 +57,11 @@ projectsRouter.all(
 projectsRouter.all(
     '/:id/*',
     async (req, _, next) => {
-        // ルーティングからプロジェクトをセット
-        const projectFromEnvironment = projects.find((p) => p.id === req.params.id);
-        if (typeof projectFromEnvironment.settings.API_ENDPOINT !== 'string') {
-            projectFromEnvironment.settings.API_ENDPOINT = process.env.API_ENDPOINT;
-        }
-
-        req.project = projectFromEnvironment;
+        req.project = {
+            typeOf: 'Project',
+            id: req.params.id,
+            settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
+        };
 
         next();
     }

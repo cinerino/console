@@ -7,8 +7,6 @@ import * as express from 'express';
 
 import * as cinerinoapi from '../cinerinoapi';
 
-const projectsFromEnvironment: any[] = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
-
 // const debug = createDebug('cinerino-console:routes');
 const homeRouter = express.Router();
 
@@ -16,38 +14,13 @@ homeRouter.get(
     '/',
     async (req, res, next) => {
         try {
-            const projects = await Promise.all(projectsFromEnvironment.map(async (p) => {
-                if (typeof p.settings.API_ENDPOINT !== 'string') {
-                    p.settings.API_ENDPOINT = process.env.API_ENDPOINT;
-                }
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
 
-                try {
-                    const projectService = new cinerinoapi.service.Project({
-                        endpoint: p.settings.API_ENDPOINT,
-                        auth: req.user.authClient
-                    });
-
-                    let project: cinerinoapi.factory.project.IProject | undefined;
-
-                    return new Promise<cinerinoapi.factory.project.IProject>(async (resolve, reject) => {
-                        setTimeout(
-                            async () => {
-                                if (project === undefined) {
-                                    reject(new Error('Couldn\'t get project details'));
-                                }
-                            },
-                            // tslint:disable-next-line:no-magic-numbers
-                            5000
-                        );
-
-                        project = await projectService.findById({ id: p.id });
-
-                        resolve(project);
-                    });
-                } catch (error) {
-                    return p;
-                }
-            }));
+            const searchProjectsResult = await projectService.search({});
+            const projects = searchProjectsResult.data;
 
             res.render('dashboard', {
                 layout: 'layouts/dashboard',

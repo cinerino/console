@@ -16,37 +16,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 // import * as moment from 'moment';
 const cinerinoapi = require("../cinerinoapi");
-const projectsFromEnvironment = (process.env.PROJECTS !== undefined) ? JSON.parse(process.env.PROJECTS) : [];
 // const debug = createDebug('cinerino-console:routes');
 const homeRouter = express.Router();
 homeRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const projects = yield Promise.all(projectsFromEnvironment.map((p) => __awaiter(void 0, void 0, void 0, function* () {
-            if (typeof p.settings.API_ENDPOINT !== 'string') {
-                p.settings.API_ENDPOINT = process.env.API_ENDPOINT;
-            }
-            try {
-                const projectService = new cinerinoapi.service.Project({
-                    endpoint: p.settings.API_ENDPOINT,
-                    auth: req.user.authClient
-                });
-                let project;
-                return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
-                    setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
-                        if (project === undefined) {
-                            reject(new Error('Couldn\'t get project details'));
-                        }
-                    }), 
-                    // tslint:disable-next-line:no-magic-numbers
-                    5000);
-                    project = yield projectService.findById({ id: p.id });
-                    resolve(project);
-                }));
-            }
-            catch (error) {
-                return p;
-            }
-        })));
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        const searchProjectsResult = yield projectService.search({});
+        const projects = searchProjectsResult.data;
         res.render('dashboard', {
             layout: 'layouts/dashboard',
             message: 'Welcome to Cinerino Console!',
