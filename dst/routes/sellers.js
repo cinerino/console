@@ -63,7 +63,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         let message;
         let attributes;
         const projectService = new cinerinoapi.service.Project({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });
@@ -110,7 +110,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         let message;
         let attributes;
         const projectService = new cinerinoapi.service.Project({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
         const project = yield projectService.findById({ id: req.project.id });

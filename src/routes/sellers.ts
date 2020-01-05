@@ -60,7 +60,7 @@ sellersRouter.all(
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
             const projectService = new cinerinoapi.service.Project({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
@@ -113,7 +113,7 @@ sellersRouter.all(
             let attributes: cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType> | undefined;
 
             const projectService = new cinerinoapi.service.Project({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
             const project = await projectService.findById({ id: req.project.id });
