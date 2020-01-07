@@ -1212,6 +1212,8 @@ function updateWaiterChart() {
     //     return data;
     // }));
 
+    var colorChoices = ['#daa8f5', '#3399FF', '#fad684', '#79f67d', '#79ccf5', '#e96c6c', '#efefef'];
+
     // This will get the first returned node in the jQuery collection.
     new Chart($('#visitorsChart').get(0).getContext('2d'), {
         type: 'line',
@@ -1238,7 +1240,7 @@ function updateWaiterChart() {
                     borderWidth: 1.5,
                     lineTension: 0,
                     spanGaps: true,
-                    borderColor: '#efefef',
+                    borderColor: colorChoices[index % colorChoices.length],
                     pointRadius: 0,
                     pointHoverRadius: 7,
                     pointColor: '#efefef',

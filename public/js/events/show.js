@@ -85,24 +85,91 @@ function searchOrders(cb) {
 }
 function createRemainingAttendeeCapacityChart(datas) {
     console.log('creating chart...datas:', datas.length);
-    remainingAttendeeCapacityChart2 = new Morris.Line({
-        element: 'remainingAttendeeCapacityChart2',
-        resize: true,
-        data: datas.map(function (data) {
-            return { y: data.x, remainingCapacity: data.y }
-        }),
-        xkey: 'y',
-        ykeys: ['remainingCapacity'],
-        labels: ['残席数遷移'],
-        lineColors: ['#efefef'],
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 4,
-        pointStrokeColors: ['#efefef'],
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10
+    // remainingAttendeeCapacityChart2 = new Morris.Line({
+    //     element: 'remainingAttendeeCapacityChart2',
+    //     resize: true,
+    //     data: datas.map(function (data) {
+    //         return { y: data.x, remainingCapacity: data.y }
+    //     }),
+    //     xkey: 'y',
+    //     ykeys: ['remainingCapacity'],
+    //     labels: ['残席数遷移'],
+    //     lineColors: ['#efefef'],
+    //     lineWidth: 2,
+    //     hideHover: 'auto',
+    //     gridTextColor: '#fff',
+    //     gridStrokeWidth: 0.4,
+    //     pointSize: 4,
+    //     pointStrokeColors: ['#efefef'],
+    //     gridLineColor: '#efefef',
+    //     gridTextFamily: 'Open Sans',
+    //     gridTextSize: 10
+    // });
+
+    // This will get the first returned node in the jQuery collection.
+    new Chart($('#remainingAttendeeCapacityChart2').get(0).getContext('2d'), {
+        type: 'line',
+        data: {
+            // labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+            datasets: [
+                {
+                    label: status,
+                    fill: false,
+                    borderWidth: 2,
+                    lineTension: 0,
+                    spanGaps: true,
+                    borderColor: '#efefef',
+                    pointRadius: 2,
+                    pointHoverRadius: 7,
+                    pointColor: '#efefef',
+                    pointBackgroundColor: '#efefef',
+                    data: datas.map(function (data) {
+                        return { x: moment(data.x).toDate(), y: data.y }
+                    })
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                        // displayFormats: {
+                        //     quarter: 'MMM YYYY'
+                        // }
+                    },
+                    ticks: {
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        // stepSize: 5000,
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: true,
+                        // color: '#555c62',
+                        // color: '#efefef',
+                        lineWidth: 1,
+                        drawBorder: false,
+                    }
+                }]
+            }
+        }
     });
 }

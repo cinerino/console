@@ -146,8 +146,8 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="active tab-pane" id="remainingAttendeeCapacity">
-                                <div class="card bg-dark-gradient">
-                                    <div class="card-header no-border">
+                                <div class="card bg-gradient-dark">
+                                    <div class="card-header border-0">
                                         <h3 class="card-title">
                                         </h3>
 
@@ -155,8 +155,10 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="chart" id="remainingAttendeeCapacityChart2" style="height: 400px;">
-                                            searching...</div>
+                                        <!-- <div class="chart" id="remainingAttendeeCapacityChart2" style="height: 400px;">
+                                            searching...</div> -->
+                                        <canvas class="chart" id="remainingAttendeeCapacityChart2"
+                                            style="min-height: 400px; height: 400px; max-height: 400px; max-width: 100%;"></canvas>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
