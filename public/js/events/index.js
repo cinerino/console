@@ -105,7 +105,9 @@ $(function () {
     $('#reservation').daterangepicker({
         timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        locale: {
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+        }
     })
 
     // イベント在庫仕入れ

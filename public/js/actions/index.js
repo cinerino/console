@@ -258,7 +258,9 @@ $(function () {
     $('#startRange').daterangepicker({
         timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        locale: {
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+        }
     });
 
     $(document).on('click', '.showAgent', function () {

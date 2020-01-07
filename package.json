@@ -14,7 +14,7 @@
     "@cinerino/api-nodejs-client": "2.0.0-alpha.51",
     "@motionpicture/coa-service": "^7.0.0",
     "@motionpicture/express-middleware": "^0.1.1",
-    "admin-lte": "3.0.0-alpha.2",
+    "admin-lte": "^3.0.1",
     "body-parser": "^1.19.0",
     "connect-redis": "^3.4.2",
     "cookie-parser": "^1.4.4",

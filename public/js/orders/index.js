@@ -191,7 +191,9 @@ $(function () {
     $('#orderDateRange,#reservationForInSessionRange').daterangepicker({
         timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        locale: {
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+        }
     })
 
     $('.search').click(function () {

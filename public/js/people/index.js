@@ -57,6 +57,8 @@ $(function () {
     $('#orderDateRange').daterangepicker({
         timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        locale: {
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+        }
     })
 });

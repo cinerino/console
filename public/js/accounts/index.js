@@ -78,6 +78,8 @@ $(function () {
     $('#orderDateRange').daterangepicker({
         timePicker: false,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDT00:00:00Z'
+        locale: {
+            format: 'YYYY-MM-DDT00:00:00Z'
+        }
     })
 });

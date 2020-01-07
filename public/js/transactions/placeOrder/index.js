@@ -125,7 +125,9 @@ $(function () {
     $('#startRange').daterangepicker({
         timePicker: true,
         // timePickerIncrement: 30,
-        format: 'YYYY-MM-DDThh:mm:ssZ'
+        locale: {
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+        }
     });
 
     $('.search').click(function () {

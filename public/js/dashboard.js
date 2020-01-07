@@ -41,7 +41,7 @@ $(function () {
     })
 
     // bootstrap WYSIHTML5 - text editor
-    $('.textarea').wysihtml5()
+    // $('.textarea').wysihtml5()
 
     $('#salesAmount .daterange').daterangepicker({
         ranges: {
@@ -148,30 +148,30 @@ $(function () {
     // })
 
     // Sparkline charts
-    var myvalues = [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021]
-    $('#sparkline-1').sparkline(myvalues, {
-        type: 'line',
-        lineColor: '#92c1dc',
-        fillColor: '#ebf4f9',
-        height: '50',
-        width: '80'
-    })
-    myvalues = [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921]
-    $('#sparkline-2').sparkline(myvalues, {
-        type: 'line',
-        lineColor: '#92c1dc',
-        fillColor: '#ebf4f9',
-        height: '50',
-        width: '80'
-    })
-    myvalues = [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21]
-    $('#sparkline-3').sparkline(myvalues, {
-        type: 'line',
-        lineColor: '#92c1dc',
-        fillColor: '#ebf4f9',
-        height: '50',
-        width: '80'
-    })
+    // var myvalues = [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021]
+    // $('#sparkline-1').sparkline(myvalues, {
+    //     type: 'line',
+    //     lineColor: '#92c1dc',
+    //     fillColor: '#ebf4f9',
+    //     height: '50',
+    //     width: '80'
+    // })
+    // myvalues = [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921]
+    // $('#sparkline-2').sparkline(myvalues, {
+    //     type: 'line',
+    //     lineColor: '#92c1dc',
+    //     fillColor: '#ebf4f9',
+    //     height: '50',
+    //     width: '80'
+    // })
+    // myvalues = [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21]
+    // $('#sparkline-3').sparkline(myvalues, {
+    //     type: 'line',
+    //     lineColor: '#92c1dc',
+    //     fillColor: '#ebf4f9',
+    //     height: '50',
+    //     width: '80'
+    // })
 
     // The Calender
     $('#calendar').datepicker()
@@ -463,56 +463,193 @@ function searchNumPlaceOrder(cb) {
 
 function createNumPlaceOrderChart(datas) {
     var statuses = ['Confirmed', 'Canceled', 'Expired'];
+    var colors = ['#79f67d', '#fad684', '#e96c6c'];
 
-    new Morris.Line({
-        element: 'numPlaceOrderChart',
-        resize: true,
-        data: datas.map(function (data) {
-            var data4chart = { y: moment(data.measureDate).toISOString() };
-            statuses.forEach(function (status) {
-                data4chart[status] = (data.value[status] !== undefined) ? data.value[status] : 0
-            });
+    // new Morris.Line({
+    //     element: 'numPlaceOrderChart',
+    //     resize: true,
+    //     data: datas.map(function (data) {
+    //         var data4chart = { y: moment(data.measureDate).toISOString() };
+    //         statuses.forEach(function (status) {
+    //             data4chart[status] = (data.value[status] !== undefined) ? data.value[status] : 0
+    //         });
 
-            return data4chart;
-        }),
-        xkey: 'y',
-        ykeys: statuses,
-        labels: statuses,
-        lineColors: ['#79f67d', '#fad684', '#e96c6c'],
-        // lineColors: ['#ffc107', '#dc3545', '#28a745'],
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 0,
-        pointStrokeColors: ['#fad684', '#e96c6c', '#79f67d'],
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10,
-        smooth: false
+    //         return data4chart;
+    //     }),
+    //     xkey: 'y',
+    //     ykeys: statuses,
+    //     labels: statuses,
+    //     lineColors: ['#79f67d', '#fad684', '#e96c6c'],
+    //     // lineColors: ['#ffc107', '#dc3545', '#28a745'],
+    //     lineWidth: 2,
+    //     hideHover: 'auto',
+    //     gridTextColor: '#fff',
+    //     gridStrokeWidth: 0.4,
+    //     pointSize: 0,
+    //     pointStrokeColors: ['#fad684', '#e96c6c', '#79f67d'],
+    //     gridLineColor: '#efefef',
+    //     gridTextFamily: 'Open Sans',
+    //     gridTextSize: 10,
+    //     smooth: false
+    // });
+
+    // Sales graph chart
+    var salesGraphChartCanvas = $('#numPlaceOrderChart').get(0).getContext('2d');
+    //$('#revenue-chart').get(0).getContext('2d');
+
+    var salesGraphChartData = {
+        // labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+        datasets: statuses.map(function (status, key) {
+            return {
+                label: status,
+                fill: false,
+                borderWidth: 1.5,
+                lineTension: 0,
+                spanGaps: true,
+                borderColor: colors[key],
+                pointRadius: 0,
+                pointHoverRadius: 7,
+                pointColor: '#efefef',
+                pointBackgroundColor: '#efefef',
+                data: datas.map(function (data) {
+                    return {
+                        x: moment(data.measureDate).toDate(),
+                        y: (data.value[status] !== undefined) ? data.value[status] : 0
+                    }
+                })
+            };
+        })
+    }
+
+    var salesGraphChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+            display: false,
+        },
+        scales: {
+            xAxes: [{
+                type: 'time',
+                ticks: {
+                    fontColor: '#fff',
+                    fontFamily: 'Open Sans',
+                    fontSize: 10
+                },
+                gridLines: {
+                    display: false,
+                    color: '#efefef',
+                    drawBorder: false,
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    // stepSize: 5000,
+                    fontColor: '#fff',
+                    fontFamily: 'Open Sans',
+                    fontSize: 10
+                },
+                gridLines: {
+                    display: true,
+                    color: '#555c62',
+                    // color: '#efefef',
+                    drawBorder: false,
+                }
+            }]
+        }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    new Chart(salesGraphChartCanvas, {
+        type: 'line',
+        data: salesGraphChartData,
+        options: salesGraphChartOptions
     });
 }
+
 function createSalesAmountChart(datas) {
-    var line = new Morris.Line({
-        element: 'salesAmountChart',
-        resize: true,
-        data: datas.map(function (data) {
-            return { y: moment(data.measureDate).toISOString(), salesAmount: data.value }
-        }),
-        xkey: 'y',
-        ykeys: ['salesAmount'],
-        labels: ['売上高'],
-        lineColors: ['#efefef'],
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 0,
-        pointStrokeColors: ['#efefef'],
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10,
-        smooth: false
+    // var line = new Morris.Line({
+    //     element: 'salesAmountChart',
+    //     resize: true,
+    //     data: datas.map(function (data) {
+    //         return { y: moment(data.measureDate).toISOString(), salesAmount: data.value }
+    //     }),
+    //     xkey: 'y',
+    //     ykeys: ['salesAmount'],
+    //     labels: ['売上高'],
+    //     lineColors: ['#efefef'],
+    //     lineWidth: 2,
+    //     hideHover: 'auto',
+    //     gridTextColor: '#fff',
+    //     gridStrokeWidth: 0.4,
+    //     pointSize: 0,
+    //     pointStrokeColors: ['#efefef'],
+    //     gridLineColor: '#efefef',
+    //     gridTextFamily: 'Open Sans',
+    //     gridTextSize: 10,
+    //     smooth: false
+    // });
+
+    // This will get the first returned node in the jQuery collection.
+    new Chart($('#salesAmountChart').get(0).getContext('2d'), {
+        type: 'line',
+        data: {
+            // labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+            datasets: [
+                {
+                    label: status,
+                    fill: false,
+                    borderWidth: 1.5,
+                    lineTension: 0,
+                    spanGaps: true,
+                    borderColor: '#efefef',
+                    pointRadius: 0,
+                    pointHoverRadius: 7,
+                    pointColor: '#efefef',
+                    pointBackgroundColor: '#efefef',
+                    data: datas.map(function (data) {
+                        return {
+                            x: moment(data.measureDate).toDate(),
+                            y: data.value
+                        }
+                    })
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    ticks: {
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        // stepSize: 5000,
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: true,
+                        // color: '#555c62',
+                        // color: '#efefef',
+                        lineWidth: 1,
+                        drawBorder: false,
+                    }
+                }]
+            }
+        }
     });
 }
 function createSalesAmountByClientChart(datas) {
@@ -597,28 +734,92 @@ function createSalesAmountBySellerChart(datas) {
     });
 }
 function createNumOrderItemsChart(datas) {
-    var line = new Morris.Line({
-        element: 'numOrderItemsChart',
-        resize: true,
-        data: datas.map(function (data) {
-            return { y: moment(data.measureDate).toISOString(), numOrderItems: data.value }
-        }),
-        xkey: 'y',
-        ykeys: ['numOrderItems'],
-        labels: ['注文アイテム数'],
-        lineColors: ['#efefef'],
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 0,
-        pointStrokeColors: ['#efefef'],
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10,
-        smooth: false
+    // var line = new Morris.Line({
+    //     element: 'numOrderItemsChart',
+    //     resize: true,
+    //     data: datas.map(function (data) {
+    //         return { y: moment(data.measureDate).toISOString(), numOrderItems: data.value }
+    //     }),
+    //     xkey: 'y',
+    //     ykeys: ['numOrderItems'],
+    //     labels: ['注文アイテム数'],
+    //     lineColors: ['#efefef'],
+    //     lineWidth: 2,
+    //     hideHover: 'auto',
+    //     gridTextColor: '#fff',
+    //     gridStrokeWidth: 0.4,
+    //     pointSize: 0,
+    //     pointStrokeColors: ['#efefef'],
+    //     gridLineColor: '#efefef',
+    //     gridTextFamily: 'Open Sans',
+    //     gridTextSize: 10,
+    //     smooth: false
+    // });
+
+    // This will get the first returned node in the jQuery collection.
+    new Chart($('#numOrderItemsChart').get(0).getContext('2d'), {
+        type: 'line',
+        data: {
+            // labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+            datasets: [
+                {
+                    label: status,
+                    fill: false,
+                    borderWidth: 1.5,
+                    lineTension: 0,
+                    spanGaps: true,
+                    borderColor: '#efefef',
+                    pointRadius: 0,
+                    pointHoverRadius: 7,
+                    pointColor: '#efefef',
+                    pointBackgroundColor: '#efefef',
+                    data: datas.map(function (data) {
+                        return {
+                            x: moment(data.measureDate).toDate(),
+                            y: data.value
+                        }
+                    })
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    ticks: {
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        // stepSize: 5000,
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: true,
+                        // color: '#555c62',
+                        // color: '#efefef',
+                        lineWidth: 1,
+                        drawBorder: false,
+                    }
+                }]
+            }
+        }
     });
 }
+
 function createNumOrderItemsByClientChart(datas) {
     var numOrderItemsByClient = {};
     datas.forEach(function (data) {
@@ -746,11 +947,14 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                         display: true,
                         lineWidth: 1,
                         color: '#555c62',
-                        zeroLineColor: '#555c62',
+                        zeroLineColor: '#555c62'
                     },
                     ticks: {
                         beginAtZero: true,
-                        fontColor: '#a1a6a9'
+                        // fontColor: '#a1a6a9',
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
                     }
                 }],
                 xAxes: [{
@@ -766,7 +970,10 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                         display: false
                     },
                     ticks: {
-                        fontColor: '#a1a6a9'
+                        // fontColor: '#a1a6a9',
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
                     }
                 }]
             }
@@ -945,6 +1152,7 @@ function countNewTransaction(cb) {
         console.error('新規取引数を取得できませんでした')
     });
 }
+
 function initializeVisitorsChart() {
     var colorChoices = ['#daa8f5', '#3399FF', '#fad684', '#79f67d', '#79ccf5', '#e96c6c', '#efefef'];
     waiterDatasets = waiterRules.map(function (rule) {
@@ -956,53 +1164,134 @@ function initializeVisitorsChart() {
         };
     });
 
-    numVisitorsChart = new Morris.Line({
-        element: 'visitorsChart',
-        resize: true,
-        data: [],
-        xkey: 'y',
-        ykeys: waiterRules.map(function (rule) {
-            return rule.scope
-        }),
-        labels: waiterRules.map(function (rule) {
-            return rule.name
-        }),
-        lineColors: waiterRules.map(function (_, index) {
-            return colorChoices[index % colorChoices.length];
-        }),
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 0,
-        pointStrokeColors: waiterRules.map(function (_, index) {
-            return colorChoices[index % colorChoices.length];
-        }),
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10,
-        smooth: false
+    // numVisitorsChart = new Morris.Line({
+    //     element: 'visitorsChart',
+    //     resize: true,
+    //     data: [],
+    //     xkey: 'y',
+    //     ykeys: waiterRules.map(function (rule) {
+    //         return rule.scope
+    //     }),
+    //     labels: waiterRules.map(function (rule) {
+    //         return rule.name
+    //     }),
+    //     lineColors: waiterRules.map(function (_, index) {
+    //         return colorChoices[index % colorChoices.length];
+    //     }),
+    //     lineWidth: 2,
+    //     hideHover: 'auto',
+    //     gridTextColor: '#fff',
+    //     gridStrokeWidth: 0.4,
+    //     pointSize: 0,
+    //     pointStrokeColors: waiterRules.map(function (_, index) {
+    //         return colorChoices[index % colorChoices.length];
+    //     }),
+    //     gridLineColor: '#efefef',
+    //     gridTextFamily: 'Open Sans',
+    //     gridTextSize: 10,
+    //     smooth: false
+    // });
+}
+
+function updateWaiterChart() {
+    // numVisitorsChart.setData(waiterDatasets[0].data.map(function (d, index) {
+    //     var data = {
+    //         y: moment(d.x).toISOString()
+    //     };
+    //     waiterRules.forEach(function (rule) {
+    //         var dataset4scope = waiterDatasets.find(function (dataset) {
+    //             return dataset.scope === rule.scope;
+    //         });
+    //         if (dataset4scope !== undefined) {
+    //             data[rule.scope] = dataset4scope.data[index].y
+    //         } else {
+    //             data[rule.scope] = 0;
+    //         }
+    //     });
+
+    //     return data;
+    // }));
+
+    // This will get the first returned node in the jQuery collection.
+    new Chart($('#visitorsChart').get(0).getContext('2d'), {
+        type: 'line',
+        data: {
+            // labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+            datasets: waiterRules.map(function (rule, index) {
+                var dataset4scope = waiterDatasets.find(function (dataset) {
+                    return dataset.scope === rule.scope;
+                });
+
+                var data4chart = [];
+                if (dataset4scope !== undefined) {
+                    data4chart = dataset4scope.data.map(function (data) {
+                        return {
+                            x: moment(data.x).toDate(),
+                            y: data.y
+                        }
+                    })
+                };
+
+                return {
+                    label: status,
+                    fill: false,
+                    borderWidth: 1.5,
+                    lineTension: 0,
+                    spanGaps: true,
+                    borderColor: '#efefef',
+                    pointRadius: 0,
+                    pointHoverRadius: 7,
+                    pointColor: '#efefef',
+                    pointBackgroundColor: '#efefef',
+                    data: data4chart
+                };
+            })
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'minute'
+                        // displayFormats: {
+                        //     quarter: 'MMM YYYY'
+                        // }
+                    },
+                    ticks: {
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        // stepSize: 5000,
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    },
+                    gridLines: {
+                        display: true,
+                        // color: '#555c62',
+                        // color: '#efefef',
+                        lineWidth: 1,
+                        drawBorder: false,
+                    }
+                }]
+            }
+        }
     });
 }
-function updateWaiterChart() {
-    numVisitorsChart.setData(waiterDatasets[0].data.map(function (d, index) {
-        var data = {
-            y: moment(d.x).toISOString()
-        };
-        waiterRules.forEach(function (rule) {
-            var dataset4scope = waiterDatasets.find(function (dataset) {
-                return dataset.scope === rule.scope;
-            });
-            if (dataset4scope !== undefined) {
-                data[rule.scope] = dataset4scope.data[index].y
-            } else {
-                data[rule.scope] = 0;
-            }
-        });
 
-        return data;
-    }));
-}
 function startMonitoringWaiter() {
     initializeVisitorsChart();
 

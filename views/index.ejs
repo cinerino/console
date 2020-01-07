@@ -111,8 +111,8 @@
             <!-- Left col -->
             <section class="col-lg-8 connectedSortable">
                 <!-- solid sales graph -->
-                <div class="card bg-dark-gradient" id="visitors">
-                    <div class="card-header no-border">
+                <div class="card bg-gradient-dark" id="visitors">
+                    <div class="card-header border-0">
                         <h3 class="card-title">
                             取引訪問者数
                         </h3>
@@ -137,7 +137,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chart" id="visitorsChart" style="height: 250px;"></div>
+                        <!-- <div class="chart" id="visitorsChart" style="height: 250px;"></div> -->
+                        <canvas class="chart" id="visitorsChart"
+                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer bg-transparent">
@@ -149,8 +151,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <!-- solid sales graph -->
-                        <div class="card bg-primary-gradient" id="salesAmount">
-                            <div class="card-header no-border">
+                        <div class="card bg-gradient-primary" id="salesAmount">
+                            <div class="card-header border-0">
                                 <h3 class="card-title">
                                     <i class="fa fa-th mr-1"></i>
                                     売上高
@@ -170,7 +172,9 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="chart" id="salesAmountChart" style="height: 250px;"></div>
+                                <!-- <div class="chart" id="salesAmountChart" style="height: 250px;"></div> -->
+                                <canvas class="chart" id="salesAmountChart"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer bg-transparent">
@@ -258,8 +262,8 @@
                     </div>
                     <div class="col-md-6">
                         <!-- solid sales graph -->
-                        <div class="card bg-info-gradient" id="numOrderItems">
-                            <div class="card-header no-border">
+                        <div class="card bg-gradient-info" id="numOrderItems">
+                            <div class="card-header border-0">
                                 <h3 class="card-title">
                                     <i class="fa fa-th mr-1"></i>
                                     注文アイテム数
@@ -279,7 +283,9 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="chart" id="numOrderItemsChart" style="height: 250px;"></div>
+                                <!-- <div class="chart" id="numOrderItemsChart" style="height: 250px;"></div> -->
+                                <canvas class="chart" id="numOrderItemsChart"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer bg-transparent">
@@ -373,8 +379,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <!-- solid sales graph -->
-                        <div class="card bg-dark-gradient" id="numPlaceOrder">
-                            <div class="card-header no-border">
+                        <div class="card bg-gradient-dark" id="numPlaceOrder">
+                            <div class="card-header border-0">
                                 <h3 class="card-title">
                                     <i class="fa fa-th mr-1"></i>
                                     注文取引数
@@ -394,7 +400,9 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="chart" id="numPlaceOrderChart" style="height: 250px;"></div>
+                                <!-- <div class="chart" id="numPlaceOrderChart" style="height: 250px;"></div> -->
+                                <canvas class="chart" id="numPlaceOrderChart"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer bg-transparent">
@@ -407,8 +415,8 @@
                         <!-- /.card -->
                     </div>
                     <div class="col-md-6">
-                        <div class="card bg-dark-gradient" id="numTransactions2salesAmount">
-                            <div class="card-header no-border">
+                        <div class="card bg-gradient-dark" id="numTransactions2salesAmount">
+                            <div class="card-header border-0">
                                 <h3 class="card-title">
                                     <i class="fa fa-th mr-1"></i>
                                     来客数と売上高

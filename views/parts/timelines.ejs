@@ -1,17 +1,18 @@
 <!-- The timeline -->
-<ul class="timeline timeline-inverse">
-    <!-- /.timeline-label -->
+<div class="timeline timeline-inverse">
     <% timelines.forEach(function(timeline, index){ %>
     <% if (index === 0) { %>
     <!-- timeline time label -->
-    <li class="time-label">
+    <div class="time-label">
         <span class="bg-success">
             <%= moment(timeline.startDate).format('LL') %>
         </span>
-    </li>
+    </div>
+    <!-- /.timeline-label -->
     <% } %>
+
     <!-- timeline item -->
-    <li>
+    <div>
         <!-- <i class="fa fa-envelope bg-primary"></i> -->
         <!-- <i class="fa fa-user bg-info"></i> -->
         <!-- <i class="fa fa-camera bg-purple"></i> -->
@@ -65,26 +66,28 @@
                 <span class="badge <%= timeline.actionStatus %>"><%= timeline.actionStatus %></span>
             </div>
             <div class="timeline-footer">
-                <a href="#" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                <a href="#" class="btn btn-info btn-sm" data-toggle="modal"
                     data-target="#modal-action-<%= timeline.action.id %>">Read more</a>
                 <% if (timeline.action.result !== undefined && timeline.action.result !== null) { %>
-                <a href="#" class="btn btn-outline-success btn-sm" data-toggle="modal"
+                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
                     data-target="#modal-actionResult-<%= timeline.action.id %>">See
                     results</a>
                 <% } %>
                 <% if (timeline.action.error !== undefined && timeline.action.error !== null) { %>
-                <a href="#" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
                     data-target="#modal-actionError-<%= timeline.action.id %>">See
                     error</a>
                 <% } %>
             </div>
         </div>
-    </li>
+    </div>
+    <!-- END timeline item -->
     <% }) %>
-    <li>
-        <i class="fa fa-clock bg-gray"></i>
-    </li>
-</ul>
+
+    <div>
+        <i class="far fa-clock bg-gray"></i>
+    </div>
+</div>
 
 <% timelines.forEach(function(timeline, index){ %>
 <div class="modal" id="modal-action-<%= timeline.action.id %>" tabindex="-1" role="dialog">

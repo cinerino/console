@@ -54,12 +54,7 @@
 <!-- /.content -->
 
 <!-- DataTables -->
-<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables/dataTables.bootstrap4.css">
-
-<!-- daterange picker -->
-<link rel="stylesheet" href="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css">
-
-<script src="/node_modules/admin-lte/plugins/daterangepicker/daterangepicker.js"></script>
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
 
 <!-- page script -->
 <script>
@@ -73,7 +68,9 @@
         $('#orderDateRange').daterangepicker({
             timePicker: true,
             // timePickerIncrement: 30,
-            format: 'YYYY-MM-DDTHH:mm:ssZ'
+            locale: {
+                format: 'YYYY-MM-DDTHH:mm:ssZ'
+            }
         })
     });
 </script>
