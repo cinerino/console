@@ -29,12 +29,12 @@ eventsRouter.get('/chevreBackend', (req, res, next) => __awaiter(void 0, void 0,
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.project.id });
-        if (project.settings !== undefined
-            && project.settings.chevre !== undefined
-            && project.settings.chevre.backend !== undefined
-            && typeof project.settings.chevre.backend.url === 'string') {
-            url = project.settings.chevre.backend.url;
+        const settings = yield projectService.getSettings({ id: req.project.id });
+        if (settings !== undefined
+            && settings.chevre !== undefined
+            && settings.chevre.backend !== undefined
+            && typeof settings.chevre.backend.url === 'string') {
+            url = settings.chevre.backend.url;
         }
         res.redirect(url);
     }

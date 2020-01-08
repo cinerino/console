@@ -64,12 +64,11 @@ accountsRouter.get('/coin', (req, res, next) => __awaiter(void 0, void 0, void 0
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.project.id });
-        if (project.settings !== undefined
-            && project.settings.chevre !== undefined
-            && project.settings.pecorino.console !== undefined
-            && typeof project.settings.pecorino.console.url === 'string') {
-            consoleUrl = project.settings.pecorino.console.url;
+        const settings = yield projectService.getSettings({ id: req.project.id });
+        if (settings.pecorino !== undefined
+            && settings.pecorino.console !== undefined
+            && typeof settings.pecorino.console.url === 'string') {
+            consoleUrl = settings.pecorino.console.url;
         }
         res.render('accounts/coin/index', {
             moment: moment,
@@ -87,12 +86,11 @@ accountsRouter.get('/point', (req, res, next) => __awaiter(void 0, void 0, void 
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.project.id });
-        if (project.settings !== undefined
-            && project.settings.chevre !== undefined
-            && project.settings.pecorino.console !== undefined
-            && typeof project.settings.pecorino.console.url === 'string') {
-            consoleUrl = project.settings.pecorino.console.url;
+        const settings = yield projectService.getSettings({ id: req.project.id });
+        if (settings.pecorino !== undefined
+            && settings.pecorino.console !== undefined
+            && typeof settings.pecorino.console.url === 'string') {
+            consoleUrl = settings.pecorino.console.url;
         }
         res.render('accounts/point/index', {
             moment: moment,
@@ -150,12 +148,11 @@ accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.project.id });
-        if (project.settings !== undefined
-            && project.settings.chevre !== undefined
-            && project.settings.pecorino.console !== undefined
-            && typeof project.settings.pecorino.console.url === 'string') {
-            consoleUrl = project.settings.pecorino.console.url;
+        const settings = yield projectService.getSettings({ id: req.project.id });
+        if (settings.pecorino !== undefined
+            && settings.pecorino.console !== undefined
+            && typeof settings.pecorino.console.url === 'string') {
+            consoleUrl = settings.pecorino.console.url;
         }
         const redirect = `${consoleUrl}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
         res.redirect(redirect);

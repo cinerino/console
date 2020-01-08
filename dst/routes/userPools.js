@@ -29,16 +29,16 @@ userPoolsRouter.get('',
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.project.id });
+        const settings = yield projectService.getSettings({ id: req.project.id });
         debug('req.query:', req.query);
         if (req.query.format === 'datatable') {
-            const userPools = (project.settings !== undefined && project.settings.cognito !== undefined) ? [
+            const userPools = (settings.cognito !== undefined) ? [
                 {
-                    id: project.settings.cognito.customerUserPool.id,
+                    id: settings.cognito.customerUserPool.id,
                     name: 'Customerユーザープール'
                 },
                 {
-                    id: project.settings.cognito.adminUserPool.id,
+                    id: settings.cognito.adminUserPool.id,
                     name: 'Adminユーザープール'
                 }
             ] : [];
@@ -176,13 +176,13 @@ userPoolsRouter.get('/:userPoolId/people/:id',
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.project.id });
-        if (project.settings !== undefined && project.settings.cognito !== undefined) {
+        const settings = yield projectService.getSettings({ id: req.project.id });
+        if (settings.cognito !== undefined) {
             switch (req.params.userPoolId) {
-                case project.settings.cognito.customerUserPool.id:
+                case settings.cognito.customerUserPool.id:
                     res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
                     break;
-                case project.settings.cognito.adminUserPool.id:
+                case settings.cognito.adminUserPool.id:
                     res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
                     break;
                 default:

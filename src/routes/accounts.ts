@@ -61,14 +61,13 @@ accountsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: req.project.id });
+            const settings = await projectService.getSettings({ id: req.project.id });
 
-            if (project.settings !== undefined
-                && project.settings.chevre !== undefined
-                && (<any>project.settings.pecorino).console !== undefined
-                && typeof (<any>project.settings.pecorino).console.url === 'string'
+            if (settings.pecorino !== undefined
+                && (<any>settings.pecorino).console !== undefined
+                && typeof (<any>settings.pecorino).console.url === 'string'
             ) {
-                consoleUrl = (<any>project.settings.pecorino).console.url;
+                consoleUrl = (<any>settings.pecorino).console.url;
             }
 
             res.render('accounts/coin/index', {
@@ -91,14 +90,13 @@ accountsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: req.project.id });
+            const settings = await projectService.getSettings({ id: req.project.id });
 
-            if (project.settings !== undefined
-                && project.settings.chevre !== undefined
-                && (<any>project.settings.pecorino).console !== undefined
-                && typeof (<any>project.settings.pecorino).console.url === 'string'
+            if (settings.pecorino !== undefined
+                && (<any>settings.pecorino).console !== undefined
+                && typeof (<any>settings.pecorino).console.url === 'string'
             ) {
-                consoleUrl = (<any>project.settings.pecorino).console.url;
+                consoleUrl = (<any>settings.pecorino).console.url;
             }
 
             res.render('accounts/point/index', {
@@ -166,14 +164,13 @@ accountsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: req.project.id });
+            const settings = await projectService.getSettings({ id: req.project.id });
 
-            if (project.settings !== undefined
-                && project.settings.chevre !== undefined
-                && (<any>project.settings.pecorino).console !== undefined
-                && typeof (<any>project.settings.pecorino).console.url === 'string'
+            if (settings.pecorino !== undefined
+                && (<any>settings.pecorino).console !== undefined
+                && typeof (<any>settings.pecorino).console.url === 'string'
             ) {
-                consoleUrl = (<any>project.settings.pecorino).console.url;
+                consoleUrl = (<any>settings.pecorino).console.url;
             }
 
             const redirect =

@@ -24,14 +24,14 @@ eventsRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: req.project.id });
+            const settings = await projectService.getSettings({ id: req.project.id });
 
-            if (project.settings !== undefined
-                && project.settings.chevre !== undefined
-                && (<any>project.settings.chevre).backend !== undefined
-                && typeof (<any>project.settings.chevre).backend.url === 'string'
+            if (settings !== undefined
+                && settings.chevre !== undefined
+                && (<any>settings.chevre).backend !== undefined
+                && typeof (<any>settings.chevre).backend.url === 'string'
             ) {
-                url = (<any>project.settings.chevre).backend.url;
+                url = (<any>settings.chevre).backend.url;
             }
 
             res.redirect(url);
