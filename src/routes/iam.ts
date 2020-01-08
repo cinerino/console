@@ -12,6 +12,92 @@ const debug = createDebug('cinerino-console:routes');
 const iamRouter = express.Router();
 
 /**
+ * IAMロール検索
+ */
+iamRouter.get(
+    '/roles',
+    async (req, res, next) => {
+        try {
+            const iamService = new cinerinoapi.service.IAM({
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                auth: req.user.authClient
+            });
+            const searchConditions = {
+                // limit: req.query.limit,
+                // page: req.query.page,
+            };
+            if (req.query.format === 'datatable') {
+                const searchResult = await iamService.searchRoles(searchConditions);
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: searchResult.totalCount,
+                    recordsFiltered: searchResult.totalCount,
+                    data: searchResult.data
+                });
+            } else {
+                res.render('iam/roles/index', {
+                    moment: moment,
+                    searchConditions: searchConditions
+                });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * プロジェクトメンバー検索
+ */
+iamRouter.get(
+    '/members',
+    async (req, res, next) => {
+        try {
+            debug('req.query:', req.query);
+            const personService = new cinerinoapi.service.Person({
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                auth: req.user.authClient
+            });
+            const searchConditions = {
+                // limit: req.query.limit,
+                // page: req.query.page
+            };
+            if (req.query.format === 'datatable') {
+                const searchResult = await personService.fetch({
+                    uri: '/members',
+                    method: 'GET',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [200]
+                })
+                    .then(async (response) => {
+                        const totalCount = response.headers.get('X-Total-Count');
+
+                        return {
+                            totalCount: totalCount,
+                            data: await response.json()
+                        };
+                    });
+
+                // const searchResult = await memberService.search(searchConditions);
+                res.json({
+                    draw: req.query.draw,
+                    recordsTotal: searchResult.totalCount,
+                    recordsFiltered: searchResult.totalCount,
+                    data: searchResult.data
+                });
+            } else {
+                res.render('iam/members/index', {
+                    moment: moment,
+                    searchConditions: searchConditions
+                });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
  * IAMユーザー検索
  */
 iamRouter.get(

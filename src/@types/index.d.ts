@@ -19,7 +19,7 @@ declare global {
             //     settings: ISettings;
             // };
             project: {
-                typeOf: 'Project';
+                typeOf: cinerino.factory.organizationType.Project;
                 id: string;
                 settings: ISettings;
             };

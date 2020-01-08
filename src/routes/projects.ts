@@ -13,7 +13,6 @@ import dashboardRouter from './dashboard';
 import eventsRouter from './events';
 import iamRouter from './iam';
 import invoicesRouter from './invoices';
-import membersRouter from './members';
 import ordersRouter from './orders';
 import ownershipInfosRouter from './ownershipInfos';
 import movieTicketPaymentMethodRouter from './paymentMethods/movieTicket';
@@ -59,7 +58,7 @@ projectsRouter.all(
     '/:id/*',
     async (req, _, next) => {
         req.project = {
-            typeOf: 'Project',
+            typeOf: cinerinoapi.factory.organizationType.Project,
             id: req.params.id,
             settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
         };
@@ -99,7 +98,6 @@ projectsRouter.use('/:id/dashboard', dashboardRouter);
 projectsRouter.use('/:id/events', eventsRouter);
 projectsRouter.use('/:id/iam', iamRouter);
 projectsRouter.use('/:id/invoices', invoicesRouter);
-projectsRouter.use('/:id/members', membersRouter);
 projectsRouter.use('/:id/orders', ordersRouter);
 projectsRouter.use('/:id/ownershipInfos', ownershipInfosRouter);
 projectsRouter.use('/:id/paymentMethods/movieTicket', movieTicketPaymentMethodRouter);

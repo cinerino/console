@@ -236,13 +236,33 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/members" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-user-shield"></i>
                                 <p>
                                     IAM
-                                    <span class="badge badge-danger right"></span>
+                                    <i class="right fa fa-angle-left"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/iam/members" class="nav-link">
+                                        <i class="nav-icon fa fa-user-shield"></i>
+                                        <p>
+                                            メンバー
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/iam/roles" class="nav-link">
+                                        <i class="nav-icon fa fa-user-shield"></i>
+                                        <p>
+                                            役割
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="/projects/<%= req.project.id %>/people" class="nav-link">

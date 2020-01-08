@@ -22,7 +22,6 @@ const dashboard_1 = require("./dashboard");
 const events_1 = require("./events");
 const iam_1 = require("./iam");
 const invoices_1 = require("./invoices");
-const members_1 = require("./members");
 const orders_1 = require("./orders");
 const ownershipInfos_1 = require("./ownershipInfos");
 const movieTicket_1 = require("./paymentMethods/movieTicket");
@@ -57,7 +56,7 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0,
 }));
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     req.project = {
-        typeOf: 'Project',
+        typeOf: cinerinoapi.factory.organizationType.Project,
         id: req.params.id,
         settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
     };
@@ -88,7 +87,6 @@ projectsRouter.use('/:id/dashboard', dashboard_1.default);
 projectsRouter.use('/:id/events', events_1.default);
 projectsRouter.use('/:id/iam', iam_1.default);
 projectsRouter.use('/:id/invoices', invoices_1.default);
-projectsRouter.use('/:id/members', members_1.default);
 projectsRouter.use('/:id/orders', orders_1.default);
 projectsRouter.use('/:id/ownershipInfos', ownershipInfos_1.default);
 projectsRouter.use('/:id/paymentMethods/movieTicket', movieTicket_1.default);

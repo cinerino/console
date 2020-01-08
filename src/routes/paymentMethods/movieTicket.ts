@@ -106,7 +106,8 @@ movieTicketPaymentMethodRouter.all(
                         serviceType: '',
                         serviceOutput: {
                             reservationFor: {
-                                typeOf: cinerinoapi.factory.chevre.eventType.ScreeningEvent,
+                                // tslint:disable-next-line:max-line-length
+                                typeOf: <cinerinoapi.factory.chevre.eventType.ScreeningEvent>cinerinoapi.factory.chevre.eventType.ScreeningEvent,
                                 id: searchConditions.serviceOutput.reservationFor.id
                             },
                             reservedTicket: {

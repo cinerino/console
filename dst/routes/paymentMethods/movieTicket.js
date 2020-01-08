@@ -104,6 +104,7 @@ movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
                         serviceType: '',
                         serviceOutput: {
                             reservationFor: {
+                                // tslint:disable-next-line:max-line-length
                                 typeOf: cinerinoapi.factory.chevre.eventType.ScreeningEvent,
                                 id: searchConditions.serviceOutput.reservationFor.id
                             },

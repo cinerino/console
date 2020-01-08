@@ -20,6 +20,86 @@ const cinerinoapi = require("../cinerinoapi");
 const debug = createDebug('cinerino-console:routes');
 const iamRouter = express.Router();
 /**
+ * IAMロール検索
+ */
+iamRouter.get('/roles', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const searchConditions = {
+        // limit: req.query.limit,
+        // page: req.query.page,
+        };
+        if (req.query.format === 'datatable') {
+            const searchResult = yield iamService.searchRoles(searchConditions);
+            res.json({
+                draw: req.query.draw,
+                recordsTotal: searchResult.totalCount,
+                recordsFiltered: searchResult.totalCount,
+                data: searchResult.data
+            });
+        }
+        else {
+            res.render('iam/roles/index', {
+                moment: moment,
+                searchConditions: searchConditions
+            });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * プロジェクトメンバー検索
+ */
+iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        debug('req.query:', req.query);
+        const personService = new cinerinoapi.service.Person({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const searchConditions = {
+        // limit: req.query.limit,
+        // page: req.query.page
+        };
+        if (req.query.format === 'datatable') {
+            const searchResult = yield personService.fetch({
+                uri: '/members',
+                method: 'GET',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [200]
+            })
+                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+                const totalCount = response.headers.get('X-Total-Count');
+                return {
+                    totalCount: totalCount,
+                    data: yield response.json()
+                };
+            }));
+            // const searchResult = await memberService.search(searchConditions);
+            res.json({
+                draw: req.query.draw,
+                recordsTotal: searchResult.totalCount,
+                recordsFiltered: searchResult.totalCount,
+                data: searchResult.data
+            });
+        }
+        else {
+            res.render('iam/members/index', {
+                moment: moment,
+                searchConditions: searchConditions
+            });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
  * IAMユーザー検索
  */
 iamRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
