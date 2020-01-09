@@ -107,79 +107,8 @@ $(function () {
         );
     });
 
-    // jvectormap data
-    // var visitorsData = {
-    //     'US': 398, //USA
-    //     'SA': 400, //Saudi Arabia
-    //     'CA': 1000, //Canada
-    //     'DE': 500, //Germany
-    //     'FR': 760, //France
-    //     'CN': 300, //China
-    //     'AU': 700, //Australia
-    //     'BR': 600, //Brazil
-    //     'IN': 800, //India
-    //     'GB': 320, //Great Britain
-    //     'RU': 3000 //Russia
-    // }
-    // World map by jvectormap
-    // $('#world-map').vectorMap({
-    //     map: 'world_mill_en',
-    //     backgroundColor: 'transparent',
-    //     regionStyle: {
-    //         initial: {
-    //             fill: 'rgba(255, 255, 255, 0.7)',
-    //             'fill-opacity': 1,
-    //             stroke: 'rgba(0,0,0,.2)',
-    //             'stroke-width': 1,
-    //             'stroke-opacity': 1
-    //         }
-    //     },
-    //     series: {
-    //         regions: [{
-    //             values: visitorsData,
-    //             scale: ['#ffffff', '#0154ad'],
-    //             normalizeFunction: 'polynomial'
-    //         }]
-    //     },
-    //     onRegionLabelShow: function (e, el, code) {
-    //         if (typeof visitorsData[code] != 'undefined')
-    //             el.html(el.html() + ': ' + visitorsData[code] + ' new visitors')
-    //     }
-    // })
-
-    // Sparkline charts
-    // var myvalues = [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021]
-    // $('#sparkline-1').sparkline(myvalues, {
-    //     type: 'line',
-    //     lineColor: '#92c1dc',
-    //     fillColor: '#ebf4f9',
-    //     height: '50',
-    //     width: '80'
-    // })
-    // myvalues = [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921]
-    // $('#sparkline-2').sparkline(myvalues, {
-    //     type: 'line',
-    //     lineColor: '#92c1dc',
-    //     fillColor: '#ebf4f9',
-    //     height: '50',
-    //     width: '80'
-    // })
-    // myvalues = [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21]
-    // $('#sparkline-3').sparkline(myvalues, {
-    //     type: 'line',
-    //     lineColor: '#92c1dc',
-    //     fillColor: '#ebf4f9',
-    //     height: '50',
-    //     width: '80'
-    // })
-
     // The Calender
     $('#calendar').datepicker()
-
-    // SLIMSCROLL FOR CHAT WIDGET
-    // $('#chat-box').slimScroll({
-    //     height: '250px'
-    // })
 
     // Fix for charts under tabs
     $('.box ul.nav a').on('shown.bs.tab', function () {
@@ -269,7 +198,6 @@ function searchSalesAmount(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmount',
-        // '/dashboard/telemetry/SalesAmount',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -295,7 +223,6 @@ function searchNumStartedTransactionsByType(cb) {
 
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmount',
-        // '/dashboard/telemetry/SalesAmount',
         {
             measureFrom: $('#numTransactions2salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numTransactions2salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -311,7 +238,6 @@ function searchNumStartedTransactionsByType(cb) {
 
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumStartedTransactionsByType',
-        // '/dashboard/telemetry/SalesAmount',
         {
             measureFrom: $('#numTransactions2salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numTransactions2salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -329,7 +255,6 @@ function searchSalesAmountByClient(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmountByClient',
-        // '/dashboard/telemetry/SalesAmountByClient',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -346,7 +271,6 @@ function searchSalesAmountByPaymentMethod(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmountByPaymentMethod',
-        // '/dashboard/telemetry/SalesAmountByPaymentMethod',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -363,7 +287,6 @@ function searchSalesAmountBySeller(cb) {
     $('#salesAmount .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/SalesAmountBySeller',
-        // '/dashboard/telemetry/SalesAmountBySeller',
         {
             measureFrom: $('#salesAmount .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#salesAmount .daterange').data('daterangepicker').endDate.toISOString()
@@ -376,11 +299,11 @@ function searchSalesAmountBySeller(cb) {
         $('#salesAmount .overlay').hide();
     });
 }
+
 function searchNumOrderItems(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItems',
-        // '/dashboard/telemetry/NumOrderItems',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -393,11 +316,11 @@ function searchNumOrderItems(cb) {
         $('#numOrderItems .overlay').hide();
     });
 }
+
 function searchNumOrderItemsByClient(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItemsByClient',
-        // '/dashboard/telemetry/NumOrderItemsByClient',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -410,11 +333,11 @@ function searchNumOrderItemsByClient(cb) {
         $('#numOrderItems .overlay').hide();
     });
 }
+
 function searchNumOrderItemsByPaymentMethod(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItemsByPaymentMethod',
-        // '/dashboard/telemetry/NumOrderItemsByPaymentMethod',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -427,11 +350,11 @@ function searchNumOrderItemsByPaymentMethod(cb) {
         $('#numOrderItems .overlay').hide();
     });
 }
+
 function searchNumOrderItemsBySeller(cb) {
     $('#numOrderItems .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumOrderItemsBySeller',
-        // '/dashboard/telemetry/NumOrderItemsBySeller',
         {
             measureFrom: $('#numOrderItems .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numOrderItems .daterange').data('daterangepicker').endDate.toISOString()
@@ -444,11 +367,11 @@ function searchNumOrderItemsBySeller(cb) {
         $('#numOrderItems .overlay').hide();
     });
 }
+
 function searchNumPlaceOrder(cb) {
     $('#numPlaceOrder .overlay').show();
     $.getJSON(
         TELEMETRY_API_ENDPOINT + '/organizations/project/' + PROJECT_ID + '/telemetry/NumPlaceOrderByStatus',
-        // '/dashboard/telemetry/NumPlaceOrderByStatus',
         {
             measureFrom: $('#numPlaceOrder .daterange').data('daterangepicker').startDate.toISOString(),
             measureThrough: $('#numPlaceOrder .daterange').data('daterangepicker').endDate.toISOString()
@@ -546,12 +469,14 @@ function createNumPlaceOrderChart(datas) {
                     // stepSize: 5000,
                     fontColor: '#fff',
                     fontFamily: 'Open Sans',
-                    fontSize: 10
+                    fontSize: 10,
+                    padding: 8,
                 },
                 gridLines: {
                     display: true,
                     color: '#555c62',
                     // color: '#efefef',
+                    zeroLineColor: '#555c62',
                     drawBorder: false,
                 }
             }]
@@ -627,7 +552,8 @@ function createSalesAmountChart(datas) {
                     ticks: {
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
-                        fontSize: 10
+                        fontSize: 10,
+                        maxTicksLimit: 6,
                     },
                     gridLines: {
                         display: false
@@ -638,7 +564,8 @@ function createSalesAmountChart(datas) {
                         // stepSize: 5000,
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
-                        fontSize: 10
+                        fontSize: 10,
+                        padding: 8,
                     },
                     gridLines: {
                         display: true,
@@ -794,7 +721,8 @@ function createNumOrderItemsChart(datas) {
                     ticks: {
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
-                        fontSize: 10
+                        fontSize: 10,
+                        maxTicksLimit: 6,
                     },
                     gridLines: {
                         display: false
@@ -805,7 +733,8 @@ function createNumOrderItemsChart(datas) {
                         // stepSize: 5000,
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
-                        fontSize: 10
+                        fontSize: 10,
+                        padding: 8,
                     },
                     gridLines: {
                         display: true,
@@ -901,6 +830,7 @@ function createNumOrderItemsBySellerChart(datas) {
         $(this).val(ratio).trigger('change');
     });
 }
+
 function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStartedTransactionsByType) {
     // 売上散布チャート
     var chartDate = datasSalesAmount.map(function (dataSalesAmount) {
@@ -941,22 +871,6 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                 display: false
             },
             scales: {
-                yAxes: [{
-                    display: true,
-                    gridLines: {
-                        display: true,
-                        lineWidth: 1,
-                        color: '#555c62',
-                        zeroLineColor: '#555c62'
-                    },
-                    ticks: {
-                        beginAtZero: true,
-                        // fontColor: '#a1a6a9',
-                        fontColor: '#fff',
-                        fontFamily: 'Open Sans',
-                        fontSize: 10
-                    }
-                }],
                 xAxes: [{
                     type: 'linear',
                     position: 'bottom',
@@ -970,6 +884,23 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                         display: false
                     },
                     ticks: {
+                        // fontColor: '#a1a6a9',
+                        fontColor: '#fff',
+                        fontFamily: 'Open Sans',
+                        fontSize: 10
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true,
+                        lineWidth: 1,
+                        color: '#555c62',
+                        zeroLineColor: '#555c62',
+                        padding: 8,
+                    },
+                    ticks: {
+                        beginAtZero: true,
                         // fontColor: '#a1a6a9',
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
@@ -1250,6 +1181,9 @@ function updateWaiterChart() {
             })
         },
         options: {
+            animation: {
+                easing: 'linear',
+            },
             maintainAspectRatio: false,
             responsive: true,
             legend: {
@@ -1259,15 +1193,17 @@ function updateWaiterChart() {
                 xAxes: [{
                     type: 'time',
                     time: {
-                        unit: 'minute'
-                        // displayFormats: {
-                        //     quarter: 'MMM YYYY'
-                        // }
+                        unit: 'second',
+                        stepSize: 10,
+                        displayFormats: {
+                            second: 'h:mm:ss'
+                        }
                     },
                     ticks: {
+                        // maxTicksLimit: 6,
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
-                        fontSize: 10
+                        fontSize: 10,
                     },
                     gridLines: {
                         display: false
@@ -1275,16 +1211,19 @@ function updateWaiterChart() {
                 }],
                 yAxes: [{
                     ticks: {
+                        maxTicksLimit: 6,
                         min: 0,
                         // stepSize: 5000,
                         fontColor: '#fff',
                         fontFamily: 'Open Sans',
-                        fontSize: 10
+                        fontSize: 10,
+                        padding: 8,
                     },
                     gridLines: {
                         display: true,
-                        // color: '#555c62',
+                        color: '#555c62',
                         // color: '#efefef',
+                        zeroLineColor: '#555c62',
                         lineWidth: 1,
                         drawBorder: false,
                     }
