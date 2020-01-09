@@ -6,7 +6,7 @@ import * as express from 'express';
 import authentication from '../middlewares/authentication';
 
 import authRouter from './auth';
-import homeRouter from './home';
+import dashboardRouter from './dashboard';
 import projectsRouter from './projects';
 
 const router = express.Router();
@@ -20,7 +20,7 @@ const router = express.Router();
 router.use(authRouter);
 
 router.use(authentication);
-router.use(homeRouter);
+router.use(dashboardRouter);
 router.use('/projects', projectsRouter);
 
 export default router;

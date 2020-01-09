@@ -918,7 +918,7 @@ function searchRecentActions(cb) {
     }
 
     $.ajax({
-        url: '/projects/' + PROJECT_ID + '/dashboard/timelines',
+        url: '/projects/' + PROJECT_ID + '/home/timelines',
         data: {
             startFrom: moment()
                 .add(-1, 'day')
@@ -988,7 +988,7 @@ function searchLatestOrders(cb) {
     }
 
     $.ajax({
-        url: '/projects/' + PROJECT_ID + '/dashboard/orders',
+        url: '/projects/' + PROJECT_ID + '/home/orders',
         data: {
             limit: 10,
             page: 1,
@@ -1041,7 +1041,7 @@ function searchLatestOrders(cb) {
 
 function countNewOrder(cb) {
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/countNewOrder',
+        '/projects/' + PROJECT_ID + '/home/countNewOrder',
         {}
     ).done(function (data) {
         $('#newOrderCount').html(data.totalCount.toString());
@@ -1052,7 +1052,7 @@ function countNewOrder(cb) {
 }
 function aggregateExitRate(cb) {
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/aggregateExitRate',
+        '/projects/' + PROJECT_ID + '/home/aggregateExitRate',
         {}
     ).done(function (data) {
         $('.exitRate').html(data.rate.toString());
@@ -1063,7 +1063,7 @@ function aggregateExitRate(cb) {
 }
 function countNewUser(cb) {
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/countNewUser',
+        '/projects/' + PROJECT_ID + '/home/countNewUser',
         {}
     ).done(function (data) {
         $('#newUserCount').html(data.totalCount.toString());
@@ -1074,7 +1074,7 @@ function countNewUser(cb) {
 }
 function countNewTransaction(cb) {
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/countNewTransaction',
+        '/projects/' + PROJECT_ID + '/home/countNewTransaction',
         {}
     ).done(function (data) {
         $('.newTransactionCount').html(data.totalCount.toString());
@@ -1273,7 +1273,7 @@ function startMonitoringWaiter() {
 
 function updateHealth(cb) {
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/health',
+        '/projects/' + PROJECT_ID + '/home/health',
         {}
     ).done(function (data) {
         $('.health').removeClass('text-danger').text(data.status);
@@ -1289,7 +1289,7 @@ function updateHealth(cb) {
 function updateDbStats(cb) {
     var GB = 1000000000;
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/dbStats',
+        '/projects/' + PROJECT_ID + '/home/dbStats',
         {}
     ).done(function (data) {
         var usedSpaceStr = Math.floor(Number(data.fsUsedSize) / GB)
@@ -1309,7 +1309,7 @@ function updateDbStats(cb) {
 
 function updateQueueCount(cb) {
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/dashboard/queueCount',
+        '/projects/' + PROJECT_ID + '/home/queueCount',
         {}
     ).done(function (data) {
         $('.queueCount').removeClass('text-danger').text(data.totalCount);
