@@ -68,13 +68,20 @@
                     <!-- /.card-header -->
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table m-0">
+                            <table class="table">
                                 <!-- <thead>
                                     <tr>
                                         <th>Project ID</th>
                                     </tr>
                                 </thead> -->
                                 <tbody>
+                                    <% if (projects.length === 0) { %>
+                                    <tr>
+                                        <td>
+                                            <p>プロジェクト作成する、あるいは、プロジェクト管理者にメンバー追加を依頼してください。</p>
+                                        </td>
+                                    </tr>
+                                    <% } else { %>
                                     <% projects.forEach(function(project) { %>
                                     <tr>
                                         <td>
@@ -86,6 +93,7 @@
                                             </a></td>
                                     </tr>
                                     <% }) %>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>
