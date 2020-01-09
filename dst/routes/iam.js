@@ -57,8 +57,7 @@ iamRouter.get('/roles', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
  */
 iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        debug('req.query:', req.query);
-        const personService = new cinerinoapi.service.Person({
+        const iamService = new cinerinoapi.service.IAM({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
@@ -67,20 +66,7 @@ iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         // page: req.query.page
         };
         if (req.query.format === 'datatable') {
-            const searchResult = yield personService.fetch({
-                uri: '/members',
-                method: 'GET',
-                // tslint:disable-next-line:no-magic-numbers
-                expectedStatusCodes: [200]
-            })
-                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-                const totalCount = response.headers.get('X-Total-Count');
-                return {
-                    totalCount: totalCount,
-                    data: yield response.json()
-                };
-            }));
-            // const searchResult = await memberService.search(searchConditions);
+            const searchResult = yield iamService.searchMembers(searchConditions);
             res.json({
                 draw: req.query.draw,
                 recordsTotal: searchResult.totalCount,
@@ -94,6 +80,114 @@ iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, 
                 searchConditions: searchConditions
             });
         }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * プロジェクトメンバー(me)
+ */
+iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let message = '';
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const member = yield iamService.findMemberById({ id: 'me' });
+        const profile = yield iamService.getMemberProfile({ id: 'me' });
+        if (req.method === 'DELETE') {
+            // 何もしない
+            res.status(http_status_1.NO_CONTENT)
+                .end();
+            return;
+        }
+        else if (req.method === 'POST') {
+            try {
+                // 何もしない
+                res.status(http_status_1.NO_CONTENT)
+                    .end();
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
+        res.render('iam/members/show', {
+            message: message,
+            moment: moment,
+            member: member,
+            profile: profile
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * プロジェクトメンバー(me)
+ */
+iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let message = '';
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const member = yield iamService.findMemberById({ id: req.params.id });
+        const profile = yield iamService.getMemberProfile({ id: req.params.id });
+        if (req.method === 'DELETE') {
+            // 何もしない
+            res.status(http_status_1.NO_CONTENT)
+                .end();
+            return;
+        }
+        else if (req.method === 'POST') {
+            try {
+                // 何もしない
+                res.status(http_status_1.NO_CONTENT)
+                    .end();
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
+        res.render('iam/members/show', {
+            message: message,
+            moment: moment,
+            member: member,
+            profile: profile
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * プロジェクトメンバー注文検索
+ */
+iamRouter.get('/members/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const orderService = new cinerinoapi.service.Order({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const searchOrdersResult = yield orderService.search({
+            limit: req.query.limit,
+            page: req.query.page,
+            sort: { orderDate: cinerinoapi.factory.sortType.Descending },
+            orderDateFrom: moment(req.query.orderDateFrom)
+                .toDate(),
+            orderDateThrough: moment(req.query.orderDateThrough)
+                .toDate(),
+            customer: {
+                ids: [req.params.id]
+            }
+        });
+        debug(searchOrdersResult.totalCount, 'orders found.');
+        res.json(searchOrdersResult);
     }
     catch (error) {
         next(error);

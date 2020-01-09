@@ -76,7 +76,7 @@
 
                         <!-- <span class="dropdown-item dropdown-header">15 Notifications</span> -->
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a href="/projects/<%= req.project.id %>/iam/members/me" class="dropdown-item">
                             <i class="fa fa-user-tag mr-2"></i> My Account
                             <!-- <span class="float-right text-muted text-sm">3 mins</span> -->
                         </a>
@@ -356,7 +356,7 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="/projects/<%= req.project.id %>/iam/members" class="nav-link">
-                                        <i class="nav-icon fa fa-user-shield"></i>
+                                        <i class="nav-icon fa fa-user-circle"></i>
                                         <p>
                                             メンバー
                                             <span class="badge badge-info right"></span>
@@ -365,7 +365,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="/projects/<%= req.project.id %>/iam/roles" class="nav-link">
-                                        <i class="nav-icon fa fa-user-shield"></i>
+                                        <i class="nav-icon fa fa-hat-cowboy"></i>
                                         <p>
                                             役割
                                             <span class="badge badge-info right"></span>

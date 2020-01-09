@@ -21,7 +21,7 @@ $(function () {
                     var member = data.member;
                     var html = '<ul class="list-unstyled">'
                         + '<li><span class="badge badge-info">' + member.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/iam/users/' + member.id + '">' + member.id + '</a></li>';
+                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/iam/members/' + member.id + '">' + member.id + '</a></li>';
 
                     html += '<li>' + member.username + '</li>'
 
