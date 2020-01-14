@@ -145,6 +145,13 @@ iamRouter.all(
             });
 
             const member = await iamService.findMemberById({ id: req.params.id });
+
+            if ((<any>member.typeOf) === cinerinoapi.factory.creativeWorkType.WebApplication) {
+                res.redirect(`/projects/${req.project.id}/applications/${(<any>member).id}`);
+
+                return;
+            }
+
             const profile = await iamService.getMemberProfile({ id: req.params.id });
 
             if (req.method === 'DELETE') {

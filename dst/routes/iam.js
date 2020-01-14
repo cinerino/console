@@ -136,6 +136,10 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
             auth: req.user.authClient
         });
         const member = yield iamService.findMemberById({ id: req.params.id });
+        if (member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
+            res.redirect(`/projects/${req.project.id}/applications/${member.id}`);
+            return;
+        }
         const profile = yield iamService.getMemberProfile({ id: req.params.id });
         if (req.method === 'DELETE') {
             // 何もしない
