@@ -23,7 +23,8 @@ $(function () {
                         + '<li><span class="badge badge-info">' + member.typeOf + '</span></li>'
                         + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/iam/members/' + member.id + '">' + member.id + '</a></li>';
 
-                    html += '<li>' + member.username + '</li>'
+                    html += '<li>' + member.name + '</li>';
+                    html += '<li>' + member.username + '</li>';
 
                     html += '</ul>';
 
