@@ -201,7 +201,7 @@ iamRouter.all(
 );
 
 /**
- * プロジェクトメンバー(me)
+ * プロジェクトメンバー
  */
 iamRouter.all(
     '/members/:id',

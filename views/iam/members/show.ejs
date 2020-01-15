@@ -58,7 +58,7 @@
                         </h3>
 
                         <p class="text-muted text-center">
-                            <%= member.username %>
+                            <%= member.member.username %>
                         </p>
 
                         <ul class="list-group list-group-unbordered mb-3">
@@ -82,7 +82,7 @@
                     <div class="card-body">
                         <strong><i class="fa fa-hat-cowboy mr-1"></i> Roles</strong>
                         <p class="text-muted">
-                            <% member.hasRole.forEach((role) => { %>
+                            <% member.member.hasRole.forEach((role) => { %>
                             <span class="badge badge-secondary"><%= role.roleName %></span>
                             <% }) %>
                         </p>
@@ -224,18 +224,18 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><%= member.username %>のプロフィールを更新しますか？</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><%= member.member.username %>のプロフィールを更新しますか？</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p><%= member.username %>のプロフィールを更新するには、ユーザーネーム「<b><%= member.username %></b>」を入力してください。
+                <p><%= member.member.username %>のプロフィールを更新するには、ユーザーネーム「<b><%= member.member.username %></b>」を入力してください。
                 </p>
                 <form>
                     <div class="form-group">
                         <input type="text" class="form-control" id="confirmUpdateProfile" placeholder="ユーザーネーム"
-                            data-expected="<%= member.username %>">
+                            data-expected="<%= member.member.username %>">
                     </div>
                 </form>
             </div>

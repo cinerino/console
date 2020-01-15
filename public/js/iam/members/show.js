@@ -40,7 +40,7 @@ $(function () {
 function searchOrders(page, cb) {
     // page += 1;
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/iam/members/' + member.id + '/orders',
+        '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id + '/orders',
         {
             limit: limit, page: page,
             orderDateFrom: moment(now)

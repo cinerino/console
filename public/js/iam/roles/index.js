@@ -34,9 +34,10 @@ $(function () {
                     var html = '<ul class="list-unstyled">';
 
                     if (Array.isArray(data.permissions)) {
+                        html += '<li class="text-muted">' + data.permissions.length + ' permissions</li>';
                         html += '<li>';
                         data.permissions.forEach(function (p) {
-                            html += '<span class="badge badge-secondary mr-1">' + p + '</span>';
+                            html += '<span class="badge badge-pill badge-secondary mr-1">' + p + '</span>';
                         });
                         html += '</li>';
                     }

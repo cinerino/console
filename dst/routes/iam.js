@@ -184,7 +184,7 @@ iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 
     }
 }));
 /**
- * プロジェクトメンバー(me)
+ * プロジェクトメンバー
  */
 iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

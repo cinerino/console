@@ -20,8 +20,30 @@ $(function () {
                 render: function (data, type, row) {
                     var member = data.member;
                     var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-info">' + member.typeOf + '</span></li>'
+                        + '<li><span class="badge badge-secondary">' + member.typeOf + '</span></li>';
+
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var member = data.member;
+                    var html = '<ul class="list-unstyled">'
                         + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/iam/members/' + member.id + '">' + member.id + '</a></li>';
+
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var member = data.member;
+                    var html = '<ul class="list-unstyled">';
 
                     html += '<li>' + member.name + '</li>';
                     html += '<li>' + member.username + '</li>';
