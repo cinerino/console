@@ -240,8 +240,8 @@ iamRouter.all(
                 }
             }
 
-            if ((<any>member.typeOf) === cinerinoapi.factory.creativeWorkType.WebApplication) {
-                res.redirect(`/projects/${req.project.id}/applications/${(<any>member).id}`);
+            if ((<any>member.member.typeOf) === cinerinoapi.factory.creativeWorkType.WebApplication) {
+                res.redirect(`/projects/${req.project.id}/applications/${member.member.id}`);
 
                 return;
             }

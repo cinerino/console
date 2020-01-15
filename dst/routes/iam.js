@@ -216,8 +216,8 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
                 message = error.message;
             }
         }
-        if (member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
-            res.redirect(`/projects/${req.project.id}/applications/${member.id}`);
+        if (member.member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
+            res.redirect(`/projects/${req.project.id}/applications/${member.member.id}`);
             return;
         }
         const profile = yield iamService.getMemberProfile({ id: req.params.id });

@@ -63,11 +63,20 @@ applicationsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0,
         next(error);
     }
 }));
+/**
+ * アプリケーション詳細
+ */
 applicationsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const projectService = new cinerinoapi.service.Project({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -79,31 +88,27 @@ applicationsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, voi
         }
         const customerUserPoolId = project.settings.cognito.customerUserPool.id;
         const adminUserPoolId = project.settings.cognito.adminUserPool.id;
-        const application = yield userPoolService.fetch({
-            uri: `/applications/${req.params.id}`,
-            method: 'GET',
-            // tslint:disable-next-line:no-magic-numbers
-            expectedStatusCodes: [200]
-        })
-            .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-            return response.json();
-        }));
+        // プロジェクトメンバー検索
+        const member = yield iamService.findMemberById({
+            id: req.params.id
+        });
+        // Cognitoユーザープール検索
         let userPoolClient;
         try {
             userPoolClient = yield userPoolService.findClientById({
                 userPoolId: customerUserPoolId,
-                clientId: application.id
+                clientId: req.params.id
             });
         }
         catch (error) {
             userPoolClient = yield userPoolService.findClientById({
                 userPoolId: adminUserPoolId,
-                clientId: application.id
+                clientId: req.params.id
             });
         }
         res.render('applications/show', {
             moment: moment,
-            application: application,
+            application: member.member,
             userPoolClient: userPoolClient
         });
     }
