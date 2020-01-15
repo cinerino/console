@@ -1,0 +1,66 @@
+<%
+if (iamMember !== undefined) {
+}
+%>
+<div class="form-group">
+    <label>アプリケーションカテゴリー</label>
+    <select class="form-control" name="member[applicationCategory]">
+        <option value="">---</option>
+        <% const categories = ['customer', 'admin'] %>
+        <% categories.forEach(function (category) { %>
+        <%
+        var selected = false;
+        if (iamMember !== undefined) {
+            selected = iamMember.member.applicationCategory === category;
+        }
+        %>
+        <option value="<%= category %>" <% if (selected) { %> selected <% } %>>
+            <%= category %>
+        </option>
+        <% }) %>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>メンバータイプ</label>
+    <select class="form-control" name="member[typeOf]">
+        <option value="">---</option>
+        <% const memberTypes = ['Person', 'WebApplication'] %>
+        <% memberTypes.forEach(function (memberType) { %>
+        <%
+        var selected = false;
+        if (iamMember !== undefined) {
+            selected = iamMember.member.typeOf === memberType;
+        }
+        %>
+        <option value="<%= memberType %>" <% if (selected) { %> selected <% } %>>
+            <%= memberType %>
+        </option>
+        <% }) %>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="branchCode">メンバーID</label>
+    <input type="text" class="form-control" id="member[id]" name="member[id]" placeholder="メンバーID"
+        value="<%= (iamMember !== undefined && iamMember.member !== undefined && iamMember.member !== null) ? iamMember.member.id : '' %>">
+</div>
+
+<div class="form-group">
+    <label>役割</label>
+    <select class="form-control" name="roleName">
+        <option value="">---</option>
+        <% roles.forEach(function (role) { %>
+        <%
+        var selected = false;
+        if (iamMember !== undefined) {
+            selected = Array.isArray(iamMember.member.hasRole)
+                && iamMember.member.hasRole.some((r) => r.roleName === role.roleName);
+        }
+        %>
+        <option value="<%= role.roleName %>" <% if (selected) { %> selected <% } %>>
+            <%= role.roleName %>
+        </option>
+        <% }) %>
+    </select>
+</div>

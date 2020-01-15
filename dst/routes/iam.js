@@ -86,6 +86,64 @@ iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 /**
+ * IAMメンバー追加
+ */
+iamRouter.all('/members/new', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let message;
+        let attributes;
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
+        const searchRolesResult = yield iamService.searchRoles({ limit: 100 });
+        if (req.method === 'POST') {
+            try {
+                attributes = createAttributesFromBody({ req: req });
+                const iamMember = yield iamService.fetch({
+                    uri: '/iam/members',
+                    method: 'POST',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [201],
+                    body: attributes
+                })
+                    .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+                    return response.json();
+                }));
+                req.flash('message', 'IAMメンバーを作成しました');
+                res.redirect(`/projects/${req.project.id}/members/${iamMember.member.id}`);
+                return;
+            }
+            catch (error) {
+                debug(error);
+                message = error.message;
+            }
+        }
+        res.render('iam/members/new', {
+            message: message,
+            attributes: attributes,
+            roles: searchRolesResult.data
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+function createAttributesFromBody(params) {
+    const body = params.req.body;
+    return {
+        member: {
+            applicationCategory: (body.member !== undefined && body.member !== null)
+                ? body.member.applicationCategory : '',
+            typeOf: (body.member !== undefined && body.member !== null)
+                ? body.member.typeOf : '',
+            id: (body.member !== undefined && body.member !== null)
+                ? body.member.id : '',
+            hasRole: [{ roleName: body.roleName }]
+        }
+    };
+}
+/**
  * プロジェクトメンバー(me)
  */
 iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

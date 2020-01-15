@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">販売者作成</h1>
+                <h1 class="m-0 text-dark">IAMメンバー作成</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -12,9 +12,9 @@
                         <a href="/projects/<%= req.project.id %>/home">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/projects/<%= req.project.id %>/sellers">販売者検索</a>
+                        <a href="/projects/<%= req.project.id %>/iam/members">IAMメンバー検索</a>
                     </li>
-                    <li class="breadcrumb-item active">販売者作成</li>
+                    <li class="breadcrumb-item active">IAMメンバー作成</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -58,14 +58,14 @@
                                 <%- message.replace(/\n/g, '<br>') %>
                             </div>
                             <% } %>
-                            <%- include('./form', {project: project, seller: attributes, PaymentMethodType: PaymentMethodType}) %>
+                            <%- include('./form', {iamMember: attributes, roles: roles}) %>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">作成</button>
                             <button type="button" class="btn btn-secondary float-right"
-                                onclick="location.href='/projects/<%= req.project.id %>/sellers'">キャンセル</button>
+                                onclick="location.href='/projects/<%= req.project.id %>/iam/members'">キャンセル</button>
                         </div>
                     </form>
                 </div>
