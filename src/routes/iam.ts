@@ -115,7 +115,7 @@ iamRouter.all(
                         });
 
                     req.flash('message', 'IAMメンバーを作成しました');
-                    res.redirect(`/projects/${req.project.id}/members/${iamMember.member.id}`);
+                    res.redirect(`/projects/${req.project.id}/iam/members/${iamMember.member.id}`);
 
                     return;
                 } catch (error) {
@@ -216,16 +216,14 @@ iamRouter.all(
 
             const member = await iamService.findMemberById({ id: req.params.id });
 
-            if ((<any>member.typeOf) === cinerinoapi.factory.creativeWorkType.WebApplication) {
-                res.redirect(`/projects/${req.project.id}/applications/${(<any>member).id}`);
-
-                return;
-            }
-
-            const profile = await iamService.getMemberProfile({ id: req.params.id });
-
             if (req.method === 'DELETE') {
-                // 何もしない
+                await iamService.fetch({
+                    uri: `/iam/members/${req.params.id}`,
+                    method: 'DELETE',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [204]
+                });
+
                 res.status(NO_CONTENT)
                     .end();
 
@@ -241,6 +239,14 @@ iamRouter.all(
                     message = error.message;
                 }
             }
+
+            if ((<any>member.typeOf) === cinerinoapi.factory.creativeWorkType.WebApplication) {
+                res.redirect(`/projects/${req.project.id}/applications/${(<any>member).id}`);
+
+                return;
+            }
+
+            const profile = await iamService.getMemberProfile({ id: req.params.id });
 
             res.render('iam/members/show', {
                 message: message,

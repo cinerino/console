@@ -111,7 +111,7 @@ iamRouter.all('/members/new', (req, res, next) => __awaiter(void 0, void 0, void
                     return response.json();
                 }));
                 req.flash('message', 'IAMメンバーを作成しました');
-                res.redirect(`/projects/${req.project.id}/members/${iamMember.member.id}`);
+                res.redirect(`/projects/${req.project.id}/iam/members/${iamMember.member.id}`);
                 return;
             }
             catch (error) {
@@ -194,13 +194,13 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
             auth: req.user.authClient
         });
         const member = yield iamService.findMemberById({ id: req.params.id });
-        if (member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
-            res.redirect(`/projects/${req.project.id}/applications/${member.id}`);
-            return;
-        }
-        const profile = yield iamService.getMemberProfile({ id: req.params.id });
         if (req.method === 'DELETE') {
-            // 何もしない
+            yield iamService.fetch({
+                uri: `/iam/members/${req.params.id}`,
+                method: 'DELETE',
+                // tslint:disable-next-line:no-magic-numbers
+                expectedStatusCodes: [204]
+            });
             res.status(http_status_1.NO_CONTENT)
                 .end();
             return;
@@ -216,6 +216,11 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
                 message = error.message;
             }
         }
+        if (member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
+            res.redirect(`/projects/${req.project.id}/applications/${member.id}`);
+            return;
+        }
+        const profile = yield iamService.getMemberProfile({ id: req.params.id });
         res.render('iam/members/show', {
             message: message,
             moment: moment,
