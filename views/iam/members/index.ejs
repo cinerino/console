@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">プロジェクトメンバー検索</h1>
+                <h1 class="m-0 text-dark">IAMメンバー検索</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -11,7 +11,7 @@
                     <li class="breadcrumb-item">
                         <a href="/projects/<%= req.project.id %>/home">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">プロジェクトメンバー検索</li>
+                    <li class="breadcrumb-item active">IAMメンバー検索</li>
                 </ol>
             </div>
             <!-- /.col -->
@@ -42,6 +42,23 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>メンバータイプ</label>
+                                        <select class="form-control" name="member[typeOf][$eq]">
+                                            <option value=""></option>
+                                            <% const memberTypes = ['WebApplication', 'Person']; %>
+                                            <% memberTypes.forEach(function (memberType) { %>
+                                            <% 
+                                                var selected = false;
+                                                selected = searchConditions.member !== undefined && searchConditions.member.typeOf !== undefined
+                                                    && searchConditions.member.typeOf.$eq === memberType;
+                                                %>
+                                            <option value="<%= memberType %>" <% if (selected) { %> selected <% } %>>
+                                                <%= memberType %>
+                                            </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                 </div>

@@ -41,6 +41,16 @@
                     <form role="form" method="get">
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">RoleName</label>
+                                        <input type="text" class="form-control" id="roleName[$eq]" name="roleName[$eq]"
+                                            placeholder="RoleName"
+                                            value="<%= (searchConditions.roleName !== undefined) ? searchConditions.roleName.$eq : '' %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
                             </div>
                         </div>
 

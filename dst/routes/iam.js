@@ -25,12 +25,18 @@ const iamRouter = express.Router();
 iamRouter.get('/roles', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const searchConditions = {
-        // limit: req.query.limit,
-        // page: req.query.page,
+            limit: req.query.limit,
+            page: req.query.page,
+            roleName: (req.query.roleName !== undefined
+                && typeof req.query.roleName.$eq === 'string'
+                && req.query.roleName.$eq.length > 0)
+                ? { $eq: req.query.roleName.$eq }
+                : undefined
         };
         if (req.query.format === 'datatable') {
             const searchResult = yield iamService.searchRoles(searchConditions);
@@ -53,17 +59,26 @@ iamRouter.get('/roles', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
 }));
 /**
- * プロジェクトメンバー検索
+ * IAMメンバー検索
  */
 iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const searchConditions = {
-        // limit: req.query.limit,
-        // page: req.query.page
+            limit: req.query.limit,
+            page: req.query.page,
+            member: {
+                typeOf: (req.query.member !== undefined
+                    && req.query.member.typeOf !== undefined
+                    && typeof req.query.member.typeOf.$eq === 'string'
+                    && req.query.member.typeOf.$eq.length > 0)
+                    ? { $eq: req.query.member.typeOf.$eq }
+                    : undefined
+            }
         };
         if (req.query.format === 'datatable') {
             const searchResult = yield iamService.searchMembers(searchConditions);
@@ -93,8 +108,9 @@ iamRouter.all('/members/new', (req, res, next) => __awaiter(void 0, void 0, void
         let message;
         let attributes;
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const searchRolesResult = yield iamService.searchRoles({ limit: 100 });
         if (req.method === 'POST') {
@@ -144,14 +160,15 @@ function createAttributesFromBody(params) {
     };
 }
 /**
- * プロジェクトメンバー(me)
+ * IAMメンバー(me)
  */
 iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message = '';
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const member = yield iamService.findMemberById({ id: 'me' });
         const profile = yield iamService.getMemberProfile({ id: 'me' });
@@ -184,14 +201,15 @@ iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 
     }
 }));
 /**
- * プロジェクトメンバー
+ * IAMメンバー
  */
 iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message = '';
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const member = yield iamService.findMemberById({ id: req.params.id });
         if (req.method === 'DELETE') {
@@ -233,13 +251,14 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
     }
 }));
 /**
- * プロジェクトメンバー注文検索
+ * IAMメンバー注文検索
  */
 iamRouter.get('/members/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const searchOrdersResult = yield orderService.search({
             limit: req.query.limit,
@@ -267,8 +286,9 @@ iamRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     try {
         debug('req.query:', req.query);
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const searchConditions = {
             // limit: req.query.limit,
@@ -307,8 +327,9 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         let message = '';
         const iamService = new cinerinoapi.service.IAM({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const user = yield iamService.findUserById({ id: req.params.id });
         if (req.method === 'DELETE') {
@@ -353,8 +374,9 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0
 iamRouter.get('/users/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderService = new cinerinoapi.service.Order({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const searchOrdersResult = yield orderService.search({
             limit: req.query.limit,

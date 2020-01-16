@@ -18,8 +18,9 @@ applicationsRouter.get(
     async (req, res, next) => {
         try {
             const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
 
             const searchConditions: any = {
@@ -91,7 +92,7 @@ applicationsRouter.get(
             const customerUserPoolId = project.settings.cognito.customerUserPool.id;
             const adminUserPoolId = project.settings.cognito.adminUserPool.id;
 
-            // プロジェクトメンバー検索
+            // IAMメンバー検索
             const member = await iamService.findMemberById({
                 id: req.params.id
             });
@@ -131,8 +132,9 @@ applicationsRouter.get(
             const now = new Date();
 
             const orderService = new cinerinoapi.service.Order({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
             const searchOrdersResult = await orderService.search({
                 limit: req.query.limit,
