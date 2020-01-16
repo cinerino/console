@@ -158,6 +158,16 @@ function createAttributesFromBody(params: {
 }): any {
     const body = params.req.body;
 
+    const hasRole = (Array.isArray(body.roleName))
+        ? (<any[]>body.roleName)
+            .filter((r) => typeof r === 'string' && r.length > 0)
+            .map((r) => {
+                return {
+                    roleName: String(r)
+                };
+            })
+        : [];
+
     return {
         member: {
             applicationCategory: (body.member !== undefined && body.member !== null)
@@ -166,7 +176,7 @@ function createAttributesFromBody(params: {
                 ? body.member.typeOf : '',
             id: (body.member !== undefined && body.member !== null)
                 ? body.member.id : '',
-            hasRole: [{ roleName: body.roleName }]
+            hasRole: hasRole
         }
     };
 }

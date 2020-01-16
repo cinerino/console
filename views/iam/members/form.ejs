@@ -48,8 +48,7 @@ if (iamMember !== undefined) {
 
 <div class="form-group">
     <label>役割</label>
-    <select class="form-control" name="roleName">
-        <option value="">---</option>
+    <select multiple class="form-control" name="roleName[]" size="10">
         <% roles.forEach(function (role) { %>
         <%
         var selected = false;
@@ -62,5 +61,5 @@ if (iamMember !== undefined) {
             <%= role.roleName %>
         </option>
         <% }) %>
-    </select>
+    </select multiple>
 </div>

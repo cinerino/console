@@ -84,3 +84,21 @@ function searchOrders(page, cb) {
         console.error('注文履歴を取得できませんでした')
     });
 }
+
+$(function () {
+    $('button.delete').click(function () {
+        if (window.confirm('元には戻せません。本当に削除しますか？')) {
+            $.ajax({
+                url: '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id,
+                type: 'DELETE'
+            }).done(function () {
+                alert('削除しました');
+                location.href = '/projects/' + PROJECT_ID + '/iam/members';
+            }).fail(function () {
+                alert('削除できませんでした');
+            }).always(function () {
+            });
+        } else {
+        }
+    });
+});
