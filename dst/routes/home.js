@@ -247,19 +247,11 @@ homeRouter.get('/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, 
 }));
 homeRouter.get('/dbStats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const eventService = new cinerinoapi.service.Event({
-            endpoint: `${req.project.settings.API_ENDPOINT}`,
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const stats = yield eventService.fetch({
-            uri: '/stats/dbStats',
-            method: 'GET',
-            // tslint:disable-next-line:no-magic-numbers
-            expectedStatusCodes: [200]
-        })
-            .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-            return response.json();
-        }));
+        const stats = yield projectService.getDBStats({});
         res.json(stats);
     }
     catch (error) {
@@ -271,24 +263,12 @@ homeRouter.get('/dbStats', (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 homeRouter.get('/health', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const eventService = new cinerinoapi.service.Event({
-            endpoint: `${req.project.settings.API_ENDPOINT}`,
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
-        const stats = yield eventService.fetch({
-            uri: '/health',
-            method: 'GET',
-            // tslint:disable-next-line:no-magic-numbers
-            expectedStatusCodes: [200]
-        })
-            .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-            const version = response.headers.get('X-API-Version');
-            return {
-                version: version,
-                status: response.status
-            };
-        }));
-        res.json(stats);
+        const health = yield projectService.getHealth({});
+        res.json(health);
     }
     catch (error) {
         res.status(http_status_1.INTERNAL_SERVER_ERROR)

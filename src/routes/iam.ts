@@ -121,16 +121,7 @@ iamRouter.all(
                 try {
                     attributes = createAttributesFromBody({ req: req });
 
-                    const iamMember = await iamService.fetch({
-                        uri: '/iam/members',
-                        method: 'POST',
-                        // tslint:disable-next-line:no-magic-numbers
-                        expectedStatusCodes: [201],
-                        body: attributes
-                    })
-                        .then(async (response) => {
-                            return response.json();
-                        });
+                    const iamMember = await iamService.createMember(attributes);
 
                     req.flash('message', 'IAMメンバーを作成しました');
                     res.redirect(`/projects/${req.project.id}/iam/members/${iamMember.member.id}`);
@@ -247,11 +238,8 @@ iamRouter.all(
             const member = await iamService.findMemberById({ id: req.params.id });
 
             if (req.method === 'DELETE') {
-                await iamService.fetch({
-                    uri: `/iam/members/${req.params.id}`,
-                    method: 'DELETE',
-                    // tslint:disable-next-line:no-magic-numbers
-                    expectedStatusCodes: [204]
+                await iamService.deleteMember({
+                    id: req.params.id
                 });
 
                 res.status(NO_CONTENT)
@@ -270,7 +258,7 @@ iamRouter.all(
                 }
             }
 
-            if ((<any>member.member.typeOf) === cinerinoapi.factory.creativeWorkType.WebApplication) {
+            if (member.member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
                 res.redirect(`/projects/${req.project.id}/applications/${member.member.id}`);
 
                 return;

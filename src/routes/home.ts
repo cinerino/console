@@ -272,19 +272,11 @@ homeRouter.get(
     '/dbStats',
     async (req, res) => {
         try {
-            const eventService = new cinerinoapi.service.Event({
-                endpoint: `${req.project.settings.API_ENDPOINT}`,
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const stats = await eventService.fetch({
-                uri: '/stats/dbStats',
-                method: 'GET',
-                // tslint:disable-next-line:no-magic-numbers
-                expectedStatusCodes: [200]
-            })
-                .then(async (response) => {
-                    return response.json();
-                });
+            const stats = await projectService.getDBStats({});
 
             res.json(stats);
         } catch (error) {
@@ -300,26 +292,13 @@ homeRouter.get(
     '/health',
     async (req, res) => {
         try {
-            const eventService = new cinerinoapi.service.Event({
-                endpoint: `${req.project.settings.API_ENDPOINT}`,
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const stats = await eventService.fetch({
-                uri: '/health',
-                method: 'GET',
-                // tslint:disable-next-line:no-magic-numbers
-                expectedStatusCodes: [200]
-            })
-                .then(async (response) => {
-                    const version = response.headers.get('X-API-Version');
+            const health = await projectService.getHealth({});
 
-                    return {
-                        version: version,
-                        status: response.status
-                    };
-                });
-
-            res.json(stats);
+            res.json(health);
         } catch (error) {
             res.status(INTERNAL_SERVER_ERROR)
                 .json({

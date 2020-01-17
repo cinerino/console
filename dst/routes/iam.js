@@ -116,16 +116,7 @@ iamRouter.all('/members/new', (req, res, next) => __awaiter(void 0, void 0, void
         if (req.method === 'POST') {
             try {
                 attributes = createAttributesFromBody({ req: req });
-                const iamMember = yield iamService.fetch({
-                    uri: '/iam/members',
-                    method: 'POST',
-                    // tslint:disable-next-line:no-magic-numbers
-                    expectedStatusCodes: [201],
-                    body: attributes
-                })
-                    .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-                    return response.json();
-                }));
+                const iamMember = yield iamService.createMember(attributes);
                 req.flash('message', 'IAMメンバーを作成しました');
                 res.redirect(`/projects/${req.project.id}/iam/members/${iamMember.member.id}`);
                 return;
@@ -222,11 +213,8 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
         });
         const member = yield iamService.findMemberById({ id: req.params.id });
         if (req.method === 'DELETE') {
-            yield iamService.fetch({
-                uri: `/iam/members/${req.params.id}`,
-                method: 'DELETE',
-                // tslint:disable-next-line:no-magic-numbers
-                expectedStatusCodes: [204]
+            yield iamService.deleteMember({
+                id: req.params.id
             });
             res.status(http_status_1.NO_CONTENT)
                 .end();

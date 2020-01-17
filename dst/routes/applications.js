@@ -23,7 +23,7 @@ const applicationsRouter = express.Router();
  */
 applicationsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userPoolService = new cinerinoapi.service.UserPool({
+        const iamService = new cinerinoapi.service.IAM({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
@@ -34,7 +34,7 @@ applicationsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0,
             name: req.query.name
         };
         if (req.query.format === 'datatable') {
-            const searchApplicationsResult = yield userPoolService.fetch({
+            const searchApplicationsResult = yield iamService.fetch({
                 uri: '/applications',
                 method: 'GET',
                 // tslint:disable-next-line:no-magic-numbers
