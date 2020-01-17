@@ -89,7 +89,7 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
                     name: 'email_verified',
                     value: 'true'
                 });
-                const profile = Object.assign(Object.assign({}, req.body), { additionalProperty: additionalProperty });
+                const profile = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (typeof req.body.familyName === 'string') ? { familyName: req.body.familyName } : {}), (typeof req.body.givenName === 'string') ? { givenName: req.body.givenName } : {}), (typeof req.body.telephone === 'string') ? { telephone: req.body.telephone } : {}), (typeof req.body.email === 'string') ? { email: req.body.email } : {}), { additionalProperty: additionalProperty });
                 yield personService.updateProfile(Object.assign({ id: req.params.id }, profile));
                 req.flash('message', '更新しました');
                 res.redirect(req.originalUrl);

@@ -22,13 +22,20 @@ const TimelineFactory = require("../factory/timeline");
 const homeRouter = express.Router();
 homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
         const userPoolService = new cinerinoapi.service.UserPool({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const sellerService = new cinerinoapi.service.Seller({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
         const projectService = new cinerinoapi.service.Project({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -47,21 +54,11 @@ homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                     userPoolId: project.settings.cognito.adminUserPool.id
                 });
             }
-            // アプリケーション検索
-            const searchApplicationsResult = yield userPoolService.fetch({
-                uri: '/applications',
-                method: 'GET',
-                // tslint:disable-next-line:no-magic-numbers
-                expectedStatusCodes: [200],
-                qs: { limit: 100 }
-            })
-                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-                return {
-                    totalCount: Number(response.headers.get('X-Total-Count')),
-                    data: yield response.json()
-                };
-            }));
-            applications = searchApplicationsResult.data;
+            // IAMメンバー検索(アプリケーション)
+            const searchMembersResult = yield iamService.searchMembers({
+                member: { typeOf: { $eq: cinerinoapi.factory.creativeWorkType.WebApplication } }
+            });
+            applications = searchMembersResult.data.map((m) => m.member);
         }
         catch (error) {
             // no op

@@ -92,7 +92,10 @@ peopleRouter.all(
                         value: 'true'
                     });
                     const profile = {
-                        ...req.body,
+                        ...(typeof req.body.familyName === 'string') ? { familyName: req.body.familyName } : {},
+                        ...(typeof req.body.givenName === 'string') ? { givenName: req.body.givenName } : {},
+                        ...(typeof req.body.telephone === 'string') ? { telephone: req.body.telephone } : {},
+                        ...(typeof req.body.email === 'string') ? { email: req.body.email } : {},
                         additionalProperty: additionalProperty
                     };
 

@@ -24,38 +24,31 @@ ordersRouter.get(
     async (req, res, next) => {
         try {
             debug('req.query:', req.query);
+            const iamService = new cinerinoapi.service.IAM({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
             const orderService = new cinerinoapi.service.Order({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
             const sellerService = new cinerinoapi.service.Seller({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
-            });
-            const userPoolService = new cinerinoapi.service.UserPool({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
 
             const searchSellersResult = await sellerService.search({});
 
             let applications: any[] = [];
             try {
-                // アプリケーション検索
-                const searchApplicationsResult = await userPoolService.fetch({
-                    uri: '/applications',
-                    method: 'GET',
-                    // tslint:disable-next-line:no-magic-numbers
-                    expectedStatusCodes: [200],
-                    qs: { limit: 100 }
-                })
-                    .then(async (response) => {
-                        return {
-                            totalCount: Number(<string>response.headers.get('X-Total-Count')),
-                            data: await response.json()
-                        };
-                    });
-                applications = searchApplicationsResult.data;
+                // IAMメンバー検索(アプリケーション)
+                const searchMembersResult = await iamService.searchMembers({
+                    member: { typeOf: { $eq: cinerinoapi.factory.creativeWorkType.WebApplication } }
+                });
+                applications = searchMembersResult.data.map((m) => m.member);
             } catch (error) {
                 // no op
             }
