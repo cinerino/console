@@ -170,8 +170,8 @@ iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
-        const member = yield iamService.findMemberById({ id: 'me' });
-        const profile = yield iamService.getMemberProfile({ id: 'me' });
+        const member = yield iamService.findMemberById({ member: { id: 'me' } });
+        const profile = yield iamService.getMemberProfile({ member: { id: 'me' } });
         if (req.method === 'DELETE') {
             // 何もしない
             res.status(http_status_1.NO_CONTENT)
@@ -205,43 +205,73 @@ iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 
  */
 iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let message = '';
+        const message = '';
         const iamService = new cinerinoapi.service.IAM({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
-        const member = yield iamService.findMemberById({ id: req.params.id });
         if (req.method === 'DELETE') {
             yield iamService.deleteMember({
-                id: req.params.id
+                member: { id: req.params.id }
             });
             res.status(http_status_1.NO_CONTENT)
                 .end();
             return;
         }
-        else if (req.method === 'POST') {
-            try {
-                // 何もしない
-                res.status(http_status_1.NO_CONTENT)
-                    .end();
-                return;
-            }
-            catch (error) {
-                message = error.message;
-            }
+        else if (req.method === 'PUT') {
+            const attributes = createAttributesFromBody({ req: req });
+            yield iamService.updateMember({
+                member: {
+                    id: req.params.id,
+                    hasRole: attributes.member.hasRole
+                }
+            });
+            res.status(http_status_1.NO_CONTENT)
+                .end();
+            return;
         }
+        const member = yield iamService.findMemberById({ member: { id: req.params.id } });
         if (member.member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
             res.redirect(`/projects/${req.project.id}/applications/${member.member.id}`);
             return;
         }
-        const profile = yield iamService.getMemberProfile({ id: req.params.id });
+        const profile = yield iamService.getMemberProfile({ member: { id: req.params.id } });
+        const searchRolesResult = yield iamService.searchRoles({ limit: 100 });
         res.render('iam/members/show', {
             message: message,
             moment: moment,
             member: member,
-            profile: profile
+            profile: profile,
+            roles: searchRolesResult.data
         });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * IAMメンバープロフィール更新
+ */
+iamRouter.put('/members/:id/profile', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const iamService = new cinerinoapi.service.IAM({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
+        // 管理者としてプロフィール更新の場合、メールアドレスを認証済にセット
+        const additionalProperty = (Array.isArray(req.body.additionalProperty))
+            ? req.body.additionalProperty
+            : [];
+        additionalProperty.push({
+            name: 'email_verified',
+            value: 'true'
+        });
+        const profile = Object.assign(Object.assign({}, req.body), { additionalProperty: additionalProperty });
+        yield iamService.updateUserProfile(Object.assign({ id: req.params.id }, profile));
+        res.status(http_status_1.NO_CONTENT)
+            .end();
     }
     catch (error) {
         next(error);
@@ -322,13 +352,13 @@ iamRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
  */
 iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let message = '';
+        // let message = '';
         const iamService = new cinerinoapi.service.IAM({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
-        const user = yield iamService.findUserById({ id: req.params.id });
+        // const user = await iamService.findUserById({ id: req.params.id });
         if (req.method === 'DELETE') {
             // 何もしない
             res.status(http_status_1.NO_CONTENT)
@@ -352,14 +382,15 @@ iamRouter.all('/users/:id', (req, res, next) => __awaiter(void 0, void 0, void 0
                 return;
             }
             catch (error) {
-                message = error.message;
+                // message = error.message;
             }
         }
-        res.render('iam/users/show', {
-            message: message,
-            moment: moment,
-            user: user
-        });
+        res.redirect(`/projects/${req.project.id}/iam/members/${req.params.id}`);
+        // res.render('iam/users/show', {
+        //     message: message,
+        //     moment: moment,
+        //     user: user
+        // });
     }
     catch (error) {
         next(error);

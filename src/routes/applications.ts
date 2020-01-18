@@ -94,7 +94,7 @@ applicationsRouter.get(
 
             // IAMメンバー検索
             const member = await iamService.findMemberById({
-                id: req.params.id
+                member: { id: req.params.id }
             });
 
             // Cognitoユーザープール検索

@@ -1,7 +1,13 @@
 <%
+let isNew = true;
 if (iamMember !== undefined) {
+    if (typeof iamMember.id === 'string') {
+        isNew = false;
+    }
 }
 %>
+
+<% if (isNew) { %>
 <div class="form-group">
     <label>アプリケーションカテゴリー</label>
     <select class="form-control" name="member[applicationCategory]">
@@ -45,6 +51,7 @@ if (iamMember !== undefined) {
     <input type="text" class="form-control" id="member[id]" name="member[id]" placeholder="メンバーID"
         value="<%= (iamMember !== undefined && iamMember.member !== undefined && iamMember.member !== null) ? iamMember.member.id : '' %>">
 </div>
+<% } %>
 
 <div class="form-group">
     <label>役割</label>

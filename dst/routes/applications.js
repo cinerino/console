@@ -91,7 +91,7 @@ applicationsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, voi
         const adminUserPoolId = project.settings.cognito.adminUserPool.id;
         // IAMメンバー検索
         const member = yield iamService.findMemberById({
-            id: req.params.id
+            member: { id: req.params.id }
         });
         // Cognitoユーザープール検索
         let userPoolClient;

@@ -33,7 +33,48 @@ $(function () {
         }
     });
     updateProfileButton.click(function () {
-        $('#settings form').submit();
+        $.ajax({
+            url: '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id + '/profile',
+            type: 'PUT',
+            data: $('#profile form').serialize(),
+        }).done(function () {
+            alert('プロフィールを更新しました');
+            location.href = '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id;
+        }).fail(function () {
+            alert('更新できませんでした');
+        }).always(function () {
+        });
+    });
+
+    // ロール更新
+    var updateButton = $('button.update');
+    $('#modal-update').on('shown.bs.modal', function () {
+        $('#confirmUpdate').val('');
+        updateButton.prop('disabled', true);
+        updateButton.addClass('disabled');
+    });
+    $('#confirmUpdate').keyup(function () {
+        var validValue = (String($(this).val()) === String($(this).data('expected')));
+        if (validValue) {
+            updateButton.prop('disabled', false);
+            updateButton.removeClass('disabled');
+        } else {
+            updateButton.prop('disabled', true);
+            updateButton.addClass('disabled');
+        }
+    });
+    updateButton.click(function () {
+        $.ajax({
+            url: '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id,
+            type: 'PUT',
+            data: $('#settings form').serialize(),
+        }).done(function () {
+            alert('ロールを更新しました');
+            location.href = '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id;
+        }).fail(function () {
+            alert('更新できませんでした');
+        }).always(function () {
+        });
     });
 });
 
@@ -45,9 +86,9 @@ function searchOrders(page, cb) {
             limit: limit, page: page,
             orderDateFrom: moment(now)
                 .add(-1, 'month')
-                .toDate(),
+                .toISOString(),
             orderDateThrough: moment(now)
-                .toDate(),
+                .toISOString(),
         }
     ).done(function (data) {
         $('#orderCount').html(data.totalCount.toString());
