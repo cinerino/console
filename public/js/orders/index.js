@@ -188,13 +188,27 @@ $(function () {
     });
 
     // Date range picker
-    $('#orderDateRange,#reservationForInSessionRange').daterangepicker({
+    $('#orderDateRange').daterangepicker({
+        // autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
+    $('#reservationForInSessionRange').daterangepicker({
+        autoUpdateInput: false,
+        timePicker: true,
+        locale: {
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+        }
+    });
+    $('#reservationForInSessionRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+    });
+    $('#reservationForInSessionRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
 
     $('.search').click(function () {
         $('form').submit();
