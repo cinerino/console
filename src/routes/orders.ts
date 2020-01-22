@@ -152,14 +152,16 @@ ordersRouter.get(
                 orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                     ? moment(req.query.orderDateRange.split(' - ')[0])
                         .toDate()
-                    : moment()
-                        .add(-1, 'day')
-                        .toDate(),
+                    // : moment()
+                    //     .add(-1, 'year')
+                    //     .toDate(),
+                    : undefined,
                 orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                     ? moment(req.query.orderDateRange.split(' - ')[1])
                         .toDate()
-                    : moment()
-                        .toDate(),
+                    // : moment()
+                    //     .toDate(),
+                    : undefined,
                 confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
                     ? (<string>req.query.confirmationNumbers).split(',')
                         .map((v) => v.trim())
@@ -254,11 +256,31 @@ ordersRouter.get(
             };
 
             if (req.query.format === 'datatable') {
-                const searchOrdersResult = await orderService.search(searchConditions);
+                const searchOrdersResult = await iamService.fetch({
+                    uri: '/orders/v2',
+                    method: 'GET',
+                    // tslint:disable-next-line:no-magic-numbers
+                    expectedStatusCodes: [200],
+                    qs: searchConditions
+                })
+                    .then(async (response) => {
+                        return {
+                            data: await response.json()
+                        };
+                    });
+                // const searchOrdersResult = await orderService.search({
+                //     ...searchConditions,
+                //     ...{
+                //         disableTotalCount: true
+                //     }
+                // });
+
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchOrdersResult.totalCount,
-                    recordsFiltered: searchOrdersResult.totalCount,
+                    // recordsTotal: searchOrdersResult.totalCount,
+                    recordsFiltered: (searchOrdersResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchOrdersResult.data.length),
                     data: searchOrdersResult.data
                 });
             } else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {

@@ -2,6 +2,12 @@ $(function () {
     var table = $("#orders-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
+        // paging: false,
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -188,25 +194,25 @@ $(function () {
     });
 
     // Date range picker
-    $('#orderDateRange').daterangepicker({
-        // autoUpdateInput: false,
+    $('#orderDateRange,#reservationForInSessionRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
-    $('#reservationForInSessionRange').daterangepicker({
-        autoUpdateInput: false,
-        timePicker: true,
-        locale: {
-            format: 'YYYY-MM-DDTHH:mm:ssZ'
-        }
-    });
-    $('#reservationForInSessionRange').on('apply.daterangepicker', function (ev, picker) {
+    // $('#reservationForInSessionRange').daterangepicker({
+    //     autoUpdateInput: false,
+    //     timePicker: true,
+    //     locale: {
+    //         format: 'YYYY-MM-DDTHH:mm:ssZ'
+    //     }
+    // });
+    $('#orderDateRange,#reservationForInSessionRange').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
     });
-    $('#reservationForInSessionRange').on('cancel.daterangepicker', function (ev, picker) {
+    $('#orderDateRange,#reservationForInSessionRange').on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
     });
 
