@@ -83,14 +83,11 @@ reservationsRouter.get('',
             modifiedFrom: (req.query.modifiedTimeRange !== undefined && req.query.modifiedTimeRange !== '')
                 ? moment(req.query.modifiedTimeRange.split(' - ')[0])
                     .toDate()
-                : moment()
-                    .add(-1, 'day')
-                    .toDate(),
+                : undefined,
             modifiedThrough: (req.query.modifiedTimeRange !== undefined && req.query.modifiedTimeRange !== '')
                 ? moment(req.query.modifiedTimeRange.split(' - ')[1])
                     .toDate()
-                : moment()
-                    .toDate(),
+                : undefined,
             ids: (req.query.ids !== undefined
                 && req.query.ids !== '')
                 ? req.query.ids.split(',')
@@ -163,11 +160,15 @@ reservationsRouter.get('',
             }
         };
         if (req.query.format === 'datatable') {
-            const searchOrdersResult = yield reservationService.search(searchConditions);
+            const searchOrdersResult = yield reservationService.search(Object.assign(Object.assign({}, searchConditions), {
+                disableTotalCount: true
+            }));
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchOrdersResult.totalCount,
-                recordsFiltered: searchOrdersResult.totalCount,
+                // recordsTotal: searchOrdersResult.totalCount,
+                recordsFiltered: (searchOrdersResult.data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchOrdersResult.data.length),
                 data: searchOrdersResult.data
             });
         }

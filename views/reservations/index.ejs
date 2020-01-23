@@ -88,7 +88,7 @@
                                             </div>
                                             <input type="text" class="form-control" name="modifiedTimeRange"
                                                 id="modifiedTimeRange"
-                                                value="<%= moment(searchConditions.modifiedFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.modifiedThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                                value="<%= (searchConditions.modifiedFrom !== undefined) ? `${moment(searchConditions.modifiedFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.modifiedThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                         </div>
                                         <!-- /.input group -->
                                     </div>

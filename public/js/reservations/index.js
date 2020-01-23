@@ -2,6 +2,12 @@ $(function () {
     var table = $("#reservations-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
+        // paging: false,
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -136,12 +142,19 @@ $(function () {
 
     // Date range picker
     $('#bookingTimeRange,#modifiedTimeRange,#reservationForInSessionRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
+    $('#bookingTimeRange,#modifiedTimeRange,#reservationForInSessionRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+    });
+    $('#bookingTimeRange,#modifiedTimeRange,#reservationForInSessionRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
 
     $(document).on('click', '.showUnderNameIdentifier', function () {
         var id = $(this).data('id');
