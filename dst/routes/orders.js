@@ -251,24 +251,9 @@ ordersRouter.get('',
                     : undefined })
         };
         if (req.query.format === 'datatable') {
-            const searchOrdersResult = yield iamService.fetch({
-                uri: '/orders/v2',
-                method: 'GET',
-                // tslint:disable-next-line:no-magic-numbers
-                expectedStatusCodes: [200],
-                qs: searchConditions
-            })
-                .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-                return {
-                    data: yield response.json()
-                };
+            const searchOrdersResult = yield orderService.search(Object.assign(Object.assign({}, searchConditions), {
+                disableTotalCount: true
             }));
-            // const searchOrdersResult = await orderService.search({
-            //     ...searchConditions,
-            //     ...{
-            //         disableTotalCount: true
-            //     }
-            // });
             res.json({
                 draw: req.query.draw,
                 // recordsTotal: searchOrdersResult.totalCount,

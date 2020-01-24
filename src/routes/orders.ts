@@ -256,24 +256,12 @@ ordersRouter.get(
             };
 
             if (req.query.format === 'datatable') {
-                const searchOrdersResult = await iamService.fetch({
-                    uri: '/orders/v2',
-                    method: 'GET',
-                    // tslint:disable-next-line:no-magic-numbers
-                    expectedStatusCodes: [200],
-                    qs: searchConditions
-                })
-                    .then(async (response) => {
-                        return {
-                            data: await response.json()
-                        };
-                    });
-                // const searchOrdersResult = await orderService.search({
-                //     ...searchConditions,
-                //     ...{
-                //         disableTotalCount: true
-                //     }
-                // });
+                const searchOrdersResult = await orderService.search({
+                    ...searchConditions,
+                    ...{
+                        disableTotalCount: true
+                    }
+                });
 
                 res.json({
                     draw: req.query.draw,
