@@ -107,12 +107,16 @@ ordersRouter.get('',
                     ? req.query.customer.ids.split(',')
                         .map((v) => v.trim())
                     : undefined,
-                membershipNumbers: (req.query.customer !== undefined
-                    && req.query.customer.membershipNumbers !== undefined
-                    && req.query.customer.membershipNumbers !== '')
-                    ? req.query.customer.membershipNumbers.split(',')
-                        .map((v) => v.trim())
-                    : undefined,
+                memberOf: {
+                    membershipNumber: {
+                        $in: (req.query.customer !== undefined
+                            && req.query.customer.membershipNumbers !== undefined
+                            && req.query.customer.membershipNumbers !== '')
+                            ? req.query.customer.membershipNumbers.split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    }
+                },
                 identifiers: customerIdentifiers,
                 // : [
                 //     ...searchUserPoolClientsResult.data.map((userPoolClient) => {
@@ -128,18 +132,38 @@ ordersRouter.get('',
                 //         };
                 //     })
                 // ],
-                givenName: (req.query.customer !== undefined && req.query.customer.givenName !== '')
-                    ? req.query.customer.givenName
-                    : undefined,
-                familyName: (req.query.customer !== undefined && req.query.customer.familyName !== '')
-                    ? req.query.customer.familyName
-                    : undefined,
-                email: (req.query.customer !== undefined && req.query.customer.email !== '')
-                    ? req.query.customer.email
-                    : undefined,
-                telephone: (req.query.customer !== undefined && req.query.customer.telephone !== '')
-                    ? req.query.customer.telephone
-                    : undefined
+                givenName: {
+                    $eq: (req.query.customer !== undefined
+                        && req.query.customer.givenName !== undefined
+                        && typeof req.query.customer.givenName.$eq === 'string'
+                        && req.query.customer.givenName.$eq !== '')
+                        ? req.query.customer.givenName.$eq
+                        : undefined
+                },
+                familyName: {
+                    $eq: (req.query.customer !== undefined
+                        && req.query.customer.familyName !== undefined
+                        && typeof req.query.customer.familyName.$eq === 'string'
+                        && req.query.customer.familyName.$eq !== '')
+                        ? req.query.customer.familyName.$eq
+                        : undefined
+                },
+                email: {
+                    $eq: (req.query.customer !== undefined
+                        && req.query.customer.email !== undefined
+                        && typeof req.query.customer.email.$eq === 'string'
+                        && req.query.customer.email.$eq !== '')
+                        ? req.query.customer.email.$eq
+                        : undefined
+                },
+                telephone: {
+                    $eq: (req.query.customer !== undefined
+                        && req.query.customer.telephone !== undefined
+                        && typeof req.query.customer.telephone.$eq === 'string'
+                        && req.query.customer.telephone.$eq !== '')
+                        ? req.query.customer.telephone.$eq
+                        : undefined
+                }
             },
             orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                 ? req.query.orderNumbers.split(',')
