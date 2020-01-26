@@ -93,9 +93,9 @@ homeRouter.get('/countNewOrder', (req, res, next) => __awaiter(void 0, void 0, v
                 .startOf('day')
                 .toDate()
         };
-        const { totalCount } = yield orderService.search(searchConditions);
+        const {} = yield orderService.search(searchConditions);
         res.json({
-            totalCount: totalCount
+            totalCount: 0
         });
     }
     catch (error) {
@@ -147,7 +147,7 @@ homeRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 0, vo
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
-        const { totalCount } = yield actionService.search({
+        const {} = yield actionService.search({
             limit: 1,
             page: 1,
             typeOf: cinerinoapi.factory.actionType.RegisterAction,
@@ -162,7 +162,7 @@ homeRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 0, vo
                 .toDate()
         });
         res.json({
-            totalCount: totalCount
+            totalCount: 0
         });
     }
     catch (error) {
@@ -184,9 +184,9 @@ homeRouter.get('/countNewTransaction', (req, res, next) => __awaiter(void 0, voi
                 .startOf('day')
                 .toDate()
         };
-        const { totalCount } = yield placeOrderService.search(searchConditions);
+        const {} = yield placeOrderService.search(searchConditions);
         res.json({
-            totalCount: totalCount
+            totalCount: 0
         });
     }
     catch (error) {

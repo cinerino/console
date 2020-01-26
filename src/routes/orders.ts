@@ -139,6 +139,12 @@ ordersRouter.get(
                             && typeof req.query.customer.givenName.$eq === 'string'
                             && req.query.customer.givenName.$eq !== '')
                             ? req.query.customer.givenName.$eq
+                            : undefined,
+                        $regex: (req.query.customer !== undefined
+                            && req.query.customer.givenName !== undefined
+                            && typeof req.query.customer.givenName.$regex === 'string'
+                            && req.query.customer.givenName.$regex !== '')
+                            ? req.query.customer.givenName.$regex
                             : undefined
                     },
                     familyName: {
@@ -147,6 +153,12 @@ ordersRouter.get(
                             && typeof req.query.customer.familyName.$eq === 'string'
                             && req.query.customer.familyName.$eq !== '')
                             ? req.query.customer.familyName.$eq
+                            : undefined,
+                        $regex: (req.query.customer !== undefined
+                            && req.query.customer.familyName !== undefined
+                            && typeof req.query.customer.familyName.$regex === 'string'
+                            && req.query.customer.familyName.$regex !== '')
+                            ? req.query.customer.familyName.$regex
                             : undefined
                     },
                     email: {
@@ -155,6 +167,12 @@ ordersRouter.get(
                             && typeof req.query.customer.email.$eq === 'string'
                             && req.query.customer.email.$eq !== '')
                             ? req.query.customer.email.$eq
+                            : undefined,
+                        $regex: (req.query.customer !== undefined
+                            && req.query.customer.email !== undefined
+                            && typeof req.query.customer.email.$regex === 'string'
+                            && req.query.customer.email.$regex !== '')
+                            ? req.query.customer.email.$regex
                             : undefined
                     },
                     telephone: {
@@ -163,6 +181,12 @@ ordersRouter.get(
                             && typeof req.query.customer.telephone.$eq === 'string'
                             && req.query.customer.telephone.$eq !== '')
                             ? req.query.customer.telephone.$eq
+                            : undefined,
+                        $regex: (req.query.customer !== undefined
+                            && req.query.customer.telephone !== undefined
+                            && typeof req.query.customer.telephone.$regex === 'string'
+                            && req.query.customer.telephone.$regex !== '')
+                            ? req.query.customer.telephone.$regex
                             : undefined
                     }
                 },

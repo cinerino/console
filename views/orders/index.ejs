@@ -105,28 +105,43 @@
                                             value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
-                                        <label for="customer[ids]">Family Name</label>
+                                        <label for="customer[familyName][$eq]">Family Name</label>
                                         <input type="text" class="form-control" id="customer[familyName][$eq]"
                                             name="customer[familyName][$eq]" placeholder="もーしょん(完全一致)"
                                             value="<%= searchConditions.customer.familyName.$eq %>">
+                                        <input type="text" class="form-control" id="customer[familyName][$regex]"
+                                            name="customer[familyName][$regex]" placeholder="^もーしょん(正規表現)"
+                                            value="<%= searchConditions.customer.familyName.$regex %>">
                                     </div>
+
                                     <div class="form-group">
-                                        <label for="customer[ids]">Given Name</label>
+                                        <label for="customer[givenName][$eq]">Given Name</label>
                                         <input type="text" class="form-control" id="customer[givenName][$eq]"
                                             name="customer[givenName][$eq]" placeholder="たろう(完全一致)"
                                             value="<%= searchConditions.customer.givenName.$eq %>">
+                                        <input type="text" class="form-control" id="customer[givenName][$regex]"
+                                            name="customer[givenName][$regex]" placeholder="^たろう(正規表現)"
+                                            value="<%= searchConditions.customer.givenName.$regex %>">
                                     </div>
+
                                     <div class="form-group">
-                                        <label for="customer[ids]">Email</label>
+                                        <label for="customer[email][$eq]">Email</label>
                                         <input type="text" class="form-control" id="customer[email][$eq]"
                                             name="customer[email][$eq]" placeholder="cinerino@example.com(完全一致)"
                                             value="<%= searchConditions.customer.email.$eq %>">
+                                        <input type="text" class="form-control" id="customer[email][$regex]"
+                                            name="customer[email][$regex]" placeholder="^cinerino(正規表現)"
+                                            value="<%= searchConditions.customer.email.$regex %>">
                                     </div>
+
                                     <div class="form-group">
-                                        <label for="customer[ids]">Telephone</label>
+                                        <label for="customer[telephone][$eq]">Telephone</label>
                                         <input type="text" class="form-control" id="customer[telephone][$eq]"
                                             name="customer[telephone][$eq]" placeholder="+819012345678(完全一致)"
                                             value="<%= searchConditions.customer.telephone.$eq %>">
+                                        <input type="text" class="form-control" id="customer[telephone][$regex]"
+                                            name="customer[telephone][$regex]" placeholder="^\+81901234(正規表現)"
+                                            value="<%= searchConditions.customer.telephone.$regex %>">
                                     </div>
 
                                     <div class="form-group">

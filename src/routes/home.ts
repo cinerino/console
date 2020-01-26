@@ -97,9 +97,9 @@ homeRouter.get(
                     .startOf('day')
                     .toDate()
             };
-            const { totalCount } = await orderService.search(searchConditions);
+            const { } = await orderService.search(searchConditions);
             res.json({
-                totalCount: totalCount
+                totalCount: 0
             });
         } catch (error) {
             next(error);
@@ -158,7 +158,7 @@ homeRouter.get(
                 auth: req.user.authClient
             });
 
-            const { totalCount } = await actionService.search({
+            const { } = await actionService.search({
                 limit: 1,
                 page: 1,
                 typeOf: cinerinoapi.factory.actionType.RegisterAction,
@@ -174,7 +174,7 @@ homeRouter.get(
             });
 
             res.json({
-                totalCount: totalCount
+                totalCount: 0
             });
         } catch (error) {
             next(error);
@@ -199,9 +199,9 @@ homeRouter.get(
                     .startOf('day')
                     .toDate()
             };
-            const { totalCount } = await placeOrderService.search(searchConditions);
+            const { } = await placeOrderService.search(searchConditions);
             res.json({
-                totalCount: totalCount
+                totalCount: 0
             });
         } catch (error) {
             next(error);
