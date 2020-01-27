@@ -171,6 +171,28 @@ reservationsRouter.get(
                         : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchOrdersResult.data.length),
                     data: searchOrdersResult.data
                 });
+            } else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
+                const stream = <NodeJS.ReadableStream>await reservationService.download({
+                    ...searchConditions,
+                    format: cinerinoapi.factory.encodingFormat.Text.csv,
+                    limit: undefined,
+                    page: undefined
+                });
+                const filename = 'ReservationReport';
+                res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
+                res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
+                stream.pipe(res);
+            } else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
+                const stream = <NodeJS.ReadableStream>await reservationService.download({
+                    ...searchConditions,
+                    format: cinerinoapi.factory.encodingFormat.Application.json,
+                    limit: undefined,
+                    page: undefined
+                });
+                const filename = 'ReservationReport';
+                res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.json`)}`);
+                res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);
+                stream.pipe(res);
             } else {
                 res.render('reservations/index', {
                     moment: moment,

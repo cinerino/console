@@ -156,6 +156,24 @@ $(function () {
         $(this).val('');
     });
 
+    $('.downloadCSV').click(function () {
+        var url = '/projects/' + PROJECT_ID + '/reservations?' + $('form').serialize() + '&format=text/csv';
+        window.open(url, '_blank');
+    });
+    $('.downloadJson').click(function () {
+        var url = '/projects/' + PROJECT_ID + '/reservations?' + $('form').serialize() + '&format=application/json';
+        window.open(url, '_blank');
+    });
+
+    $('form .card-footer .btn-group')
+        .popover({
+            title: '検索方法',
+            content: 'ドロップダウンメニューから出力フォーマットを選択できます。ストリーミングダウンロードの場合、全件出力が可能です。',
+            placement: 'top',
+            trigger: 'hover'
+        })
+        .popover('show');
+
     $(document).on('click', '.showUnderNameIdentifier', function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
