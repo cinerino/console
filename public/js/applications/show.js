@@ -17,7 +17,6 @@ function searchOrders(cb) {
         '/projects/' + PROJECT_ID + '/applications/' + userPoolClient.ClientId + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
-        $('#orderCount').html(data.totalCount.toString());
         searchedAllOrders = (data.data.length < limit);
         $.each(data.data, function (key, order) {
             orders.push(order);
@@ -45,6 +44,8 @@ function searchOrders(cb) {
         if (!searchedAllOrders) {
             searchOrders(cb);
         } else {
+            // 件数表示
+            $('#orderCount').html(orders.length.toString());
             cb();
         }
     }).fail(function () {

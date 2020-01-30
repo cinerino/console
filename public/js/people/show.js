@@ -164,7 +164,6 @@ function searchOrders(page, cb) {
         '/projects/' + PROJECT_ID + '/people/' + person.id + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
-        $('#orderCount').html(data.totalCount.toString());
         searchedAllOrders = (data.data.length < limit);
         $.each(data.data, function (key, order) {
             orders.push(order);
@@ -192,6 +191,8 @@ function searchOrders(page, cb) {
         if (!searchedAllOrders) {
             searchOrders(page + 1, cb);
         } else {
+            // 件数表示
+            $('#orderCount').html(orders.length.toString());
             cb();
         }
     }).fail(function () {
@@ -205,7 +206,6 @@ function searchReservations(page, cb) {
         '/projects/' + PROJECT_ID + '/people/' + person.id + '/reservations',
         { limit: limit, page: page }
     ).done(function (data) {
-        // $('#orderCount').html(data.totalCount.toString());
         searchedAllReservations = (data.data.length < limit);
         $.each(data.data, function (key, ownershipInfo) {
             var reservation = ownershipInfo.typeOfGood;
@@ -237,7 +237,6 @@ function searchProgramMemberships(page, cb) {
         '/projects/' + PROJECT_ID + '/people/' + person.id + '/programMemberships',
         { limit: limit, page: page }
     ).done(function (data) {
-        // $('#orderCount').html(data.totalCount.toString());
         searchedAllProgramMemberships = (data.data.length < limit);
         $.each(data.data, function (key, ownershipInfo) {
             var programMembership = ownershipInfo.typeOfGood;

@@ -273,11 +273,6 @@ eventsRouter.get(
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-                orderDateFrom: moment(event.startDate)
-                    .add(-1, 'months')
-                    .toDate(),
-                orderDateThrough: moment(event.startDate)
-                    .toDate(),
                 acceptedOffers: {
                     itemOffered: {
                         reservationFor: { ids: [event.id] }

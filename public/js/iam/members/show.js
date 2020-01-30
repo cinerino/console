@@ -91,7 +91,6 @@ function searchOrders(page, cb) {
                 .toISOString(),
         }
     ).done(function (data) {
-        $('#orderCount').html(data.totalCount.toString());
         searchedAllOrders = (data.data.length < limit);
         $.each(data.data, function (key, order) {
             orders.push(order);
@@ -119,6 +118,8 @@ function searchOrders(page, cb) {
         if (!searchedAllOrders) {
             searchOrders(page + 1, cb);
         } else {
+            // 件数表示
+            $('#orderCount').html(orders.length.toString());
             cb();
         }
     }).fail(function () {

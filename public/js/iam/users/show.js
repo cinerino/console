@@ -42,7 +42,6 @@ function searchOrders(page, cb) {
         '/projects/' + PROJECT_ID + '/iam/users/' + person.id + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
-        $('#orderCount').html(data.totalCount.toString());
         searchedAllOrders = (data.data.length < limit);
         $.each(data.data, function (key, order) {
             orders.push(order);
@@ -70,6 +69,8 @@ function searchOrders(page, cb) {
         if (!searchedAllOrders) {
             searchOrders(page + 1, cb);
         } else {
+            // 件数表示
+            $('#orderCount').html(orders.length.toString());
             cb();
         }
     }).fail(function () {
