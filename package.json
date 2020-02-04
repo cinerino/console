@@ -10,8 +10,8 @@
   ],
   "config": {},
   "dependencies": {
-    "@chevre/api-nodejs-client": "^2.1.0",
-    "@cinerino/api-nodejs-client": "2.0.0-alpha.65",
+    "@chevre/api-nodejs-client": "2.2.0-alpha.7",
+    "@cinerino/api-nodejs-client": "2.0.0-alpha.66",
     "@motionpicture/coa-service": "^7.0.0",
     "@motionpicture/express-middleware": "^0.1.1",
     "admin-lte": "^3.0.1",

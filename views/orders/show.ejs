@@ -147,6 +147,9 @@
                                             <% if (acceptedOffer.itemOffered.reservedTicket.ticketedSeat !== undefined) { %>
                                             Seat Number:
                                             <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatNumber %>
+                                            <br>
+                                            Seating Type:
+                                            <%= acceptedOffer.itemOffered.reservedTicket.ticketedSeat.seatingType %>
                                             <% } else { %>
                                             Non-reserved Seat
                                             <% } %>
@@ -169,14 +172,28 @@
                                         <td>
                                             <% if (Number.isInteger(acceptedOffer.price)) { %>
                                             <%= acceptedOffer.price %>
+
                                             <% } else if (acceptedOffer.priceSpecification !== undefined) { %>
+
                                             <% if (Array.isArray(acceptedOffer.priceSpecification.priceComponent)) { %>
                                             <% const unitPriceSpec = acceptedOffer.priceSpecification.priceComponent.find((c) => c.typeOf === 'UnitPriceSpecification') %>
                                             <% if (unitPriceSpec !== undefined) { %>
                                             <%= unitPriceSpec.price %> / <%= unitPriceSpec.referenceQuantity.value %>
                                             <%= unitPriceSpec.priceCurrency %>
                                             <% } %>
+
+                                            <% acceptedOffer.priceSpecification.priceComponent
+                                            .filter((priceComponent) => priceComponent.typeOf === 'CategoryCodeChargeSpecification')
+                                            .forEach((priceComponent) => { %>
+                                            <% const appliesToCategoryCode = priceComponent.appliesToCategoryCode.map((categoryCode) => {
+                                                return `${categoryCode.inCodeSet.identifier} ${categoryCode.codeValue}`;
+                                            }).join(',') %>
+                                            <br>
+                                            + <%= priceComponent.price %>
+                                            <%= priceComponent.priceCurrency %>(<%= appliesToCategoryCode %>)
+                                            <% }) %>
                                             <% } %>
+
                                             <% } %>
                                         </td>
                                     </tr>

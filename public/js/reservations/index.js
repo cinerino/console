@@ -53,9 +53,6 @@ $(function () {
                     if (Array.isArray(data.additionalProperty)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAdditionalProperty" data-id="' + data.id + '">追加特性</a>';
                     }
-                    if (data.price !== undefined) {
-                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPrice" data-id="' + data.id + '">価格仕様</a>';
-                    }
                     html += '<li>';
 
                     html += '</ul>';
@@ -83,6 +80,45 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
 
+                    var html = '<ul class="list-unstyled">';
+
+                    if (Number.isInteger(data.price)) {
+                        html += '<li>' + data.price + '</li>';
+                        // <%= data.price %>
+
+                    } else if (data.price !== undefined) {
+
+                        if (Array.isArray(data.price.priceComponent)) {
+                            var unitPriceSpec = data.price.priceComponent.find((c) => c.typeOf === 'UnitPriceSpecification');
+                            if (unitPriceSpec !== undefined) {
+                                html += '<li>' + unitPriceSpec.price + '/' + unitPriceSpec.referenceQuantity.value + ' ' + unitPriceSpec.priceCurrency + '</li>';
+                            }
+
+                            data.price.priceComponent
+                                .filter((priceComponent) => priceComponent.typeOf === 'CategoryCodeChargeSpecification')
+                                .forEach((priceComponent) => {
+                                    var appliesToCategoryCode = priceComponent.appliesToCategoryCode.map((categoryCode) => {
+                                        return categoryCode.inCodeSet.identifier + ' ' + categoryCode.codeValue;
+                                    }).join(',')
+
+                                    html += '<li>+ ' + priceComponent.price + ' ' + priceComponent.priceCurrency + '(' + appliesToCategoryCode + ')' + '</li>';
+                                })
+                        }
+                    }
+
+                    if (data.price !== undefined) {
+                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPrice" data-id="' + data.id + '">詳しく</a>';
+                    }
+
+                    html += '</ul>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+
 
                     // name="reservedTicket.typeOf__ticketType.name__reservedTicket.ticketType.id__reservedTicket.ticketType.name.ja__reservedTicket.ticketType.name.en__unitPriceSpec.price__unitPriceSpec.referenceQuantity.value__unitPriceSpec.priceCurrency__ticketedSeat">
                     // <p class="badge badge-secondary">$reservedTicket.typeOf$</p>
@@ -95,8 +131,12 @@ $(function () {
                     // <p>$ticketedSeat$</p>
 
                     var seatNumber = 'Non Reserved Seat';
+                    var seatingType = '';
                     if (data.reservedTicket.ticketedSeat !== undefined) {
                         seatNumber = data.reservedTicket.ticketedSeat.seatNumber;
+                        if (typeof data.reservedTicket.ticketedSeat.seatingType === 'string') {
+                            seatingType = data.reservedTicket.ticketedSeat.seatingType;
+                        }
                     }
 
                     return '<ul class="list-unstyled">'
@@ -105,6 +145,7 @@ $(function () {
                         + '<li>' + data.reservedTicket.ticketType.identifier + '</li>'
                         + '<li>' + data.reservedTicket.ticketType.name.ja + '</li>'
                         + '<li class="font-italic">' + data.reservedTicket.ticketType.name.en + '</li>'
+                        + '<li><span class="badge badge-primary ' + seatingType + '">' + seatingType + '</span></li>'
                         + '<li>' + seatNumber + '</li>'
                         + '</ul>';
                 }
