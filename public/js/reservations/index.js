@@ -89,19 +89,19 @@ $(function () {
                     } else if (data.price !== undefined) {
 
                         if (Array.isArray(data.price.priceComponent)) {
-                            var unitPriceSpec = data.price.priceComponent.find((c) => c.typeOf === 'UnitPriceSpecification');
-                            if (unitPriceSpec !== undefined) {
-                                html += '<li>' + unitPriceSpec.price + '/' + unitPriceSpec.referenceQuantity.value + ' ' + unitPriceSpec.priceCurrency + '</li>';
-                            }
-
                             data.price.priceComponent
-                                .filter((priceComponent) => priceComponent.typeOf === 'CategoryCodeChargeSpecification')
                                 .forEach((priceComponent) => {
-                                    var appliesToCategoryCode = priceComponent.appliesToCategoryCode.map((categoryCode) => {
-                                        return categoryCode.inCodeSet.identifier + ' ' + categoryCode.codeValue;
-                                    }).join(',')
+                                    var name = '';
+                                    if (priceComponent.name !== undefined && priceComponent.name !== null) {
+                                        name = priceComponent.name.ja;
+                                    }
 
-                                    html += '<li>+ ' + priceComponent.price + ' ' + priceComponent.priceCurrency + '(' + appliesToCategoryCode + ')' + '</li>';
+                                    var referenceQuantityValue = '';
+                                    if (priceComponent.referenceQuantity !== undefined && priceComponent.referenceQuantity !== null) {
+                                        referenceQuantityValue = ' / ' + String(priceComponent.referenceQuantity.value);
+                                    }
+
+                                    html += '<li>' + priceComponent.price + ' ' + priceComponent.priceCurrency + referenceQuantityValue + '(' + name + ')' + '</li>';
                                 })
                         }
                     }

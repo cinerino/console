@@ -176,21 +176,18 @@
                                             <% } else if (acceptedOffer.priceSpecification !== undefined) { %>
 
                                             <% if (Array.isArray(acceptedOffer.priceSpecification.priceComponent)) { %>
-                                            <% const unitPriceSpec = acceptedOffer.priceSpecification.priceComponent.find((c) => c.typeOf === 'UnitPriceSpecification') %>
-                                            <% if (unitPriceSpec !== undefined) { %>
-                                            <%= unitPriceSpec.price %> / <%= unitPriceSpec.referenceQuantity.value %>
-                                            <%= unitPriceSpec.priceCurrency %>
-                                            <% } %>
-
                                             <% acceptedOffer.priceSpecification.priceComponent
-                                            .filter((priceComponent) => priceComponent.typeOf === 'CategoryCodeChargeSpecification')
                                             .forEach((priceComponent) => { %>
-                                            <% const appliesToCategoryCode = priceComponent.appliesToCategoryCode.map((categoryCode) => {
-                                                return `${categoryCode.inCodeSet.identifier} ${categoryCode.codeValue}`;
-                                            }).join(',') %>
+                                            <%
+                                            let name = '';
+                                            if (priceComponent.name !== undefined && priceComponent.name !== null) {
+                                                name = priceComponent.name.ja;
+                                            }
+                                            %>
+                                            <%= priceComponent.price %><% if (priceComponent.referenceQuantity !== undefined && priceComponent.referenceQuantity !== null) { %>
+                                            / <%= priceComponent.referenceQuantity.value %><% } %>
+                                            <%= priceComponent.priceCurrency %>(<%= name %>)
                                             <br>
-                                            + <%= priceComponent.price %>
-                                            <%= priceComponent.priceCurrency %>(<%= appliesToCategoryCode %>)
                                             <% }) %>
                                             <% } %>
 
