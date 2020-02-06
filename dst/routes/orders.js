@@ -39,6 +39,11 @@ ordersRouter.get('',
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
+        const streamingOrderService = new cinerinoapi.service.Order({
+            endpoint: process.env.STREAMING_API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
         const sellerService = new cinerinoapi.service.Seller({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient,
@@ -312,14 +317,14 @@ ordersRouter.get('',
             });
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
-            const stream = yield orderService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Text.csv, limit: undefined, page: undefined }));
+            const stream = yield streamingOrderService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Text.csv, limit: undefined, page: undefined }));
             const filename = 'OrderReport';
             res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
             res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
             stream.pipe(res);
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
-            const stream = yield orderService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Application.json, limit: undefined, page: undefined }));
+            const stream = yield streamingOrderService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Application.json, limit: undefined, page: undefined }));
             const filename = 'OrderReport';
             res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.json`)}`);
             res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);
