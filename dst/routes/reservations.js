@@ -31,6 +31,11 @@ reservationsRouter.get('',
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
+        const streamingReservationService = new cinerinoapi.service.Reservation({
+            endpoint: process.env.STREAMING_API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
@@ -173,14 +178,14 @@ reservationsRouter.get('',
             });
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
-            const stream = yield reservationService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Text.csv, limit: undefined, page: undefined }));
+            const stream = yield streamingReservationService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Text.csv, limit: undefined, page: undefined }));
             const filename = 'ReservationReport';
             res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.csv`)}`);
             res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
             stream.pipe(res);
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
-            const stream = yield reservationService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Application.json, limit: undefined, page: undefined }));
+            const stream = yield streamingReservationService.download(Object.assign(Object.assign({}, searchConditions), { format: cinerinoapi.factory.encodingFormat.Application.json, limit: undefined, page: undefined }));
             const filename = 'ReservationReport';
             res.setHeader('Content-disposition', `attachment; filename*=UTF-8\'\'${encodeURIComponent(`${filename}.json`)}`);
             res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);

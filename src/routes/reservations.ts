@@ -23,6 +23,11 @@ reservationsRouter.get(
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
+            const streamingReservationService = new cinerinoapi.service.Reservation({
+                endpoint: <string>process.env.STREAMING_API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
 
             const searchConditions
                 : cinerinoapi.factory.chevre.reservation.ISearchConditions<cinerinoapi.factory.chevre.reservationType.EventReservation>
@@ -172,7 +177,7 @@ reservationsRouter.get(
                     data: searchOrdersResult.data
                 });
             } else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
-                const stream = <NodeJS.ReadableStream>await reservationService.download({
+                const stream = <NodeJS.ReadableStream>await streamingReservationService.download({
                     ...searchConditions,
                     format: cinerinoapi.factory.encodingFormat.Text.csv,
                     limit: undefined,
@@ -183,7 +188,7 @@ reservationsRouter.get(
                 res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
                 stream.pipe(res);
             } else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
-                const stream = <NodeJS.ReadableStream>await reservationService.download({
+                const stream = <NodeJS.ReadableStream>await streamingReservationService.download({
                     ...searchConditions,
                     format: cinerinoapi.factory.encodingFormat.Application.json,
                     limit: undefined,
