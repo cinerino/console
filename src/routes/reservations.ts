@@ -8,13 +8,14 @@ import * as moment from 'moment';
 import * as cinerinoapi from '../cinerinoapi';
 
 const debug = createDebug('cinerino-console:routes');
+
 const reservationsRouter = express.Router();
+
 /**
- * 注文検索
+ * 予約検索
  */
 reservationsRouter.get(
     '',
-    // tslint:disable-next-line:cyclomatic-complexity
     // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
     async (req, res, next) => {
         try {
@@ -107,14 +108,16 @@ reservationsRouter.get(
                         ? (<string>req.query.reservationFor.ids).split(',')
                             .map((v) => v.trim())
                         : undefined,
-                    startFrom: (req.query.reservationForStartRange !== undefined
-                        && req.query.reservationForStartRange !== '')
-                        ? moment(req.query.reservationForStartRange.split(' - ')[0])
+                    startFrom: (req.query.reservationFor !== undefined
+                        && req.query.reservationFor.startDateRange !== undefined
+                        && req.query.reservationFor.startDateRange !== '')
+                        ? moment(req.query.reservationFor.startDateRange.split(' - ')[0])
                             .toDate()
                         : undefined,
-                    startThrough: (req.query.reservationForStartRange !== undefined
-                        && req.query.reservationForStartRange !== '')
-                        ? moment(req.query.reservationForInSesreservationForStartRangesionRange.split(' - ')[1])
+                    startThrough: (req.query.reservationFor !== undefined
+                        && req.query.reservationFor.startDateRange !== undefined
+                        && req.query.reservationFor.startDateRange !== '')
+                        ? moment(req.query.reservationFor.startDateRange.split(' - ')[1])
                             .toDate()
                         : undefined,
                     superEvent: {

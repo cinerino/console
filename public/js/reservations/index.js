@@ -182,7 +182,7 @@ $(function () {
     });
 
     // Date range picker
-    $('#bookingTimeRange,#modifiedTimeRange,#reservationForInSessionRange').daterangepicker({
+    $('#bookingTimeRange,#modifiedTimeRange,#reservationFor\\[startDateRange\\]').daterangepicker({
         autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
@@ -190,10 +190,10 @@ $(function () {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
-    $('#bookingTimeRange,#modifiedTimeRange,#reservationForInSessionRange').on('apply.daterangepicker', function (ev, picker) {
+    $('#bookingTimeRange,#modifiedTimeRange,#reservationFor\\[startDateRange\\]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
     });
-    $('#bookingTimeRange,#modifiedTimeRange,#reservationForInSessionRange').on('cancel.daterangepicker', function (ev, picker) {
+    $('#bookingTimeRange,#modifiedTimeRange,#reservationFor\\[startDateRange\\]').on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
     });
 

@@ -131,6 +131,23 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label>予約イベント開始日時</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control"
+                                                name="reservationFor[startDateRange]"
+                                                id="reservationFor[startDateRange]"
+                                                value="<%= (searchConditions.reservationFor !== undefined && searchConditions.reservationFor.startFrom !== undefined) ? `${moment(searchConditions.reservationFor.startFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.reservationFor.startThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="reservedTicket[ticketedSeat][seatNumbers]">座席番号</label>
                                         <input type="text" class="form-control"
                                             id="reservedTicket[ticketedSeat][seatNumbers]"
