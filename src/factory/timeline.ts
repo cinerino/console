@@ -166,17 +166,20 @@ export function createFromAction(params: {
         case cinerinoapi.factory.actionType.AuthorizeAction:
             actionName = '承認';
             break;
+        case cinerinoapi.factory.actionType.CancelAction:
+            actionName = 'キャンセル';
+            break;
         case cinerinoapi.factory.actionType.CheckAction:
             actionName = '確認';
+            break;
+        case cinerinoapi.factory.actionType.ConfirmAction:
+            actionName = '確定';
             break;
         case cinerinoapi.factory.actionType.DeleteAction:
             actionName = '削除';
             break;
         case cinerinoapi.factory.actionType.OrderAction:
             actionName = '注文';
-            break;
-        case cinerinoapi.factory.actionType.ConfirmAction:
-            actionName = '確定';
             break;
         case cinerinoapi.factory.actionType.GiveAction:
             actionName = '付与';
