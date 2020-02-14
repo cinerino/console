@@ -97,17 +97,11 @@ ordersRouter.get('',
                 }
             }
         }
-        const searchConditions = {
-            limit: req.query.limit,
-            page: req.query.page,
-            sort: { orderDate: cinerinoapi.factory.sortType.Descending },
-            seller: {
+        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { orderDate: cinerinoapi.factory.sortType.Descending }, seller: {
                 ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
                     ? req.query.seller.ids
                     : undefined
-            },
-            identifier: { $in: identifiers },
-            customer: {
+            }, identifier: { $in: identifiers }, customer: {
                 ids: (req.query.customer !== undefined && req.query.customer.ids !== undefined && req.query.customer.ids !== '')
                     ? req.query.customer.ids.split(',')
                         .map((v) => v.trim())
@@ -193,32 +187,26 @@ ordersRouter.get('',
                         ? req.query.customer.telephone.$regex
                         : undefined
                 }
-            },
-            orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
+            }, orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                 ? req.query.orderNumbers.split(',')
                     .map((v) => v.trim())
-                : undefined,
-            orderStatuses: (req.query.orderStatuses !== undefined)
+                : undefined, orderStatuses: (req.query.orderStatuses !== undefined)
                 ? req.query.orderStatuses
-                : undefined,
-            orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
+                : undefined, orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                 ? moment(req.query.orderDateRange.split(' - ')[0])
                     .toDate()
                 // : moment()
                 //     .add(-1, 'year')
                 //     .toDate(),
-                : undefined,
-            orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
+                : undefined, orderDateThrough: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                 ? moment(req.query.orderDateRange.split(' - ')[1])
                     .toDate()
                 // : moment()
                 //     .toDate(),
-                : undefined,
-            confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
+                : undefined, confirmationNumbers: (req.query.confirmationNumbers !== undefined && req.query.confirmationNumbers !== '')
                 ? req.query.confirmationNumbers.split(',')
                     .map((v) => v.trim())
-                : undefined,
-            acceptedOffers: {
+                : undefined, acceptedOffers: {
                 itemOffered: {
                     ids: (req.query.acceptedOffers !== undefined
                         && req.query.acceptedOffers.itemOffered !== undefined
@@ -283,8 +271,7 @@ ordersRouter.get('',
                         }
                     }
                 }
-            },
-            paymentMethods: Object.assign({
+            }, paymentMethods: Object.assign({
                 accountIds: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.accountIds !== undefined
                     && req.query.paymentMethods.accountIds !== '')
@@ -301,8 +288,18 @@ ordersRouter.get('',
                     : undefined, typeOfs: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.typeOfs !== undefined)
                     ? req.query.paymentMethods.typeOfs
-                    : undefined })
-        };
+                    : undefined }) }, {
+            price: {
+                $gte: (req.query.price !== undefined
+                    && typeof req.query.price.$gte === 'string' && req.query.price.$gte.length > 0)
+                    ? Number(req.query.price.$gte)
+                    : undefined,
+                $lte: (req.query.price !== undefined
+                    && typeof req.query.price.$lte === 'string' && req.query.price.$lte.length > 0)
+                    ? Number(req.query.price.$lte)
+                    : undefined
+            }
+        });
         if (req.query.format === 'datatable') {
             const searchOrdersResult = yield orderService.search(Object.assign(Object.assign({}, searchConditions), {
                 disableTotalCount: true

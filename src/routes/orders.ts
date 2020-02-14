@@ -305,6 +305,18 @@ ordersRouter.get(
                         && req.query.paymentMethods.typeOfs !== undefined)
                         ? req.query.paymentMethods.typeOfs
                         : undefined
+                },
+                ...{
+                    price: {
+                        $gte: (req.query.price !== undefined
+                            && typeof req.query.price.$gte === 'string' && req.query.price.$gte.length > 0)
+                            ? Number(req.query.price.$gte)
+                            : undefined,
+                        $lte: (req.query.price !== undefined
+                            && typeof req.query.price.$lte === 'string' && req.query.price.$lte.length > 0)
+                            ? Number(req.query.price.$lte)
+                            : undefined
+                    }
                 }
             };
 

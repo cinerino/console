@@ -89,6 +89,29 @@
                                             name="identifier[$in]" placeholder="confirmationPass:cinerino"
                                             value="<%= (Array.isArray(searchConditions.identifier.$in)) ? `${searchConditions.identifier.$in[0].name}:${searchConditions.identifier.$in[0].value}` : '' %>">
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="price[$gte]">注文金額</label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="price[$gte]" name="price[$gte]"
+                                                placeholder="1000"
+                                                value="<%= (searchConditions.price.$gte !== undefined) ? searchConditions.price.$gte : '' %>">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    円以上
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" id="price[$lte]" name="price[$lte]"
+                                                placeholder="2000"
+                                                value="<%= (searchConditions.price.$lte !== undefined) ? searchConditions.price.$lte : '' %>">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    円以下
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-3">
