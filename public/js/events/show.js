@@ -1,5 +1,6 @@
 
 var event = JSON.parse($('#jsonViewer textarea').val());
+var offers = [];
 var orders = [];
 var searchedAllOrders = false;
 var limit = 10;
@@ -8,6 +9,14 @@ var remainingAttendeeCapacityChart;
 var remainingAttendeeCapacityChart2;
 
 $(function () {
+    // オファー集計
+    console.log('searching orders...', page);
+    searchOffers(function () {
+    });
+
+    // 予約集計
+    showAggregateReservation();
+
     // 注文検索
     console.log('searching orders...', page);
     searchOrders(function () {
@@ -43,6 +52,68 @@ $(function () {
         createRemainingAttendeeCapacityChart(datas);
     });
 });
+
+function showAggregateReservation() {
+    var maximumAttendeeCapacity = event.maximumAttendeeCapacity;
+    var remainingAttendeeCapacity = event.remainingAttendeeCapacity;
+
+    var reservationCount = '?';
+    var checkInCount = '?';
+    var attendeeCount = '?';
+    var aggregateReservation = event.aggregateReservation;
+    if (aggregateReservation !== undefined && aggregateReservation !== null) {
+        reservationCount = aggregateReservation.reservationCount;
+        checkInCount = aggregateReservation.checkInCount;
+        attendeeCount = aggregateReservation.attendeeCount;
+    }
+
+    $('<dl>').html(
+        '<dt>maximumAttendeeCapacity</dt>'
+        + '<dd>' + maximumAttendeeCapacity + '</dd>'
+        + '<dt>remainingAttendeeCapacity</dt>'
+        + '<dd>' + remainingAttendeeCapacity + '</dd>'
+        + '<dt>reservationCount</dt>'
+        + '<dd>' + reservationCount + '</dd>'
+        + '<dt>checkInCount</dt>'
+        + '<dd>' + checkInCount + '</dd>'
+        + '<dt>attendeeCount</dt>'
+        + '<dd>' + attendeeCount + '</dd>'
+    ).appendTo("#aggregateReservation");
+}
+
+function searchOffers(cb) {
+    $.getJSON(
+        '/projects/' + PROJECT_ID + '/events/' + event.id + '/offers',
+        { limit: limit, page: page }
+    ).done(function (data) {
+        $.each(data.data, function (_, offer) {
+            offers.push(offer);
+
+            var reservationCount = '?';
+            var checkInCount = '?';
+            var attendeeCount = '?';
+            var aggregateReservation = offer.aggregateReservation;
+            if (aggregateReservation !== undefined && aggregateReservation !== null) {
+                reservationCount = aggregateReservation.reservationCount;
+                checkInCount = aggregateReservation.checkInCount;
+                attendeeCount = aggregateReservation.attendeeCount;
+            }
+
+
+            $('<tr>').html(
+                '<td>' + offer.id + '</td>'
+                + '<td>' + offer.identifier + '</td>'
+                + '<td>' + String(offer.remainingAttendeeCapacity) + '/' + String(offer.maximumAttendeeCapacity) + '</td>'
+                + '<td>' + String(reservationCount) + ' / ' + String(checkInCount) + ' / ' + String(attendeeCount) + '</td>'
+            ).appendTo("#aggregateOffer tbody");
+        });
+
+        cb();
+    }).fail(function () {
+        console.error('オファーを検索できませんでした')
+    });
+}
+
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
@@ -84,6 +155,7 @@ function searchOrders(cb) {
         console.error('注文履歴を取得できませんでした')
     });
 }
+
 function createRemainingAttendeeCapacityChart(datas) {
     console.log('creating chart...datas:', datas.length);
     // remainingAttendeeCapacityChart2 = new Morris.Line({

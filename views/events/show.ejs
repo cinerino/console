@@ -136,6 +136,10 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                             <li class="nav-item"><a class="nav-link active" href="#remainingAttendeeCapacity"
                                     data-toggle="tab">残席数遷移</a></li>
                             <li class="nav-item"><a class="nav-link" href="#orders" data-toggle="tab">注文履歴</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#aggregateOffer" data-toggle="tab">オファー集計</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#aggregateReservation"
+                                    data-toggle="tab">予約集計</a></li>
                             <li class="nav-item"><a class="nav-link" href="#jsonViewer" data-toggle="tab">JSON
                                     Viewer</a></li>
                             <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
@@ -182,6 +186,27 @@ const thumbnailImageUrl = (event.workPerformed.thumbnailUrl !== undefined)
                                     </table>
                                 </div>
                                 <!-- /.table-responsive -->
+                            </div>
+
+                            <div class="tab-pane" id="aggregateOffer">
+                                <div class="table-responsive">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Identifier</th>
+                                                <th>Capacity</th>
+                                                <th>Reservation / CheckIn / Attendee</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+
+                            <div class="tab-pane" id="aggregateReservation">
                             </div>
 
                             <div class="tab-pane" id="jsonViewer">

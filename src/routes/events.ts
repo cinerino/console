@@ -251,6 +251,35 @@ eventsRouter.get(
 );
 
 /**
+ * イベントのオファー検索
+ */
+eventsRouter.get(
+    '/:id/offers',
+    async (req, res, next) => {
+        try {
+            const eventService = new cinerinoapi.service.Event({
+                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+                auth: req.user.authClient
+            });
+
+            const event = await eventService.findById({
+                id: req.params.id
+            });
+
+            let offers = [];
+            const aggregateOffer = (<any>event).aggregateOffer;
+            if (aggregateOffer !== undefined && aggregateOffer !== null) {
+                offers = aggregateOffer.offers;
+            }
+
+            res.json({ data: offers });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
  * 上映イベントの注文検索
  */
 eventsRouter.get(
