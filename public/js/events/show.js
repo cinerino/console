@@ -27,7 +27,7 @@ $(function () {
             numberOfSeats = event.maximumAttendeeCapacity
         }
         // 売り出し日時は？
-        var reservationStartDate = moment(event.startDate).add(-3, 'days').toDate();
+        // var reservationStartDate = moment(event.startDate).add(-3, 'days').toDate();
         // var reservationPeriodInMinutes = moment(event.endDate).diff(moment(reservationStartDate), 'hours');
         var datas = orders.sort(function (a, b) {
             return moment(a.orderDate).unix() - moment(b.orderDate).unix();
@@ -45,8 +45,8 @@ $(function () {
                     return a;
                 },
                 [
-                    { x: moment(reservationStartDate).toISOString(), y: numberOfSeats },
-                    { x: moment(event.endDate).toISOString(), y: null }
+                    // { x: moment(reservationStartDate).toISOString(), y: numberOfSeats },
+                    // { x: moment(event.endDate).toISOString(), y: null }
                 ],
             );
         createRemainingAttendeeCapacityChart(datas);
