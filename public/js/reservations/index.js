@@ -69,7 +69,8 @@ $(function () {
                         + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + data.reservationFor.id + '">' + data.reservationFor.name.ja + '</a></li>'
                         + '<li>' + data.reservationFor.startDate + '</li>'
                         + '<li>' + data.reservationFor.superEvent.location.name.ja + '</li>'
-                        + '<li>' + data.reservationFor.location.name.ja + '</li>';
+                        + '<li>' + data.reservationFor.location.name.ja + '</li>'
+                        + '<li> <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReservationFor" data-id="' + data.id + '">詳しく</a></li>';
 
                     html += '</ul>';
 
@@ -130,9 +131,11 @@ $(function () {
                     //     $unitPriceSpec.priceCurrency$</p>
                     // <p>$ticketedSeat$</p>
 
+                    var seatSection = 'Non Reserved Seat';
                     var seatNumber = 'Non Reserved Seat';
                     var seatingType = '';
                     if (data.reservedTicket.ticketedSeat !== undefined) {
+                        seatSection = data.reservedTicket.ticketedSeat.seatSection;
                         seatNumber = data.reservedTicket.ticketedSeat.seatNumber;
                         if (typeof data.reservedTicket.ticketedSeat.seatingType === 'string') {
                             seatingType = data.reservedTicket.ticketedSeat.seatingType;
@@ -146,7 +149,9 @@ $(function () {
                         + '<li>' + data.reservedTicket.ticketType.name.ja + '</li>'
                         + '<li class="font-italic">' + data.reservedTicket.ticketType.name.en + '</li>'
                         + '<li><span class="badge badge-primary ' + seatingType + '">' + seatingType + '</span></li>'
+                        + '<li>' + seatSection + '</li>'
                         + '<li>' + seatNumber + '</li>'
+                        + '<li> <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReservedTicket" data-id="' + data.id + '">詳しく</a></li>'
                         + '</ul>';
                 }
             },
@@ -158,11 +163,8 @@ $(function () {
                         + '<li><span class="text-muted">' + data.underName.id + '</span></li>'
                         + '<li>' + data.underName.givenName + ' ' + data.underName.familyName + '</li>'
                         + '<li>' + data.underName.email + '</li>'
-                        + '<li>' + data.underName.telephone + '</li>';
-
-                    if (Array.isArray(data.underName.identifier)) {
-                        html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showUnderNameIdentifier" data-id="' + data.id + '">識別子を見る</a><li>';
-                    }
+                        + '<li>' + data.underName.telephone + '</li>'
+                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showUnderName" data-id="' + data.id + '">詳しく</a><li>';
 
                     html += '</ul>';
 
@@ -226,21 +228,42 @@ $(function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
 
-        showIdentifier(id);
+        showAttribute(id, 'identifier');
     });
 
     $(document).on('click', '.showAdditionalProperty', function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
 
-        showAdditionalProperty(id);
+        showAttribute(id, 'additionalProperty');
     });
 
     $(document).on('click', '.showPrice', function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
 
-        showPrice(id);
+        showAttribute(id, 'price');
+    });
+
+    $(document).on('click', '.showReservedTicket', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showAttribute(id, 'reservedTicket');
+    });
+
+    $(document).on('click', '.showUnderName', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showAttribute(id, 'underName');
+    });
+
+    $(document).on('click', '.showReservationFor', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showAttribute(id, 'reservationFor');
     });
 
     /**
@@ -265,7 +288,7 @@ $(function () {
         modal.modal();
     }
 
-    function showIdentifier(id) {
+    function showAttribute(id, attributeName) {
         var reservations = table
             .rows()
             .data()
@@ -275,53 +298,9 @@ $(function () {
         })
 
         var modal = $('#modal-additionalProperty');
-        var title = 'Reservation `' + reservation.id + '` Identifier';
+        var title = 'Reservation `' + reservation.id + '` ' + attributeName + '';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(reservation.identifier, null, '\t')
-            + '</textarea>';
-        modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(body);
-        modal.modal();
-    }
-
-    /**
-     * 予約追加特性を表示する
-     */
-    function showAdditionalProperty(id) {
-        var reservations = table
-            .rows()
-            .data()
-            .toArray();
-        var reservation = reservations.find(function (r) {
-            return r.id === id
-        })
-
-        var modal = $('#modal-additionalProperty');
-        var title = 'Reservation `' + reservation.id + '` Additional Property';
-        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(reservation.additionalProperty, null, '\t')
-            + '</textarea>';
-        modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(body);
-        modal.modal();
-    }
-
-    /**
-     * 予約価格仕様を表示する
-     */
-    function showPrice(id) {
-        var reservations = table
-            .rows()
-            .data()
-            .toArray();
-        var reservation = reservations.find(function (r) {
-            return r.id === id
-        })
-
-        var modal = $('#modal-price');
-        var title = 'Reservation `' + reservation.id + '` Price';
-        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(reservation.price, null, '\t')
+            + JSON.stringify(reservation[attributeName], null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);

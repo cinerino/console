@@ -99,10 +99,15 @@ function searchOffers(cb) {
                 attendeeCount = aggregateReservation.attendeeCount;
             }
 
+            var name = '?';
+            if (offer.name !== undefined && offer.name !== null) {
+                name = offer.name.ja;
+            }
 
             $('<tr>').html(
                 '<td>' + offer.id + '</td>'
                 + '<td>' + offer.identifier + '</td>'
+                + '<td>' + name + '</td>'
                 + '<td>' + String(offer.remainingAttendeeCapacity) + '/' + String(offer.maximumAttendeeCapacity) + '</td>'
                 + '<td>' + String(reservationCount) + ' / ' + String(checkInCount) + ' / ' + String(attendeeCount) + '</td>'
             ).appendTo("#aggregateOffer tbody");
