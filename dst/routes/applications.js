@@ -93,6 +93,8 @@ applicationsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, voi
         const member = yield iamService.findMemberById({
             member: { id: req.params.id }
         });
+        // ロール検索
+        const searchRolesResult = yield iamService.searchRoles({ limit: 100 });
         // Cognitoユーザープール検索
         let userPoolClient;
         try {
@@ -102,15 +104,22 @@ applicationsRouter.get('/:id', (req, res, next) => __awaiter(void 0, void 0, voi
             });
         }
         catch (error) {
-            userPoolClient = yield userPoolService.findClientById({
-                userPoolId: adminUserPoolId,
-                clientId: req.params.id
-            });
+            try {
+                userPoolClient = yield userPoolService.findClientById({
+                    userPoolId: adminUserPoolId,
+                    clientId: req.params.id
+                });
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
         res.render('applications/show', {
             moment: moment,
             application: member.member,
-            userPoolClient: userPoolClient
+            member: member,
+            userPoolClient: userPoolClient,
+            roles: searchRolesResult.data
         });
     }
     catch (error) {

@@ -84,8 +84,10 @@ iamRouter.get('/members', (req, res, next) => __awaiter(void 0, void 0, void 0, 
             const searchResult = yield iamService.searchMembers(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchResult.totalCount,
-                recordsFiltered: searchResult.totalCount,
+                // recordsTotal: searchOrdersResult.totalCount,
+                recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
                 data: searchResult.data
             });
         }
@@ -137,6 +139,7 @@ iamRouter.all('/members/new', (req, res, next) => __awaiter(void 0, void 0, void
     }
 }));
 function createAttributesFromBody(params) {
+    var _a, _b;
     const body = params.req.body;
     const hasRole = (Array.isArray(body.roleName))
         ? body.roleName
@@ -148,15 +151,10 @@ function createAttributesFromBody(params) {
         })
         : [];
     return {
-        member: {
-            applicationCategory: (body.member !== undefined && body.member !== null)
-                ? body.member.applicationCategory : '',
-            typeOf: (body.member !== undefined && body.member !== null)
-                ? body.member.typeOf : '',
-            id: (body.member !== undefined && body.member !== null)
-                ? body.member.id : '',
-            hasRole: hasRole
-        }
+        member: Object.assign({ applicationCategory: (body.member !== undefined && body.member !== null)
+                ? body.member.applicationCategory : '', typeOf: (body.member !== undefined && body.member !== null)
+                ? body.member.typeOf : '', id: (body.member !== undefined && body.member !== null)
+                ? body.member.id : '', hasRole: hasRole }, (typeof ((_a = body.member) === null || _a === void 0 ? void 0 : _a.name) === 'string') ? { name: (_b = body.member) === null || _b === void 0 ? void 0 : _b.name } : undefined)
     };
 }
 /**
@@ -222,10 +220,7 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
         else if (req.method === 'PUT') {
             const attributes = createAttributesFromBody({ req: req });
             yield iamService.updateMember({
-                member: {
-                    id: req.params.id,
-                    hasRole: attributes.member.hasRole
-                }
+                member: Object.assign({ id: req.params.id, hasRole: attributes.member.hasRole }, (typeof attributes.member.name === 'string') ? { name: attributes.member.name } : undefined)
             });
             res.status(http_status_1.NO_CONTENT)
                 .end();

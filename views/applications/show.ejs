@@ -39,11 +39,11 @@
                         </div> -->
 
                         <h3 class="profile-username text-center">
-                            <%= userPoolClient.ClientName %>
+                            <%= member.member.name %>
                         </h3>
 
                         <p class="text-muted text-center">
-                            <%= userPoolClient.ClientId %>
+                            <%= member.member.id %>
                         </p>
 
                         <ul class="list-group list-group-unbordered mb-3">
@@ -68,7 +68,7 @@
                         <strong><i class="fa fa-info mr-1"></i> サポートIDプロバイダー</strong>
 
                         <p class="text-muted">
-                            <%- (Array.isArray(userPoolClient.SupportedIdentityProviders)) ? userPoolClient.SupportedIdentityProviders.join('<br>') : '' %>
+                            <%- (userPoolClient !== undefined && Array.isArray(userPoolClient.SupportedIdentityProviders)) ? userPoolClient.SupportedIdentityProviders.join('<br>') : '' %>
                         </p>
 
                         <hr>
@@ -76,7 +76,7 @@
                         <strong><i class="fa fa-info mr-1"></i> 許可OAuthフロー</strong>
 
                         <p class="text-muted">
-                            <%- (Array.isArray(userPoolClient.AllowedOAuthFlows)) ? userPoolClient.AllowedOAuthFlows.join('<br>') : '' %>
+                            <%- (userPoolClient !== undefined && Array.isArray(userPoolClient.AllowedOAuthFlows)) ? userPoolClient.AllowedOAuthFlows.join('<br>') : '' %>
                         </p>
 
                         <hr>
@@ -84,7 +84,7 @@
                         <strong><i class="fa fa-info mr-1"></i> 許可OAuthスコープ</strong>
 
                         <p class="text-muted">
-                            <%- (Array.isArray(userPoolClient.AllowedOAuthScopes)) ? userPoolClient.AllowedOAuthScopes.join('<br>') : '' %>
+                            <%- (userPoolClient !== undefined && Array.isArray(userPoolClient.AllowedOAuthScopes)) ? userPoolClient.AllowedOAuthScopes.join('<br>') : '' %>
                         </p>
 
                         <hr>
@@ -93,8 +93,8 @@
 
                         <p class="text-muted">
                             <a target="_blank"
-                                href="/projects/<%= req.project.id %>/userPools/<%= userPoolClient.UserPoolId %>">
-                                <%= userPoolClient.UserPoolId %></a>
+                                href="/projects/<%= req.project.id %>/userPools/<%= (userPoolClient !== undefined) ? userPoolClient.UserPoolId : '' %>">
+                                <%= (userPoolClient !== undefined) ? userPoolClient.UserPoolId : '' %></a>
                         </p>
                     </div>
                     <!-- /.card-body -->
@@ -137,6 +137,13 @@
                             </div>
 
                             <div class="tab-pane" id="jsonViewer">
+                                <h4>Member</h4>
+                                <div class="form-group">
+                                    <textarea class="form-control person" rows="20" placeholder=""
+                                        disabled=""><%= JSON.stringify(member, null, '\t') %></textarea>
+                                </div>
+
+                                <h4>User Pool Client</h4>
                                 <div class="form-group">
                                     <textarea class="form-control" rows="20" placeholder=""
                                         disabled=""><%= JSON.stringify(userPoolClient, null, '\t') %></textarea>
@@ -145,20 +152,18 @@
                             <!-- /.tab-pane -->
 
                             <div class="tab-pane" id="settings">
-                                <!-- <form class="form-horizontal">
-                                        <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Name</label>
-    
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputName" placeholder="Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-2 col-sm-10">
-                                                <button type="submit" class="btn btn-danger">Submit</button>
-                                            </div>
-                                        </div>
-                                    </form> -->
+                                <!-- form start -->
+                                <form role="form" method="post">
+                                    <div class="card-body">
+                                        <%- include('../iam/members/form', {iamMember: member, roles: roles}) %>
+                                    </div>
+                                    <!-- /.card-body -->
+
+                                    <div class="card-footer">
+                                        <a href="#" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#modal-update">更新</a>
+                                    </div>
+                                </form>
                             </div>
                             <!-- /.tab-pane -->
 
@@ -192,6 +197,36 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+<!-- Modal -->
+<div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%= member.member.name %>のロールを更新しますか？</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><%= member.member.name %>のロールを更新するには、ID「<b><%= member.member.id %></b>」を入力してください。
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="confirmUpdate" placeholder="アプリケーションID"
+                            data-expected="<%= member.member.id %>">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                <!-- <button type="submit" class="btn btn-primary">更新</button> -->
+                <button type="button" class="btn btn-primary disabled update" disabled>更新する</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">

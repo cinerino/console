@@ -376,7 +376,8 @@ function createAttributesFromBody(params) {
         const makesOffer = [];
         if (movieTheaterFromChevre !== undefined) {
             makesOffer.push({
-                typeOf: 'Offer',
+                project: { typeOf: params.project.typeOf, id: params.project.id },
+                typeOf: cinerinoapi.factory.chevre.offerType.Offer,
                 priceCurrency: cinerinoapi.factory.priceCurrency.JPY,
                 offeredThrough: {
                     typeOf: 'WebAPI',

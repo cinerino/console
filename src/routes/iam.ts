@@ -84,8 +84,10 @@ iamRouter.get(
 
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchResult.totalCount,
-                    recordsFiltered: searchResult.totalCount,
+                    // recordsTotal: searchOrdersResult.totalCount,
+                    recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
                     data: searchResult.data
                 });
             } else {
@@ -167,7 +169,8 @@ function createAttributesFromBody(params: {
                 ? body.member.typeOf : '',
             id: (body.member !== undefined && body.member !== null)
                 ? body.member.id : '',
-            hasRole: hasRole
+            hasRole: hasRole,
+            ...(typeof body.member?.name === 'string') ? { name: body.member?.name } : undefined
         }
     };
 }
@@ -250,7 +253,8 @@ iamRouter.all(
                 await iamService.updateMember({
                     member: {
                         id: req.params.id,
-                        hasRole: attributes.member.hasRole
+                        hasRole: attributes.member.hasRole,
+                        ...(typeof attributes.member.name === 'string') ? { name: attributes.member.name } : undefined
                     }
                 });
 

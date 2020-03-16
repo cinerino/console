@@ -410,7 +410,8 @@ async function createAttributesFromBody(params: {
     const makesOffer: cinerinoapi.factory.seller.IMakesOffer[] = [];
     if (movieTheaterFromChevre !== undefined) {
         makesOffer.push({
-            typeOf: <'Offer'>'Offer',
+            project: { typeOf: params.project.typeOf, id: params.project.id },
+            typeOf: cinerinoapi.factory.chevre.offerType.Offer,
             priceCurrency: cinerinoapi.factory.priceCurrency.JPY,
             offeredThrough: {
                 typeOf: <'WebAPI'>'WebAPI',
@@ -454,7 +455,7 @@ async function createAttributesFromBody(params: {
                 location: {
                     typeOf: movieTheaterFromChevre.typeOf,
                     branchCode: movieTheaterFromChevre.branchCode,
-                    name: movieTheaterFromChevre.name
+                    name: <any>movieTheaterFromChevre.name
                 }
             }
             : { $unset: { location: 1 } }

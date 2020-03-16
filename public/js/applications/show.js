@@ -1,5 +1,5 @@
-
-var userPoolClient = JSON.parse($('#jsonViewer textarea').val());
+var member = JSON.parse($('#jsonViewer textarea.person').val());
+// var userPoolClient = JSON.parse($('#jsonViewer textarea').val());
 var orders = [];
 var searchedAllOrders = false;
 var limit = 10;
@@ -10,11 +10,42 @@ $(function () {
     console.log('searching orders...', page);
     searchOrders(function () {
     });
+
+    // ロール更新
+    var updateButton = $('button.update');
+    $('#modal-update').on('shown.bs.modal', function () {
+        $('#confirmUpdate').val('');
+        updateButton.prop('disabled', true);
+        updateButton.addClass('disabled');
+    });
+    $('#confirmUpdate').keyup(function () {
+        var validValue = (String($(this).val()) === String($(this).data('expected')));
+        if (validValue) {
+            updateButton.prop('disabled', false);
+            updateButton.removeClass('disabled');
+        } else {
+            updateButton.prop('disabled', true);
+            updateButton.addClass('disabled');
+        }
+    });
+    updateButton.click(function () {
+        $.ajax({
+            url: '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id,
+            type: 'PUT',
+            data: $('#settings form').serialize(),
+        }).done(function () {
+            alert('ロールを更新しました');
+            location.href = '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id;
+        }).fail(function () {
+            alert('更新できませんでした');
+        }).always(function () {
+        });
+    });
 });
 function searchOrders(cb) {
     page += 1;
     $.getJSON(
-        '/projects/' + PROJECT_ID + '/applications/' + userPoolClient.ClientId + '/orders',
+        '/projects/' + PROJECT_ID + '/applications/' + member.member.id + '/orders',
         { limit: limit, page: page }
     ).done(function (data) {
         searchedAllOrders = (data.data.length < limit);
@@ -57,7 +88,7 @@ $(function () {
     $('button.delete').click(function () {
         if (window.confirm('元には戻せません。本当に削除しますか？')) {
             $.ajax({
-                url: '/projects/' + PROJECT_ID + '/iam/members/' + userPoolClient.ClientId,
+                url: '/projects/' + PROJECT_ID + '/iam/members/' + member.member.id,
                 type: 'DELETE'
             }).done(function () {
                 alert('削除しました');

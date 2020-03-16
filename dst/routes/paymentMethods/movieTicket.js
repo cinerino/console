@@ -98,7 +98,7 @@ movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
                 typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
                 movieTickets: [{
                         project: { typeOf: req.project.typeOf, id: req.project.id },
-                        typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.MovieTicket,
                         identifier: searchConditions.identifier,
                         accessCode: searchConditions.accessCode,
                         serviceType: '',
@@ -111,9 +111,6 @@ movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
                             reservedTicket: {
                                 ticketedSeat: {
                                     typeOf: cinerinoapi.factory.chevre.placeType.Seat,
-                                    seatingType: {
-                                        typeOf: 'Default'
-                                    },
                                     seatNumber: '',
                                     seatRow: '',
                                     seatSection: ''

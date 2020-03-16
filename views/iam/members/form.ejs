@@ -47,11 +47,17 @@ if (iamMember !== undefined) {
 </div>
 
 <div class="form-group">
-    <label for="branchCode">メンバーID</label>
+    <label for="member[id]">メンバーID</label>
     <input type="text" class="form-control" id="member[id]" name="member[id]" placeholder="メンバーID"
         value="<%= (iamMember !== undefined && iamMember.member !== undefined && iamMember.member !== null) ? iamMember.member.id : '' %>">
 </div>
 <% } %>
+
+<div class="form-group">
+    <label for="member[name]">名称</label>
+    <input type="text" class="form-control" id="member[name]" name="member[name]" placeholder="名称"
+        value="<%= (iamMember !== undefined && iamMember.member !== undefined && iamMember.member !== null) ? iamMember.member.name : '' %>">
+</div>
 
 <div class="form-group">
     <label>役割</label>
