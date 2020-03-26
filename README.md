@@ -24,6 +24,7 @@
 | `API_CLIENT_ID`               | true     |                    | APIクライアントID                  |
 | `API_CLIENT_SECRET`           | true     |                    | APIクライアントシークレット        |
 | `API_CODE_VERIFIER`           | true     |                    | APIコード検証鍵                    |
+| `PECORINO_CONSOLE_URL`        | true     |                    | Pecorino Console URL               |
 | `USER_EXPIRES_IN_SECONDS`     | true     |                    | ログインユーザーセッション保持期間 |
 | `WAITER_ENDPOINT`             | true     |                    | WAITER Endpoint                    |
 | `TELEMETRY_API_ENDPOINT`      | true     |                    | Telemetry API Endpoint             |

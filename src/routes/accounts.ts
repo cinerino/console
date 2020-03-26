@@ -53,22 +53,9 @@ accountsRouter.get(
 
 accountsRouter.get(
     '/coin',
-    async (req, res, next) => {
+    async (_, res, next) => {
         try {
-            let consoleUrl = '';
-
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const settings = await projectService.getSettings({ id: req.project.id });
-
-            if (settings.pecorino !== undefined
-                && (<any>settings.pecorino).console !== undefined
-                && typeof (<any>settings.pecorino).console.url === 'string'
-            ) {
-                consoleUrl = (<any>settings.pecorino).console.url;
-            }
+            const consoleUrl = <string>process.env.PECORINO_CONSOLE_URL;
 
             res.render('accounts/coin/index', {
                 moment: moment,
@@ -82,22 +69,9 @@ accountsRouter.get(
 
 accountsRouter.get(
     '/point',
-    async (req, res, next) => {
+    async (_, res, next) => {
         try {
-            let consoleUrl = '';
-
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const settings = await projectService.getSettings({ id: req.project.id });
-
-            if (settings.pecorino !== undefined
-                && (<any>settings.pecorino).console !== undefined
-                && typeof (<any>settings.pecorino).console.url === 'string'
-            ) {
-                consoleUrl = (<any>settings.pecorino).console.url;
-            }
+            const consoleUrl = <string>process.env.PECORINO_CONSOLE_URL;
 
             res.render('accounts/point/index', {
                 moment: moment,
@@ -158,20 +132,7 @@ accountsRouter.get(
     '/:accountType/:accountNumber',
     async (req, res, next) => {
         try {
-            let consoleUrl = '';
-
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const settings = await projectService.getSettings({ id: req.project.id });
-
-            if (settings.pecorino !== undefined
-                && (<any>settings.pecorino).console !== undefined
-                && typeof (<any>settings.pecorino).console.url === 'string'
-            ) {
-                consoleUrl = (<any>settings.pecorino).console.url;
-            }
+            const consoleUrl = <string>process.env.PECORINO_CONSOLE_URL;
 
             const redirect =
                 `${consoleUrl}/accounts/${req.params.accountType}/${req.params.accountNumber}`;

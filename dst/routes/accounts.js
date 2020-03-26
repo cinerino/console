@@ -57,19 +57,9 @@ accountsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next(error);
     }
 }));
-accountsRouter.get('/coin', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+accountsRouter.get('/coin', (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let consoleUrl = '';
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const settings = yield projectService.getSettings({ id: req.project.id });
-        if (settings.pecorino !== undefined
-            && settings.pecorino.console !== undefined
-            && typeof settings.pecorino.console.url === 'string') {
-            consoleUrl = settings.pecorino.console.url;
-        }
+        const consoleUrl = process.env.PECORINO_CONSOLE_URL;
         res.render('accounts/coin/index', {
             moment: moment,
             consoleUrl: consoleUrl
@@ -79,19 +69,9 @@ accountsRouter.get('/coin', (req, res, next) => __awaiter(void 0, void 0, void 0
         next(error);
     }
 }));
-accountsRouter.get('/point', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+accountsRouter.get('/point', (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let consoleUrl = '';
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const settings = yield projectService.getSettings({ id: req.project.id });
-        if (settings.pecorino !== undefined
-            && settings.pecorino.console !== undefined
-            && typeof settings.pecorino.console.url === 'string') {
-            consoleUrl = settings.pecorino.console.url;
-        }
+        const consoleUrl = process.env.PECORINO_CONSOLE_URL;
         res.render('accounts/point/index', {
             moment: moment,
             consoleUrl: consoleUrl
@@ -143,17 +123,7 @@ accountsRouter.get('/actions/MoneyTransfer', (req, res, next) => __awaiter(void 
  */
 accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let consoleUrl = '';
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const settings = yield projectService.getSettings({ id: req.project.id });
-        if (settings.pecorino !== undefined
-            && settings.pecorino.console !== undefined
-            && typeof settings.pecorino.console.url === 'string') {
-            consoleUrl = settings.pecorino.console.url;
-        }
+        const consoleUrl = process.env.PECORINO_CONSOLE_URL;
         const redirect = `${consoleUrl}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
         res.redirect(redirect);
     }
