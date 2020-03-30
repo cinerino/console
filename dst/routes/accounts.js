@@ -75,7 +75,7 @@ accountsRouter.get('/actions/MoneyTransfer', (req, res, next) => __awaiter(void 
 accountsRouter.get('/:accountType/:accountNumber', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const consoleUrl = process.env.PECORINO_CONSOLE_URL;
-        const redirect = `${consoleUrl}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
+        const redirect = `${consoleUrl}/projects/${req.project.id}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
         res.redirect(redirect);
     }
     catch (error) {

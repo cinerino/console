@@ -79,7 +79,7 @@ accountsRouter.get(
             const consoleUrl = <string>process.env.PECORINO_CONSOLE_URL;
 
             const redirect =
-                `${consoleUrl}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
+                `${consoleUrl}/projects/${req.project.id}/accounts/${req.params.accountType}/${req.params.accountNumber}`;
 
             res.redirect(redirect);
         } catch (error) {
