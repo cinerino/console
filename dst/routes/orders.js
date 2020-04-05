@@ -412,9 +412,9 @@ ordersRouter.post('/createOrderReport', ...[
                     sendEmailMessage: [
                         {
                             object: {
-                                about: 'レポートが使用可能です',
+                                about: `レポートが使用可能です [${req.project.id}]`,
                                 sender: {
-                                    name: `[${req.project.id}]Cinerino Report`,
+                                    name: `Cinerino Report[${req.project.id}]`,
                                     email: 'noreply@example.com'
                                 },
                                 toRecipient: { email: req.user.profile.email }
