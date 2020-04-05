@@ -24,23 +24,49 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+                    var html = '<span><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></span>';
 
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></li>'
-                        + '<li><span class="badge ' + data.orderStatus + '">' + data.orderStatus + '</span></li>'
-                        + '<li><span class="text-muted">' + data.confirmationNumber + '</span></li>'
-                        + '<li>' + data.orderDate + '</li>'
-                        + '<li>' + data.dateReturned + '</li>';
-
-                    html += '<li>';
+                    html += '<span>';
                     if (Array.isArray(data.identifier)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
                     }
-                    html += '</li>';
+                    html += '</span>';
 
-                    html += '</ul>';
+                    return html;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<span><span class="text-muted">' + data.confirmationNumber + '</span></span>';
+
+                    return html;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<span><span class="badge ' + data.orderStatus + '">' + data.orderStatus + '</span></span>';
+
+                    return html;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<span>' + data.orderDate + '</span>';
+
+                    return html;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<span>' + data.dateReturned + '</span>';
 
                     return html;
 
@@ -64,21 +90,13 @@ $(function () {
                         }
                     }
 
-                    var html = '<ul class="list-unstyled">';
-
-                    html += '<li><span class="badge badge-info">' + data.customer.typeOf + '</span></li>'
-                        + '<li><span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span></li>'
-                        + '<li>'
-                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
-                        + '</li>';
+                    var html = '';
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.customer.typeOf + '/' + data.customer.id + '?userPoolId=' + userPoolId;
-                    html += '<li><a target="_blank" href="' + url + '">' + data.customer.id + '</a></li>'
-                        + '<li>' + data.customer.name + '</li>'
-                        + '<li>' + data.customer.email + '</li>'
-                        + '<li>' + data.customer.telephone + '</li>';
+                    html += '<span><a target="_blank" href="' + url + '"><span class="badge badge-info">' + data.customer.typeOf + '</span></a></span>';
+                    html += '<br><span>' + data.customer.name + '</span>';
 
-                    html += '<li>'
+                    html += '<br>'
                         + '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomer" data-orderNumber="' + data.orderNumber + '">詳細</a>';
                     if (Array.isArray(data.customer.identifier)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
@@ -86,9 +104,6 @@ $(function () {
                     if (Array.isArray(data.customer.additionalProperty)) {
                         html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerAdditionalProperty" data-orderNumber="' + data.orderNumber + '">追加特性</a>';
                     }
-                    html += '</li>';
-
-                    html += '</ul>';
 
                     return html;
                 }
@@ -97,16 +112,17 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-info">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.seller.id + '</a></li>'
-                        + '<li>' + data.seller.name + '</li>'
-                        + '<li><a target="_blank" href="' + data.seller.url + '">' + data.seller.url + '</a></li>'
-                        + '<li>' + data.seller.telephone + '</li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSeller" data-orderNumber="' + data.orderNumber + '">詳細</a></li>'
-                        + '</ul>';
+                    var html = '<span><span class="badge badge-info">' + data.seller.typeOf + '</span></span>'
+                        + '<br><span><a target="_blank" href="' + url + '">' + data.seller.name + '</a></span>'
+                        + '<br><span><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSeller" data-orderNumber="' + data.orderNumber + '">詳細</a></span>';
 
                     return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<span>' + data.price + ' ' + data.priceCurrency + '</span>';
                 }
             },
             {
@@ -117,37 +133,27 @@ $(function () {
                         numItems = data.acceptedOffers.length;
                     }
 
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.price + ' ' + data.priceCurrency + '</li>'
-                        + '<li>' + numItems + ' items</li>'
-                        + '</ul>';
+                    return '<span>' + numItems + ' items</span>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
+                    return ''
                         + data.paymentMethods.map(function (payment) {
-                            var listHtml = '<li><span class="badge badge-secondary ' + payment.typeOf + '">' + payment.typeOf + '</span></li>'
-                                + '<li><span>' + payment.name + '</span></li>'
-                                + '<li><span>' + payment.accountId + '</span></li>'
-                                + '<li><span>' + payment.paymentMethodId + '</span></li>';
+                            var listHtml = '<span><span class="badge badge-secondary ' + payment.typeOf + '">' + payment.typeOf + '</span></span>'
+                                + '<br><span><span>' + payment.name + '</span></span>';
 
-                            if (payment.totalPaymentDue !== undefined) {
-                                listHtml += '<li><span>' + payment.totalPaymentDue.value + ' ' + payment.totalPaymentDue.currency + '</span></li>'
-                            }
-
-                            listHtml += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPaymentMethods" data-orderNumber="' + data.orderNumber + '">詳細</a></li>';
+                            listHtml += '<br><span><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPaymentMethods" data-orderNumber="' + data.orderNumber + '">詳細</a></span>';
 
                             return listHtml;
-                        }).join('')
-                        + '</ul>';
+                        }).join('');
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
+                    var html = '';
 
                     if (data.returner !== undefined && data.returner !== null) {
                         var userPoolId = '';
@@ -165,27 +171,19 @@ $(function () {
                             }
                         }
 
-                        html += '<li><span class="badge badge-info">' + data.returner.typeOf + '</span></li>'
-                            + '<li><span class="badge badge-warning">' + ((data.returner.memberOf !== undefined) ? data.returner.memberOf.membershipNumber : '') + '</span></li>'
-                            + '<li>'
-                            + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
-                            + '</li>';
+                        html += '<span><span class="badge badge-info">' + data.returner.typeOf + '</span></span>';
 
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.returner.typeOf + '/' + data.returner.id + '?userPoolId=' + userPoolId;
-                        html += '<li><a target="_blank" href="' + url + '">' + data.returner.id + '</a></li>'
-                            + '<li>' + data.returner.name + '</li>'
-                            + '<li>' + data.returner.email + '</li>'
-                            + '<li>' + data.returner.telephone + '</li>';
+                        html += '<br><span><a target="_blank" href="' + url + '">' + data.returner.id + '</a></span>'
+                            + '<br><span>' + data.returner.name + '</span>';
 
-                        html += '<li>'
+                        html += '<br><span>'
                             + '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturner" data-orderNumber="' + data.orderNumber + '">詳細</a>';
                         if (Array.isArray(data.returner.identifier)) {
                             html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturnerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
                         }
-                        html += '</li>';
+                        html += '</span>';
                     }
-
-                    html += '</ul>';
 
                     return html;
                 }
@@ -219,13 +217,28 @@ $(function () {
     $('.search').click(function () {
         $('form').submit();
     });
+
     $('.downloadCSV').click(function () {
-        var url = '/projects/' + PROJECT_ID + '/orders?' + $('form').serialize() + '&format=text/csv';
-        window.open(url, '_blank');
+        // ストリーミングの場合
+        // var url = '/projects/' + PROJECT_ID + '/orders?' + $('form').serialize() + '&format=text/csv';
+        // window.open(url, '_blank');
+
+        // レポート作成タスク追加
+        var conditions = $('form').serializeArray();
+        openCreateReportForm(conditions, 'text/csv');
     });
     $('.downloadJson').click(function () {
-        var url = '/projects/' + PROJECT_ID + '/orders?' + $('form').serialize() + '&format=application/json';
-        window.open(url, '_blank');
+        // ストリーミングの場合
+        // var url = '/projects/' + PROJECT_ID + '/orders?' + $('form').serialize() + '&format=application/json';
+        // window.open(url, '_blank');
+
+        // レポート作成タスク追加
+        var conditions = $('form').serializeArray();
+        openCreateReportForm(conditions, 'application/json');
+    });
+
+    $('#modal-createReport .submit').click(function () {
+        createOrderReportTask();
     });
 
     $('form .card-footer .btn-group')
@@ -413,3 +426,58 @@ $(function () {
         modal.modal();
     }
 });
+
+function openCreateReportForm(conditions, format) {
+    var orderDateRangeElement = conditions.find(function (e) {
+        return e.name === 'orderDateRange';
+    });
+    if (orderDateRangeElement === undefined || typeof orderDateRangeElement.value !== 'string' || orderDateRangeElement.value.length === 0) {
+        alert('注文日時を指定してください');
+
+        return;
+    }
+
+    var orderDateRange = orderDateRangeElement.value;
+
+    var message = '[注文日時]<br>' + orderDateRange
+        + '<br>の注文レポートを作成しようとしています。'
+        + '<br>よろしいですか？';
+    var modal = $('#modal-createReport');
+    var title = message;
+    modal.find('input[name=format]').val(format);
+    modal.find('input[name=orderDateRange]').val(orderDateRange);
+    modal.find('.modal-title').html(title);
+    modal.modal();
+}
+
+function createOrderReportTask() {
+    var data = {
+        orderDateRange: $('#modal-createReport input[name=orderDateRange]').val(),
+        format: $('#modal-createReport input[name=format]').val(),
+        reportName: $('#modal-createReport input[name=reportName]').val()
+    };
+
+    $.ajax({
+        url: '/projects/' + PROJECT_ID + '/orders/createOrderReport',
+        type: 'POST',
+        dataType: 'json',
+        data: data
+    }).done(function (result) {
+        console.log(result);
+
+        var modal = $('#modal-sm');
+        var title = '注文レポート作成を開始しました';
+        var body = [result].map(function (task) {
+            var href = '/projects/' + PROJECT_ID + '/tasks/' + task.id + '?name=' + task.name;
+            return task.id + ' <a target="_blank" href="' + href + '">タスクを確認</a>';
+        }).join('<br>');
+        ;
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }).fail(function (xhr) {
+        var res = $.parseJSON(xhr.responseText);
+        alert(res.error.message);
+    }).always(function () {
+    });
+}

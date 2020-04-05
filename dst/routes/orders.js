@@ -14,9 +14,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const createDebug = require("debug");
 const express = require("express");
+// tslint:disable-next-line:no-submodule-imports
+const check_1 = require("express-validator/check");
 const http_status_1 = require("http-status");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
+const validator_1 = require("../middlewares/validator");
 const TimelineFactory = require("../factory/timeline");
 const debug = createDebug('cinerino-console:routes');
 const ordersRouter = express.Router();
@@ -337,6 +340,93 @@ ordersRouter.get('',
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType
             });
         }
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+/**
+ * 注文レポート作成
+ */
+ordersRouter.post('/createOrderReport', ...[
+    check_1.body('orderDateRange')
+        .not()
+        .isEmpty(),
+    check_1.body('format')
+        .not()
+        .isEmpty(),
+    check_1.body('reportName')
+        .not()
+        .isEmpty()
+], validator_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const taskService = new cinerinoapi.service.Task({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
+        const orderDateFrom = moment(req.body.orderDateRange.split(' - ')[0])
+            .toDate();
+        const orderDateThrough = moment(req.body.orderDateRange.split(' - ')[1])
+            .toDate();
+        const reportName = req.body.reportName;
+        const expires = moment()
+            .add(1, 'hour')
+            .toDate();
+        const taskAttributes = {
+            project: { typeOf: req.project.typeOf, id: req.project.id },
+            name: 'createOrderReport',
+            status: cinerinoapi.factory.taskStatus.Ready,
+            runsAt: new Date(),
+            remainingNumberOfTries: 1,
+            numberOfTried: 0,
+            executionResults: [],
+            data: {
+                typeOf: 'CreateAction',
+                project: { typeOf: req.project.typeOf, id: req.project.id },
+                agent: {
+                    typeOf: cinerinoapi.factory.personType.Person,
+                    id: req.user.profile.sub,
+                    familyName: req.user.profile.family_name,
+                    givenName: req.user.profile.given_name,
+                    name: `${req.user.profile.given_name} ${req.user.profile.family_name}`
+                },
+                // recipient: { name: 'recipientName' },
+                object: {
+                    typeOf: 'Report',
+                    about: reportName,
+                    mentions: {
+                        typeOf: 'SearchAction',
+                        query: {
+                            orderDateFrom: orderDateFrom,
+                            orderDateThrough: orderDateThrough
+                        },
+                        object: {
+                            typeOf: 'Order'
+                        }
+                    },
+                    encodingFormat: req.body.format,
+                    expires: expires
+                },
+                potentialActions: {
+                    sendEmailMessage: [
+                        {
+                            object: {
+                                about: 'レポートが使用可能です',
+                                sender: {
+                                    name: `[${req.project.id}]Cinerino Report`,
+                                    email: 'noreply@example.com'
+                                },
+                                toRecipient: { email: req.user.profile.email }
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+        const task = yield taskService.create(taskAttributes);
+        res.status(http_status_1.CREATED)
+            .json(task);
     }
     catch (error) {
         next(error);

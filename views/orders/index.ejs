@@ -342,38 +342,22 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table id="orders-table" class="table table-bordered table-hover dataTable">
+                        <table id="orders-table" class="table table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>Order Number
-                                        <br><span class="text-muted">Confirmation Number</span>
-                                        <br>Order Date
-                                        <br>Date Returned
-                                        <br>Order Status
-                                    </th>
+                                    <th>Order Number</th>
+                                    <th>Confirmation Number</th>
+                                    <th>Order Status</th>
+                                    <th>Order Date</th>
+                                    <th>Date Returned</th>
                                     <th>Customer</th>
                                     <th>Seller</th>
                                     <th>Price</th>
+                                    <th>Items</th>
                                     <th>Payment Methods</th>
                                     <th>Returner</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Order Number
-                                        <br><span class="text-muted">Confirmation Number</span>
-                                        <br>Order Date
-                                        <br>Date Returned
-                                        <br>Order Status
-                                    </th>
-                                    <th>Customer</th>
-                                    <th>Seller</th>
-                                    <th>Price</th>
-                                    <th>Payment Methods</th>
-                                    <th>Returner</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -400,6 +384,45 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-sm" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-createReport" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" type="text" name="reportName" placeholder="レポート名称">
+                <input type="hidden" name="format">
+                <input type="hidden" name="orderDateRange">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                <!-- <button type="submit" class="btn btn-primary">更新</button> -->
+                <button type="button" class="btn btn-primary submit" data-dismiss="modal">作成する</button>
             </div>
         </div>
     </div>
