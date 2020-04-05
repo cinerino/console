@@ -454,7 +454,8 @@ function createOrderReportTask() {
     var data = {
         orderDateRange: $('#modal-createReport input[name=orderDateRange]').val(),
         format: $('#modal-createReport input[name=format]').val(),
-        reportName: $('#modal-createReport input[name=reportName]').val()
+        reportName: $('#modal-createReport input[name=reportName]').val(),
+        recipientEmail: $('#modal-createReport input[name=recipientEmail]').val()
     };
 
     $.ajax({

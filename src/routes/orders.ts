@@ -392,7 +392,10 @@ ordersRouter.post(
             .isEmpty(),
         body('reportName')
             .not()
-            .isEmpty()
+            .isEmpty(),
+        body('recipientEmail')
+            .optional()
+            .isEmail()
     ],
     validator,
     async (req, res, next) => {
@@ -411,6 +414,10 @@ ordersRouter.post(
             const expires = moment()
                 .add(1, 'hour')
                 .toDate();
+            const recipientEmail = (typeof req.body.recipientEmail === 'string' && req.body.recipientEmail.length > 0)
+                ? req.body.recipientEmail
+                : req.user.profile.email;
+
             const taskAttributes: cinerinoapi.factory.task.IAttributes<any> = {
                 project: { typeOf: req.project.typeOf, id: req.project.id },
                 name: <any>'createOrderReport',
@@ -452,10 +459,10 @@ ordersRouter.post(
                                 object: {
                                     about: `レポートが使用可能です [${req.project.id}]`,
                                     sender: {
-                                        name: `Cinerino Report[${req.project.id}]`,
+                                        name: `Cinerino Report [${req.project.id}]`,
                                         email: 'noreply@example.com'
                                     },
-                                    toRecipient: { email: req.user.profile.email }
+                                    toRecipient: { email: recipientEmail }
                                 }
                             }
                         ]

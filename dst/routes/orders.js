@@ -357,7 +357,10 @@ ordersRouter.post('/createOrderReport', ...[
         .isEmpty(),
     check_1.body('reportName')
         .not()
-        .isEmpty()
+        .isEmpty(),
+    check_1.body('recipientEmail')
+        .optional()
+        .isEmail()
 ], validator_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
@@ -373,6 +376,9 @@ ordersRouter.post('/createOrderReport', ...[
         const expires = moment()
             .add(1, 'hour')
             .toDate();
+        const recipientEmail = (typeof req.body.recipientEmail === 'string' && req.body.recipientEmail.length > 0)
+            ? req.body.recipientEmail
+            : req.user.profile.email;
         const taskAttributes = {
             project: { typeOf: req.project.typeOf, id: req.project.id },
             name: 'createOrderReport',
@@ -414,10 +420,10 @@ ordersRouter.post('/createOrderReport', ...[
                             object: {
                                 about: `レポートが使用可能です [${req.project.id}]`,
                                 sender: {
-                                    name: `Cinerino Report[${req.project.id}]`,
+                                    name: `Cinerino Report [${req.project.id}]`,
                                     email: 'noreply@example.com'
                                 },
-                                toRecipient: { email: req.user.profile.email }
+                                toRecipient: { email: recipientEmail }
                             }
                         }
                     ]

@@ -415,7 +415,14 @@
                     <span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <input class="form-control" type="text" name="reportName" placeholder="レポート名称">
+                <div class="form-group">
+                    <label for="reportName">レポート名称</label>
+                    <input class="form-control" type="text" name="reportName" placeholder="レポート名称">
+                </div>
+                <div class="form-group">
+                    <label for="recipientEmail">通知先メールアドレス</label>
+                    <input class="form-control" type="text" name="recipientEmail" placeholder="通知先メールアドレス">
+                </div>
                 <input type="hidden" name="format">
                 <input type="hidden" name="orderDateRange">
             </div>
