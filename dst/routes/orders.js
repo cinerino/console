@@ -27,9 +27,9 @@ const ordersRouter = express.Router();
  * 注文検索
  */
 ordersRouter.get('', 
-// tslint:disable-next-line:cyclomatic-complexity
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e;
     try {
         debug('req.query:', req.query);
         const iamService = new cinerinoapi.service.IAM({
@@ -80,29 +80,29 @@ ordersRouter.get('',
             }
         }
         if (req.query.customer !== undefined) {
-            if (Array.isArray(req.query.customer.userPoolClients)) {
-                customerIdentifiers = req.query.customer.userPoolClients.map((userPoolClient) => {
-                    return {
+            if (typeof req.query.customer.userPoolClient === 'string' && req.query.customer.userPoolClient.length > 0) {
+                customerIdentifiers = [{
                         name: 'clientId',
-                        value: userPoolClient
-                    };
-                });
+                        value: req.query.customer.userPoolClient
+                    }];
             }
-            if (req.query.customer.identifiers !== '') {
-                const splitted = req.query.customer.identifiers.split(':');
-                if (splitted.length > 1) {
-                    customerIdentifiers = [
-                        {
-                            name: splitted[0],
-                            value: splitted[1]
-                        }
-                    ];
+            else {
+                if (req.query.customer.identifiers !== '') {
+                    const splitted = req.query.customer.identifiers.split(':');
+                    if (splitted.length > 1) {
+                        customerIdentifiers = [
+                            {
+                                name: splitted[0],
+                                value: splitted[1]
+                            }
+                        ];
+                    }
                 }
             }
         }
         const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { orderDate: cinerinoapi.factory.sortType.Descending }, seller: {
-                ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
-                    ? req.query.seller.ids
+                ids: (typeof ((_a = req.query.seller) === null || _a === void 0 ? void 0 : _a.id) === 'string' && ((_b = req.query.seller) === null || _b === void 0 ? void 0 : _b.id.length) > 0)
+                    ? [req.query.seller.id]
                     : undefined
             }, identifier: { $in: identifiers }, customer: {
                 ids: (req.query.customer !== undefined && req.query.customer.ids !== undefined && req.query.customer.ids !== '')
@@ -193,8 +193,8 @@ ordersRouter.get('',
             }, orderNumbers: (req.query.orderNumbers !== undefined && req.query.orderNumbers !== '')
                 ? req.query.orderNumbers.split(',')
                     .map((v) => v.trim())
-                : undefined, orderStatuses: (req.query.orderStatuses !== undefined)
-                ? req.query.orderStatuses
+                : undefined, orderStatuses: (typeof req.query.orderStatus === 'string' && req.query.orderStatus.length > 0)
+                ? [req.query.orderStatus]
                 : undefined, orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                 ? moment(req.query.orderDateRange.split(' - ')[0])
                     .toDate()
@@ -288,9 +288,8 @@ ordersRouter.get('',
                     && req.query.paymentMethods.paymentMethodIds !== '')
                     ? req.query.paymentMethods.paymentMethodIds.split(',')
                         .map((v) => v.trim())
-                    : undefined, typeOfs: (req.query.paymentMethods !== undefined
-                    && req.query.paymentMethods.typeOfs !== undefined)
-                    ? req.query.paymentMethods.typeOfs
+                    : undefined, typeOfs: (typeof ((_c = req.query.paymentMethods) === null || _c === void 0 ? void 0 : _c.typeOf) === 'string' && ((_d = req.query.paymentMethods) === null || _d === void 0 ? void 0 : _d.typeOf.length) > 0)
+                    ? [(_e = req.query.paymentMethods) === null || _e === void 0 ? void 0 : _e.typeOf]
                     : undefined }) }, {
             price: {
                 $gte: (req.query.price !== undefined

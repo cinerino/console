@@ -23,7 +23,6 @@ const ordersRouter = express.Router();
  */
 ordersRouter.get(
     '',
-    // tslint:disable-next-line:cyclomatic-complexity
     // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
     async (req, res, next) => {
         try {
@@ -80,24 +79,22 @@ ordersRouter.get(
             }
 
             if (req.query.customer !== undefined) {
-                if (Array.isArray(req.query.customer.userPoolClients)) {
-                    customerIdentifiers = req.query.customer.userPoolClients.map((userPoolClient: string) => {
-                        return {
-                            name: 'clientId',
-                            value: userPoolClient
-                        };
-                    });
-                }
-
-                if (req.query.customer.identifiers !== '') {
-                    const splitted = (<string>req.query.customer.identifiers).split(':');
-                    if (splitted.length > 1) {
-                        customerIdentifiers = [
-                            {
-                                name: splitted[0],
-                                value: splitted[1]
-                            }
-                        ];
+                if (typeof req.query.customer.userPoolClient === 'string' && req.query.customer.userPoolClient.length > 0) {
+                    customerIdentifiers = [{
+                        name: 'clientId',
+                        value: req.query.customer.userPoolClient
+                    }];
+                } else {
+                    if (req.query.customer.identifiers !== '') {
+                        const splitted = (<string>req.query.customer.identifiers).split(':');
+                        if (splitted.length > 1) {
+                            customerIdentifiers = [
+                                {
+                                    name: splitted[0],
+                                    value: splitted[1]
+                                }
+                            ];
+                        }
                     }
                 }
             }
@@ -107,8 +104,8 @@ ordersRouter.get(
                 page: req.query.page,
                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
                 seller: {
-                    ids: (req.query.seller !== undefined && req.query.seller.ids !== undefined)
-                        ? req.query.seller.ids
+                    ids: (typeof req.query.seller?.id === 'string' && req.query.seller?.id.length > 0)
+                        ? [req.query.seller.id]
                         : undefined
                 },
                 identifier: { $in: identifiers },
@@ -203,8 +200,8 @@ ordersRouter.get(
                     ? (<string>req.query.orderNumbers).split(',')
                         .map((v) => v.trim())
                     : undefined,
-                orderStatuses: (req.query.orderStatuses !== undefined)
-                    ? req.query.orderStatuses
+                orderStatuses: (typeof req.query.orderStatus === 'string' && req.query.orderStatus.length > 0)
+                    ? [req.query.orderStatus]
                     : undefined,
                 orderDateFrom: (req.query.orderDateRange !== undefined && req.query.orderDateRange !== '')
                     ? moment(req.query.orderDateRange.split(' - ')[0])
@@ -305,9 +302,8 @@ ordersRouter.get(
                         ? (<string>req.query.paymentMethods.paymentMethodIds).split(',')
                             .map((v) => v.trim())
                         : undefined,
-                    typeOfs: (req.query.paymentMethods !== undefined
-                        && req.query.paymentMethods.typeOfs !== undefined)
-                        ? req.query.paymentMethods.typeOfs
+                    typeOfs: (typeof req.query.paymentMethods?.typeOf === 'string' && req.query.paymentMethods?.typeOf.length > 0)
+                        ? [req.query.paymentMethods?.typeOf]
                         : undefined
                 },
                 ...{

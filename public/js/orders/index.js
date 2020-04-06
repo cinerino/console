@@ -237,14 +237,13 @@ $(function () {
         createOrderReportTask();
     });
 
-    $('form .card-footer .btn-group')
+    $('form .card-footer button.search')
         .popover({
             title: '検索方法',
             content: 'ドロップダウンメニューから出力フォーマットを選択できます。ストリーミングダウンロードの場合、全件出力が可能です。',
             placement: 'top',
             trigger: 'hover'
-        })
-        .popover('show');
+        });
 
     $(document).on('click', '.showIdentifier', function () {
         showIdentifier($(this).data('ordernumber'));
