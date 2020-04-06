@@ -37,16 +37,18 @@
                     <!-- form start -->
                     <form role="form" method="get">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="name">購入管理番号</label>
-                                <input type="text" class="form-control" id="identifiers" name="identifiers"
-                                    placeholder="8559919013,8559919014" value="<%= searchConditions.identifiers %>">
-                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="name">購入管理番号</label>
+                                    <input type="text" class="form-control" id="identifiers" name="identifiers"
+                                        placeholder="8559919013,8559919014" value="<%= searchConditions.identifiers %>">
+                                </div>
 
-                            <div class="form-group">
-                                <label for="name">券種区分</label>
-                                <input type="text" class="form-control" id="serviceTypes" name="serviceTypes"
-                                    placeholder="01,09,BG" value="<%= searchConditions.serviceTypes %>">
+                                <div class="form-group col-md-2">
+                                    <label for="name">券種区分</label>
+                                    <input type="text" class="form-control" id="serviceTypes" name="serviceTypes"
+                                        placeholder="01,09,BG" value="<%= searchConditions.serviceTypes %>">
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->

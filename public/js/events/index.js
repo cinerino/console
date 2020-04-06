@@ -30,57 +30,55 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
                     var thumbnailImageUrl = (data.workPerformed.thumbnailUrl !== undefined)
                         ? data.workPerformed.thumbnailUrl
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrhpsOJOcLBwc1SPD9sWlinildy4S05-I2Wf6z2wRXnSxbmtRz';
 
-                    var alternativeHeadline = data.superEvent.alternativeHeadline;
-                    if (typeof data.superEvent.alternativeHeadline === 'object') {
-                        alternativeHeadline = data.superEvent.alternativeHeadline.ja;
-                    }
-
-                    return '<ul class="products-list">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li class="item">'
-                        + '<div class="product-img">'
+                    return '<div class="product-img">'
                         + '<img src="' + thumbnailImageUrl + '" alt="Product Image" class="img-size-50">'
-                        + '</div>'
-                        + '<div class="product-info">'
-                        + '<span class="badge badge-secondary ' + data.typeOf + '">' + data.typeOf + '</span>'
-                        + '<br>'
-                        + '<span class="badge badge-secondary ' + data.eventStatus + '">' + data.eventStatus + '</span>'
+                        + '</div>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<span class="badge badge-secondary ' + data.typeOf + '">' + data.typeOf + '</span>'
                         + '<br>'
                         + '<a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + data.id + '">'
                         + data.name.ja
-                        // + '<span class="badge badge-warning float-right">' + data.maximumAttendeeCapacity + ' seats</span>'
-                        + '</a>'
-                        + '<span class="product-description">' + alternativeHeadline + '</span>'
-                        + data.startDate + ' - ' + data.endDate + '<br>'
-                        // + '<i class="fa fa-user"></i> ' + data.maximumAttendeeCapacity + ' maximum'
-                        // + '<br>'
-                        + '<i class="fa fa-user"></i> ' + data.remainingAttendeeCapacity + '/' + data.maximumAttendeeCapacity + ' remaining'
-                        + '<br>'
-                        + '</div>'
-                        + '</li>'
-                        + '</ul>';
+                        + '</a>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li>' + '<span class="badge badge-secondary ' + data.location.typeOf + '">' + data.location.typeOf + '</span></li>'
-                        + '<li>' + data.location.branchCode + '</li>'
-                        + '<li>' + data.location.name.ja + '</li>';
+                    return '<span class="badge badge-secondary ' + data.eventStatus + '">' + data.eventStatus + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.startDate;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.endDate;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.remainingAttendeeCapacity + '/' + data.maximumAttendeeCapacity;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<span class="badge badge-secondary ' + data.location.typeOf + '">' + data.location.typeOf + '</span>';
 
-
-                    html += '<li>';
-                    html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showLocation" data-id="' + data.id + '">詳しく</a>';
-                    html += '</li>';
-
-                    html += '</ul>';
+                    html += '<br><a href="javascript:void(0)" class="showLocation" data-id="' + data.id + '">' + data.location.name.ja + '</a>';
 
                     return html;
                 }
@@ -88,16 +86,10 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li>' + '<span class="badge badge-secondary ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span></li>'
-                        + '<li>' + data.superEvent.id + '</li>'
-                        + '<li>' + data.superEvent.name.ja + '</li>';
+                    var html = '<span class="badge badge-secondary ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span>'
+                        + '<br>' + data.superEvent.id;
 
-                    html += '<li>';
-                    html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSuperEvent" data-id="' + data.id + '">詳しく</a>';
-                    html += '</li>';
-
-                    html += '</ul>';
+                    html += '<br><a href="javascript:void(0)" class="showSuperEvent" data-id="' + data.id + '">' + data.superEvent.name.ja + '</a>';
 
                     return html;
                 }
@@ -105,18 +97,10 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li>' + '<span class="badge badge-secondary ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span></li>'
-                        + '<li>' + data.workPerformed.id + '</li>'
-                        + '<li>' + data.workPerformed.identifier + '</li>'
-                        + '<li>' + data.workPerformed.name + '</li>'
-                        + '<li>' + moment.duration(data.workPerformed.duration).asMinutes() + ' minutes</li>';
+                    var html = '<span class="badge badge-secondary ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span>'
+                        + '<br>' + data.workPerformed.id;
 
-                    html += '<li>';
-                    html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showWorkPerformed" data-id="' + data.id + '">詳しく</a>';
-                    html += '</li>';
-
-                    html += '</ul>';
+                    html += '<br><a href="javascript:void(0)" class="showWorkPerformed" data-id="' + data.id + '">' + data.workPerformed.name + '</a>';
 
                     return html;
                 }
@@ -128,17 +112,9 @@ $(function () {
                         data.offers = { name: {} };
                     }
 
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary">ID</span> ' + String(data.offers.id) + '</li>'
-                        + '<li><span class="badge badge-secondary">NAME</span> ' + String(data.offers.name.ja) + '</li>'
-                        + '<li><span class="badge badge-secondary">AVBL</span> ' + String(data.offers.availability) + '</li>'
-                        + '<li><span class="badge badge-secondary">VALID</span> ' + String(data.offers.validFrom) + ' - ' + String(data.offers.validThrough) + '</li>'
+                    var html = String(data.offers.id);
 
-                    html += '<li>';
-                    html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showOffers" data-id="' + data.id + '">詳しく</a>';
-                    html += '</li>';
-
-                    html += '</ul>';
+                    html += '<br><a href="javascript:void(0)" class="showOffers" data-id="' + data.id + '">' + String(data.offers.name.ja) + '</a>';
 
                     return html;
                 }
@@ -181,7 +157,7 @@ $(function () {
         })
 
         var modal = $('#modal-event');
-        var title = 'Event `' + event.id + '` Location';
+        var title = 'Event `' + event.id + '`';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(event[propertyName], null, '\t')
             + '</textarea>';
