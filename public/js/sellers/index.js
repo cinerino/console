@@ -20,22 +20,15 @@ $(function () {
                 render: function (data, type, row) {
                     var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
 
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><a href="/projects/' + PROJECT_ID + '/sellers/' + data.id + '">' + data.id + '</a></li>'
-                        + '<li><span class="badge badge-info ' + data.typeOf + '">' + data.typeOf + '</span></li>'
-                        + '<li>' + data.name.ja + '</li>'
-                        + '<li>' + data.name.en + '</li>'
-                        + '<li>' + data.telephone + '</li>'
-                        + '<li><a target="_blank" href="' + data.url + '">' + data.url + '</a></li>';
+                    var html = ''
+                        + '<span class="badge badge-light ' + data.typeOf + '">' + data.typeOf + '</span>'
+                        + '<br><a href="/projects/' + PROJECT_ID + '/sellers/' + data.id + '">' + data.id + '</a>';
 
-                    html += '<li>';
                     if (Array.isArray(data.additionalProperty)) {
-                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAdditionalProperty" data-id="' + data.id + '">追加特性</a>';
+                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAdditionalProperty" data-id="' + data.id + '">追加特性</a>';
                     }
-                    html += '</li>';
 
-                    html += '</ul>';
+                    html += '';
 
                     return html;
                 }
@@ -43,14 +36,47 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
+                    var html = ''
+                        + '<span>' + data.name.ja + '</span>';
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+
+                    var html = ''
+                        + '<span>' + data.telephone + '</span>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = ''
+                        + '<a target="_blank" href="' + data.url + '">' + data.url + '</a>';
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
                     if (data.location !== undefined && data.location !== null) {
-                        html += '<li><span class="badge badge-info ' + data.location.typeOf + '">' + data.location.typeOf + '</span></li>'
-                            + '<li>' + data.location.branchCode + '</li>'
-                            + '<li>' + data.location.name.ja + '</li>'
-                            + '<li>' + data.location.name.en + '</li>';
+                        html += '<span class="badge badge-light ' + data.location.typeOf + '">' + data.location.typeOf + '</span>'
+                            + '<br><span>' + data.location.name.ja + '</span>';
                     }
-                    html += '</ul>';
+                    html += '';
 
                     return html;
                 }
@@ -58,15 +84,12 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li>'
+                    var html = ''
                         + data.paymentAccepted.map(function (payment) {
-                            return '<span class="mr-1 badge badge-secondary ' + payment.paymentMethodType + '">' + payment.paymentMethodType + '</span>';
-                        }).join('')
-                        + '</li>';
+                            return '<span class="mr-1 badge badge-light ' + payment.paymentMethodType + '">' + payment.paymentMethodType + '</span>';
+                        }).join('');
 
-                    html += '<li><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showPaymentAccepted" data-id="' + data.id + '">詳しく見る</a></li>'
-                        + '</ul>';
+                    html += '<br><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showPaymentAccepted" data-id="' + data.id + '">詳しく</a>';
 
                     return html;
                 }
@@ -74,7 +97,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
+                    var html = '';
                     if (Array.isArray(data.makesOffer)) {
                         html += data.makesOffer.map(function (offer) {
                             var branchCode = '';
@@ -84,13 +107,13 @@ $(function () {
                                 branchCode = offer.itemOffered.reservationFor.location.branchCode;
                             }
 
-                            return '<li><span class="mr-1 badge badge-secondary">' + offer.offeredThrough.identifier + '</span>' + branchCode + '</li>';
+                            return '<span class="mr-1 badge badge-light">' + offer.offeredThrough.identifier + '</span>' + branchCode + '';
                         }).join('')
                     }
 
-                    html += '<li><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showMakesOffer" data-id="' + data.id + '">詳しく見る</a></li>'
+                    html += '<br><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showMakesOffer" data-id="' + data.id + '">詳しく</a>'
 
-                    html += '</ul>';
+                    html += '';
 
                     return html;
                 }
@@ -98,19 +121,8 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
-                    if (Array.isArray(data.areaServed)) {
-                        html += data.areaServed.map(function (area) {
-                            var url = '/projects/' + PROJECT_ID + '/applications/' + area.id;
-                            return '<li>'
-                                + '<span class="mr-1 badge badge-secondary">' + area.typeOf + '</span>'
-                                + '<a target="_blank" href="' + url + '">' + area.name + '</a>'
-                                + '</li>';
-                        }).join('')
-                    }
-
-                    html += '<li><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showAreaServed" data-id="' + data.id + '">対応店舗を詳しく見る</a></li>'
-                        + '</ul>';
+                    var html = '';
+                    html += '<a href="javascript:void(0)" class="showAreaServed" data-id="' + data.id + '">表示</a>';
 
                     return html;
                 }

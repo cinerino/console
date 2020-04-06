@@ -24,13 +24,11 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a></span>';
+                    var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a>';
 
-                    html += '<span>';
                     if (Array.isArray(data.identifier)) {
-                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
+                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
                     }
-                    html += '</span>';
 
                     return html;
 
@@ -57,7 +55,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span>' + data.orderDate + '</span>';
+                    var html = '<span>' + moment(data.orderDate).utc().format() + '</span>';
 
                     return html;
 
@@ -66,7 +64,10 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span>' + data.dateReturned + '</span>';
+                    var html = '';
+                    if (typeof data.dateReturned === 'string') {
+                        html += '<span>' + moment(data.dateReturned).utc().format() + '</span>';
+                    }
 
                     return html;
 
@@ -93,17 +94,15 @@ $(function () {
                     var html = '';
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.customer.typeOf + '/' + data.customer.id + '?userPoolId=' + userPoolId;
-                    html += '<span><a target="_blank" href="' + url + '"><span class="badge badge-info">' + data.customer.typeOf + '</span></a></span>';
-                    html += '<br><span>' + data.customer.name + '</span>';
+                    html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.customer.typeOf + '</span></a>';
+                    html += '<br><a href="javascript:void(0)" class="showCustomer" data-orderNumber="' + data.orderNumber + '"><span>' + data.customer.name + '</span></a>';
 
-                    html += '<br>'
-                        + '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomer" data-orderNumber="' + data.orderNumber + '">詳細</a>';
-                    if (Array.isArray(data.customer.identifier)) {
-                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
-                    }
-                    if (Array.isArray(data.customer.additionalProperty)) {
-                        html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerAdditionalProperty" data-orderNumber="' + data.orderNumber + '">追加特性</a>';
-                    }
+                    // if (Array.isArray(data.customer.identifier)) {
+                    //     html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
+                    // }
+                    // if (Array.isArray(data.customer.additionalProperty)) {
+                    //     html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerAdditionalProperty" data-orderNumber="' + data.orderNumber + '">追加特性</a>';
+                    // }
 
                     return html;
                 }
@@ -112,9 +111,8 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
-                    var html = '<span><span class="badge badge-info">' + data.seller.typeOf + '</span></span>'
-                        + '<br><span><a target="_blank" href="' + url + '">' + data.seller.name + '</a></span>'
-                        + '<br><span><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showSeller" data-orderNumber="' + data.orderNumber + '">詳細</a></span>';
+                    var html = '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.seller.typeOf + '</span></a>'
+                        + '<br><a href="javascript:void(0)" class="showSeller" data-orderNumber="' + data.orderNumber + '">' + data.seller.name + '</a>';
 
                     return html;
                 }
@@ -139,15 +137,21 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return ''
-                        + data.paymentMethods.map(function (payment) {
-                            var listHtml = '<span><span class="badge badge-secondary ' + payment.typeOf + '">' + payment.typeOf + '</span></span>'
-                                + '<br><span><span>' + payment.name + '</span></span>';
+                    var numItems = '';
+                    if (Array.isArray(data.paymentMethods)) {
+                        numItems = data.paymentMethods.length;
+                    }
 
-                            listHtml += '<br><span><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPaymentMethods" data-orderNumber="' + data.orderNumber + '">詳細</a></span>';
+                    var html = '<a href="javascript:void(0)" class="showPaymentMethods" data-orderNumber="' + data.orderNumber + '"><span>' + numItems + ' methods</span></a>';
+
+                    html += '<br>'
+                        + data.paymentMethods.map(function (payment) {
+                            var listHtml = '<span class="badge badge-light ' + payment.typeOf + '">' + payment.typeOf + '</span>'
 
                             return listHtml;
                         }).join('');
+
+                    return html;
                 }
             },
             {
@@ -171,17 +175,9 @@ $(function () {
                             }
                         }
 
-                        html += '<span><span class="badge badge-info">' + data.returner.typeOf + '</span></span>';
-
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.returner.typeOf + '/' + data.returner.id + '?userPoolId=' + userPoolId;
-                        html += '<br><span><a target="_blank" href="' + url + '">' + data.returner.id + '</a></span>'
-                            + '<br><span>' + data.returner.name + '</span>';
-
-                        html += '<br><span>'
-                            + '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturner" data-orderNumber="' + data.orderNumber + '">詳細</a>';
-                        if (Array.isArray(data.returner.identifier)) {
-                            html += ' <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showReturnerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
-                        }
+                        html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.returner.typeOf + '</span></a>';
+                        html += '<br><a href="javascript:void(0)" class="showReturner" data-orderNumber="' + data.orderNumber + '"><span>' + data.returner.name + '</a>';
                         html += '</span>';
                     }
 

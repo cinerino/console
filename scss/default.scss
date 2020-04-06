@@ -50,32 +50,6 @@
     @extend .badge-danger;
 }
 
-.badge.CreditCard {
-    @extend .badge-primary;
-}
-.badge.Account {
-    @extend .badge-success;
-}
-.badge.Cash {
-    @extend .badge-secondary;
-}
-.badge.Pecorino {
-    @extend .badge-secondary;
-}
-.badge.Mocoin {
-    @extend .badge-secondary;
-}
-.badge.MovieTicket {
-    @extend .badge-warning;
-}
-
-.badge.Coin {
-    @extend .badge-primary;
-}
-.badge.Point {
-    @extend .badge-info;
-}
-
 .badge.Opened {
     @extend .badge-success;
 }
