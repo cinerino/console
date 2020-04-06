@@ -40,59 +40,55 @@
                     </div> -->
                     <form role="form" method="get">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="object[typeOfs]">認可対象タイプ</label>
-                                        <input type="text" class="form-control" id="object[typeOfs]"
-                                            name="object[typeOfs]" placeholder="OwnershipInfo"
-                                            value="<%= (Array.isArray(searchConditions.object.typeOfs)) ? searchConditions.object.typeOfs.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="object[ids]">認可対象ID</label>
-                                        <input type="text" class="form-control" id="object[ids]" name="object[ids]"
-                                            placeholder="所有権IDなど"
-                                            value="<%= (Array.isArray(searchConditions.object.ids)) ? searchConditions.object.ids.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="object[typeOfGood][typeOfs]">認可対象所有物タイプ</label>
-                                        <input type="text" class="form-control" id="object[typeOfGood][typeOfs]"
-                                            name="object[typeOfGood][typeOfs]" placeholder="EventReservation"
-                                            value="<%= (searchConditions.object.typeOfGood !== undefined && Array.isArray(searchConditions.object.typeOfGood.typeOfs)) ? searchConditions.object.typeOfGood.typeOfs.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="object[typeOfGood][ids]">認可対象所有物ID</label>
-                                        <input type="text" class="form-control" id="object[typeOfGood][ids]"
-                                            name="object[typeOfGood][ids]" placeholder="予約IDなど"
-                                            value="<%= (searchConditions.object.typeOfGood !== undefined && Array.isArray(searchConditions.object.typeOfGood.ids)) ? searchConditions.object.typeOfGood.ids.join(',') : '' %>">
-                                    </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="object[typeOfs]">認可対象タイプ</label>
+                                    <input type="text" class="form-control" id="object[typeOfs]" name="object[typeOfs]"
+                                        placeholder="OwnershipInfo"
+                                        value="<%= (Array.isArray(searchConditions.object.typeOfs)) ? searchConditions.object.typeOfs.join(',') : '' %>">
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="codes">コード</label>
-                                        <input type="text" class="form-control" id="codes" name="codes"
-                                            placeholder="12345678-abcd-1234-abcd-123456abcdef"
-                                            value="<%= (Array.isArray(searchConditions.codes)) ? searchConditions.codes.join(',') : '' %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="object[ids]">認可対象ID</label>
+                                    <input type="text" class="form-control" id="object[ids]" name="object[ids]"
+                                        placeholder="所有権IDなど"
+                                        value="<%= (Array.isArray(searchConditions.object.ids)) ? searchConditions.object.ids.join(',') : '' %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label>有効期間</label>
+                                <div class="form-group col-md-2">
+                                    <label for="object[typeOfGood][typeOfs]">認可対象所有物タイプ</label>
+                                    <input type="text" class="form-control" id="object[typeOfGood][typeOfs]"
+                                        name="object[typeOfGood][typeOfs]" placeholder="EventReservation"
+                                        value="<%= (searchConditions.object.typeOfGood !== undefined && Array.isArray(searchConditions.object.typeOfGood.typeOfs)) ? searchConditions.object.typeOfGood.typeOfs.join(',') : '' %>">
+                                </div>
 
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="validRange" id="validRange"
-                                                value="<%= moment(searchConditions.validFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.validThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                <div class="form-group col-md-2">
+                                    <label for="object[typeOfGood][ids]">認可対象所有物ID</label>
+                                    <input type="text" class="form-control" id="object[typeOfGood][ids]"
+                                        name="object[typeOfGood][ids]" placeholder="予約IDなど"
+                                        value="<%= (searchConditions.object.typeOfGood !== undefined && Array.isArray(searchConditions.object.typeOfGood.ids)) ? searchConditions.object.typeOfGood.ids.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="codes">コード</label>
+                                    <input type="text" class="form-control" id="codes" name="codes"
+                                        placeholder="12345678-abcd-1234-abcd-123456abcdef"
+                                        value="<%= (Array.isArray(searchConditions.codes)) ? searchConditions.codes.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label>有効期間</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
                                         </div>
-                                        <!-- /.input group -->
+                                        <input type="text" class="form-control" name="validRange" id="validRange"
+                                            value="<%= moment(searchConditions.validFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.validThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
+                                    <!-- /.input group -->
                                 </div>
                             </div>
                         </div>
@@ -117,7 +113,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table id="authorizations-table" class="table table-bordered table-hover dataTable">
+                        <table id="authorizations-table" class="table table-hover dataTable">
                             <thead>
                                 <tr>
                                     <th>Code

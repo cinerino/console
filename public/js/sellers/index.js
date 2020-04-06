@@ -126,6 +126,20 @@ $(function () {
 
                     return html;
                 }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    var numPolicy = 0;
+                    if (Array.isArray(data.hasMerchantReturnPolicy)) {
+                        numPolicy = data.hasMerchantReturnPolicy.length;
+                    }
+                    html += '<a href="javascript:void(0)" class="showReturnPolicy" data-id="' + data.id + '">' + numPolicy + ' ポリシー</a>';
+
+                    return html;
+                }
             }
         ]
     });
@@ -148,6 +162,11 @@ $(function () {
     $(document).on('click', '.showAreaServed', function () {
         var id = $(this).data('id');
         showAreaServed(id);
+    });
+
+    $(document).on('click', '.showReturnPolicy', function () {
+        var id = $(this).data('id');
+        showReturnPolicy(id);
     });
 
     function showAdditionalProperty(id) {
@@ -220,6 +239,25 @@ $(function () {
         var title = 'Seller `' + seller.id + '` Area Served';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(seller.areaServed, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+
+    function showReturnPolicy(id) {
+        var sellers = table
+            .rows()
+            .data()
+            .toArray();
+        var seller = sellers.find(function (s) {
+            return s.id === id
+        })
+
+        var modal = $('#modal-seller');
+        var title = 'Seller `' + seller.id + '` Return Policy';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(seller.hasMerchantReturnPolicy, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);

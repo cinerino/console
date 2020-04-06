@@ -39,59 +39,53 @@
                         <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint"
                             value="/projects/<%= req.project.id %>/events/chevreBackend">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name"
-                                            value="<%= searchConditions.name %>">
-                                    </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>開催日</label>
 
-                                    <div class="form-group">
-                                        <label>開催日</label>
-
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="startRange" id="reservation"
-                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
                                         </div>
-                                        <!-- /.input group -->
+                                        <input type="text" class="form-control" name="startRange" id="reservation"
+                                            value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
+                                    <!-- /.input group -->
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Event Status</label>
-                                        <select multiple class="form-control" name="eventStatuses[]" size="6">
-                                            <% Object.values(EventStatusType).forEach(function (eventStatus) { %>
-                                            <% 
-                                                var selected = false;
-                                                selected = Array.isArray(searchConditions.eventStatuses) && searchConditions.eventStatuses.indexOf(eventStatus) >= 0;
-                                                %>
-                                            <option value="<%= eventStatus %>" <% if (selected) { %> selected <% } %>>
-                                                <%= eventStatus %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name"
+                                        value="<%= searchConditions.name %>">
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>販売者</label>
-                                        <select multiple class="form-control" name="seller[ids][]">
-                                            <% sellers.forEach(function (seller) { %>
-                                            <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
-                                                Array.isArray(searchConditions.seller.ids) &&
-                                                searchConditions.seller.ids.indexOf(seller.id)>=
-                                                0) ? 'selected' : '' %>><%= seller.name.ja %></option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label>Event Status</label>
+                                    <select multiple class="form-control" name="eventStatuses[]">
+                                        <% Object.values(EventStatusType).forEach(function (eventStatus) { %>
+                                        <% 
+                                            var selected = false;
+                                            selected = Array.isArray(searchConditions.eventStatuses) && searchConditions.eventStatuses.indexOf(eventStatus) >= 0;
+                                            %>
+                                        <option value="<%= eventStatus %>" <% if (selected) { %> selected <% } %>>
+                                            <%= eventStatus %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label>販売者</label>
+                                    <select multiple class="form-control" name="seller[ids][]">
+                                        <% sellers.forEach(function (seller) { %>
+                                        <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
+                                            Array.isArray(searchConditions.seller.ids) &&
+                                            searchConditions.seller.ids.indexOf(seller.id)>=
+                                            0) ? 'selected' : '' %>><%= seller.name.ja %></option>
+                                        <% }) %>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +114,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table id="events-table" class="table table-bordered table-hover dataTable">
+                        <table id="events-table" class="table table-hover dataTable">
                             <thead>
                                 <tr>
                                     <th>Name<br>Alternative Headline</th>
