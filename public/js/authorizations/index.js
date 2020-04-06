@@ -2,6 +2,12 @@ $(function () {
     var table = $("#authorizations-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
+        // paging: false,
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -18,36 +24,44 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+                    return '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showQRCode" data-id="' + data.id + '">表示</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/authorizations/' + data.id;
 
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><span class="badge badge-secondary">' + data.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '"><span class="">' + data.code + '</span></a></li>'
-                        + '<li>' + data.validFrom + '</li>'
-                        + '<li>' + data.validUntil + '</li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showQRCode" data-id="' + data.id + '">QRコード表示</a><li>'
-                        + '</ul>';
+                    return '<span class="badge badge-secondary">' + data.typeOf + '</span>'
+                        + '<br><a target="_blank" href="' + url + '"><span class="">' + data.code + '</span></a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return moment(data.validFrom).utc().format();
 
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-primary">' + data.object.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/ownershipInfos?ids=' + data.object.id + '">' + data.object.id + '</a></li>';
+                    return moment(data.validUntil).utc().format();
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/ownershipInfos?ids=' + data.object.id + '"><span class="badge badge-primary">' + data.object.typeOf + '</span></a>';
 
+                    var objectType = 'undefined';
                     if (data.object.typeOfGood !== undefined) {
-                        html += '<ul class="list-unstyled">'
-                            + '<li><span class="badge badge-success">' + data.object.typeOfGood.typeOf + '</span></li>'
-                            + '<li><span class="badge badge-secondary">' + data.object.typeOfGood.id + '</span></li>';
+                        objectType = data.object.typeOfGood.typeOf;
+                        // html += '<br><span class="badge badge-success">' + data.object.typeOfGood.typeOf + '</span>'
+                        //     + ' <a href="javascript:void(0)" class="showObject" data-id="' + data.id + '">' + data.object.typeOfGood.id + '</a>';
                     }
 
-                    html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showObject" data-id="' + data.id + '">オブジェクトをより詳しく見る</a><li>';
-
-                    html += '</ul>';
+                    html += '<br><a href="javascript:void(0)" class="showObject" data-id="' + data.id + '">' + objectType + '</a>';
 
                     return html;
                 }

@@ -193,8 +193,10 @@ reservationsRouter.get('',
             stream.pipe(res);
         }
         else {
+            const consoleUrl = process.env.CHEVRE_CONSOLE_URL;
             res.render('reservations/index', {
                 moment: moment,
+                consoleUrl: consoleUrl,
                 searchConditions: searchConditions,
                 ReservationStatusType: cinerinoapi.factory.chevre.reservationStatusType,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType

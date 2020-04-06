@@ -18,32 +18,25 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><a href="/projects/' + PROJECT_ID + '/paymentMethods/movieTicket/' + data.identifier + '">' + data.identifier + '</a></li>'
-                        + '</ul>';
+                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/paymentMethods/movieTicket/' + data.identifier + '">' + data.identifier + '</a>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.serviceType + '</li>'
-                        + '</ul>';
+                    return data.serviceType;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
+                    var html = ''
 
-                    if (data.validThrough !== undefined) {
-                        html += '<li>- ' + data.validThrough + '</li>';
+                    if (typeof data.validThrough === 'string') {
+                        html += moment(data.validThrough).utc().format() + ' まで';
                     }
 
-                    html += '</ul>';
+                    html += '';
 
                     return html;
                 }

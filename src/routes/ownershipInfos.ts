@@ -76,12 +76,14 @@ ownershipInfosRouter.get(
 
             if (req.query.format === 'datatable') {
                 debug('searching ownershipInfos...', searchConditions);
-                const searchOrdersResult = await ownershipInfoService.search(searchConditions);
+                const searchResult = await ownershipInfoService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchOrdersResult.totalCount,
-                    recordsFiltered: searchOrdersResult.totalCount,
-                    data: searchOrdersResult.data
+                    // recordsTotal: searchOrdersResult.totalCount,
+                    recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
+                    data: searchResult.data
                 });
             } else {
                 res.render('ownershipInfos/index', {

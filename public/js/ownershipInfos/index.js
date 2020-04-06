@@ -1,7 +1,15 @@
+var table;
+
 $(function () {
-    var table = $("#ownershipInfos-table").DataTable({
+    table = $("#ownershipInfos-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
+        // paging: false,
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -18,17 +26,22 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOf + '/' + data.id;
 
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><span class="badge badge-secondary">' + data.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.id + '</a></li>'
-                        + '<li>' + data.ownedFrom + '</li>'
-                        + '<li>' + data.ownedThrough + '</li>'
-                        + '</ul>';
+                    return '<span class="badge badge-secondary">' + data.typeOf + '</span>'
+                        + '<br><a target="_blank" href="' + url + '">' + data.id + '</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return moment(data.ownedFrom).utc().format();
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return moment(data.ownedThrough).utc().format();
                 }
             },
             {
@@ -51,17 +64,12 @@ $(function () {
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.ownedBy.typeOf + '/' + data.ownedBy.id + '?userPoolId=' + userPoolId;
 
-                    var html = '<ul class="list-unstyled">';
+                    var html = '';
 
-                    html += '<li><span class="badge badge-info">' + data.ownedBy.typeOf + '</span></li>'
-                        + '<li><span class="badge badge-warning">' + ((data.ownedBy.memberOf !== undefined) ? data.ownedBy.memberOf.membershipNumber : '') + '</span></li>'
-                        + '<li>'
-                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
-                        + '</li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.ownedBy.id + '</a></li>'
-                        + '<li>' + data.ownedBy.name + '</li>'
-                        + '<li>' + data.ownedBy.email + '</li>'
-                        + '<li>' + data.ownedBy.telephone + '</li>';
+                    html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.ownedBy.typeOf + '</span></a>'
+                        + ' <span class="badge badge-warning">' + ((data.ownedBy.memberOf !== undefined) ? data.ownedBy.memberOf.membershipNumber : '') + '</span>'
+                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
+                        + '<br><a href="javascript:void(0)" class="showOwnedBy" data-id="' + data.id + '">' + data.ownedBy.name + '</a>';
 
                     if (Array.isArray(data.ownedBy.identifier)) {
                         // data.customer.identifier.slice(0, 2).forEach(function (i) {
@@ -71,7 +79,7 @@ $(function () {
                         // html += '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showCustomerIdentifier" data-orderNumber="' + data.orderNumber + '">識別子をより詳しく見る</a><li>';
                     }
 
-                    html += '</ul>';
+                    html += '';
 
                     return html;
                 }
@@ -79,18 +87,17 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-primary">' + data.typeOfGood.typeOf + '</span></li>';
-
                     var resourceId = data.typeOfGood.id;
                     if (data.typeOfGood.typeOf === 'Account') {
                         resourceId = data.typeOfGood.accountNumber;
                     }
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOfGood.typeOf + '/' + resourceId + '?accountType=' + data.typeOfGood.accountType;
 
-                    html += '<li><a target="_blank" href="' + url + '">' + resourceId + '</a></li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showTypeOfGood" data-id="' + data.id + '">詳しく</a><li>'
-                        + '</ul>';
+                    var html = ''
+                        + '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.typeOfGood.typeOf + '</span></a>';
+
+                    html += '<br><a href="javascript:void(0)" class="showTypeOfGood" data-id="' + data.id + '">' + resourceId + '</a>'
+                        + '';
 
                     return html;
                 }
@@ -114,25 +121,47 @@ $(function () {
         showTypeOfGood(id);
     });
 
-    /**
-     * 認可対象を詳しく表示する
-     */
-    function showTypeOfGood(id) {
-        var ownershipInfos = table
-            .rows()
-            .data()
-            .toArray();
-        var ownershipInfo = ownershipInfos.find(function (o) {
-            return o.id === id
-        })
+    $(document).on('click', '.showOwnedBy', function () {
+        var id = $(this).data('id');
 
-        var modal = $('#modal-ownershipInfo-typeOfGood');
-        var title = 'OwnershipInfo `' + ownershipInfo.id + '` Object';
-        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(ownershipInfo.typeOfGood, null, '\t')
-            + '</textarea>';
-        modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(body);
-        modal.modal();
-    }
+        showOwnedBy(id);
+    });
 });
+
+function showTypeOfGood(id) {
+    var ownershipInfos = table
+        .rows()
+        .data()
+        .toArray();
+    var ownershipInfo = ownershipInfos.find(function (o) {
+        return o.id === id
+    })
+
+    var modal = $('#modal-ownershipInfo');
+    var title = 'OwnershipInfo `' + ownershipInfo.id + '`';
+    var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+        + JSON.stringify(ownershipInfo.typeOfGood, null, '\t')
+        + '</textarea>';
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}
+
+function showOwnedBy(id) {
+    var ownershipInfos = table
+        .rows()
+        .data()
+        .toArray();
+    var ownershipInfo = ownershipInfos.find(function (o) {
+        return o.id === id
+    })
+
+    var modal = $('#modal-ownershipInfo');
+    var title = 'OwnershipInfo `' + ownershipInfo.id + '`';
+    var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+        + JSON.stringify(ownershipInfo.ownedBy, null, '\t')
+        + '</textarea>';
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}

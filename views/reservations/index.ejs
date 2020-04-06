@@ -9,7 +9,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                        <a href="/projects/<%= req.project.id %>/home">Home</a>
+                        <a href="/">Home</a>
                     </li>
                     <li class="breadcrumb-item active">予約検索</li>
                 </ol>
@@ -29,203 +29,17 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-default">
+                <div class="card card-primary">
                     <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
+                        <h3 class="card-title">Quick Example</h3>
                     </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ids">予約ID</label>
-                                        <input type="text" class="form-control" id="ids" name="ids" placeholder="予約ID"
-                                            value="<%= (Array.isArray(searchConditions.ids)) ? searchConditions.ids.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="reservationNumbers">予約番号</label>
-                                        <input type="text" class="form-control" id="reservationNumbers"
-                                            name="reservationNumbers" placeholder="予約番号"
-                                            value="<%= (Array.isArray(searchConditions.reservationNumbers)) ? searchConditions.reservationNumbers.join(',') : '' %>">
-                                    </div>
+                    <!-- /.card-header -->
 
-                                    <div class="form-group">
-                                        <label for="ids">追加チケットテキスト</label>
-                                        <input type="text" class="form-control" id="additionalTicketText"
-                                            name="additionalTicketText" placeholder="追加チケットテキスト"
-                                            value="<%= searchConditions.additionalTicketText %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>予約日時</label>
-
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="bookingTimeRange"
-                                                id="bookingTimeRange"
-                                                value="<%= (searchConditions.bookingFrom !== undefined) ? `${moment(searchConditions.bookingFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.bookingThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>更新日時</label>
-
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="modifiedTimeRange"
-                                                id="modifiedTimeRange"
-                                                value="<%= (searchConditions.modifiedFrom !== undefined) ? `${moment(searchConditions.modifiedFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.modifiedThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>予約ステータス</label>
-                                        <select multiple class="form-control" name="reservationStatuses[]" size="6">
-                                            <% Object.values(ReservationStatusType).forEach(function (reservationStatus) { %>
-                                            <% 
-                                            var selected = false;
-                                            selected = Array.isArray(searchConditions.reservationStatuses) && searchConditions.reservationStatuses.indexOf(reservationStatus) >= 0;
-                                            %>
-                                            <option value="<%= reservationStatus %>" <% if (selected) { %> selected
-                                                <% } %>>
-                                                <%= reservationStatus %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="reservationFor[ids]">予約イベントID</label>
-                                        <input type="text" class="form-control" id="reservationFor[ids]"
-                                            name="reservationFor[ids]" placeholder="予約イベントID"
-                                            value="<%= (Array.isArray(searchConditions.reservationFor.ids)) ? searchConditions.reservationFor.ids.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="reservationFor[name]">予約イベント名称</label>
-                                        <input type="text" class="form-control" id="reservationFor[name]"
-                                            name="reservationFor[name]" placeholder="予約イベント名称"
-                                            value="<%= searchConditions.reservationFor.name %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="reservationFor[superEvent][ids]">予約イベントシリーズID</label>
-                                        <input type="text" class="form-control" id="reservationFor[superEvent][ids]"
-                                            name="reservationFor[superEvent][ids]" placeholder="予約イベントシリーズID"
-                                            value="<%= (Array.isArray(searchConditions.reservationFor.superEvent.ids)) ? searchConditions.reservationFor.superEvent.ids.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>予約イベント開始日時</label>
-
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control"
-                                                name="reservationFor[startDateRange]"
-                                                id="reservationFor[startDateRange]"
-                                                value="<%= (searchConditions.reservationFor !== undefined && searchConditions.reservationFor.startFrom !== undefined) ? `${moment(searchConditions.reservationFor.startFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.reservationFor.startThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="reservedTicket[ticketedSeat][seatNumbers]">座席番号</label>
-                                        <input type="text" class="form-control"
-                                            id="reservedTicket[ticketedSeat][seatNumbers]"
-                                            name="reservedTicket[ticketedSeat][seatNumbers]" placeholder="座席番号"
-                                            value="<%= (Array.isArray(searchConditions.reservedTicket.ticketedSeat.seatNumbers)) ? searchConditions.reservedTicket.ticketedSeat.seatNumbers.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="reservedTicket[ticketType][ids]">券種ID</label>
-                                        <input type="text" class="form-control" id="reservedTicket[ticketType][ids]"
-                                            name="reservedTicket[ticketType][ids]" placeholder="券種ID"
-                                            value="<%= (Array.isArray(searchConditions.reservedTicket.ticketType.ids)) ? searchConditions.reservedTicket.ticketType.ids.join(',') : '' %>">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="underName[id]">チケットホルダーID</label>
-                                        <input type="text" class="form-control" id="underName[id]" name="underName[id]"
-                                            placeholder="チケットホルダーID" value="<%= searchConditions.underName.id %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[name]">Name</label>
-                                        <input type="text" class="form-control" id="underName[name]"
-                                            name="underName[name]" placeholder="もーしょん(正規表現使用可)"
-                                            value="<%= searchConditions.underName.name %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[familyName]">Family Name</label>
-                                        <input type="text" class="form-control" id="underName[familyName]"
-                                            name="underName[familyName]" placeholder="Family Name(正規表現使用可)"
-                                            value="<%= searchConditions.underName.familyName %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[givenName]">Given Name</label>
-                                        <input type="text" class="form-control" id="underName[givenName]"
-                                            name="underName[givenName]" placeholder="Given Name(正規表現使用可)"
-                                            value="<%= searchConditions.underName.givenName %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[email]">Email</label>
-                                        <input type="text" class="form-control" id="underName[email]"
-                                            name="underName[email]" placeholder="cinerino@example.com(正規表現使用可)"
-                                            value="<%= searchConditions.underName.email %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[telephone]">Telephone</label>
-                                        <input type="text" class="form-control" id="underName[telephone]"
-                                            name="underName[telephone]" placeholder="0312345678(正規表現使用可)"
-                                            value="<%= searchConditions.underName.telephone %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="underName[identifier]">識別子</label>
-                                        <input type="text" class="form-control" id="underName[identifier]"
-                                            name="underName[identifier]" placeholder="username:cinerino"
-                                            value="<%= (Array.isArray(searchConditions.underName.identifier.$all)) ? `${searchConditions.underName.identifier.$all[0].name}:${searchConditions.underName.identifier.$all[0].value}` : '' %>">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <div class="btn-group float-right">
-                                <button type="submit" class="btn btn-info float-right">検索</button>
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item search" href="#">検索</a>
-                                    <a class="dropdown-item downloadCSV" href="#">CSVダウンロード</a>
-                                    <a class="dropdown-item downloadJson" href="#">JSONダウンロード</a>
-                                    <!-- <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a> -->
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="card-body">
+                        <p class="text-center"><a target="_blank" href="<%= consoleUrl %>">Chevre Console</a>をご利用ください。
+                        </p>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
@@ -233,106 +47,7 @@
             <!--/.col (left) -->
         </div>
         <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="reservations-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID<br>Reservation Number<br>Reservation Status<br>Booking Time<br>Modified
-                                        Time<br>Additional
-                                        Ticket Text</th>
-                                    <th>Event</th>
-                                    <th>Price</th>
-                                    <th>Ticket</th>
-                                    <th>Under Name</th>
-                                    <th>Check In<br>Attend</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>ID<br>Reservation Number<br>Reservation Status<br>Booking Time<br>Modified
-                                        Time<br>Additional
-                                        Ticket Text</th>
-                                    <th>Event</th>
-                                    <th>Price</th>
-                                    <th>Ticket</th>
-                                    <th>Under Name</th>
-                                    <th>Check In<br>Attend</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
-<div class="modal" id="modal-underName-identifier" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modal-additionalProperty" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modal-price" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- DataTables -->
-<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
-
-<script src="/js/reservations/index.js"></script>
