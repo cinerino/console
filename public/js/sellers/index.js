@@ -24,15 +24,9 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
                     var html = ''
                         + '<span class="badge badge-light ' + data.typeOf + '">' + data.typeOf + '</span>'
                         + '<br><a href="/projects/' + PROJECT_ID + '/sellers/' + data.id + '">' + data.id + '</a>';
-
-                    if (Array.isArray(data.additionalProperty)) {
-                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAdditionalProperty" data-id="' + data.id + '">追加特性</a>';
-                    }
 
                     html += '';
 
@@ -143,6 +137,20 @@ $(function () {
                         numPolicy = data.hasMerchantReturnPolicy.length;
                     }
                     html += '<a href="javascript:void(0)" class="showReturnPolicy" data-id="' + data.id + '">' + numPolicy + ' ポリシー</a>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    if (Array.isArray(data.additionalProperty)) {
+                        html += '<a href="javascript:void(0)" class="showAdditionalProperty" data-id="' + data.id + '">表示</a>';
+                    }
+
+                    html += '';
 
                     return html;
                 }

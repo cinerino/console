@@ -27,8 +27,17 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.orderNumber + '">' + data.orderNumber + '</a>';
 
+                    return html;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
                     if (Array.isArray(data.identifier)) {
-                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showIdentifier" data-orderNumber="' + data.orderNumber + '">識別子</a>';
+                        html += '<a href="javascript:void(0)" class="showIdentifier" data-orderNumber="' + data.orderNumber + '">表示</a>';
                     }
 
                     return html;
@@ -132,7 +141,7 @@ $(function () {
                         numItems = data.acceptedOffers.length;
                     }
 
-                    return '<span>' + numItems + ' items</span>';
+                    return '<span>' + numItems + '</span>';
                 }
             },
             {
