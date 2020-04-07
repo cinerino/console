@@ -35,7 +35,7 @@ reservationsRouter.get(
                 = {
                 limit: req.query.limit,
                 page: req.query.page,
-                sort: { modifiedTime: cinerinoapi.factory.sortType.Descending },
+                // sort: { bookingTime: cinerinoapi.factory.sortType.Descending },
                 typeOf: cinerinoapi.factory.chevre.reservationType.EventReservation,
                 underName: {
                     id: (req.query.underName !== undefined && req.query.underName.id !== '')
