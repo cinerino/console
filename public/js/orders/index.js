@@ -17,6 +17,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -187,6 +188,18 @@ $(function () {
         ]
     });
 
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
+    });
+
+    // $('.btn.search')
+    //     .popover({
+    //         title: '検索方法',
+    //         content: 'ドロップダウンメニューから出力フォーマットを選択できます。ストリーミングダウンロードの場合、全件出力が可能です。',
+    //         placement: 'top',
+    //         trigger: 'hover'
+    //     });
+
     // Date range picker
     $('#orderDateRange,#reservationForInSessionRange').daterangepicker({
         autoUpdateInput: false,
@@ -210,40 +223,32 @@ $(function () {
         $(this).val('');
     });
 
-    $('.search').click(function () {
-        $('form').submit();
-    });
-
-    $('.downloadCSV').click(function () {
+    $(document).on('click', '.downloadCSV', function () {
         // ストリーミングの場合
         // var url = '/projects/' + PROJECT_ID + '/orders?' + $('form').serialize() + '&format=text/csv';
         // window.open(url, '_blank');
 
         // レポート作成タスク追加
-        var conditions = $('form').serializeArray();
+        var conditions = $('form.search').serializeArray();
         openCreateReportForm(conditions, 'text/csv');
+
+        return false;
     });
-    $('.downloadJson').click(function () {
+    $(document).on('click', '.downloadJson', function () {
         // ストリーミングの場合
         // var url = '/projects/' + PROJECT_ID + '/orders?' + $('form').serialize() + '&format=application/json';
         // window.open(url, '_blank');
 
         // レポート作成タスク追加
-        var conditions = $('form').serializeArray();
+        var conditions = $('form.search').serializeArray();
         openCreateReportForm(conditions, 'application/json');
+
+        return false;
     });
 
     $('#modal-createReport .submit').click(function () {
         createOrderReportTask();
     });
-
-    $('form .card-footer button.search')
-        .popover({
-            title: '検索方法',
-            content: 'ドロップダウンメニューから出力フォーマットを選択できます。ストリーミングダウンロードの場合、全件出力が可能です。',
-            placement: 'top',
-            trigger: 'hover'
-        });
 
     $(document).on('click', '.showIdentifier', function () {
         showIdentifier($(this).data('ordernumber'));

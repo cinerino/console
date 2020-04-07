@@ -30,32 +30,39 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                            <a class="btn btn-default btn-sm downloadCSV" href="#">
+                                <i class="fa fa-download"></i>&nbsp;&nbsp;CSV</a>
+                            <a class="btn btn-default btn-sm downloadJson" href="#">
+                                <i class="fa fa-download"></i>&nbsp;&nbsp;JSON</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="confirmationNumbers">確認番号</label>
-                                    <input type="text" class="form-control" id="confirmationNumbers"
+                                    <input type="text" class="form-control form-control-sm" id="confirmationNumbers"
                                         name="confirmationNumbers" placeholder="確認番号"
                                         value="<%= (Array.isArray(searchConditions.confirmationNumbers)) ? searchConditions.confirmationNumbers.join(',') : '' %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="orderNumbers">注文番号</label>
-                                    <input type="text" class="form-control" id="orderNumbers" name="orderNumbers"
-                                        placeholder="注文番号"
+                                    <input type="text" class="form-control form-control-sm" id="orderNumbers"
+                                        name="orderNumbers" placeholder="注文番号"
                                         value="<%= (Array.isArray(searchConditions.orderNumbers)) ? searchConditions.orderNumbers.join(',') : '' %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>注文ステータス</label>
-                                    <select class="form-control" name="orderStatus">
+                                    <select class="form-control form-control-sm" name="orderStatus">
                                         <option value="">---</option>
                                         <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
                                         <% 
@@ -71,7 +78,7 @@
 
                                 <div class="form-group col-md-2">
                                     <label>アプリケーション</label>
-                                    <select class="form-control" name="customer[userPoolClient]">
+                                    <select class="form-control form-control-sm" name="customer[userPoolClient]">
                                         <option value="">---</option>
                                         <% applications.forEach(function (application) { %>
                                         <% 
@@ -90,7 +97,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>販売者</label>
-                                    <select class="form-control" name="seller[id]">
+                                    <select class="form-control form-control-sm" name="seller[id]">
                                         <option value="">---</option>
                                         <% sellers.forEach(function (seller) { %>
                                         <% 
@@ -105,7 +112,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>決済方法</label>
-                                    <select class="form-control" name="paymentMethods[typeOf]">
+                                    <select class="form-control form-control-sm" name="paymentMethods[typeOf]">
                                         <option value="">---</option>
                                         <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
                                         <%
@@ -123,7 +130,8 @@
                             </div>
 
                             <div class="text-center"><a class="" data-toggle="collapse" href=".advanced" role="button"
-                                    aria-expanded="false"><i class="fa fa-angle-double-down"></i></a></div>
+                                    aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
+                            </div>
 
                             <div class="advanced collapse">
                                 <div class="form-row">
@@ -136,8 +144,8 @@
                                                     <i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="orderDateRange"
-                                                id="orderDateRange"
+                                            <input type="text" class="form-control form-control-sm"
+                                                name="orderDateRange" id="orderDateRange"
                                                 value="<%= (searchConditions.orderDateFrom !== undefined) ? `${moment(searchConditions.orderDateFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.orderDateThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                         </div>
                                         <!-- /.input group -->
@@ -145,7 +153,7 @@
 
                                     <div class="form-group col-md-2">
                                         <label for="identifier[$in]">注文識別子</label>
-                                        <input type="text" class="form-control" id="identifier[$in]"
+                                        <input type="text" class="form-control form-control-sm" id="identifier[$in]"
                                             name="identifier[$in]" placeholder="confirmationPass:cinerino"
                                             value="<%= (Array.isArray(searchConditions.identifier.$in)) ? `${searchConditions.identifier.$in[0].name}:${searchConditions.identifier.$in[0].value}` : '' %>">
                                     </div>
@@ -153,17 +161,17 @@
                                     <div class="form-group col-md-2">
                                         <label for="price[$gte]">注文金額</label>
 
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="price[$gte]" name="price[$gte]"
-                                                placeholder="1000"
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control form-control-sm" id="price[$gte]"
+                                                name="price[$gte]" placeholder="1000"
                                                 value="<%= (searchConditions.price.$gte !== undefined) ? searchConditions.price.$gte : '' %>">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     円以上
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" id="price[$lte]" name="price[$lte]"
-                                                placeholder="2000"
+                                            <input type="text" class="form-control form-control-sm" id="price[$lte]"
+                                                name="price[$lte]" placeholder="2000"
                                                 value="<%= (searchConditions.price.$lte !== undefined) ? searchConditions.price.$lte : '' %>">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
@@ -175,20 +183,23 @@
 
                                     <div class="form-group col-md-2">
                                         <label for="paymentMethods[accountIds]">決済アカウントID</label>
-                                        <input type="text" class="form-control" id="paymentMethods[accountIds]"
-                                            name="paymentMethods[accountIds]" placeholder="************1111、口座番号、購入管理番号"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="paymentMethods[accountIds]" name="paymentMethods[accountIds]"
+                                            placeholder="************1111、口座番号、購入管理番号"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.accountIds)) ? searchConditions.paymentMethods.accountIds.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="paymentMethods[paymentMethodIds]">決済ID</label>
-                                        <input type="text" class="form-control" id="paymentMethods[paymentMethodIds]"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="paymentMethods[paymentMethodIds]"
                                             name="paymentMethods[paymentMethodIds]"
                                             placeholder="GMOオーダーID、購入管理番号など(カンマ区切り)"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="acceptedOffers[itemOffered][ids]">注文アイテムID</label>
-                                        <input type="text" class="form-control" id="acceptedOffers[itemOffered][ids]"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="acceptedOffers[itemOffered][ids]"
                                             name="acceptedOffers[itemOffered][ids]" placeholder="アイテムID(予約IDなど)"
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.ids)) ? searchConditions.acceptedOffers.itemOffered.ids.join(',') : '' %>">
                                     </div>
@@ -196,53 +207,62 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <label for="customer[membershipNumbers]">Username</label>
-                                        <input type="text" class="form-control" id="customer[membershipNumbers]"
-                                            name="customer[membershipNumbers]" placeholder="username1234"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[membershipNumbers]" name="customer[membershipNumbers]"
+                                            placeholder="username1234"
                                             value="<%= (Array.isArray(searchConditions.customer.memberOf.membershipNumber.$in)) ? searchConditions.customer.memberOf.membershipNumber.$in.join(',') : '' %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="customer[ids]">User ID</label>
-                                        <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
-                                            placeholder="Customer ID"
+                                        <input type="text" class="form-control form-control-sm" id="customer[ids]"
+                                            name="customer[ids]" placeholder="Customer ID"
                                             value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="customer[familyName][$eq]">Family Name</label>
-                                        <input type="text" class="form-control" id="customer[familyName][$eq]"
-                                            name="customer[familyName][$eq]" placeholder="もーしょん(完全一致)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[familyName][$eq]" name="customer[familyName][$eq]"
+                                            placeholder="もーしょん(完全一致)"
                                             value="<%= searchConditions.customer.familyName.$eq %>">
-                                        <input type="text" class="form-control" id="customer[familyName][$regex]"
-                                            name="customer[familyName][$regex]" placeholder="^もーしょん(正規表現)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[familyName][$regex]" name="customer[familyName][$regex]"
+                                            placeholder="^もーしょん(正規表現)"
                                             value="<%= searchConditions.customer.familyName.$regex %>">
                                     </div>
 
                                     <div class="form-group col-md-2">
                                         <label for="customer[givenName][$eq]">Given Name</label>
-                                        <input type="text" class="form-control" id="customer[givenName][$eq]"
-                                            name="customer[givenName][$eq]" placeholder="たろう(完全一致)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[givenName][$eq]" name="customer[givenName][$eq]"
+                                            placeholder="たろう(完全一致)"
                                             value="<%= searchConditions.customer.givenName.$eq %>">
-                                        <input type="text" class="form-control" id="customer[givenName][$regex]"
-                                            name="customer[givenName][$regex]" placeholder="^たろう(正規表現)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[givenName][$regex]" name="customer[givenName][$regex]"
+                                            placeholder="^たろう(正規表現)"
                                             value="<%= searchConditions.customer.givenName.$regex %>">
                                     </div>
 
                                     <div class="form-group col-md-2">
                                         <label for="customer[email][$eq]">Email</label>
-                                        <input type="text" class="form-control" id="customer[email][$eq]"
-                                            name="customer[email][$eq]" placeholder="cinerino@example.com(完全一致)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[email][$eq]" name="customer[email][$eq]"
+                                            placeholder="cinerino@example.com(完全一致)"
                                             value="<%= searchConditions.customer.email.$eq %>">
-                                        <input type="text" class="form-control" id="customer[email][$regex]"
-                                            name="customer[email][$regex]" placeholder="^cinerino(正規表現)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[email][$regex]" name="customer[email][$regex]"
+                                            placeholder="^cinerino(正規表現)"
                                             value="<%= searchConditions.customer.email.$regex %>">
                                     </div>
 
                                     <div class="form-group col-md-2">
                                         <label for="customer[telephone][$eq]">Telephone</label>
-                                        <input type="text" class="form-control" id="customer[telephone][$eq]"
-                                            name="customer[telephone][$eq]" placeholder="+819012345678(完全一致)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[telephone][$eq]" name="customer[telephone][$eq]"
+                                            placeholder="+819012345678(完全一致)"
                                             value="<%= searchConditions.customer.telephone.$eq %>">
-                                        <input type="text" class="form-control" id="customer[telephone][$regex]"
-                                            name="customer[telephone][$regex]" placeholder="^\+81901234(正規表現)"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[telephone][$regex]" name="customer[telephone][$regex]"
+                                            placeholder="^\+81901234(正規表現)"
                                             value="<%= searchConditions.customer.telephone.$regex %>">
                                     </div>
 
@@ -254,8 +274,9 @@
                                         }
                                         %>
                                         <label for="customer[identifiers]">ユーザー識別子</label>
-                                        <input type="text" class="form-control" id="customer[identifiers]"
-                                            name="customer[identifiers]" placeholder="username:cinerino"
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[identifiers]" name="customer[identifiers]"
+                                            placeholder="username:cinerino"
                                             value="<%= (customerIdentifiers.length > 0) ? `${customerIdentifiers[0].name}:${customerIdentifiers[0].value}` : '' %>">
                                     </div>
 
@@ -264,14 +285,14 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <label for="acceptedOffers[itemOffered][reservationNumbers]">予約番号</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control form-control-sm"
                                             id="acceptedOffers[itemOffered][reservationNumbers]"
                                             name="acceptedOffers[itemOffered][reservationNumbers]" placeholder="予約番号"
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.reservationNumbers)) ? searchConditions.acceptedOffers.itemOffered.reservationNumbers.join(',') : '' %>">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="acceptedOffers[itemOffered][reservationFor][ids]">予約イベントID</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control form-control-sm"
                                             id="acceptedOffers[itemOffered][reservationFor][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][ids]"
                                             placeholder="予約イベントID"
@@ -279,7 +300,7 @@
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="acceptedOffers[itemOffered][reservationFor][name]">予約イベント名称</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control form-control-sm"
                                             id="acceptedOffers[itemOffered][reservationFor][name]"
                                             name="acceptedOffers[itemOffered][reservationFor][name]"
                                             placeholder="予約イベント名称"
@@ -294,8 +315,9 @@
                                                     <i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="reservationForInSessionRange"
-                                                id="reservationForInSessionRange" value="<%= (searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom !== undefined)
+                                            <input type="text" class="form-control form-control-sm"
+                                                name="reservationForInSessionRange" id="reservationForInSessionRange"
+                                                value="<%= (searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom !== undefined)
                                                 ? `${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionThrough).format('YYYY-MM-DDTHH:mm:ssZ')}`
                                                 : '' %>">
                                         </div>
@@ -304,7 +326,7 @@
                                     <div class="form-group col-md-2">
                                         <label
                                             for="acceptedOffers[itemOffered][reservationFor][superEvent][ids]">予約イベントシリーズID</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control form-control-sm"
                                             id="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][ids]"
                                             placeholder="予約イベントシリーズID"
@@ -314,7 +336,7 @@
                                     <div class="form-group col-md-2">
                                         <label
                                             for="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]">予約作品コード</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control form-control-sm"
                                             id="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             name="acceptedOffers[itemOffered][reservationFor][superEvent][workPerformed][identifiers]"
                                             placeholder="予約作品コード"
@@ -322,67 +344,34 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <div class="btn-group float-right">
-                                <button type="button" class="btn btn-info search">検索</button>
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item search" href="#">検索</a>
-                                    <a class="dropdown-item downloadCSV" href="#"><i class="fa fa-download"></i>
-                                        CSV</a>
-                                    <a class="dropdown-item downloadJson" href="#"><i class="fa fa-download"></i>
-                                        JSON</a>
-                                    <!-- <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a> -->
-                                </div>
-                            </div>
-                            <!-- <button type="submit" class="btn btn-secondary float-right">検索</button> -->
+                        <div class="table-responsive">
+                            <table id="orders-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>注文番号</th>
+                                        <th>確認番号</th>
+                                        <th>ステータス</th>
+                                        <th>注文日時</th>
+                                        <th>返品日時</th>
+                                        <th>Customer</th>
+                                        <th>Seller</th>
+                                        <th>Price</th>
+                                        <th>Items</th>
+                                        <th>決済方法</th>
+                                        <th>返品者</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="orders-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>注文番号</th>
-                                    <th>確認番号</th>
-                                    <th>ステータス</th>
-                                    <th>注文日時</th>
-                                    <th>返品日時</th>
-                                    <th>Customer</th>
-                                    <th>Seller</th>
-                                    <th>Price</th>
-                                    <th>Items</th>
-                                    <th>決済方法</th>
-                                    <th>返品者</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>
@@ -435,18 +424,18 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="reportName">レポート名称</label>
-                    <input class="form-control" type="text" name="reportName" placeholder="レポート名称">
+                    <input class="form-control form-control-sm" type="text" name="reportName" placeholder="レポート名称">
                 </div>
                 <div class="form-group">
                     <label for="recipientEmail">通知先メールアドレス</label>
-                    <input class="form-control" type="text" name="recipientEmail" placeholder="通知先メールアドレス">
+                    <input class="form-control form-control-sm" type="text" name="recipientEmail"
+                        placeholder="通知先メールアドレス">
                 </div>
                 <input type="hidden" name="format">
                 <input type="hidden" name="orderDateRange">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
-                <!-- <button type="submit" class="btn btn-primary">更新</button> -->
                 <button type="button" class="btn btn-primary submit" data-dismiss="modal">作成する</button>
             </div>
         </div>

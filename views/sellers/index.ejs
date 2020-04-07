@@ -29,64 +29,56 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm" target="_blank"
+                                href="/projects/<%= req.project.id %>/sellers/new">
+                                <i class="fa fa-plus"></i>&nbsp;&nbsp;作成</a>
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                        </div>
+                    </div>
                     <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="name">名称</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="名称"
-                                    value="<%= searchConditions.name %>">
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="name">名称</label>
+                                    <input type="text" class="form-control form-control-sm" id="name" name="name"
+                                        placeholder="名称" value="<%= searchConditions.name %>">
+                                </div>
                             </div>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="sellers-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>名称</th>
+                                        <th>Tel</th>
+                                        <th>URL</th>
+                                        <th>Location</th>
+                                        <th>対応決済方法</th>
+                                        <th>オファー</th>
+                                        <th>Area Served</th>
+                                        <th>返品ポリシー</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            <button type="button" class="btn btn-primary"
-                                onclick="location.href='/projects/<%= req.project.id %>/sellers/new'">
-                                <i class="fa fa-plus"></i> 販売者追加</button>
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
-                        </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="sellers-table" class="table table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>名称</th>
-                                    <th>Tel</th>
-                                    <th>URL</th>
-                                    <th>Location</th>
-                                    <th>対応決済方法</th>
-                                    <th>オファー</th>
-                                    <th>Area Served</th>
-                                    <th>返品ポリシー</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>

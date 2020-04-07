@@ -2,6 +2,11 @@ $(function () {
     var table = $("#sellers-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -11,6 +16,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']],
         ordering: false,
@@ -142,6 +148,10 @@ $(function () {
                 }
             }
         ]
+    });
+
+    $(document).on('click', '.btn.search', function () {
+        $('form').submit();
     });
 
     $(document).on('click', '.showAdditionalProperty', function () {
