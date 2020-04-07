@@ -250,12 +250,12 @@ ordersRouter.get(
                                 && req.query.acceptedOffers.itemOffered.reservationFor.name !== '')
                                 ? req.query.acceptedOffers.itemOffered.reservationFor.name
                                 : undefined,
-                            inSessionFrom: (req.query.reservationForInSessionRange !== undefined
+                            startFrom: (req.query.reservationForInSessionRange !== undefined
                                 && req.query.reservationForInSessionRange !== '')
                                 ? moment(req.query.reservationForInSessionRange.split(' - ')[0])
                                     .toDate()
                                 : undefined,
-                            inSessionThrough: (req.query.reservationForInSessionRange !== undefined
+                            startThrough: (req.query.reservationForInSessionRange !== undefined
                                 && req.query.reservationForInSessionRange !== '')
                                 ? moment(req.query.reservationForInSessionRange.split(' - ')[1])
                                     .toDate()
@@ -380,9 +380,12 @@ ordersRouter.get(
 ordersRouter.post(
     '/createOrderReport',
     ...[
-        body('orderDateRange')
-            .not()
-            .isEmpty(),
+        // body('orderDateRange')
+        //     .not()
+        //     .isEmpty(),
+        // body('reservationForInSessionRange')
+        //     .not()
+        //     .isEmpty(),
         body('format')
             .not()
             .isEmpty(),
@@ -394,6 +397,7 @@ ordersRouter.post(
             .isEmail()
     ],
     validator,
+    // tslint:disable-next-line:max-func-body-length
     async (req, res, next) => {
         try {
             const taskService = new cinerinoapi.service.Task({
@@ -402,13 +406,27 @@ ordersRouter.post(
                 project: { id: req.project.id }
             });
 
-            const orderDateFrom = moment(req.body.orderDateRange.split(' - ')[0])
-                .toDate();
-            const orderDateThrough = moment(req.body.orderDateRange.split(' - ')[1])
-                .toDate();
+            let orderDateFrom: Date | undefined;
+            let orderDateThrough: Date | undefined;
+            let eventStartFrom: Date | undefined;
+            let eventStartThrough: Date | undefined;
+
+            if (typeof req.body.orderDateRange === 'string' && req.body.orderDateRange.length > 0) {
+                orderDateFrom = moment(req.body.orderDateRange.split(' - ')[0])
+                    .toDate();
+                orderDateThrough = moment(req.body.orderDateRange.split(' - ')[1])
+                    .toDate();
+            }
+            if (typeof req.body.reservationForInSessionRange === 'string' && req.body.reservationForInSessionRange.length > 0) {
+                eventStartFrom = moment(req.body.reservationForInSessionRange.split(' - ')[0])
+                    .toDate();
+                eventStartThrough = moment(req.body.reservationForInSessionRange.split(' - ')[1])
+                    .toDate();
+            }
+
             const reportName = req.body.reportName;
             const expires = moment()
-                .add(1, 'hour')
+                .add(1, 'day')
                 .toDate();
             const recipientEmail = (typeof req.body.recipientEmail === 'string' && req.body.recipientEmail.length > 0)
                 ? req.body.recipientEmail
@@ -439,8 +457,16 @@ ordersRouter.post(
                         mentions: {
                             typeOf: 'SearchAction',
                             query: {
-                                orderDateFrom: orderDateFrom,
-                                orderDateThrough: orderDateThrough
+                                ...(orderDateFrom instanceof Date) ? { orderDateFrom } : undefined,
+                                ...(orderDateThrough instanceof Date) ? { orderDateThrough } : undefined,
+                                acceptedOffers: {
+                                    itemOffered: {
+                                        reservationFor: {
+                                            ...(eventStartFrom instanceof Date) ? { startFrom: eventStartFrom } : undefined,
+                                            ...(eventStartThrough instanceof Date) ? { startThrough: eventStartThrough } : undefined
+                                        }
+                                    }
+                                }
                             },
                             object: {
                                 typeOf: 'Order'

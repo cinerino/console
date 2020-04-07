@@ -440,21 +440,28 @@ function openCreateReportForm(conditions, format) {
     var orderDateRangeElement = conditions.find(function (e) {
         return e.name === 'orderDateRange';
     });
-    if (orderDateRangeElement === undefined || typeof orderDateRangeElement.value !== 'string' || orderDateRangeElement.value.length === 0) {
-        alert('注文日時を指定してください');
+    var reservationForInSessionRangeElement = conditions.find(function (e) {
+        return e.name === 'reservationForInSessionRange';
+    });
+    if ((orderDateRangeElement === undefined || typeof orderDateRangeElement.value !== 'string' || orderDateRangeElement.value.length === 0)
+        && (reservationForInSessionRangeElement === undefined || typeof reservationForInSessionRangeElement.value !== 'string' || reservationForInSessionRangeElement.value.length === 0)) {
+        alert('注文日時あるいは予約イベント開催期間を指定してください');
 
         return;
     }
 
     var orderDateRange = orderDateRangeElement.value;
+    var reservationForInSessionRange = reservationForInSessionRangeElement.value;
 
-    var message = '[注文日時]<br>' + orderDateRange
+    var message = '[注文日時]　' + orderDateRange
+        + '<br>[予約イベント開始日時] ' + reservationForInSessionRange
         + '<br>の注文レポートを作成しようとしています。'
         + '<br>よろしいですか？';
     var modal = $('#modal-createReport');
     var title = message;
     modal.find('input[name=format]').val(format);
     modal.find('input[name=orderDateRange]').val(orderDateRange);
+    modal.find('input[name=reservationForInSessionRange]').val(reservationForInSessionRange);
     modal.find('.modal-title').html(title);
     modal.modal();
 }
@@ -462,6 +469,7 @@ function openCreateReportForm(conditions, format) {
 function createOrderReportTask() {
     var data = {
         orderDateRange: $('#modal-createReport input[name=orderDateRange]').val(),
+        reservationForInSessionRange: $('#modal-createReport input[name=reservationForInSessionRange]').val(),
         format: $('#modal-createReport input[name=format]').val(),
         reportName: $('#modal-createReport input[name=reportName]').val(),
         recipientEmail: $('#modal-createReport input[name=recipientEmail]').val()

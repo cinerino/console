@@ -239,12 +239,12 @@ ordersRouter.get('',
                             && req.query.acceptedOffers.itemOffered.reservationFor.name !== '')
                             ? req.query.acceptedOffers.itemOffered.reservationFor.name
                             : undefined,
-                        inSessionFrom: (req.query.reservationForInSessionRange !== undefined
+                        startFrom: (req.query.reservationForInSessionRange !== undefined
                             && req.query.reservationForInSessionRange !== '')
                             ? moment(req.query.reservationForInSessionRange.split(' - ')[0])
                                 .toDate()
                             : undefined,
-                        inSessionThrough: (req.query.reservationForInSessionRange !== undefined
+                        startThrough: (req.query.reservationForInSessionRange !== undefined
                             && req.query.reservationForInSessionRange !== '')
                             ? moment(req.query.reservationForInSessionRange.split(' - ')[1])
                                 .toDate()
@@ -348,9 +348,12 @@ ordersRouter.get('',
  * 注文レポート作成
  */
 ordersRouter.post('/createOrderReport', ...[
-    check_1.body('orderDateRange')
-        .not()
-        .isEmpty(),
+    // body('orderDateRange')
+    //     .not()
+    //     .isEmpty(),
+    // body('reservationForInSessionRange')
+    //     .not()
+    //     .isEmpty(),
     check_1.body('format')
         .not()
         .isEmpty(),
@@ -360,20 +363,34 @@ ordersRouter.post('/createOrderReport', ...[
     check_1.body('recipientEmail')
         .optional()
         .isEmail()
-], validator_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+], validator_1.default, 
+// tslint:disable-next-line:max-func-body-length
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const taskService = new cinerinoapi.service.Task({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
-        const orderDateFrom = moment(req.body.orderDateRange.split(' - ')[0])
-            .toDate();
-        const orderDateThrough = moment(req.body.orderDateRange.split(' - ')[1])
-            .toDate();
+        let orderDateFrom;
+        let orderDateThrough;
+        let eventStartFrom;
+        let eventStartThrough;
+        if (typeof req.body.orderDateRange === 'string' && req.body.orderDateRange.length > 0) {
+            orderDateFrom = moment(req.body.orderDateRange.split(' - ')[0])
+                .toDate();
+            orderDateThrough = moment(req.body.orderDateRange.split(' - ')[1])
+                .toDate();
+        }
+        if (typeof req.body.reservationForInSessionRange === 'string' && req.body.reservationForInSessionRange.length > 0) {
+            eventStartFrom = moment(req.body.reservationForInSessionRange.split(' - ')[0])
+                .toDate();
+            eventStartThrough = moment(req.body.reservationForInSessionRange.split(' - ')[1])
+                .toDate();
+        }
         const reportName = req.body.reportName;
         const expires = moment()
-            .add(1, 'hour')
+            .add(1, 'day')
             .toDate();
         const recipientEmail = (typeof req.body.recipientEmail === 'string' && req.body.recipientEmail.length > 0)
             ? req.body.recipientEmail
@@ -402,10 +419,11 @@ ordersRouter.post('/createOrderReport', ...[
                     about: reportName,
                     mentions: {
                         typeOf: 'SearchAction',
-                        query: {
-                            orderDateFrom: orderDateFrom,
-                            orderDateThrough: orderDateThrough
-                        },
+                        query: Object.assign(Object.assign(Object.assign({}, (orderDateFrom instanceof Date) ? { orderDateFrom } : undefined), (orderDateThrough instanceof Date) ? { orderDateThrough } : undefined), { acceptedOffers: {
+                                itemOffered: {
+                                    reservationFor: Object.assign(Object.assign({}, (eventStartFrom instanceof Date) ? { startFrom: eventStartFrom } : undefined), (eventStartThrough instanceof Date) ? { startThrough: eventStartThrough } : undefined)
+                                }
+                            } }),
                         object: {
                             typeOf: 'Order'
                         }
