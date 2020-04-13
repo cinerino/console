@@ -16,23 +16,9 @@ const eventsRouter = express.Router();
 
 eventsRouter.get(
     '/chevreBackend',
-    async (req, res, next) => {
+    async (__, res, next) => {
         try {
-            let url = '';
-
-            const projectService = new cinerinoapi.service.Project({
-                endpoint: req.project.settings.API_ENDPOINT,
-                auth: req.user.authClient
-            });
-            const settings = await projectService.getSettings({ id: req.project.id });
-
-            if (settings !== undefined
-                && settings.chevre !== undefined
-                && (<any>settings.chevre).backend !== undefined
-                && typeof (<any>settings.chevre).backend.url === 'string'
-            ) {
-                url = (<any>settings.chevre).backend.url;
-            }
+            const url = <string>process.env.CHEVRE_CONSOLE_URL;
 
             res.redirect(url);
         } catch (error) {

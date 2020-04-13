@@ -29,106 +29,17 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="agent[ids]">Customer ID</label>
-                                        <input type="text" class="form-control" id="agent[ids]" name="agent[ids]"
-                                            placeholder="Customer ID"
-                                            value="<%= (Array.isArray(searchConditions.agent.ids)) ? searchConditions.agent.ids.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="agent[familyName]"
-                                            name="agent[familyName]" placeholder="Family Name"
-                                            value="<%= searchConditions.agent.familyName %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="agent[givenName]"
-                                            name="agent[givenName]" placeholder="Given Name"
-                                            value="<%= searchConditions.agent.givenName %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="agent[email]" name="agent[email]"
-                                            placeholder="test@example.com" value="<%= searchConditions.agent.email %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="agent[telephone]"
-                                            name="agent[telephone]" placeholder="+819012345678"
-                                            value="<%= searchConditions.agent.telephone %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>販売者</label>
-                                        <select multiple class="form-control" name="seller[ids][]" size="6">
-                                            <% sellers.forEach(function (seller) { %>
-                                            <% var selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf(seller.id) >= 0; %>
-                                            <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
-                                                <%= seller.name.ja %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="result[order][orderNumbers]">注文番号</label>
-                                        <input type="text" class="form-control" id="result[order][orderNumbers]"
-                                            name="result[order][orderNumbers]" placeholder="注文番号"
-                                            value="<%= (Array.isArray(searchConditions.result.order.orderNumbers)) ? searchConditions.result.order.orderNumbers.join(',') : '' %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>取引開始日時</label>
-
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="startRange" id="startRange"
-                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                    <div class="form-group">
-                                        <label>ステータス</label>
-                                        <select multiple class="form-control" name="statuses[]">
-                                            <% Object.values(TransactionStatusType).forEach(function (transactionStatus) { %>
-                                            <% var selected = Array.isArray(searchConditions.statuses) && searchConditions.statuses.indexOf(transactionStatus) >= 0; %>
-                                            <option value="<%= transactionStatus %>" <% if (selected) { %> selected
-                                                <% } %>>
-                                                <%= transactionStatus %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>タスクエクスポートステータス</label>
-                                        <select multiple class="form-control" name="tasksExportationStatuses[]">
-                                            <% Object.values(TransactionTasksExportationStatus).forEach(function (status) { %>
-                                            <% var selected = Array.isArray(searchConditions.tasksExportationStatuses) && searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
-                                            <option value="<%= status %>" <% if (selected) { %> selected <% } %>>
-                                                <%= status %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <div class="btn-group float-right">
-                                <button type="button" class="btn btn-info search">検索</button>
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <!-- <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a> -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm search">検索</button>
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+                                    data-toggle="dropdown">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
@@ -141,50 +52,156 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>販売者</label>
+                                    <select multiple class=" form-control form-control-sm" name="seller[ids][]">
+                                        <% sellers.forEach(function (seller) { %>
+                                        <% var selected = Array.isArray(searchConditions.seller.ids) && searchConditions.seller.ids.indexOf(seller.id) >= 0; %>
+                                        <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                            <%= seller.name.ja %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="result[order][orderNumbers]">注文番号</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="result[order][orderNumbers]" name="result[order][orderNumbers]"
+                                        placeholder="注文番号"
+                                        value="<%= (Array.isArray(searchConditions.result.order.orderNumbers)) ? searchConditions.result.order.orderNumbers.join(',') : '' %>">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>開始日時</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm" name="startRange"
+                                            id="startRange"
+                                            value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>ステータス</label>
+                                    <select multiple class="form-control form-control-sm" name="statuses[]">
+                                        <% Object.values(TransactionStatusType).forEach(function (transactionStatus) { %>
+                                        <% var selected = Array.isArray(searchConditions.statuses) && searchConditions.statuses.indexOf(transactionStatus) >= 0; %>
+                                        <option value="<%= transactionStatus %>" <% if (selected) { %> selected <% } %>>
+                                            <%= transactionStatus %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>タスクステータス</label>
+                                    <select multiple class="form-control form-control-sm"
+                                        name="tasksExportationStatuses[]">
+                                        <% Object.values(TransactionTasksExportationStatus).forEach(function (status) { %>
+                                        <% var selected = Array.isArray(searchConditions.tasksExportationStatuses) && searchConditions.tasksExportationStatuses.indexOf(status) >= 0; %>
+                                        <option value="<%= status %>" <% if (selected) { %> selected <% } %>>
+                                            <%= status %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="text-center"><a class="" data-toggle="collapse" href=".advanced" role="button"
+                                    aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
+                            </div>
+
+                            <div class="advanced collapse">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="agent[ids]">Customer ID</label>
+                                        <input type="text" class="form-control form-control-sm" id="agent[ids]"
+                                            name="agent[ids]" placeholder="Customer ID"
+                                            value="<%= (Array.isArray(searchConditions.agent.ids)) ? searchConditions.agent.ids.join(',') : '' %>">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="agent[ids]">Family Name</label>
+                                        <input type="text" class="form-control form-control-sm" id="agent[familyName]"
+                                            name="agent[familyName]" placeholder="Family Name"
+                                            value="<%= searchConditions.agent.familyName %>">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="agent[ids]">Given Name</label>
+                                        <input type="text" class="form-control form-control-sm" id="agent[givenName]"
+                                            name="agent[givenName]" placeholder="Given Name"
+                                            value="<%= searchConditions.agent.givenName %>">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="agent[ids]">Email</label>
+                                        <input type="text" class="form-control form-control-sm" id="agent[email]"
+                                            name="agent[email]" placeholder="test@example.com"
+                                            value="<%= searchConditions.agent.email %>">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="agent[ids]">Telephone</label>
+                                        <input type="text" class="form-control form-control-sm" id="agent[telephone]"
+                                            name="agent[telephone]" placeholder="+819012345678"
+                                            value="<%= searchConditions.agent.telephone %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="transactions-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ステータス</th>
+                                        <th>開始</th>
+                                        <th>終了</th>
+                                        <th>期限</th>
+                                        <th>agent</th>
+                                        <th>販売者</th>
+                                        <th>結果</th>
+                                        <th>所要時間</th>
+                                        <th>タスクステータス</th>
+                                        <th>タスクエクスポート</th>
+                                        <th>タスクレイテンシ</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="modal" id="modal-transaction" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="transactions-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID<br>Status<br>Start / End / Expires</th>
-                                    <th>Customer</th>
-                                    <th>Seller</th>
-                                    <th>Result</th>
-                                    <th>Export Task</th>
-                                    <th>Required Time<br>Task Latency</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>ID<br>Status<br>Start / End / Expires</th>
-                                    <th>Customer</th>
-                                    <th>Seller</th>
-                                    <th>Result</th>
-                                    <th>Export Task</th>
-                                    <th>Required Time<br>Task Latency</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>

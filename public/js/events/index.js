@@ -3,6 +3,11 @@ $(function () {
     var table = $("#events-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -23,6 +28,7 @@ $(function () {
                 alert(message);
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -58,13 +64,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.startDate;
+                    return moment(data.startDate).utc().format();
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.endDate;
+                    return moment(data.endDate).utc().format();
                 }
             },
             {
@@ -86,8 +92,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-secondary ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span>'
-                        + '<br>' + data.superEvent.id;
+                    var html = '<span class="badge badge-secondary ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span>';
 
                     html += '<br><a href="javascript:void(0)" class="showSuperEvent" data-id="' + data.id + '">' + data.superEvent.name.ja + '</a>';
 
@@ -97,8 +102,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-secondary ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span>'
-                        + '<br>' + data.workPerformed.id;
+                    var html = '<span class="badge badge-secondary ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span>';
 
                     html += '<br><a href="javascript:void(0)" class="showWorkPerformed" data-id="' + data.id + '">' + data.workPerformed.name + '</a>';
 
@@ -120,6 +124,10 @@ $(function () {
                 }
             }
         ]
+    });
+
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
     });
 
     // Date range picker
@@ -167,7 +175,7 @@ $(function () {
     }
 
     // イベント在庫仕入れ
-    $('button.importScreeningEvents').click(function () {
+    $('a.importScreeningEvents').click(function () {
         var selectedSellerNames = [];
         $('select[name="seller[ids][]"] option:selected').each(function () {
             selectedSellerNames.push($(this).text());
@@ -209,7 +217,7 @@ $(function () {
     });
 
     // イベント管理
-    $('button.updateEvents').click(function () {
+    $('a.updateEvents').click(function () {
         var url = $('input[name="chevreBackendEndpoint"]').val()
         window.open(url);
     });

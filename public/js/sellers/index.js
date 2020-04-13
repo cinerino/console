@@ -84,12 +84,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = ''
-                        + data.paymentAccepted.map(function (payment) {
-                            return '<span class="mr-1 badge badge-light ' + payment.paymentMethodType + '">' + payment.paymentMethodType + '</span>';
-                        }).join('');
+                    var numPaymentMethods = 0;
+                    if (Array.isArray(data.paymentAccepted)) {
+                        numPaymentMethods = data.paymentAccepted.length;
+                    }
+                    var html = '';
 
-                    html += '<br><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showPaymentAccepted" data-id="' + data.id + '">詳しく</a>';
+                    html += '<a href="javascript:void(0)" class="showPaymentAccepted" data-id="' + data.id + '">' + numPaymentMethods + '</a>';
 
                     return html;
                 }
@@ -107,13 +108,11 @@ $(function () {
                                 branchCode = offer.itemOffered.reservationFor.location.branchCode;
                             }
 
-                            return '<span class="mr-1 badge badge-light">' + offer.offeredThrough.identifier + '</span>' + branchCode + '';
+                            return '<span class="mr-1 badge badge-light">' + offer.offeredThrough.identifier + '</span>'
+                                + ' <a href="javascript:void(0)" class="showMakesOffer" data-id="' + data.id + '">' + branchCode + '</a>'
+                                + '';
                         }).join('')
                     }
-
-                    html += '<br><a href="javascript:void(0)" class="mt-2 btn btn-outline-primary btn-sm showMakesOffer" data-id="' + data.id + '">詳しく</a>'
-
-                    html += '';
 
                     return html;
                 }

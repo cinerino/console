@@ -1,7 +1,14 @@
+var table;
+
 $(function () {
-    $("#transactions-table").DataTable({
+    table = $("#transactions-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -11,6 +18,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -20,14 +28,41 @@ $(function () {
                 render: function (data, type, row) {
                     var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
 
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/placeOrder/' + data.id + '">' + data.id + '</a></li>'
-                        + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
-                        + '<li>' + data.startDate + '</li>'
-                        + '<li>' + data.endDate + '</li>'
-                        + '<li>' + data.expires + '</li>'
-                        + '</ul>';
+                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/placeOrder/' + data.id + '">' + data.id + '</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<span class="badge ' + data.status + '">' + data.status + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return moment(data.startDate).utc().format();
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var endDate = '';
+                    if (typeof data.endDate === 'string') {
+                        endDate = moment(data.endDate).utc().format();
+                    }
+
+                    return endDate;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var expires = '';
+                    if (typeof data.expires === 'string') {
+                        expires = moment(data.expires).utc().format();
+                    }
+
+                    return expires;
                 }
             },
             {
@@ -50,18 +85,12 @@ $(function () {
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
 
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>'
-                        + '<li><span class="badge badge-warning">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span></li>'
-                        + '<li>'
-                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
-                        + '</li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.agent.id + '</a></li>'
-                        + '<li>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</li>'
-                        + '<li>' + String(data.agent.email) + '</li>'
-                        + '<li>' + String(data.agent.telephone) + '</li>';
+                    var html = '<a target="_blank" href="' + url + '"><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></a>'
+                        + ' <span class="badge badge-warning">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span>'
+                        + '<br><a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
+                        + '<br><a href="javscript:void(0);" class="showAgent" data-id="' + data.id + '">' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</a>';
 
-                    html += '</ul>';
+                    html += '';
 
                     return html;
                 }
@@ -70,12 +99,8 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.seller.name.ja + '</a></li>'
-                        + '<li>' + data.seller.telephone + '</li>'
-                        + '<li>' + data.seller.url + '</li>'
-                        + '</ul>';
+                    var html = '<span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span>'
+                        + '<br><a target="_blank" href="' + url + '">' + data.seller.name.ja + '</a>';
 
                     return html;
                 }
@@ -84,36 +109,49 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     if (data.result !== undefined) {
-                        return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.result.order.orderNumber + '">' + data.result.order.orderNumber + '</a></li>'
-                            + '</ul>';
+                        return '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.result.order.orderNumber + '">' + data.result.order.orderNumber + '</a>';
                     } else {
-                        return '<ul class="list-unstyled">'
-                            + '<li>No Result</li>'
-                            + '</ul>';
+                        return 'No Result';
                     }
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span></li>'
-                        + '<li>' + data.tasksExportedAt + '</li>'
-                        + '</ul>';
+                    return '<span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
+                    var tasksExportedAt = '';
+                    if (typeof data.tasksExportedAt === 'string') {
+                        tasksExportedAt = moment(data.tasksExportedAt).utc().format();
+                    }
+
+                    return tasksExportedAt;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
 
                     if (data.endDate !== undefined) {
-                        html += '<li>' + moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s</li>';
-                        html += '<li>' + moment.duration(moment(data.tasksExportedAt).diff(data.endDate)).asMilliseconds() + ' ms</li>';
+                        html += moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s';
                     }
 
-                    html += '</ul>';
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    if (data.endDate !== undefined) {
+                        html += moment.duration(moment(data.tasksExportedAt).diff(data.endDate)).asMilliseconds() + ' ms';
+                    }
 
                     return html;
                 }
@@ -150,4 +188,28 @@ $(function () {
             trigger: 'hover'
         })
         .popover('show');
+
+    $(document).on('click', '.showAgent', function () {
+        showDetails($(this).data('id'), 'agent');
+    });
+
 });
+
+function showDetails(id, propertyName) {
+    var transactions = table
+        .rows()
+        .data()
+        .toArray();
+    var transaction = transactions.find(function (t) {
+        return t.id === id
+    })
+
+    var modal = $('#modal-transaction');
+    var title = 'Transaction `' + transaction.id + '`';
+    var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+        + JSON.stringify(transaction[propertyName], null, '\t')
+        + '</textarea>';
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}

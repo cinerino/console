@@ -29,16 +29,26 @@
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="card card-primary">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Quick Example</h3>
-                    </div> -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                            <a class="btn btn-default btn-sm importScreeningEvents" href="#">
+                                <i class="fa fa-plus"></i>&nbsp;&nbsp;在庫仕入れ from Chevre | COA</a>
+                            <a class="btn btn-default btn-sm updateEvents" href="#">
+                                <i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;在庫管理 by Chevre</a>
+                        </div>
+                    </div>
                     <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="get">
-                        <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint"
-                            value="/projects/<%= req.project.id %>/events/chevreBackend">
-                        <div class="card-body">
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
+                            <input type="hidden" class="form-control" id="backendUrl" name="chevreBackendEndpoint"
+                                value="/projects/<%= req.project.id %>/events/chevreBackend">
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label>開催日</label>
@@ -49,7 +59,8 @@
                                                 <i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control" name="startRange" id="reservation"
+                                        <input type="text" class="form-control form-control-sm" name="startRange"
+                                            id="reservation"
                                             value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
                                     <!-- /.input group -->
@@ -57,18 +68,18 @@
 
                                 <div class="form-group col-md-2">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name"
-                                        value="<%= searchConditions.name %>">
+                                    <input type="text" class="form-control form-control-sm" id="name" name="name"
+                                        placeholder="Name" value="<%= searchConditions.name %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label>Event Status</label>
-                                    <select multiple class="form-control" name="eventStatuses[]">
+                                    <select multiple class="form-control form-control-sm" name="eventStatuses[]">
                                         <% Object.values(EventStatusType).forEach(function (eventStatus) { %>
                                         <% 
-                                            var selected = false;
-                                            selected = Array.isArray(searchConditions.eventStatuses) && searchConditions.eventStatuses.indexOf(eventStatus) >= 0;
-                                            %>
+                                                var selected = false;
+                                                selected = Array.isArray(searchConditions.eventStatuses) && searchConditions.eventStatuses.indexOf(eventStatus) >= 0;
+                                                %>
                                         <option value="<%= eventStatus %>" <% if (selected) { %> selected <% } %>>
                                             <%= eventStatus %>
                                         </option>
@@ -78,27 +89,75 @@
 
                                 <div class="form-group col-md-2">
                                     <label>販売者</label>
-                                    <select multiple class="form-control" name="seller[ids][]">
+                                    <select multiple class="form-control form-control-sm" name="seller[ids][]">
                                         <% sellers.forEach(function (seller) { %>
                                         <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
-                                            Array.isArray(searchConditions.seller.ids) &&
-                                            searchConditions.seller.ids.indexOf(seller.id)>=
-                                            0) ? 'selected' : '' %>><%= seller.name.ja %></option>
+                                                Array.isArray(searchConditions.seller.ids) &&
+                                                searchConditions.seller.ids.indexOf(seller.id)>=
+                                                0) ? 'selected' : '' %>><%= seller.name.ja %></option>
                                         <% }) %>
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            <button type="button" class="btn btn-primary importScreeningEvents">
-                                <i class="fa fa-plus"></i> 在庫仕入れ from Chevre | COA</button>
-                            <button type="button" class="btn btn-success updateEvents">
-                                <i class="fa fa-calendar-alt"></i> 在庫管理 by Chevre</button>
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        <div class="table-responsive">
+                            <table id="events-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Capacity</th>
+                                        <th>Location</th>
+                                        <th>Super Event</th>
+                                        <th>Work Performed</th>
+                                        <th>Offers</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="modal" id="modal-event" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modal-sm" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.card -->
 
@@ -106,76 +165,10 @@
             <!--/.col (left) -->
         </div>
         <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="events-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Capacity</th>
-                                    <th>Location</th>
-                                    <th>Super Event</th>
-                                    <th>Work Performed</th>
-                                    <th>Offers</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
-<div class="modal" id="modal-event" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-sm" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">

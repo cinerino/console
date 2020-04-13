@@ -22,20 +22,9 @@ const cinerinoapi = require("../cinerinoapi");
 const validator_1 = require("../middlewares/validator");
 const debug = createDebug('cinerino-console:routes:events');
 const eventsRouter = express.Router();
-eventsRouter.get('/chevreBackend', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+eventsRouter.get('/chevreBackend', (__, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let url = '';
-        const projectService = new cinerinoapi.service.Project({
-            endpoint: req.project.settings.API_ENDPOINT,
-            auth: req.user.authClient
-        });
-        const settings = yield projectService.getSettings({ id: req.project.id });
-        if (settings !== undefined
-            && settings.chevre !== undefined
-            && settings.chevre.backend !== undefined
-            && typeof settings.chevre.backend.url === 'string') {
-            url = settings.chevre.backend.url;
-        }
+        const url = process.env.CHEVRE_CONSOLE_URL;
         res.redirect(url);
     }
     catch (error) {
