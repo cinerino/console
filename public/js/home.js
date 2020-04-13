@@ -526,7 +526,7 @@ function createSalesAmountChart(datas) {
                     borderWidth: 1.5,
                     lineTension: 0,
                     spanGaps: true,
-                    borderColor: '#efefef',
+                    borderColor: '#007bff',
                     pointRadius: 0,
                     pointHoverRadius: 7,
                     pointColor: '#efefef',
@@ -550,7 +550,7 @@ function createSalesAmountChart(datas) {
                 xAxes: [{
                     type: 'time',
                     ticks: {
-                        fontColor: '#fff',
+                        fontColor: '#6c757d',
                         fontFamily: 'Open Sans',
                         fontSize: 10,
                         maxTicksLimit: 6,
@@ -562,7 +562,7 @@ function createSalesAmountChart(datas) {
                 yAxes: [{
                     ticks: {
                         // stepSize: 5000,
-                        fontColor: '#fff',
+                        fontColor: '#6c757d',
                         fontFamily: 'Open Sans',
                         fontSize: 10,
                         padding: 8,
@@ -695,7 +695,7 @@ function createNumOrderItemsChart(datas) {
                     borderWidth: 1.5,
                     lineTension: 0,
                     spanGaps: true,
-                    borderColor: '#efefef',
+                    borderColor: '#007bff',
                     pointRadius: 0,
                     pointHoverRadius: 7,
                     pointColor: '#efefef',
@@ -1201,7 +1201,7 @@ function updateWaiterChart() {
                     },
                     ticks: {
                         // maxTicksLimit: 6,
-                        fontColor: '#fff',
+                        fontColor: '#6c757d',
                         fontFamily: 'Open Sans',
                         fontSize: 10,
                     },
@@ -1214,16 +1214,16 @@ function updateWaiterChart() {
                         maxTicksLimit: 6,
                         min: 0,
                         // stepSize: 5000,
-                        fontColor: '#fff',
+                        fontColor: '#6c757d',
                         fontFamily: 'Open Sans',
                         fontSize: 10,
                         padding: 8,
                     },
                     gridLines: {
                         display: true,
-                        color: '#555c62',
-                        // color: '#efefef',
-                        zeroLineColor: '#555c62',
+                        // color: '#555c62',
+                        color: '#efefef',
+                        zeroLineColor: '#efefef',
                         lineWidth: 1,
                         drawBorder: false,
                     }

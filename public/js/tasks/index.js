@@ -51,14 +51,19 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.runsAt;
+                    return moment(data.runsAt).utc().format();
 
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.lastTriedAt;
+                    var html = '';
+                    if (typeof data.lastTriedAt === 'string') {
+                        html += moment(data.lastTriedAt).utc().format();
+                    }
+
+                    return html;
 
                 }
             },
