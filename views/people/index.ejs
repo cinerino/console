@@ -30,94 +30,97 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="id">ID</label>
-                                        <input type="text" class="form-control" id="id" name="id"
-                                            placeholder="ユーザーID(前方一致)" value="<%= searchConditions.id %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="username">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username"
-                                            placeholder="ユーザーネーム(前方一致)" value="<%= searchConditions.username %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="familyName">Family Name</label>
-                                        <input type="text" class="form-control" id="familyName" name="familyName"
-                                            placeholder="Family Name(前方一致)" value="<%= searchConditions.familyName %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="givenName">Given Name</label>
-                                        <input type="text" class="form-control" id="givenName" name="givenName"
-                                            placeholder="Given Name(前方一致)" value="<%= searchConditions.givenName %>">
-                                    </div>
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="id">ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="id" name="id"
+                                        placeholder="ユーザーID(前方一致)" value="<%= searchConditions.id %>">
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email"
-                                            placeholder="Email(前方一致)" value="<%= searchConditions.email %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telephone">Telephone</label>
-                                        <input type="text" class="form-control" id="telephone" name="telephone"
-                                            placeholder="Telephone(前方一致)" value="<%= searchConditions.telephone %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control form-control-sm" id="username"
+                                        name="username" placeholder="ユーザーネーム(前方一致)"
+                                        value="<%= searchConditions.username %>">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="familyName">Family Name</label>
+                                    <input type="text" class="form-control form-control-sm" id="familyName"
+                                        name="familyName" placeholder="Family Name(前方一致)"
+                                        value="<%= searchConditions.familyName %>">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="givenName">Given Name</label>
+                                    <input type="text" class="form-control form-control-sm" id="givenName"
+                                        name="givenName" placeholder="Given Name(前方一致)"
+                                        value="<%= searchConditions.givenName %>">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="email">Email</label>
+                                    <input type="text" class="form-control form-control-sm" id="email" name="email"
+                                        placeholder="Email(前方一致)" value="<%= searchConditions.email %>">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="telephone">Telephone</label>
+                                    <input type="text" class="form-control form-control-sm" id="telephone"
+                                        name="telephone" placeholder="Telephone(前方一致)"
+                                        value="<%= searchConditions.telephone %>">
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="people-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Telephone</th>
+                                        <th>Family Name</th>
+                                        <th>Given Name</th>
+                                        <th>Additional Property</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="modal" id="modal-person" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="people-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Profile</th>
-                                    <th>Additional Property</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Profile</th>
-                                    <th>Additional Property</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>

@@ -48,7 +48,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<span class="badge badge-secondary ' + data.typeOf + '">' + data.typeOf + '</span>'
+                    return '<span class="badge badge-light ' + data.typeOf + '">' + data.typeOf + '</span>'
                         + '<br>'
                         + '<a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + data.id + '">'
                         + data.name.ja
@@ -58,7 +58,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<span class="badge badge-secondary ' + data.eventStatus + '">' + data.eventStatus + '</span>';
+                    return '<span class="badge badge-light ' + data.eventStatus + '">' + data.eventStatus + '</span>';
                 }
             },
             {
@@ -82,7 +82,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-secondary ' + data.location.typeOf + '">' + data.location.typeOf + '</span>';
+                    var html = '<span class="badge badge-light ' + data.location.typeOf + '">' + data.location.typeOf + '</span>';
 
                     html += '<br><a href="javascript:void(0)" class="showLocation" data-id="' + data.id + '">' + data.location.name.ja + '</a>';
 
@@ -92,7 +92,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-secondary ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span>';
+                    var html = '<span class="badge badge-light ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span>';
 
                     html += '<br><a href="javascript:void(0)" class="showSuperEvent" data-id="' + data.id + '">' + data.superEvent.name.ja + '</a>';
 
@@ -102,7 +102,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-secondary ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span>';
+                    var html = '<span class="badge badge-light ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span>';
 
                     html += '<br><a href="javascript:void(0)" class="showWorkPerformed" data-id="' + data.id + '">' + data.workPerformed.name + '</a>';
 

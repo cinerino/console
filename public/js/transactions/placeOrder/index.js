@@ -118,6 +118,18 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var html = '';
+
+                    if (typeof data.endDate === 'string') {
+                        html += moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s';
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     return '<span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span>';
                 }
             },
@@ -137,19 +149,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '';
 
-                    if (data.endDate !== undefined) {
-                        html += moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s';
-                    }
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var html = '';
-
-                    if (data.endDate !== undefined) {
+                    if (typeof data.endDate === 'string') {
                         html += moment.duration(moment(data.tasksExportedAt).diff(data.endDate)).asMilliseconds() + ' ms';
                     }
 

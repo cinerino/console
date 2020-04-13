@@ -1,7 +1,14 @@
+var table;
+
 $(function () {
-    $("#people-table").DataTable({
+    table = $("#people-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -11,6 +18,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']],
         ordering: false,
@@ -18,18 +26,8 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-info">' + data.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/people/' + data.id + '">' + data.id + '</a></li>';
-                    if (data.memberOf !== undefined) {
-                        html += '<li><span class="badge badge-warning">' + ((data.memberOf.membershipNumber !== undefined) ? data.memberOf.membershipNumber : '') + '</span></li>';
-                    }
-
-                    html += '<li>' + data.familyName + ' ' + data.givenName + '</li>'
-                        + '<li>' + data.email + '</li>'
-                        + '<li>' + data.telephone + '</li>'
-
-                    html += '</ul>';
+                    var html = '<span class="badge badge-light">' + data.typeOf + '</span>'
+                        + '<br><a target="_blank" href="/projects/' + PROJECT_ID + '/people/' + data.id + '">' + data.id + '</a>';
 
                     return html;
                 }
@@ -37,20 +35,81 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
-
-                    if (Array.isArray(data.additionalProperty)) {
-                        data.additionalProperty.forEach(function (p) {
-                            html += '<li>' + '<span class="badge badge-secondary">' + p.name + '</span> ' + p.value.toString() + '</li>';
-                        });
+                    var html = ''
+                    if (data.memberOf !== undefined) {
+                        html += (data.memberOf.membershipNumber !== undefined) ? data.memberOf.membershipNumber : '';
                     }
 
-                    html += '</ul>';
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    html += data.email
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    html += data.telephone;
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    html += data.familyName;
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    html += data.givenName;
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    if (Array.isArray(data.additionalProperty)) {
+                        html += '<a href="javascript:void(0)" class="showAdditionalProperty" data-id="' + data.id + '">' + '表示</a>';
+                    }
+
+                    html += '';
 
                     return html;
                 }
             }
         ]
+    });
+
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
     });
 
     // Date range picker
@@ -61,4 +120,28 @@ $(function () {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
+
+    $(document).on('click', '.showAdditionalProperty', function () {
+        showDetails($(this).data('id'), 'additionalProperty');
+    });
+
 });
+
+function showDetails(id, propertyName) {
+    var people = table
+        .rows()
+        .data()
+        .toArray();
+    var person = people.find(function (p) {
+        return p.id === id
+    })
+
+    var modal = $('#modal-person');
+    var title = 'Person `' + person.id + '`';
+    var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+        + JSON.stringify(person[propertyName], null, '\t')
+        + '</textarea>';
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}
