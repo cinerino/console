@@ -30,33 +30,37 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="ids">所有権ID</label>
-                                    <input type="text" class="form-control" id="ids" name="ids" placeholder="所有権ID"
+                                    <input type="text" class="form-control form-control-sm" id="ids" name="ids"
+                                        placeholder="所有権ID"
                                         value="<%= (Array.isArray(searchConditions.ids)) ? searchConditions.ids.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="ownedBy[id]">所有者ID</label>
-                                    <input type="text" class="form-control" id="ownedBy[id]" name="ownedBy[id]"
-                                        placeholder="ユーザーID,アプリケーションIDなど"
+                                    <input type="text" class="form-control form-control-sm" id="ownedBy[id]"
+                                        name="ownedBy[id]" placeholder="ユーザーID,アプリケーションIDなど"
                                         value="<%= (searchConditions.ownedBy !== undefined) ? searchConditions.ownedBy.id : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label>所有物タイプ</label>
-                                    <select class="form-control" name="typeOfGood[typeOf]">
+                                    <select class="form-control form-control-sm" name="typeOfGood[typeOf]">
                                         <option value="">---</option>
                                         <% GoodTypeChoices.forEach(function (GoodTypeChoice) { %>
                                         <%
@@ -74,15 +78,16 @@
 
                                 <div class="form-group col-md-2">
                                     <label for="typeOfGood[ids]">所有物ID</label>
-                                    <input type="text" class="form-control" id="typeOfGood[ids]" name="typeOfGood[ids]"
-                                        placeholder="予約IDなど"
+                                    <input type="text" class="form-control form-control-sm" id="typeOfGood[ids]"
+                                        name="typeOfGood[ids]" placeholder="予約IDなど"
                                         value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.ids)) ? searchConditions.typeOfGood.ids.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="typeOfGood[accountNumbers]">口座番号</label>
-                                    <input type="text" class="form-control" id="typeOfGood[accountNumbers]"
-                                        name="typeOfGood[accountNumbers]" placeholder="1234567"
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="typeOfGood[accountNumbers]" name="typeOfGood[accountNumbers]"
+                                        placeholder="1234567"
                                         value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.accountNumbers)) ? searchConditions.typeOfGood.accountNumbers.join(',') : '' %>">
                                 </div>
 
@@ -95,19 +100,49 @@
                                                 <i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control" name="ownedRange" id="ownedRange"
+                                        <input type="text" class="form-control form-control-sm" name="ownedRange"
+                                            id="ownedRange"
                                             value="<%= moment(searchConditions.ownedFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.ownedThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
                                     <!-- /.input group -->
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        <div class="table-responsive">
+                            <table id="ownershipInfos-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>所有 From</th>
+                                        <th>所有 Through</th>
+                                        <th>所有者</th>
+                                        <th>所有物</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="modal" id="modal-ownershipInfo" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.card -->
 
@@ -115,54 +150,10 @@
             <!--/.col (left) -->
         </div>
         <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="ownershipInfos-table" class="table table-sm table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>所有 From</th>
-                                    <th>所有 Through</th>
-                                    <th>所有者</th>
-                                    <th>所有物</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
-<div class="modal" id="modal-ownershipInfo" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">

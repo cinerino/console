@@ -30,100 +30,103 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Action Type</label>
-                                        <select class="form-control" name="typeOf" size="6">
-                                            <% Object.values(ActionType).forEach(function (actionType) { %>
-                                            <%
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>Action Type</label>
+                                    <select class="form-control form-control-sm" name="typeOf">
+                                        <option value="">---</option>
+                                        <% Object.values(ActionType).forEach(function (actionType) { %>
+                                        <%
                                             var selected = searchConditions.typeOf === actionType;
                                             %>
-                                            <option value="<%= actionType %>" <% if (selected) { %> selected <% } %>>
-                                                <%= actionType %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
+                                        <option value="<%= actionType %>" <% if (selected) { %> selected <% } %>>
+                                            <%= actionType %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label>Start Date</label>
+                                <div class="form-group col-md-2">
+                                    <label>Start Date</label>
 
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="startRange" id="startRange"
-                                                value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
                                         </div>
-                                        <!-- /.input group -->
+                                        <input type="text" class="form-control form-control-sm" name="startRange"
+                                            id="startRange"
+                                            value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
+                                    <!-- /.input group -->
+                                </div>
 
-                                    <div class="form-group">
-                                        <label>Action Status Type</label>
-                                        <select multiple class="form-control" name="actionStatusTypes[]" size="6">
-                                            <% Object.values(ActionStatusType).forEach(function (statusType) { %>
-                                            <%
+                                <div class="form-group col-md-2">
+                                    <label>Action Status Type</label>
+                                    <select multiple class="form-control form-control-sm" name="actionStatusTypes[]">
+                                        <% Object.values(ActionStatusType).forEach(function (statusType) { %>
+                                        <%
                                             var selected = false;
                                             if (searchConditions.actionStatusTypes !== undefined) {
                                                 selected = searchConditions.actionStatusTypes.indexOf(statusType) >= 0;
                                             }
                                             %>
-                                            <option value="<%= statusType %>" <% if (selected) { %> selected <% } %>>
-                                                <%= statusType %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
+                                        <option value="<%= statusType %>" <% if (selected) { %> selected <% } %>>
+                                            <%= statusType %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="object[typeOf][$in]">Object Type</label>
-                                        <input type="text" class="form-control" id="object[typeOf][$in]"
-                                            name="object[typeOf][$in]" placeholder="Object Type"
-                                            value="<%= (searchConditions.object !== undefined && searchConditions.object.typeOf !== undefined && Array.isArray(searchConditions.object.typeOf.$in)) ? searchConditions.object.typeOf.$in.join(',') : '' %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="object[typeOf][$in]">Object Type</label>
+                                    <input type="text" class="form-control form-control-sm" id="object[typeOf][$in]"
+                                        name="object[typeOf][$in]" placeholder="Object Type"
+                                        value="<%= (searchConditions.object !== undefined && searchConditions.object.typeOf !== undefined && Array.isArray(searchConditions.object.typeOf.$in)) ? searchConditions.object.typeOf.$in.join(',') : '' %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="object[id][$in]">Object ID</label>
-                                        <input type="text" class="form-control" id="object[id][$in]"
-                                            name="object[id][$in]" placeholder="Object ID"
-                                            value="<%= (searchConditions.object !== undefined && searchConditions.object.id !== undefined && Array.isArray(searchConditions.object.id.$in)) ? searchConditions.object.id.$in.join(',') : '' %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="object[id][$in]">Object ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="object[id][$in]"
+                                        name="object[id][$in]" placeholder="Object ID"
+                                        value="<%= (searchConditions.object !== undefined && searchConditions.object.id !== undefined && Array.isArray(searchConditions.object.id.$in)) ? searchConditions.object.id.$in.join(',') : '' %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="object[orderNumber][$in]">Object Order Number</label>
-                                        <input type="text" class="form-control" id="object[orderNumber][$in]"
-                                            name="object[orderNumber][$in]" placeholder="Object Order Number"
-                                            value="<%= (searchConditions.object !== undefined && searchConditions.object.orderNumber !== undefined && Array.isArray(searchConditions.object.orderNumber.$in)) ? searchConditions.object.orderNumber.$in.join(',') : '' %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="object[orderNumber][$in]">Object Order Number</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="object[orderNumber][$in]" name="object[orderNumber][$in]"
+                                        placeholder="Object Order Number"
+                                        value="<%= (searchConditions.object !== undefined && searchConditions.object.orderNumber !== undefined && Array.isArray(searchConditions.object.orderNumber.$in)) ? searchConditions.object.orderNumber.$in.join(',') : '' %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="object[paymentMethod][paymentMethodId][$in]">Object Payment Method
-                                            ID</label>
-                                        <input type="text" class="form-control"
-                                            id="object[paymentMethod][paymentMethodId][$in]"
-                                            name="object[paymentMethod][paymentMethodId][$in]"
-                                            placeholder="Object Payment Method ID"
-                                            value="<%= (searchConditions.object !== undefined && searchConditions.object.paymentMethod !== undefined && searchConditions.object.paymentMethod.paymentMethodId !== undefined && Array.isArray(searchConditions.object.paymentMethod.paymentMethodId.$in)) ? searchConditions.object.paymentMethod.paymentMethodId.$in.join(',') : '' %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="object[paymentMethod][paymentMethodId][$in]">Object Payment Method
+                                        ID</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="object[paymentMethod][paymentMethodId][$in]"
+                                        name="object[paymentMethod][paymentMethodId][$in]"
+                                        placeholder="Object Payment Method ID"
+                                        value="<%= (searchConditions.object !== undefined && searchConditions.object.paymentMethod !== undefined && searchConditions.object.paymentMethod.paymentMethodId !== undefined && Array.isArray(searchConditions.object.paymentMethod.paymentMethodId.$in)) ? searchConditions.object.paymentMethod.paymentMethodId.$in.join(',') : '' %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="object[event][id][$in]">Object Event ID</label>
-                                        <%
+                                <div class="form-group col-md-2">
+                                    <label for="object[event][id][$in]">Object Event ID</label>
+                                    <%
                                         let objectEventIdValue = '';
                                         if (searchConditions.object !== undefined 
                                             && searchConditions.object.event !== undefined 
@@ -132,15 +135,15 @@
                                             objectEventIdValue = searchConditions.object.event.id.$in.join(',');
                                         }
                                         %>
-                                        <input type="text" class="form-control" id="object[event][id][$in]"
-                                            name="object[event][id][$in]" placeholder="Object Event ID"
-                                            value="<%= objectEventIdValue %>">
-                                    </div>
+                                    <input type="text" class="form-control form-control-sm" id="object[event][id][$in]"
+                                        name="object[event][id][$in]" placeholder="Object Event ID"
+                                        value="<%= objectEventIdValue %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="object[acceptedOffer][ticketedSeat][seatNumber][$in]">Object
-                                            Accepted Offer Seat Number</label>
-                                        <%
+                                <div class="form-group col-md-2">
+                                    <label for="object[acceptedOffer][ticketedSeat][seatNumber][$in]">Object
+                                        Accepted Offer Seat Number</label>
+                                    <%
                                         let objectAcceptedOfferTicketedSeatAeatNumberValue = '';
                                         if (searchConditions.object !== undefined 
                                             && searchConditions.object.acceptedOffer !== undefined 
@@ -150,63 +153,60 @@
                                                 objectAcceptedOfferTicketedSeatAeatNumberValue = searchConditions.object.acceptedOffer.ticketedSeat.seatNumber.$in.join(',');
                                         }
                                         %>
-                                        <input type="text" class="form-control"
-                                            id="object[acceptedOffer][ticketedSeat][seatNumber][$in]"
-                                            name="object[acceptedOffer][ticketedSeat][seatNumber][$in]"
-                                            placeholder="Object Accepted Offer Seat Number"
-                                            value="<%= objectAcceptedOfferTicketedSeatAeatNumberValue %>">
-                                    </div>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="object[acceptedOffer][ticketedSeat][seatNumber][$in]"
+                                        name="object[acceptedOffer][ticketedSeat][seatNumber][$in]"
+                                        placeholder="Object Accepted Offer Seat Number"
+                                        value="<%= objectAcceptedOfferTicketedSeatAeatNumberValue %>">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="purpose[typeOf][$in]">Purpose Type</label>
+                                    <input type="text" class="form-control form-control-sm" id="purpose[typeOf][$in]"
+                                        name="purpose[typeOf][$in]" placeholder="Purpose Type"
+                                        value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.typeOf !== undefined && Array.isArray(searchConditions.purpose.typeOf.$in)) ? searchConditions.purpose.typeOf.$in.join(',') : '' %>">
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="purpose[typeOf][$in]">Purpose Type</label>
-                                        <input type="text" class="form-control" id="purpose[typeOf][$in]"
-                                            name="purpose[typeOf][$in]" placeholder="Purpose Type"
-                                            value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.typeOf !== undefined && Array.isArray(searchConditions.purpose.typeOf.$in)) ? searchConditions.purpose.typeOf.$in.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="purpose[id][$in]">Purpose ID</label>
-                                        <input type="text" class="form-control" id="purpose[id][$in]"
-                                            name="purpose[id][$in]" placeholder="Purpose ID"
-                                            value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.id !== undefined && Array.isArray(searchConditions.purpose.id.$in)) ? searchConditions.purpose.id.$in.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="purpose[orderNumber][$in]">Purpose Order Number</label>
-                                        <input type="text" class="form-control" id="purpose[orderNumber][$in]"
-                                            name="purpose[orderNumber][$in]" placeholder="Purpose Order Number"
-                                            value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.orderNumber !== undefined && Array.isArray(searchConditions.purpose.orderNumber.$in)) ? searchConditions.purpose.orderNumber.$in.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="result[typeOf][$in]">Result Type</label>
-                                        <input type="text" class="form-control" id="result[typeOf][$in]"
-                                            name="result[typeOf][$in]" placeholder="Result Type"
-                                            value="<%= (searchConditions.result !== undefined && searchConditions.result.typeOf !== undefined && Array.isArray(searchConditions.result.typeOf.$in)) ? searchConditions.result.typeOf.$in.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="result[id][$in]">Result ID</label>
-                                        <input type="text" class="form-control" id="result[id][$in]"
-                                            name="result[id][$in]" placeholder="Result ID"
-                                            value="<%= (searchConditions.result !== undefined && searchConditions.result.id !== undefined && Array.isArray(searchConditions.result.id.$in)) ? searchConditions.result.id.$in.join(',') : '' %>">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="result[orderNumber][$in]">Result Order Number</label>
-                                        <input type="text" class="form-control" id="result[orderNumber][$in]"
-                                            name="result[orderNumber][$in]" placeholder="Result Order Number"
-                                            value="<%= (searchConditions.result !== undefined && searchConditions.result.orderNumber !== undefined && Array.isArray(searchConditions.result.orderNumber.$in)) ? searchConditions.result.orderNumber.$in.join(',') : '' %>">
-                                    </div>
+                                <div class="form-group col-md-2">
+                                    <label for="purpose[id][$in]">Purpose ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="purpose[id][$in]"
+                                        name="purpose[id][$in]" placeholder="Purpose ID"
+                                        value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.id !== undefined && Array.isArray(searchConditions.purpose.id.$in)) ? searchConditions.purpose.id.$in.join(',') : '' %>">
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="fromLocation[accountNumber][$in]">From Location Account
-                                            Number</label>
-                                        <%
+                                <div class="form-group col-md-2">
+                                    <label for="purpose[orderNumber][$in]">Purpose Order Number</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="purpose[orderNumber][$in]" name="purpose[orderNumber][$in]"
+                                        placeholder="Purpose Order Number"
+                                        value="<%= (searchConditions.purpose !== undefined && searchConditions.purpose.orderNumber !== undefined && Array.isArray(searchConditions.purpose.orderNumber.$in)) ? searchConditions.purpose.orderNumber.$in.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="result[typeOf][$in]">Result Type</label>
+                                    <input type="text" class="form-control form-control-sm" id="result[typeOf][$in]"
+                                        name="result[typeOf][$in]" placeholder="Result Type"
+                                        value="<%= (searchConditions.result !== undefined && searchConditions.result.typeOf !== undefined && Array.isArray(searchConditions.result.typeOf.$in)) ? searchConditions.result.typeOf.$in.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="result[id][$in]">Result ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="result[id][$in]"
+                                        name="result[id][$in]" placeholder="Result ID"
+                                        value="<%= (searchConditions.result !== undefined && searchConditions.result.id !== undefined && Array.isArray(searchConditions.result.id.$in)) ? searchConditions.result.id.$in.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="result[orderNumber][$in]">Result Order Number</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="result[orderNumber][$in]" name="result[orderNumber][$in]"
+                                        placeholder="Result Order Number"
+                                        value="<%= (searchConditions.result !== undefined && searchConditions.result.orderNumber !== undefined && Array.isArray(searchConditions.result.orderNumber.$in)) ? searchConditions.result.orderNumber.$in.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="fromLocation[accountNumber][$in]">From Location Account
+                                        Number</label>
+                                    <%
                                         let fromLocationAccountNumberValue = '';
                                         if (searchConditions.fromLocation !== undefined 
                                             && searchConditions.fromLocation.accountNumber !== undefined 
@@ -214,15 +214,15 @@
                                                 fromLocationAccountNumberValue = searchConditions.fromLocation.accountNumber.$in.join(',');
                                         }
                                         %>
-                                        <input type="text" class="form-control" id="fromLocation[accountNumber][$in]"
-                                            name="fromLocation[accountNumber][$in]"
-                                            placeholder="From Location Account Number"
-                                            value="<%= fromLocationAccountNumberValue %>">
-                                    </div>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="fromLocation[accountNumber][$in]" name="fromLocation[accountNumber][$in]"
+                                        placeholder="From Location Account Number"
+                                        value="<%= fromLocationAccountNumberValue %>">
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="toLocation[accountNumber][$in]">To Location Account Number</label>
-                                        <%
+                                <div class="form-group col-md-2">
+                                    <label for="toLocation[accountNumber][$in]">To Location Account Number</label>
+                                    <%
                                         let toLocationAccountNumberValue = '';
                                         if (searchConditions.toLocation !== undefined 
                                             && searchConditions.toLocation.accountNumber !== undefined 
@@ -230,80 +230,43 @@
                                                 toLocationAccountNumberValue = searchConditions.toLocation.accountNumber.$in.join(',');
                                         }
                                         %>
-                                        <input type="text" class="form-control" id="toLocation[accountNumber][$in]"
-                                            name="toLocation[accountNumber][$in]"
-                                            placeholder="To Location Account Number"
-                                            value="<%= toLocationAccountNumberValue %>">
-                                    </div>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="toLocation[accountNumber][$in]" name="toLocation[accountNumber][$in]"
+                                        placeholder="To Location Account Number"
+                                        value="<%= toLocationAccountNumberValue %>">
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="actions-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Status</th>
+                                        <th>Agent</th>
+                                        <th>Recipient</th>
+                                        <th>Object</th>
+                                        <th>Purpose</th>
+                                        <th>Amount</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Result</th>
+                                        <th>Error</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="actions-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID
-                                        <br>Start
-                                        <br>End
-                                        <br>Status
-                                    </th>
-                                    <th>Agent</th>
-                                    <th>Recipient</th>
-                                    <th>Object</th>
-                                    <th>Purpose</th>
-                                    <th>Amount</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Result<br>or<br>Error</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>ID
-                                        <br>Start
-                                        <br>End
-                                        <br>Status
-                                    </th>
-                                    <th>Agent</th>
-                                    <th>Recipient</th>
-                                    <th>Object</th>
-                                    <th>Purpose</th>
-                                    <th>Amount</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Result<br>or<br>Error</th>
-                                    <th></th>
-                                </tr>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>

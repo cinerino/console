@@ -55,8 +55,10 @@ tasksRouter.get(
                 const searchResult = await taskService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchResult.totalCount,
-                    recordsFiltered: searchResult.totalCount,
+                    // recordsTotal: searchOrdersResult.totalCount,
+                    recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
                     data: searchResult.data
                 });
             } else {

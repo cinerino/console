@@ -2,6 +2,11 @@ $(function () {
     var table = $("#tasks-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -11,6 +16,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -18,37 +24,56 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
                     var url = '/projects/' + PROJECT_ID + '/tasks/' + data.id + '?name=' + data.name;
 
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.id + '</a></li>'
-                        + '<li><span class="badge-secondary badge ' + data.name + '">' + data.name + '</span></li>'
-                        + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
-                        + '<li>' + data.remainingNumberOfTries + '/' + data.numberOfTried + '</li>'
-                        + '<li>' + data.runsAt + '</li>'
-                        + '<li>' + data.lastTriedAt + '</li>'
-                        + '</ul>';
+                    return '<a target="_blank" href="' + url + '">' + data.id + '</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.name;
 
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><textarea class="form-control" placeholder="" disabled="" rows="8">' + JSON.stringify(data.data, null, '\t') + '</textarea></li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showData" data-id="' + data.id + '">詳細</a><li>'
-                        + '</ul>';
+                    return '<span class="badge ' + data.status + '">' + data.status + '</span>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><textarea class="form-control" placeholder="" disabled="" rows="8">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea></li>'
-                        + '<li><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showExecutionResults" data-id="' + data.id + '">詳細</a><li>'
-                        + '</ul>';
+                    return data.remainingNumberOfTries + '/' + data.numberOfTried;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.runsAt;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.lastTriedAt;
+
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<textarea class="form-control" placeholder="" disabled="" rows="1">' + JSON.stringify(data.data, null, '\t') + '</textarea>'
+                        + '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showData" data-id="' + data.id + '">詳細</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<textarea class="form-control" placeholder="" disabled="" rows="1">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea>'
+                        + '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showExecutionResults" data-id="' + data.id + '">詳細</a>';
                 }
             }
         ]

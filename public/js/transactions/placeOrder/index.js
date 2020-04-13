@@ -85,9 +85,9 @@ $(function () {
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
 
-                    var html = '<a target="_blank" href="' + url + '"><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></a>'
-                        + ' <span class="badge badge-warning">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span>'
-                        + '<br><a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
+                    var html = '<a target="_blank" href="' + url + '"><span class="badge badge-light ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></a>'
+                        + ' <span class="badge badge-light">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span>'
+                        + '<br><a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-light">Application</span></a>'
                         + '<br><a href="javscript:void(0);" class="showAgent" data-id="' + data.id + '">' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</a>';
 
                     html += '';
@@ -99,7 +99,7 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
-                    var html = '<span class="badge badge-secondary ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span>'
+                    var html = '<span class="badge badge-light ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span>'
                         + '<br><a target="_blank" href="' + url + '">' + data.seller.name.ja + '</a>';
 
                     return html;
@@ -130,7 +130,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span>';
+                    return '<span class="badge badge-light ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span>';
                 }
             },
             {

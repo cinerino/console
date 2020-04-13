@@ -30,48 +30,52 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="object[typeOfs]">認可対象タイプ</label>
-                                    <input type="text" class="form-control" id="object[typeOfs]" name="object[typeOfs]"
-                                        placeholder="OwnershipInfo"
+                                    <input type="text" class="form-control form-control-sm" id="object[typeOfs]"
+                                        name="object[typeOfs]" placeholder="OwnershipInfo"
                                         value="<%= (Array.isArray(searchConditions.object.typeOfs)) ? searchConditions.object.typeOfs.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="object[ids]">認可対象ID</label>
-                                    <input type="text" class="form-control" id="object[ids]" name="object[ids]"
-                                        placeholder="所有権IDなど"
+                                    <input type="text" class="form-control form-control-sm" id="object[ids]"
+                                        name="object[ids]" placeholder="所有権IDなど"
                                         value="<%= (Array.isArray(searchConditions.object.ids)) ? searchConditions.object.ids.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="object[typeOfGood][typeOfs]">認可対象所有物タイプ</label>
-                                    <input type="text" class="form-control" id="object[typeOfGood][typeOfs]"
-                                        name="object[typeOfGood][typeOfs]" placeholder="EventReservation"
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="object[typeOfGood][typeOfs]" name="object[typeOfGood][typeOfs]"
+                                        placeholder="EventReservation"
                                         value="<%= (searchConditions.object.typeOfGood !== undefined && Array.isArray(searchConditions.object.typeOfGood.typeOfs)) ? searchConditions.object.typeOfGood.typeOfs.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="object[typeOfGood][ids]">認可対象所有物ID</label>
-                                    <input type="text" class="form-control" id="object[typeOfGood][ids]"
+                                    <input type="text" class="form-control form-control-sm" id="object[typeOfGood][ids]"
                                         name="object[typeOfGood][ids]" placeholder="予約IDなど"
                                         value="<%= (searchConditions.object.typeOfGood !== undefined && Array.isArray(searchConditions.object.typeOfGood.ids)) ? searchConditions.object.typeOfGood.ids.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="codes">コード</label>
-                                    <input type="text" class="form-control" id="codes" name="codes"
+                                    <input type="text" class="form-control form-control-sm" id="codes" name="codes"
                                         placeholder="12345678-abcd-1234-abcd-123456abcdef"
                                         value="<%= (Array.isArray(searchConditions.codes)) ? searchConditions.codes.join(',') : '' %>">
                                 </div>
@@ -85,19 +89,67 @@
                                                 <i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control" name="validRange" id="validRange"
+                                        <input type="text" class="form-control form-control-sm" name="validRange"
+                                            id="validRange"
                                             value="<%= moment(searchConditions.validFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.validThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
                                     <!-- /.input group -->
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        <div class="table-responsive">
+                            <table id="authorizations-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>QR</th>
+                                        <th>Code</th>
+                                        <th>Valid From</th>
+                                        <th>Valid Until</th>
+                                        <th>Object</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="modal" id="modal-authorization-object" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal" id="modal-authorization-qrcode" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.card -->
 
@@ -105,71 +157,10 @@
             <!--/.col (left) -->
         </div>
         <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="authorizations-table" class="table table-sm table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>QR</th>
-                                    <th>Code</th>
-                                    <th>Valid From</th>
-                                    <th>Valid Until</th>
-                                    <th>Object</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
-<div class="modal" id="modal-authorization-object" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modal-authorization-qrcode" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- DataTables -->
 <link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">

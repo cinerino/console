@@ -19,6 +19,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -28,7 +29,7 @@ $(function () {
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOf + '/' + data.id;
 
-                    return '<span class="badge badge-secondary">' + data.typeOf + '</span>'
+                    return '<span class="badge badge-light">' + data.typeOf + '</span>'
                         + '<br><a target="_blank" href="' + url + '">' + data.id + '</a>';
                 }
             },
@@ -67,8 +68,8 @@ $(function () {
                     var html = '';
 
                     html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.ownedBy.typeOf + '</span></a>'
-                        + ' <span class="badge badge-warning">' + ((data.ownedBy.memberOf !== undefined) ? data.ownedBy.memberOf.membershipNumber : '') + '</span>'
-                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
+                        + ' <span class="badge badge-light">' + ((data.ownedBy.memberOf !== undefined) ? data.ownedBy.memberOf.membershipNumber : '') + '</span>'
+                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-light">Application</span></a>'
                         + '<br><a href="javascript:void(0)" class="showOwnedBy" data-id="' + data.id + '">' + data.ownedBy.name + '</a>';
 
                     if (Array.isArray(data.ownedBy.identifier)) {
@@ -112,6 +113,10 @@ $(function () {
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
+    });
+
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
     });
 
     $(document).on('click', '.showTypeOfGood', function () {

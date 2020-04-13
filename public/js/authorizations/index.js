@@ -17,6 +17,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -24,7 +25,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showQRCode" data-id="' + data.id + '">表示</a>';
+                    return '<a href="javascript:void(0)" class="showQRCode" data-id="' + data.id + '">表示</a>';
                 }
             },
             {
@@ -32,7 +33,7 @@ $(function () {
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/authorizations/' + data.id;
 
-                    return '<span class="badge badge-secondary">' + data.typeOf + '</span>'
+                    return '<span class="badge badge-light">' + data.typeOf + '</span>'
                         + '<br><a target="_blank" href="' + url + '"><span class="">' + data.code + '</span></a>';
                 }
             },
@@ -52,7 +53,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/ownershipInfos?ids=' + data.object.id + '"><span class="badge badge-primary">' + data.object.typeOf + '</span></a>';
+                    var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/ownershipInfos?ids=' + data.object.id + '"><span class="badge badge-light">' + data.object.typeOf + '</span></a>';
 
                     var objectType = 'undefined';
                     if (data.object.typeOfGood !== undefined) {
@@ -77,6 +78,10 @@ $(function () {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
+
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
+    });
 
     $(document).on('click', '.showObject', function () {
         var id = $(this).data('id');
