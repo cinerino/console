@@ -1,19 +1,19 @@
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
+        <% if (process.env.LINE_ASSISTANT_QR_CODE !== undefined) { %>
         <div class="alert alert-light alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h5>
                 <i class="icon fa fa-info"></i> お知らせ</h5>
-            <% if (process.env.LINE_ASSISTANT_QR_CODE !== undefined) { %>
             <p>
                 <a href="<%= process.env.LINE_ASSISTANT_QR_CODE %>" target="_blank">LINE
                     Assistant</a>では簡易的なコンソール機能をご利用いただけます。
                 <a href="<%= process.env.LINE_ASSISTANT_QR_CODE %>" target="_blank">使ってみる</a>
 
             </p>
-            <% } %>
         </div>
+        <% } %>
 
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -52,21 +52,24 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <dl>
+                        <dl class="mb-0">
                             <dt>プロジェクト ID</dt>
                             <dd><%= req.project.id %></dd>
                         </dl>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer text-center">
-                        <a href="/projects/<%= req.project.id %>" class="uppercase">設定</a>
+                    <div class="card-footer">
+                        <a href="/projects/<%= req.project.id %>" class="uppercase">設定 <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                     <!-- /.card-footer -->
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="ion ion-bag align-middle"></i>&nbsp;&nbsp;本日の新規注文
+                        <h3 class="card-title">
+                            <i class="fa fa-receipt mr-1"></i>
+                            本日の新規注文
                         </h3>
 
                         <div class="card-tools">
@@ -139,6 +142,7 @@
                     <div class="card" id="visitors">
                         <div class="card-header border-0">
                             <h3 class="card-title">
+                                <i class="fa fa-shopping-cart mr-1"></i>
                                 取引訪問者数
                             </h3>
 
@@ -152,12 +156,6 @@
                                             class="dropdown-item">入場制限設定を見る</a>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm" data-widget="remove">
-                                    <i class="fa fa-times"></i>
-                                </button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -184,12 +182,6 @@
                                 <button type="button" class="btn btn-sm daterange" data-toggle="tooltip"
                                     title="Date range">
                                     <i class="fa fa-calendar"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm" data-widget="remove">
-                                    <i class="fa fa-times"></i>
                                 </button>
                             </div>
                         </div>
@@ -293,12 +285,6 @@
                                     title="Date range">
                                     <i class="fa fa-calendar"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm" data-widget="remove">
-                                    <i class="fa fa-times"></i>
-                                </button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -392,7 +378,7 @@
                     <!-- /.card -->
 
                     <!-- solid sales graph -->
-                    <div class="card bg-dark" id="numPlaceOrder">
+                    <div class="card" id="numPlaceOrder">
                         <div class="card-header border-0">
                             <h3 class="card-title">
                                 <i class="fa fa-th mr-1"></i>
@@ -400,15 +386,9 @@
                             </h3>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-dark btn-sm daterange" data-toggle="tooltip"
+                                <button type="button" class="btn btn-sm daterange" data-toggle="tooltip"
                                     title="Date range">
                                     <i class="fa fa-calendar"></i>
-                                </button>
-                                <button type="button" class="btn bg-dark btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn bg-dark btn-sm" data-widget="remove">
-                                    <i class="fa fa-times"></i>
                                 </button>
                             </div>
                         </div>
@@ -427,22 +407,16 @@
                     </div>
                     <!-- /.card -->
 
-                    <div class="card bg-dark" id="numTransactions2salesAmount">
+                    <div class="card" id="numTransactions2salesAmount">
                         <div class="card-header border-0">
                             <h3 class="card-title">
                                 <i class="fa fa-th mr-1"></i>
                                 来客数と売上高
                             </h3>
                             <div class="card-tools">
-                                <button type="button" class="btn btn-dark btn-sm daterange" data-toggle="tooltip"
+                                <button type="button" class="btn btn-sm daterange" data-toggle="tooltip"
                                     title="Date range">
                                     <i class="fa fa-calendar"></i>
-                                </button>
-                                <button type="button" class="btn bg-dark btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn bg-dark btn-sm" data-widget="remove">
-                                    <i class="fa fa-times"></i>
                                 </button>
                             </div>
                         </div><!-- /.card-header -->
@@ -541,8 +515,9 @@
                             </ul>
                         </div>
                         <!-- /.card-body -->
-                        <div class="card-footer text-center">
-                            <a href="/projects/<%= req.project.id %>/actions" class="uppercase">View All Actions</a>
+                        <div class="card-footer">
+                            <a href="/projects/<%= req.project.id %>/actions" class="uppercase">アクション検索 <i
+                                    class="fa fa-arrow-circle-right"></i></a>
                         </div>
                         <!-- /.card-footer -->
                     </div>
@@ -581,11 +556,9 @@
                             <!-- /.table-responsive -->
                         </div>
                         <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            <!-- <a href="#" class="btn btn-sm btn-info float-left">Place New Order</a> -->
-                            <a target="_blank" href="/projects/<%= req.project.id %>/orders"
-                                class="btn btn-sm btn-secondary float-right">View All
-                                Orders</a>
+                        <div class="card-footer">
+                            <a target="_blank" href="/projects/<%= req.project.id %>/orders" class="">注文検索 <i
+                                    class="fa fa-arrow-circle-right"></i></a>
                         </div>
                         <!-- /.card-footer -->
                     </div>

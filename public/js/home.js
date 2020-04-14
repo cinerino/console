@@ -386,7 +386,8 @@ function searchNumPlaceOrder(cb) {
 
 function createNumPlaceOrderChart(datas) {
     var statuses = ['Confirmed', 'Canceled', 'Expired'];
-    var colors = ['#79f67d', '#fad684', '#e96c6c'];
+    // var colors = ['#79f67d', '#fad684', '#e96c6c'];
+    var colors = ['#28a745', '#ffc107', '#dc3545'];
 
     // new Morris.Line({
     //     element: 'numPlaceOrderChart',
@@ -454,8 +455,9 @@ function createNumPlaceOrderChart(datas) {
             xAxes: [{
                 type: 'time',
                 ticks: {
-                    fontColor: '#fff',
-                    fontFamily: 'Open Sans',
+                    // fontColor: '#fff',
+                    fontColor: '#6c757d',
+                    // fontFamily: 'Open Sans',
                     fontSize: 10
                 },
                 gridLines: {
@@ -467,16 +469,18 @@ function createNumPlaceOrderChart(datas) {
             yAxes: [{
                 ticks: {
                     // stepSize: 5000,
-                    fontColor: '#fff',
-                    fontFamily: 'Open Sans',
+                    // fontColor: '#fff',
+                    fontColor: '#6c757d',
+                    // fontFamily: 'Open Sans',
                     fontSize: 10,
                     padding: 8,
                 },
                 gridLines: {
                     display: true,
-                    color: '#555c62',
-                    // color: '#efefef',
-                    zeroLineColor: '#555c62',
+                    // color: '#555c62',
+                    color: '#efefef',
+                    // zeroLineColor: '#555c62',
+                    zeroLineColor: '#efefef',
                     drawBorder: false,
                 }
             }]
@@ -551,7 +555,7 @@ function createSalesAmountChart(datas) {
                     type: 'time',
                     ticks: {
                         fontColor: '#6c757d',
-                        fontFamily: 'Open Sans',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10,
                         maxTicksLimit: 6,
                     },
@@ -563,7 +567,7 @@ function createSalesAmountChart(datas) {
                     ticks: {
                         // stepSize: 5000,
                         fontColor: '#6c757d',
-                        fontFamily: 'Open Sans',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10,
                         padding: 8,
                     },
@@ -719,8 +723,9 @@ function createNumOrderItemsChart(datas) {
                 xAxes: [{
                     type: 'time',
                     ticks: {
-                        fontColor: '#fff',
-                        fontFamily: 'Open Sans',
+                        // fontColor: '#fff',
+                        fontColor: '#6c757d',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10,
                         maxTicksLimit: 6,
                     },
@@ -731,8 +736,9 @@ function createNumOrderItemsChart(datas) {
                 yAxes: [{
                     ticks: {
                         // stepSize: 5000,
-                        fontColor: '#fff',
-                        fontFamily: 'Open Sans',
+                        // fontColor: '#fff',
+                        fontColor: '#6c757d',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10,
                         padding: 8,
                     },
@@ -855,11 +861,13 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                 {
                     data: chartDate,
                     backgroundColor: 'transparent',
-                    borderColor: '#DAA8F5',
+                    // borderColor: '#DAA8F5',
+                    borderColor: '#007bff',
+
                     borderWidth: 1,
                     pointRadius: 2,
-                    pointBorderColor: '#DAA8F5',
-                    pointBackgroundColor: '#DAA8F5',
+                    pointBorderColor: '#007bff',
+                    pointBackgroundColor: '#007bff',
                     fill: false
                 },
             ]
@@ -885,8 +893,9 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                     },
                     ticks: {
                         // fontColor: '#a1a6a9',
-                        fontColor: '#fff',
-                        fontFamily: 'Open Sans',
+                        // fontColor: '#fff',
+                        fontColor: '#6c757d',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10
                     }
                 }],
@@ -895,15 +904,18 @@ function createSalesAmountNumTransactionsChart(datasSalesAmount, datasNumStarted
                     gridLines: {
                         display: true,
                         lineWidth: 1,
-                        color: '#555c62',
-                        zeroLineColor: '#555c62',
+                        // color: '#555c62',
+                        color: '#efefef',
+                        // zeroLineColor: '#555c62',
+                        zeroLineColor: '#efefef',
                         padding: 8,
                     },
                     ticks: {
                         beginAtZero: true,
                         // fontColor: '#a1a6a9',
-                        fontColor: '#fff',
-                        fontFamily: 'Open Sans',
+                        // fontColor: '#fff',
+                        fontColor: '#6c757d',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10
                     }
                 }]
@@ -1202,7 +1214,7 @@ function updateWaiterChart() {
                     ticks: {
                         // maxTicksLimit: 6,
                         fontColor: '#6c757d',
-                        fontFamily: 'Open Sans',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10,
                     },
                     gridLines: {
@@ -1215,7 +1227,7 @@ function updateWaiterChart() {
                         min: 0,
                         // stepSize: 5000,
                         fontColor: '#6c757d',
-                        fontFamily: 'Open Sans',
+                        // fontFamily: 'Open Sans',
                         fontSize: 10,
                         padding: 8,
                     },
