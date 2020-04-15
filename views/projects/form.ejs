@@ -12,27 +12,27 @@
     </div>
 
     <div class="form-group col-md-4">
-        <label for="logo">logo</label>
-        <input type="text" class="form-control" id="logo" name="logo" placeholder="logo"
+        <label for="logo">ロゴ</label>
+        <input type="text" class="form-control" id="logo" name="logo" placeholder="https://example.com"
             value="<%= (project !== undefined) ?  project.logo : '' %>">
     </div>
 </div>
 
 <div class="form-row">
     <div class="form-group col-md-4">
-        <label for="parentOrganization[typeOf]">parentOrganization.typeOf</label>
+        <label for="parentOrganization[typeOf]">親組織タイプ</label>
         <input type="text" class="form-control" id="parentOrganization[typeOf]" name="parentOrganization[typeOf]"
             value="<%= (project !== undefined && project.parentOrganization !== undefined) ?  project.parentOrganization.typeOf : '' %>">
     </div>
 
     <div class="form-group col-md-4">
-        <label for="parentOrganization[name][ja]">parentOrganization.name.ja</label>
+        <label for="parentOrganization[name][ja]">親組織日本語名称</label>
         <input type="text" class="form-control" id="parentOrganization[name][ja]" name="parentOrganization[name][ja]"
             value="<%= (project !== undefined && project.parentOrganization !== undefined) ?  project.parentOrganization.name.ja : '' %>">
     </div>
 
     <div class="form-group col-md-4">
-        <label for="parentOrganization[name][en]">parentOrganization.name.en</label>
+        <label for="parentOrganization[name][en]">親組織英語名称</label>
         <input type="text" class="form-control" id="parentOrganization[name][en]" name="parentOrganization[name][en]"
             value="<%= (project !== undefined && project.parentOrganization !== undefined) ?  project.parentOrganization.name.en : '' %>">
     </div>
@@ -40,14 +40,14 @@
 
 <div class="form-row">
     <div class="form-group col-md-4">
-        <label for="settings[cognito][adminUserPool][id]">settings.cognito.adminUserPool.id</label>
+        <label for="settings[cognito][adminUserPool][id]">Cognito 管理ユーザープールID</label>
         <input type="text" class="form-control" id="settings[cognito][adminUserPool][id]"
             name="settings[cognito][adminUserPool][id]"
             value="<%= (project !== undefined && project.settings !== undefined && project.settings.cognito !== undefined) ?  project.settings.cognito.adminUserPool.id : '' %>">
     </div>
 
     <div class="form-group col-md-4">
-        <label for="settings[cognito][customerUserPool][id]">settings.cognito.customerUserPool.id</label>
+        <label for="settings[cognito][customerUserPool][id]">Cognito カスタマーユーザープールID</label>
         <input type="text" class="form-control" id="settings[cognito][customerUserPool][id]"
             name="settings[cognito][customerUserPool][id]"
             value="<%= (project !== undefined && project.settings !== undefined && project.settings.cognito !== undefined) ?  project.settings.cognito.customerUserPool.id : '' %>">
@@ -88,17 +88,17 @@
 
 <div class="form-row">
     <div class="form-group col-md-4">
-        <label for="settings[mvtkReserve][companyCode]">ムビチケ興行会社コード</label>
-        <input type="text" class="form-control" id="settings[mvtkReserve][companyCode]"
-            name="settings[mvtkReserve][companyCode]"
-            value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.mvtkReserve.companyCode : '' %>">
-    </div>
-
-    <div class="form-group col-md-4">
         <label for="settings[mvtkReserve][endpoint]">ムビチケ着券エンドポイント</label>
         <input type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
             name="settings[mvtkReserve][endpoint]" placeholder="https://example.com"
             value="<%= (project !== undefined && project.settings.mvtkReserve !== undefined) ? project.settings.mvtkReserve.endpoint : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="settings[mvtkReserve][companyCode]">ムビチケ興行会社コード</label>
+        <input type="text" class="form-control" id="settings[mvtkReserve][companyCode]"
+            name="settings[mvtkReserve][companyCode]"
+            value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.mvtkReserve.companyCode : '' %>">
     </div>
 </div>
 

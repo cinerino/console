@@ -38,7 +38,29 @@ projectsRouter.all(
     async (req, res, next) => {
         try {
             let message;
-            let attributes: cinerinoapi.factory.project.IProject | undefined;
+            let attributes: cinerinoapi.factory.project.IProject = {
+                typeOf: cinerinoapi.factory.organizationType.Project,
+                id: '',
+                name: '新しいプロジェクト名称',
+                parentOrganization: {
+                    typeOf: cinerinoapi.factory.organizationType.Corporation,
+                    name: { ja: '', en: '' }
+                },
+                // デフォルト設定をセット
+                settings: {
+                    chevre: { endpoint: <string>process.env.DEFAULT_CHEVRE_API_ENDPOINT },
+                    gmo: {
+                        endpoint: <string>process.env.DEFAULT_GMO_ENDPOINT,
+                        siteId: '',
+                        sitePass: ''
+                    },
+                    mvtkReserve: {
+                        companyCode: '',
+                        endpoint: <string>process.env.DEFAULT_MVTK_RESERVE_ENDPOINT
+                    },
+                    pecorino: { endpoint: <string>process.env.DEFAULT_PECORINO_API_ENDPOINT }
+                }
+            };
 
             const projectService = new cinerinoapi.service.Project({
                 endpoint: <string>process.env.API_ENDPOINT,

@@ -42,7 +42,29 @@ const projectsRouter = express.Router();
 projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message;
-        let attributes;
+        let attributes = {
+            typeOf: cinerinoapi.factory.organizationType.Project,
+            id: '',
+            name: '新しいプロジェクト名称',
+            parentOrganization: {
+                typeOf: cinerinoapi.factory.organizationType.Corporation,
+                name: { ja: '', en: '' }
+            },
+            // デフォルト設定をセット
+            settings: {
+                chevre: { endpoint: process.env.DEFAULT_CHEVRE_API_ENDPOINT },
+                gmo: {
+                    endpoint: process.env.DEFAULT_GMO_ENDPOINT,
+                    siteId: '',
+                    sitePass: ''
+                },
+                mvtkReserve: {
+                    companyCode: '',
+                    endpoint: process.env.DEFAULT_MVTK_RESERVE_ENDPOINT
+                },
+                pecorino: { endpoint: process.env.DEFAULT_PECORINO_API_ENDPOINT }
+            }
+        };
         const projectService = new cinerinoapi.service.Project({
             endpoint: process.env.API_ENDPOINT,
             auth: req.user.authClient
