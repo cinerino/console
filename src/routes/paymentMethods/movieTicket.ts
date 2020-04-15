@@ -173,7 +173,7 @@ movieTicketPaymentMethodRouter.get(
                 message: message,
                 movieTicket: movieTicket,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
-                PlaceType: cinerinoapi.factory.placeType
+                PlaceType: { Online: 'Online', Store: 'Store' }
             });
         } catch (error) {
             next(error);

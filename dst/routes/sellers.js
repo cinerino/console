@@ -93,7 +93,7 @@ sellersRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, 
             attributes: attributes,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             OrganizationType: cinerinoapi.factory.organizationType,
-            PlaceType: cinerinoapi.factory.placeType,
+            PlaceType: { Online: 'Online', Store: 'Store' },
             WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
             project: project
         });
@@ -161,7 +161,7 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
             seller: seller,
             PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             OrganizationType: cinerinoapi.factory.organizationType,
-            PlaceType: cinerinoapi.factory.placeType,
+            PlaceType: { Online: 'Online', Store: 'Store' },
             WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
             project: project
         });
@@ -395,7 +395,7 @@ function createAttributesFromBody(params) {
                 }
             });
         }
-        return Object.assign({ project: { typeOf: params.project.typeOf, id: params.project.id }, typeOf: body.typeOf, name: {
+        return Object.assign(Object.assign({ project: { typeOf: params.project.typeOf, id: params.project.id }, typeOf: body.typeOf, name: {
                 ja: (body.name.ja !== undefined && body.name.ja !== '') ? body.name.ja : initialName,
                 en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
             }, legalName: {
@@ -403,7 +403,9 @@ function createAttributesFromBody(params) {
                 en: (body.name.en !== undefined && body.name.en !== '') ? body.name.en : initialName
             }, parentOrganization: params.project.parentOrganization, telephone: (body.telephone !== undefined && body.telephone !== '')
                 ? body.telephone
-                : (movieTheaterFromChevre !== undefined) ? movieTheaterFromChevre.telephone : '', url: body.url, paymentAccepted: paymentAccepted, hasPOS: hasPOS, areaServed: areaServed, makesOffer: makesOffer }, (movieTheaterFromChevre !== undefined)
+                : (movieTheaterFromChevre !== undefined) ? movieTheaterFromChevre.telephone : '', url: body.url, paymentAccepted: paymentAccepted, areaServed: areaServed, makesOffer: makesOffer }, {
+            hasPOS: hasPOS
+        }), (movieTheaterFromChevre !== undefined)
             ? {
                 location: {
                     typeOf: movieTheaterFromChevre.typeOf,

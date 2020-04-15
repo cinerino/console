@@ -1,38 +1,123 @@
-<div class="form-group">
-    <label for="names">名称</label>
-    <input disabled type="text" class="form-control" id="name" name="name" placeholder="名称"
-        value="<%= (project !== undefined) ?  project.name : '' %>">
-</div>
-<hr>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="id">ID</label>
+        <input type="text" class="form-control" id="id" name="id" placeholder="ID"
+            value="<%= (project !== undefined) ?  project.id : '' %>">
+    </div>
 
-<div class="form-group">
-    <label for="settings[chevre][endpoint]">Chevreエンドポイント</label>
-    <input disabled type="text" class="form-control" id="settings[chevre][endpoint]" placeholder="https://example.com"
-        value="<%= (project !== undefined && project.settings.chevre !== undefined) ? project.settings.chevre.endpoint : '' %>">
-</div>
+    <div class="form-group col-md-4">
+        <label for="name">名称</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="名称"
+            value="<%= (project !== undefined) ?  project.name : '' %>">
+    </div>
 
-<div class="form-group">
-    <label for="settings[gmo][endpoint]">GMOエンドポイント</label>
-    <input disabled type="text" class="form-control" id="settings[gmo][endpoint]" placeholder="https://example.com"
-        value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.endpoint : '' %>">
-</div>
-
-<div class="form-group">
-    <label for="settings[gmo][siteId]">GMOサイトID</label>
-    <input disabled type="text" class="form-control" id="settings[gmo][siteId]" placeholder="GMOサイトID"
-        value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.siteId : '' %>">
+    <div class="form-group col-md-4">
+        <label for="logo">logo</label>
+        <input type="text" class="form-control" id="logo" name="logo" placeholder="logo"
+            value="<%= (project !== undefined) ?  project.logo : '' %>">
+    </div>
 </div>
 
-<div class="form-group">
-    <label for="settings[gmo][sitePass]">GMOサイトPASS</label>
-    <input disabled type="text" class="form-control" id="settings[gmo][sitePass]" name="settings[gmo][sitePass]"
-        placeholder="GMOサイトPASS"
-        value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.sitePass : '' %>">
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="parentOrganization[typeOf]">parentOrganization.typeOf</label>
+        <input type="text" class="form-control" id="parentOrganization[typeOf]" name="parentOrganization[typeOf]"
+            value="<%= (project !== undefined && project.parentOrganization !== undefined) ?  project.parentOrganization.typeOf : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="parentOrganization[name][ja]">parentOrganization.name.ja</label>
+        <input type="text" class="form-control" id="parentOrganization[name][ja]" name="parentOrganization[name][ja]"
+            value="<%= (project !== undefined && project.parentOrganization !== undefined) ?  project.parentOrganization.name.ja : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="parentOrganization[name][en]">parentOrganization.name.en</label>
+        <input type="text" class="form-control" id="parentOrganization[name][en]" name="parentOrganization[name][en]"
+            value="<%= (project !== undefined && project.parentOrganization !== undefined) ?  project.parentOrganization.name.en : '' %>">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="settings[cognito][adminUserPool][id]">settings.cognito.adminUserPool.id</label>
+        <input type="text" class="form-control" id="settings[cognito][adminUserPool][id]"
+            name="settings[cognito][adminUserPool][id]"
+            value="<%= (project !== undefined && project.settings !== undefined && project.settings.cognito !== undefined) ?  project.settings.cognito.adminUserPool.id : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="settings[cognito][customerUserPool][id]">settings.cognito.customerUserPool.id</label>
+        <input type="text" class="form-control" id="settings[cognito][customerUserPool][id]"
+            name="settings[cognito][customerUserPool][id]"
+            value="<%= (project !== undefined && project.settings !== undefined && project.settings.cognito !== undefined) ?  project.settings.cognito.customerUserPool.id : '' %>">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="settings[chevre][endpoint]">Chevreエンドポイント</label>
+        <input type="text" class="form-control" id="settings[chevre][endpoint]" name="settings[chevre][endpoint]"
+            placeholder="https://example.com"
+            value="<%= (project !== undefined && project.settings.chevre !== undefined) ? project.settings.chevre.endpoint : '' %>">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="settings[gmo][endpoint]">GMOエンドポイント</label>
+        <input type="text" class="form-control" id="settings[gmo][endpoint]" name="settings[gmo][endpoint]"
+            placeholder="https://example.com"
+            value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.endpoint : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="settings[gmo][siteId]">GMOサイトID</label>
+        <input type="text" class="form-control" id="settings[gmo][siteId]" name="settings[gmo][siteId]"
+            placeholder="GMOサイトID"
+            value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.siteId : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="settings[gmo][sitePass]">GMOサイトPASS</label>
+        <input type="text" class="form-control" id="settings[gmo][sitePass]" name="settings[gmo][sitePass]"
+            name="settings[gmo][sitePass]" placeholder="GMOサイトPASS"
+            value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.sitePass : '' %>">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="settings[mvtkReserve][companyCode]">ムビチケ興行会社コード</label>
+        <input type="text" class="form-control" id="settings[mvtkReserve][companyCode]"
+            name="settings[mvtkReserve][companyCode]"
+            value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.mvtkReserve.companyCode : '' %>">
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="settings[mvtkReserve][endpoint]">ムビチケ着券エンドポイント</label>
+        <input type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
+            name="settings[mvtkReserve][endpoint]" placeholder="https://example.com"
+            value="<%= (project !== undefined && project.settings.mvtkReserve !== undefined) ? project.settings.mvtkReserve.endpoint : '' %>">
+    </div>
 </div>
 
 <div class="form-group">
-    <label for="settings[mvtkReserve][endpoint]">ムビチケ着券エンドポイント</label>
-    <input disabled type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
+    <label for="settings[pecorino][endpoint]">Pecorinoエンドポイント</label>
+    <input type="text" class="form-control" id="settings[pecorino][endpoint]" name="settings[pecorino][endpoint]"
         placeholder="https://example.com"
-        value="<%= (project !== undefined && project.settings.mvtkReserve !== undefined) ? project.settings.mvtkReserve.endpoint : '' %>">
+        value="<%= (project !== undefined && project.settings !== undefined && project.settings.pecorino !== undefined) ? project.settings.pecorino.endpoint : '' %>">
+</div>
+
+<div class="form-group">
+    <label for="settings[sendgridApiKey]">Sendgrid API Key</label>
+    <input type="text" class="form-control" id="settings[sendgridApiKey]" name="settings[sendgridApiKey]"
+        value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.sendgridApiKey : '' %>">
+</div>
+
+<div class="form-group">
+    <label for="settings[transactionWebhookUrl]">取引ウェブフックURL</label>
+    <input type="text" class="form-control" id="settings[transactionWebhookUrl]" name="settings[transactionWebhookUrl]"
+        placeholder="https://example.com"
+        value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.transactionWebhookUrl : '' %>">
 </div>

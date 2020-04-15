@@ -36,6 +36,54 @@ const userPools_1 = require("./userPools");
 const waiter_1 = require("./waiter");
 const API_ENDPOINT = process.env.API_ENDPOINT;
 const projectsRouter = express.Router();
+/**
+ * プロジェクト作成
+ */
+projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let message;
+        let attributes;
+        const projectService = new cinerinoapi.service.Project({
+            endpoint: process.env.API_ENDPOINT,
+            auth: req.user.authClient
+        });
+        if (req.method === 'POST') {
+            try {
+                attributes = yield createProjectFromBody({
+                    req: req
+                });
+                const project = yield projectService.create(attributes);
+                req.flash('message', 'プロジェクトを作成しました');
+                res.redirect(`/projects/${project.id}/home`);
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
+        res.render('projects/new', {
+            layout: 'layouts/dashboard',
+            message: message,
+            attributes: attributes,
+            OrganizationType: cinerinoapi.factory.organizationType
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+function createProjectFromBody(params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return {
+            typeOf: cinerinoapi.factory.organizationType.Project,
+            id: params.req.body.id,
+            name: params.req.body.name,
+            logo: params.req.body.logo,
+            parentOrganization: params.req.body.parentOrganization,
+            settings: params.req.body.settings
+        };
+    });
+}
 projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const message = '';

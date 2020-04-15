@@ -30,6 +30,61 @@ const API_ENDPOINT = <string>process.env.API_ENDPOINT;
 
 const projectsRouter = express.Router();
 
+/**
+ * プロジェクト作成
+ */
+projectsRouter.all(
+    '/new',
+    async (req, res, next) => {
+        try {
+            let message;
+            let attributes: cinerinoapi.factory.project.IProject | undefined;
+
+            const projectService = new cinerinoapi.service.Project({
+                endpoint: <string>process.env.API_ENDPOINT,
+                auth: req.user.authClient
+            });
+
+            if (req.method === 'POST') {
+                try {
+                    attributes = await createProjectFromBody({
+                        req: req
+                    });
+                    const project = await projectService.create(attributes);
+                    req.flash('message', 'プロジェクトを作成しました');
+                    res.redirect(`/projects/${project.id}/home`);
+
+                    return;
+                } catch (error) {
+                    message = error.message;
+                }
+            }
+
+            res.render('projects/new', {
+                layout: 'layouts/dashboard',
+                message: message,
+                attributes: attributes,
+                OrganizationType: cinerinoapi.factory.organizationType
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+async function createProjectFromBody(params: {
+    req: express.Request;
+}): Promise<cinerinoapi.factory.project.IProject> {
+    return {
+        typeOf: cinerinoapi.factory.organizationType.Project,
+        id: params.req.body.id,
+        name: params.req.body.name,
+        logo: params.req.body.logo,
+        parentOrganization: params.req.body.parentOrganization,
+        settings: params.req.body.settings
+    };
+}
+
 projectsRouter.all(
     '/:id',
     async (req, res, next) => {

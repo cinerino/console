@@ -92,7 +92,7 @@ sellersRouter.all(
                 attributes: attributes,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 OrganizationType: cinerinoapi.factory.organizationType,
-                PlaceType: cinerinoapi.factory.placeType,
+                PlaceType: { Online: 'Online', Store: 'Store' },
                 WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
                 project: project
             });
@@ -174,7 +174,7 @@ sellersRouter.all(
                 seller: seller,
                 PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 OrganizationType: cinerinoapi.factory.organizationType,
-                PlaceType: cinerinoapi.factory.placeType,
+                PlaceType: { Online: 'Online', Store: 'Store' },
                 WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,
                 project: project
             });
@@ -380,7 +380,7 @@ async function createAttributesFromBody(params: {
         });
     }
 
-    let hasPOS: cinerinoapi.factory.seller.IPOS[] = [];
+    let hasPOS: any[] = [];
     if (Array.isArray(body.hasPOS)) {
         body.hasPOS.forEach((pos: any) => {
             if (pos.id !== '') {
@@ -447,9 +447,11 @@ async function createAttributesFromBody(params: {
             : (movieTheaterFromChevre !== undefined) ? movieTheaterFromChevre.telephone : '',
         url: body.url,
         paymentAccepted: paymentAccepted,
-        hasPOS: hasPOS,
         areaServed: areaServed,
         makesOffer: makesOffer,
+        ...{
+            hasPOS: hasPOS
+        },
         ...(movieTheaterFromChevre !== undefined)
             ? {
                 location: {
