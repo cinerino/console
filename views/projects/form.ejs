@@ -57,8 +57,8 @@
 <div class="form-row">
     <div class="form-group col-md-4">
         <label for="settings[chevre][endpoint]">Chevreエンドポイント</label>
-        <input type="text" class="form-control" id="settings[chevre][endpoint]" name="settings[chevre][endpoint]"
-            placeholder="https://example.com"
+        <input readonly type="text" class="form-control" id="settings[chevre][endpoint]"
+            name="settings[chevre][endpoint]" placeholder="https://example.com"
             value="<%= (project !== undefined && project.settings.chevre !== undefined) ? project.settings.chevre.endpoint : '' %>">
     </div>
 </div>
@@ -66,7 +66,7 @@
 <div class="form-row">
     <div class="form-group col-md-4">
         <label for="settings[gmo][endpoint]">GMOエンドポイント</label>
-        <input type="text" class="form-control" id="settings[gmo][endpoint]" name="settings[gmo][endpoint]"
+        <input readonly type="text" class="form-control" id="settings[gmo][endpoint]" name="settings[gmo][endpoint]"
             placeholder="https://example.com"
             value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.endpoint : '' %>">
     </div>
@@ -89,7 +89,7 @@
 <div class="form-row">
     <div class="form-group col-md-4">
         <label for="settings[mvtkReserve][endpoint]">ムビチケ着券エンドポイント</label>
-        <input type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
+        <input readonly type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
             name="settings[mvtkReserve][endpoint]" placeholder="https://example.com"
             value="<%= (project !== undefined && project.settings.mvtkReserve !== undefined) ? project.settings.mvtkReserve.endpoint : '' %>">
     </div>
@@ -104,8 +104,8 @@
 
 <div class="form-group">
     <label for="settings[pecorino][endpoint]">Pecorinoエンドポイント</label>
-    <input type="text" class="form-control" id="settings[pecorino][endpoint]" name="settings[pecorino][endpoint]"
-        placeholder="https://example.com"
+    <input readonly type="text" class="form-control" id="settings[pecorino][endpoint]"
+        name="settings[pecorino][endpoint]" placeholder="https://example.com"
         value="<%= (project !== undefined && project.settings !== undefined && project.settings.pecorino !== undefined) ? project.settings.pecorino.endpoint : '' %>">
 </div>
 

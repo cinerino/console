@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * プロジェクトルーター
  */
 const express = require("express");
+const http_status_1 = require("http-status");
 const cinerinoapi = require("../cinerinoapi");
 const accounts_1 = require("./accounts");
 const actions_1 = require("./actions");
@@ -108,16 +109,35 @@ function createProjectFromBody(params) {
 }
 projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const message = '';
+        let message = '';
         const projectService = new cinerinoapi.service.Project({
             endpoint: API_ENDPOINT,
             auth: req.user.authClient
         });
-        const project = yield projectService.findById({ id: req.params.id });
+        let project = yield projectService.findById({ id: req.params.id });
+        if (req.method === 'DELETE') {
+            res.status(http_status_1.NO_CONTENT)
+                .end();
+            return;
+        }
+        else if (req.method === 'POST') {
+            try {
+                project = yield createProjectFromBody({
+                    req: req
+                });
+                yield projectService.update(project);
+                req.flash('message', '更新しました');
+                res.redirect(req.originalUrl);
+                return;
+            }
+            catch (error) {
+                message = error.message;
+            }
+        }
         req.project = Object.assign(Object.assign({}, project), { settings: Object.assign(Object.assign({}, project.settings), { id: project.id, API_ENDPOINT: API_ENDPOINT }) });
         res.render('projects/edit', {
             message: message,
-            project: req.project
+            project: project
         });
     }
     catch (error) {

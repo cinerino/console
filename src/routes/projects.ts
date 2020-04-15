@@ -2,6 +2,7 @@
  * プロジェクトルーター
  */
 import * as express from 'express';
+import { NO_CONTENT } from 'http-status';
 
 import * as cinerinoapi from '../cinerinoapi';
 
@@ -111,19 +112,39 @@ projectsRouter.all(
     '/:id',
     async (req, res, next) => {
         try {
-            const message: string = '';
+            let message: string = '';
 
             const projectService = new cinerinoapi.service.Project({
                 endpoint: API_ENDPOINT,
                 auth: req.user.authClient
             });
-            const project = await projectService.findById({ id: req.params.id });
+            let project = await projectService.findById({ id: req.params.id });
+
+            if (req.method === 'DELETE') {
+                res.status(NO_CONTENT)
+                    .end();
+
+                return;
+            } else if (req.method === 'POST') {
+                try {
+                    project = await createProjectFromBody({
+                        req: req
+                    });
+                    await projectService.update(project);
+                    req.flash('message', '更新しました');
+                    res.redirect(req.originalUrl);
+
+                    return;
+                } catch (error) {
+                    message = error.message;
+                }
+            }
 
             req.project = { ...project, settings: { ...project.settings, id: project.id, API_ENDPOINT: API_ENDPOINT } };
 
             res.render('projects/edit', {
                 message: message,
-                project: req.project
+                project: project
             });
         } catch (error) {
             next(error);
