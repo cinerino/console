@@ -24,9 +24,17 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = ''
-                        + '<span class="badge badge-light ' + data.typeOf + '">' + data.typeOf + '</span>'
-                        + '<br><a href="/projects/' + PROJECT_ID + '/sellers/' + data.id + '">' + data.id + '</a>';
+                    var html = '<span class="badge badge-light ' + data.typeOf + '">' + data.typeOf + '</span>';
+
+                    html += '';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<a href="/projects/' + PROJECT_ID + '/sellers/' + data.id + '">' + data.id + '</a>';
 
                     html += '';
 
@@ -71,19 +79,6 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '';
-                    if (data.location !== undefined && data.location !== null) {
-                        html += '<span class="badge badge-light ' + data.location.typeOf + '">' + data.location.typeOf + '</span>'
-                            + '<br><span>' + data.location.name.ja + '</span>';
-                    }
-                    html += '';
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
                     var numPaymentMethods = 0;
                     if (Array.isArray(data.paymentAccepted)) {
                         numPaymentMethods = data.paymentAccepted.length;
@@ -91,6 +86,19 @@ $(function () {
                     var html = '';
 
                     html += '<a href="javascript:void(0)" class="showPaymentAccepted" data-id="' + data.id + '">' + numPaymentMethods + '</a>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+                    if (data.location !== undefined && data.location !== null) {
+                        html += '<span class="badge badge-light ' + data.location.typeOf + '">' + data.location.typeOf + '</span>'
+                            + '<br><span>' + data.location.name.ja + '</span>';
+                    }
+                    html += '';
 
                     return html;
                 }
@@ -121,7 +129,12 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '';
-                    html += '<a href="javascript:void(0)" class="showAreaServed" data-id="' + data.id + '">表示</a>';
+
+                    var numAreaServed = 0;
+                    if (Array.isArray(data.areaServed)) {
+                        numAreaServed = data.areaServed.length;
+                    }
+                    html += '<a href="javascript:void(0)" class="showAreaServed" data-id="' + data.id + '">' + numAreaServed + '</a>';
 
                     return html;
                 }
@@ -135,7 +148,7 @@ $(function () {
                     if (Array.isArray(data.hasMerchantReturnPolicy)) {
                         numPolicy = data.hasMerchantReturnPolicy.length;
                     }
-                    html += '<a href="javascript:void(0)" class="showReturnPolicy" data-id="' + data.id + '">' + numPolicy + ' ポリシー</a>';
+                    html += '<a href="javascript:void(0)" class="showReturnPolicy" data-id="' + data.id + '">' + numPolicy + '</a>';
 
                     return html;
                 }
