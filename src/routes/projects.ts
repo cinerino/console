@@ -98,13 +98,18 @@ projectsRouter.all(
 async function createProjectFromBody(params: {
     req: express.Request;
 }): Promise<cinerinoapi.factory.project.IProject> {
+    const useEventRepo: boolean = params.req.body.settings?.useEventRepo === 'on';
+
     return {
         typeOf: cinerinoapi.factory.organizationType.Project,
         id: params.req.body.id,
         name: params.req.body.name,
         logo: params.req.body.logo,
         parentOrganization: params.req.body.parentOrganization,
-        settings: params.req.body.settings
+        settings: {
+            ...params.req.body.settings,
+            useEventRepo: useEventRepo
+        }
     };
 }
 

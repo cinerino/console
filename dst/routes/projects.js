@@ -96,14 +96,16 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 }));
 function createProjectFromBody(params) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        const useEventRepo = ((_a = params.req.body.settings) === null || _a === void 0 ? void 0 : _a.useEventRepo) === 'on';
         return {
             typeOf: cinerinoapi.factory.organizationType.Project,
             id: params.req.body.id,
             name: params.req.body.name,
             logo: params.req.body.logo,
             parentOrganization: params.req.body.parentOrganization,
-            settings: params.req.body.settings
+            settings: Object.assign(Object.assign({}, params.req.body.settings), { useEventRepo: useEventRepo })
         };
     });
 }
