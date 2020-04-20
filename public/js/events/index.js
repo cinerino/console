@@ -51,8 +51,14 @@ $(function () {
                     return '<span class="badge badge-light ' + data.typeOf + '">' + data.typeOf + '</span>'
                         + '<br>'
                         + '<a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + data.id + '">'
-                        + data.name.ja
+                        + data.id
                         + '</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return String(data.name.ja).slice(0, 10) + '...';
                 }
             },
             {
@@ -94,7 +100,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<span class="badge badge-light ' + data.superEvent.typeOf + '">' + data.superEvent.typeOf + '</span>';
 
-                    html += '<br><a href="javascript:void(0)" class="showSuperEvent" data-id="' + data.id + '">' + data.superEvent.name.ja + '</a>';
+                    html += '<br><a href="javascript:void(0)" class="showSuperEvent" data-id="' + data.id + '">' + String(data.superEvent.name.ja).slice(0, 10) + '...</a>';
 
                     return html;
                 }
@@ -104,7 +110,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '<span class="badge badge-light ' + data.workPerformed.typeOf + '">' + data.workPerformed.typeOf + '</span>';
 
-                    html += '<br><a href="javascript:void(0)" class="showWorkPerformed" data-id="' + data.id + '">' + data.workPerformed.name + '</a>';
+                    html += '<br><a href="javascript:void(0)" class="showWorkPerformed" data-id="' + data.id + '">' + String(data.workPerformed.name).slice(0, 10) + '...</a>';
 
                     return html;
                 }
@@ -116,9 +122,9 @@ $(function () {
                         data.offers = { name: {} };
                     }
 
-                    var html = String(data.offers.id);
+                    var html = '';
 
-                    html += '<br><a href="javascript:void(0)" class="showOffers" data-id="' + data.id + '">' + String(data.offers.name.ja) + '</a>';
+                    html += '<a href="javascript:void(0)" class="showOffers" data-id="' + data.id + '">表示</a>';
 
                     return html;
                 }
@@ -173,48 +179,6 @@ $(function () {
         modal.find('.modal-body').html(body);
         modal.modal();
     }
-
-    // イベント在庫仕入れ
-    $('a.importScreeningEvents').click(function () {
-        var selectedSellerNames = [];
-        $('select[name="seller[ids][]"] option:selected').each(function () {
-            selectedSellerNames.push($(this).text());
-        });
-        var message = '[販売者]\n' + selectedSellerNames.join('\n')
-            + '\n\n[開催日]\n' + $('input[name="startRange"]').val()
-            + '\n\nの販売イベントをインポートしようとしています。'
-            + '\nよろしいですか？';
-        if (window.confirm(message)) {
-            $.ajax({
-                url: '/projects/' + PROJECT_ID + '/events/import',
-                type: 'POST',
-                dataType: 'json',
-                data: $('form').serialize()
-            }).done(function (tasks) {
-                console.log(tasks);
-
-                if (Array.isArray(tasks)) {
-                    var modal = $('#modal-sm');
-                    var title = 'インポートを開始しました(' + tasks.length + 'つのタスクが作成されました' + ')';
-                    var body = tasks.map(function (task) {
-                        var href = '/projects/' + PROJECT_ID + '/tasks/' + task.id + '?name=' + task.name;
-                        return task.id + ' <a target="_blank" href="' + href + '">タスクを確認</a>';
-                    }).join('<br>');
-                    ;
-                    modal.find('.modal-title').html(title);
-                    modal.find('.modal-body').html(body);
-                    modal.modal();
-                }
-
-                // alert('インポートを開始しました');
-            }).fail(function (xhr) {
-                var res = $.parseJSON(xhr.responseText);
-                alert(res.error.message);
-            }).always(function () {
-            });
-        } else {
-        }
-    });
 
     // イベント管理
     $('a.updateEvents').click(function () {

@@ -36,8 +36,6 @@
                             <!--        Here you can write extra buttons/actions for the toolbar              -->
                             <a class="btn btn-default btn-sm search" href="#">
                                 <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
-                            <a class="btn btn-default btn-sm importScreeningEvents" href="#">
-                                <i class="fa fa-plus"></i>&nbsp;&nbsp;在庫仕入れ from Chevre | COA</a>
                             <a class="btn btn-default btn-sm updateEvents" href="#">
                                 <i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;在庫管理 by Chevre</a>
                         </div>
@@ -86,18 +84,6 @@
                                         <% }) %>
                                     </select>
                                 </div>
-
-                                <div class="form-group col-md-2">
-                                    <label>販売者</label>
-                                    <select multiple class="form-control form-control-sm" name="seller[ids][]">
-                                        <% sellers.forEach(function (seller) { %>
-                                        <option value="<%= seller.id %>" <%=( searchConditions.seller !==undefined &&
-                                                Array.isArray(searchConditions.seller.ids) &&
-                                                searchConditions.seller.ids.indexOf(seller.id)>=
-                                                0) ? 'selected' : '' %>><%= seller.name.ja %></option>
-                                        <% }) %>
-                                    </select>
-                                </div>
                             </div>
                         </form>
 
@@ -106,6 +92,7 @@
                                 <thead>
                                     <tr>
                                         <th></th>
+                                        <th>ID</th>
                                         <th>Name</th>
                                         <th>Status</th>
                                         <th>Start</th>
