@@ -192,6 +192,7 @@ iamRouter.all(
 
             const member = await iamService.findMemberById({ member: { id: 'me' } });
             const profile = await iamService.getMemberProfile({ member: { id: 'me' } });
+            const searchRolesResult = await iamService.searchRoles({ limit: 100 });
 
             if (req.method === 'DELETE') {
                 // 何もしない
@@ -215,7 +216,8 @@ iamRouter.all(
                 message: message,
                 moment: moment,
                 member: member,
-                profile: profile
+                profile: profile,
+                roles: searchRolesResult.data
             });
         } catch (error) {
             next(error);

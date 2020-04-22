@@ -2,6 +2,11 @@ $(function () {
     $("#rules-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '',
             data: function (d) {
@@ -11,6 +16,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']],
         ordering: false,
@@ -18,32 +24,31 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-success">' + data.scope + '</span></li>'
-                        + '<li>' + data.name + '</li>'
-                        + '</ul>';
+                    return data.scope;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li>' + data.threshold + ' / ' + data.aggregationUnitInSeconds + ' seconds</li>'
-                        + '</ul>';
+                    return data.name;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
+                    return data.threshold + ' / ' + data.aggregationUnitInSeconds + ' seconds';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
 
                     if (Array.isArray(data.availableHoursSpecifications)) {
                         data.availableHoursSpecifications.forEach(function (specification) {
-                            html += '<li>' + specification.startDate + ' - ' + specification.endDate + '</li>'
+                            html += specification.startDate + ' - ' + specification.endDate
                         });
                     }
-
-                    html += '</ul>';
 
                     return html;
                 }
@@ -51,15 +56,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<ul class="list-unstyled">';
+                    var html = '';
 
                     if (Array.isArray(data.unavailableHoursSpecifications)) {
                         data.unavailableHoursSpecifications.forEach(function (specification) {
-                            html += '<li>' + specification.startDate + ' - ' + specification.endDate + '</li>'
+                            html += specification.startDate + ' - ' + specification.endDate
                         });
                     }
-
-                    html += '</ul>';
 
                     return html;
                 }

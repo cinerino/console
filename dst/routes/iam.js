@@ -170,6 +170,7 @@ iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 
         });
         const member = yield iamService.findMemberById({ member: { id: 'me' } });
         const profile = yield iamService.getMemberProfile({ member: { id: 'me' } });
+        const searchRolesResult = yield iamService.searchRoles({ limit: 100 });
         if (req.method === 'DELETE') {
             // 何もしない
             res.status(http_status_1.NO_CONTENT)
@@ -191,7 +192,8 @@ iamRouter.all('/members/me', (req, res, next) => __awaiter(void 0, void 0, void 
             message: message,
             moment: moment,
             member: member,
-            profile: profile
+            profile: profile,
+            roles: searchRolesResult.data
         });
     }
     catch (error) {

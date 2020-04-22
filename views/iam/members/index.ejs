@@ -30,88 +30,62 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <button type="button" class="btn btn-default btn-sm"
+                                onclick="location.href='/projects/<%= req.project.id %>/iam/members/new'">
+                                <i class="fa fa-plus"></i> 追加</button>
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>メンバータイプ</label>
-                                        <select class="form-control" name="member[typeOf][$eq]">
-                                            <option value=""></option>
-                                            <% const memberTypes = ['WebApplication', 'Person']; %>
-                                            <% memberTypes.forEach(function (memberType) { %>
-                                            <% 
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>メンバータイプ</label>
+                                    <select class="form-control form-control-sm" name="member[typeOf][$eq]">
+                                        <option value=""></option>
+                                        <% const memberTypes = ['WebApplication', 'Person']; %>
+                                        <% memberTypes.forEach(function (memberType) { %>
+                                        <% 
                                                 var selected = false;
                                                 selected = searchConditions.member !== undefined && searchConditions.member.typeOf !== undefined
                                                     && searchConditions.member.typeOf.$eq === memberType;
                                                 %>
-                                            <option value="<%= memberType %>" <% if (selected) { %> selected <% } %>>
-                                                <%= memberType %>
-                                            </option>
-                                            <% }) %>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                                        <option value="<%= memberType %>" <% if (selected) { %> selected <% } %>>
+                                            <%= memberType %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-primary"
-                                onclick="location.href='/projects/<%= req.project.id %>/iam/members/new'">
-                                <i class="fa fa-plus"></i> 追加</button>
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        <div class="table-responsive">
+                            <table id="members-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Member</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Roles</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="members-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Member</th>
-                                    <th>Name</th>
-                                    <th>Roles</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Member</th>
-                                    <th>Name</th>
-                                    <th>Roles</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>

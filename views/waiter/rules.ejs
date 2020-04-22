@@ -49,30 +49,32 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card card-default">
                     <div class="card-header">
-                        <h3 class="card-title">Results</h3>
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                        </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="rules-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Scope / Name</th>
-                                    <th>Threshold</th>
-                                    <th>利用可能期間指定</th>
-                                    <th>利用不可能期間指定</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Scope / Name</th>
-                                    <th>Threshold</th>
-                                    <th>利用可能期間指定</th>
-                                    <th>利用不可能期間指定</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="rules-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>Scope</th>
+                                        <th>Name</th>
+                                        <th>Threshold</th>
+                                        <th>利用可能期間指定</th>
+                                        <th>利用不可能期間指定</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                 </div>
