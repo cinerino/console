@@ -26,8 +26,15 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-light">' + data.typeOf + '</span>'
-                        + '<br><a target="_blank" href="/projects/' + PROJECT_ID + '/people/' + data.id + '">' + data.id + '</a>';
+                    var html = '<span class="badge badge-light">' + data.typeOf + '</span>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/people/' + data.id + '">' + data.id + '</a>';
 
                     return html;
                 }

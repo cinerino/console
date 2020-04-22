@@ -31,10 +31,15 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    return '<span class="badge badge-light">' + data.typeOf + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/authorizations/' + data.id;
 
-                    return '<span class="badge badge-light">' + data.typeOf + '</span>'
-                        + '<br><a target="_blank" href="' + url + '"><span class="">' + data.code + '</span></a>';
+                    return '<a target="_blank" href="' + url + '"><span class="">' + data.code + '</span></a>';
                 }
             },
             {

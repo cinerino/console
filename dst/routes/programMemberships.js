@@ -23,12 +23,14 @@ programMembershipsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, v
         });
         const searchConditions = Object.assign(Object.assign({}, req.query), { limit: req.query.limit, page: req.query.page });
         if (req.query.format === 'datatable') {
-            const searchProgramMembershipsResult = yield programMembershipService.search(searchConditions);
+            const searchResult = yield programMembershipService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchProgramMembershipsResult.totalCount,
-                recordsFiltered: searchProgramMembershipsResult.totalCount,
-                data: searchProgramMembershipsResult.data
+                // recordsTotal: searchOrdersResult.totalCount,
+                recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
+                data: searchResult.data
             });
         }
         else {

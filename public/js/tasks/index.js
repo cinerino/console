@@ -71,14 +71,14 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<textarea class="form-control" placeholder="" disabled="" rows="1">' + JSON.stringify(data.data, null, '\t') + '</textarea>'
-                        + '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showData" data-id="' + data.id + '">詳細</a>';
+                        + '<a href="javascript:void(0)" class="showData" data-id="' + data.id + '">表示</a>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
                     return '<textarea class="form-control" placeholder="" disabled="" rows="1">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea>'
-                        + '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showExecutionResults" data-id="' + data.id + '">詳細</a>';
+                        + '<a href="javascript:void(0)" class="showExecutionResults" data-id="' + data.id + '">表示</a>';
                 }
             }
         ]

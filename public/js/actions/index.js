@@ -24,8 +24,15 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="badge badge-light">' + data.typeOf + '</span>'
-                        + '<br><span class="text-muted">' + data.id + '</span>';
+                    var html = '<span class="badge badge-light">' + data.typeOf + '</span>';
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '<span class="text-muted">' + data.id + '</span>';
 
                     return html;
                 }
@@ -81,9 +88,8 @@ $(function () {
                             agentName = data.agent.name.ja;
                         }
 
-                        html += '<span class="badge badge-light">' + data.agent.typeOf + '</span>'
-                            + '<br><a target="_blank" href="' + url + '">' + agentName + '</a>';
-                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showAgent" data-id="' + data.id + '">詳細</a>';
+                        html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.agent.typeOf + '</span></a>'
+                            + '<br><a href="javascript:void(0)" class="showAgent" data-id="' + data.id + '">' + agentName + '</a>';
                     }
 
                     return html;
@@ -109,10 +115,8 @@ $(function () {
                             recipientName = data.recipient.name.ja.slice(0, 10) + '...';
                         }
 
-                        html += '<span class="badge badge-light">' + data.recipient.typeOf + '</span>'
-                            + '<br><a target="_blank" href="' + url + '">' + recipientName + '</a>';
-
-                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showRecipient" data-id="' + data.id + '">詳細</a>';
+                        html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.recipient.typeOf + '</span></a>'
+                            + '<br><a href="javascript:void(0)" class="showRecipient" data-id="' + data.id + '">' + recipientName + '</a>';
                     }
 
                     return html;
@@ -146,7 +150,7 @@ $(function () {
                             html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.object.typeOf + '</span></a>';
                         }
 
-                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showObject" data-id="' + data.id + '">詳細</a>';
+                        html += '<br><a href="javascript:void(0)" class="showObject" data-id="' + data.id + '">表示</a>';
                     }
 
                     return html;
@@ -165,7 +169,7 @@ $(function () {
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.purpose.typeOf + '/' + purposeId;
 
                         html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.purpose.typeOf + '</span></a>'
-                            + '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showPurpose" data-id="' + data.id + '">詳細</a>';
+                            + '<br><a href="javascript:void(0)" class="showPurpose" data-id="' + data.id + '">表示</a>';
                     }
 
                     return html;
@@ -232,7 +236,7 @@ $(function () {
 
                     if (data.result !== undefined && data.result !== null && Object.keys(data.result).length > 0) {
                         html += '<span class="badge badge-light">' + data.result.typeOf + '</span>';
-                        html += '<br><a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showResult" data-id="' + data.id + '">詳細</a>';
+                        html += '<br><a href="javascript:void(0)" class="showResult" data-id="' + data.id + '">表示</a>';
                     } else {
                     }
 
@@ -247,9 +251,9 @@ $(function () {
                     if (data.error !== undefined && data.error !== null && Object.keys(data.error).length > 0) {
                         html += '<span class="badge badge-light">' + data.error.name + '</span></li>';
                         if (typeof data.error.message === 'string') {
-                            html += data.error.message;
+                            html += data.error.message.slice(0, 10) + '...';
                         }
-                        html += '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showError" data-id="' + data.id + '">詳細</a>';
+                        html += '<a href="javascript:void(0)" class="showError" data-id="' + data.id + '">表示</a>';
                     } else {
                     }
 

@@ -2,6 +2,11 @@ $(function () {
     $("#transactions-table").DataTable({
         processing: true,
         serverSide: true,
+        pagingType: 'simple',
+        language: {
+            info: 'Showing page _PAGE_',
+            infoFiltered: ''
+        },
         ajax: {
             url: '?' + $('form').serialize(),
             data: function (d) {
@@ -11,6 +16,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[1, 'asc']], // デフォルトは枝番号昇順
         ordering: false,
@@ -18,16 +24,31 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-light">' + projectId + '</span></li>'
-                        + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/returnOrder/' + data.id + '">' + data.id + '</a></li>'
-                        + '<li><span class="badge ' + data.status + '">' + data.status + '</span></li>'
-                        + '<li>' + data.startDate + '</li>'
-                        + '<li>' + data.endDate + '</li>'
-                        + '<li>' + data.expires + '</li>'
-                        + '</ul>';
+                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/returnOrder/' + data.id + '">' + data.id + '</a>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<span class="badge ' + data.status + '">' + data.status + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.startDate;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.endDate;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.expires;
                 }
             },
             {
@@ -50,18 +71,11 @@ $(function () {
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
 
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></li>'
-                        + '<li><span class="badge badge-warning">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span></li>'
-                        + '<li>'
-                        + '<a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-secondary">Application</span></a>'
-                        + '</li>'
-                        + '<li><a target="_blank" href="' + url + '">' + data.agent.id + '</a></li>'
-                        + '<li>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</li>'
-                        + '<li>' + String(data.agent.email) + '</li>'
-                        + '<li>' + String(data.agent.telephone) + '</li>';
-
-                    html += '</ul>';
+                    var html = '<span class="badge badge-light ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span>'
+                        + ' <span class="badge badge-light">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span>'
+                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-light">Application</span></a>'
+                        + '<br><a target="_blank" href="' + url + '">' + data.agent.id + '</a>'
+                        + '<br>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName);
 
                     return html;
                 }
@@ -76,12 +90,8 @@ $(function () {
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + seller.typeOf + '/' + seller.id;
 
-                    var html = '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + seller.typeOf + '">' + seller.typeOf + '</span></li>'
-                        + '<li><a target="_blank" href="' + url + '">' + seller.name + '</a></li>'
-                        + '<li>' + seller.telephone + '</li>'
-                        + '<li>' + seller.url + '</li>'
-                        + '</ul>';
+                    var html = '<span class="badge badge-light ' + seller.typeOf + '">' + seller.typeOf + '</span>'
+                        + '<br><a target="_blank" href="' + url + '">' + seller.name + '</a>';
 
                     return html;
                 }
@@ -103,10 +113,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<ul class="list-unstyled">'
-                        + '<li><span class="badge badge-secondary ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span></li>'
-                        + '<li>' + data.tasksExportedAt + '</li>'
-                        + '</ul>';
+                    return '<span class="badge badge-light ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.tasksExportedAt;
                 }
             }
         ]

@@ -18,6 +18,7 @@ $(function () {
                 d.format = 'datatable';
             }
         },
+        lengthChange: false,
         searching: false,
         order: [[0, 'asc']], // デフォルトソート
         ordering: false,
@@ -25,48 +26,42 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var accountId = '---';
-                    if (data.accountId !== undefined && data.accountId !== null && data.accountId !== '') {
+                    var accountId = 'なし';
+                    if (typeof data.accountId === 'string') {
                         accountId = data.accountId;
                     }
 
-                    return '' + accountId + ''
-                        // + data.paymentMethods.map(function (payment) {
-                        //     var listHtml = '<li><span class="badge ' + payment.typeOf + '">' + payment.typeOf + '</span></li>'
-                        //         + '<li><span>' + payment.paymentMethodId + '</span></li>';
-
-                        //     if (payment.totalPaymentDue !== undefined) {
-                        //         listHtml += '<li><span>' + payment.totalPaymentDue.value + ' ' + payment.totalPaymentDue.currency + '</span></li>'
-                        //     }
-
-                        //     return listHtml;
-                        // }).join('')
-                        + '';
+                    return accountId;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '' + data.confirmationNumber + '';
+                    return data.confirmationNumber;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<span class="badge ' + data.paymentMethod + '">' + data.paymentMethod + '</span>'
-                        + '<br><span>' + data.paymentMethodId + '</span>';
+                    return data.paymentMethod;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<span class="badge badge-secondary ' + data.paymentStatus + '">' + data.paymentStatus + '</span>';
+                    return data.paymentMethodId;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm showTotalPaymentDue" data-orderNumber="' + data.referencesOrder.orderNumber + '">表示</a>';
+                    return '<span class="badge badge-light ' + data.paymentStatus + '">' + data.paymentStatus + '</span>';
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<a href="javascript:void(0)" class="showTotalPaymentDue" data-orderNumber="' + data.referencesOrder.orderNumber + '">表示</a>';
                 }
             },
             {
@@ -86,12 +81,10 @@ $(function () {
 
                     var html = '';
 
-                    html += '<a target="_blank" href="' + url + '"><span class="badge badge-info">' + data.customer.typeOf + '</span></a>';
+                    html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.customer.typeOf + '</span></a>';
 
-                    html += ' <span class="badge badge-warning">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span>'
+                    html += ' <span class="badge badge-light">' + ((data.customer.memberOf !== undefined) ? data.customer.memberOf.membershipNumber : '') + '</span>'
                         + '<br><a href="javascript:void(0)" class="showCustomer" data-orderNumber="' + data.referencesOrder.orderNumber + '">' + data.customer.name + '</a>';
-
-                    html += '';
 
                     return html;
                 }
@@ -104,8 +97,6 @@ $(function () {
                     if (data.referencesOrder !== undefined) {
                         html += '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.referencesOrder.orderNumber + '">' + data.referencesOrder.orderNumber + '</a>'
                     }
-
-                    html += '';
 
                     return html;
                 }

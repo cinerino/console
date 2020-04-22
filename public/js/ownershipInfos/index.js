@@ -29,8 +29,7 @@ $(function () {
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOf + '/' + data.id;
 
-                    return '<span class="badge badge-light">' + data.typeOf + '</span>'
-                        + '<br><a target="_blank" href="' + url + '">' + data.id + '</a>';
+                    return '<a target="_blank" href="' + url + '">' + data.id + '</a>';
                 }
             },
             {
