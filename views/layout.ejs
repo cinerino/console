@@ -456,6 +456,24 @@
     <script src="/node_modules/admin-lte/plugins/datatables/jquery.dataTables.js"></script>
     <script src="/node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
     <%- script %>
+
+    <% if (typeof process.env.NEW_CONSOLE_RECOMMENDATION === 'string') { %>
+    <script>
+        $(function () {
+            $(document).Toasts('create', {
+                autohide: false,
+                delay: 10000,
+                fade: true,
+                icon: 'fas fa-exclamation-triangle',
+                class: 'bg-warning',
+                close: true,
+                title: '新しいコンソールの推奨',
+                body: '本コンソールは情報が最新でない可能性があります。<br>最新の情報を確認するには <a href="<%= process.env.NEW_CONSOLE_RECOMMENDATION %>">新しいコンソール</a> をご利用ください。'
+            })
+
+        });
+    </script>
+    <% } %>
 </body>
 
 </html>
