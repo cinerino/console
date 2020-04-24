@@ -26,9 +26,9 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
-                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/placeOrder/' + data.id + '">' + data.id + '</a>';
+                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/placeOrder/' + data.id + '">'
+                        + '表示<i class="fa fa-external-link-alt ml-1"></i>'
+                        + '</a>';
                 }
             },
             {
@@ -84,11 +84,14 @@ $(function () {
                     }
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
+                    var agentName = String(data.agent.familyName) + ' ' + String(data.agent.givenName);
+                    if (agentName.length > 8) {
+                        agentName = agentName.slice(0, 8) + '...';
+                    }
 
                     var html = '<a target="_blank" href="' + url + '"><span class="badge badge-light ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></a>'
-                        + ' <span class="badge badge-light">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span>'
-                        + '<br><a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-light">Application</span></a>'
-                        + '<br><a href="javscript:void(0);" class="showAgent" data-id="' + data.id + '">' + String(data.agent.familyName) + ' ' + String(data.agent.givenName) + '</a>';
+                        + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-light">Application</span></a>'
+                        + '<br><a href="javscript:void(0);" class="showAgent" data-id="' + data.id + '">' + agentName + '</a>';
 
                     html += '';
 
@@ -99,8 +102,13 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
+                    var sellerName = data.seller.name.ja;
+                    if (sellerName.length > 8) {
+                        sellerName = sellerName.slice(0, 8) + '...';
+                    }
+
                     var html = '<span class="badge badge-light ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span>'
-                        + '<br><a target="_blank" href="' + url + '">' + data.seller.name.ja + '</a>';
+                        + '<br><a target="_blank" href="' + url + '">' + sellerName + '</a>';
 
                     return html;
                 }
@@ -109,7 +117,9 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     if (data.result !== undefined) {
-                        return '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.result.order.orderNumber + '">' + data.result.order.orderNumber + '</a>';
+                        return '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.result.order.orderNumber + '">'
+                            + '表示<i class="fa fa-external-link-alt ml-1"></i>'
+                            + '</a>';
                     } else {
                         return 'No Result';
                     }
@@ -121,7 +131,8 @@ $(function () {
                     var html = '';
 
                     if (typeof data.endDate === 'string') {
-                        html += moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds() + ' s';
+                        html += Math.floor(moment.duration(moment(data.endDate).diff(data.startDate)).asSeconds()) + ' s';
+                        // html += moment.duration(moment(data.endDate).diff(data.startDate)).humanize();
                     }
 
                     return html;
@@ -131,17 +142,6 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     return '<span class="badge badge-light ' + data.tasksExportationStatus + '">' + data.tasksExportationStatus + '</span>';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var tasksExportedAt = '';
-                    if (typeof data.tasksExportedAt === 'string') {
-                        tasksExportedAt = moment(data.tasksExportedAt).utc().format();
-                    }
-
-                    return tasksExportedAt;
                 }
             },
             {
@@ -161,12 +161,19 @@ $(function () {
 
     // Date range picker
     $('#startRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
-    });
+    })
+        .on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+        })
+        .on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
     $('.search').click(function () {
         $('form').submit();

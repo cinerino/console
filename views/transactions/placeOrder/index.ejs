@@ -88,7 +88,7 @@
                                         </div>
                                         <input type="text" class="form-control form-control-sm" name="startRange"
                                             id="startRange"
-                                            value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                            value="<%= (searchConditions.startFrom !== undefined) ? `${moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                     </div>
                                     <!-- /.input group -->
                                 </div>
@@ -170,9 +170,8 @@
                                         <th>販売者</th>
                                         <th>結果</th>
                                         <th>所要時間</th>
-                                        <th>タスクステータス</th>
-                                        <th>タスクエクスポート</th>
-                                        <th>タスクレイテンシ</th>
+                                        <th>タスク</th>
+                                        <th>レイテンシ</th>
                                     </tr>
                                 </thead>
                             </table>

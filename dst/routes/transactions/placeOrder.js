@@ -46,14 +46,11 @@ placeOrderTransactionsRouter.get('',
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])
                     .toDate()
-                : moment()
-                    .add(-1, 'days')
-                    .toDate(),
+                : undefined,
             startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[1])
                     .toDate()
-                : moment()
-                    .toDate(),
+                : undefined,
             endFrom: (req.query.endFrom !== undefined)
                 ? moment(req.query.endFrom)
                     .toDate()
