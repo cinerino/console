@@ -91,13 +91,15 @@ $(function () {
                     if (data.typeOfGood.typeOf === 'Account') {
                         resourceId = data.typeOfGood.accountNumber;
                     }
+
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOfGood.typeOf + '/' + resourceId + '?accountType=' + data.typeOfGood.accountType;
 
-                    var html = ''
-                        + '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.typeOfGood.typeOf + '</span></a>';
+                    var html = '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.typeOfGood.typeOf + '</span></a>';
 
-                    html += '<br><a href="javascript:void(0)" class="showTypeOfGood" data-id="' + data.id + '">' + resourceId + '</a>'
-                        + '';
+                    if (typeof resourceId !== 'string') {
+                        resourceId = '表示';
+                    }
+                    html += '<br><a href="javascript:void(0)" class="showTypeOfGood" data-id="' + data.id + '">' + resourceId + '</a>';
 
                     return html;
                 }
@@ -107,12 +109,19 @@ $(function () {
 
     // Date range picker
     $('#ownedRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
-    });
+    })
+        .on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+        })
+        .on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
     $(document).on('click', '.btn.search,a.search', function () {
         $('form.search').submit();

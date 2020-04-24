@@ -32,7 +32,9 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<span class="text-muted">' + data.id + '</span>';
+                    var html = '';
+
+                    html += '<a href="javascript:void(0)" class="showId" data-id="' + data.id + '">表示</a>';
 
                     return html;
                 }
@@ -63,7 +65,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '';
 
-                    html += '<span class="badge ' + data.actionStatus + '">' + data.actionStatus + '</span>';
+                    html += '<span class="badge ' + data.actionStatus + '">' + String(data.actionStatus).replace('ActionStatus', '') + '</span>';
 
                     return html;
                 }
@@ -88,6 +90,10 @@ $(function () {
                             agentName = data.agent.name.ja;
                         }
 
+                        if (typeof agentName === 'string' && agentName.length > 8) {
+                            agentName = agentName.slice(0, 8) + '...';
+                        }
+
                         html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.agent.typeOf + '</span></a>'
                             + '<br><a href="javascript:void(0)" class="showAgent" data-id="' + data.id + '">' + agentName + '</a>';
                     }
@@ -110,9 +116,13 @@ $(function () {
                         }
                         var url = '/projects/' + PROJECT_ID + '/resources/' + data.recipient.typeOf + '/' + data.recipient.id + '?userPoolId=' + userPoolId;
 
-                        var recipientName = (typeof data.recipient.name === 'string') ? data.recipient.name.slice(0, 10) + '...' : data.recipient.id;
+                        var recipientName = (typeof data.recipient.name === 'string') ? data.recipient.name : data.recipient.id;
                         if (typeof data.recipient.name === 'object' && data.recipient.name !== undefined && typeof data.recipient.name.ja === 'string') {
-                            recipientName = data.recipient.name.ja.slice(0, 10) + '...';
+                            recipientName = data.recipient.name.ja;
+                        }
+
+                        if (typeof recipientName === 'string' && recipientName.length > 8) {
+                            recipientName = recipientName.slice(0, 8) + '...';
                         }
 
                         html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.recipient.typeOf + '</span></a>'
@@ -130,8 +140,7 @@ $(function () {
                     if (data.object !== undefined && data.object !== null) {
                         if (Array.isArray(data.object)) {
                             data.object.forEach(function (o) {
-                                html += '<span class="badge badge-light">' + o.typeOf + '</span>'
-                                    + '<br><span class="text-muted">' + o.id + '</span>';
+                                html += '<span class="badge badge-light">' + o.typeOf + '</span>';
                             });
                         } else {
                             var userPoolId = '';
@@ -265,15 +274,29 @@ $(function () {
 
     // Date range picker
     $('#startRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
-    });
+    })
+        .on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+        })
+        .on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
     $(document).on('click', '.btn.search,a.search', function () {
         $('form.search').submit();
+    });
+
+    $(document).on('click', '.showId', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showId(id);
     });
 
     $(document).on('click', '.showAgent', function () {
@@ -317,6 +340,25 @@ $(function () {
 
         showError(id);
     });
+
+    function showId(id) {
+        var actions = table
+            .rows()
+            .data()
+            .toArray();
+        var action = actions.find(function (o) {
+            return o.id === id
+        })
+
+        var modal = $('#modal-action');
+        var title = 'Action `' + action.id + '` ID';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(action.id, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
 
     function showAgent(id) {
         var actions = table

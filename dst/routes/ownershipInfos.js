@@ -50,14 +50,11 @@ ownershipInfosRouter.get('',
             ownedFrom: (req.query.ownedRange !== undefined && req.query.ownedRange !== '')
                 ? moment(req.query.ownedRange.split(' - ')[0])
                     .toDate()
-                : moment()
-                    .add(-1, 'day')
-                    .toDate(),
+                : undefined,
             ownedThrough: (req.query.ownedRange !== undefined && req.query.ownedRange !== '')
                 ? moment(req.query.ownedRange.split(' - ')[1])
                     .toDate()
-                : moment()
-                    .toDate(),
+                : undefined,
             typeOfGood: {
                 typeOf: (req.query.typeOfGood !== undefined
                     && req.query.typeOfGood.typeOf !== undefined

@@ -70,7 +70,7 @@
                                         </div>
                                         <input type="text" class="form-control form-control-sm" name="startRange"
                                             id="startRange"
-                                            value="<%= moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                            value="<%= (searchConditions.startFrom !== undefined) ? `${moment(searchConditions.startFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.startThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                     </div>
                                     <!-- /.input group -->
                                 </div>
