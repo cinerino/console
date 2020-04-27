@@ -38,13 +38,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '';
-                    html += data.programName;
-                    html += '';
-
-                    return html;
+                    return data.name.ja;
                 }
             }
         ]
+    });
+
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
     });
 });

@@ -136,7 +136,7 @@
                                             </a>
                                             <% } %>
                                             <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
-                                            <%= acceptedOffer.itemOffered.programName %>
+                                            <%= acceptedOffer.itemOffered.name.ja %>
                                             <% } else { %>
                                             <%= `${acceptedOffer.itemOffered.typeOf} ${acceptedOffer.itemOffered.name}` %>
                                             <% } %>
@@ -163,10 +163,6 @@
                                         <td>
                                             <% if (acceptedOffer.itemOffered.typeOf === 'EventReservation') { %>
                                             <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
-                                            <%= acceptedOffer.price %>
-                                            <%= acceptedOffer.priceCurrency %>
-                                            per
-                                            <%= moment.duration(acceptedOffer.eligibleDuration.value, 'seconds').humanize() %>
                                             <% } %>
                                         </td>
                                         <td>

@@ -45,7 +45,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.remainingNumberOfTries + '/' + data.numberOfTried;
+                    return data.remainingNumberOfTries;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return data.numberOfTried;
                 }
             },
             {
@@ -70,14 +76,14 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<textarea class="form-control" placeholder="" disabled="" rows="1">' + JSON.stringify(data.data, null, '\t') + '</textarea>'
+                    return '<textarea class="form-control" placeholder="" disabled="" cols="4" rows="1">' + JSON.stringify(data.data, null, '\t') + '</textarea>'
                         + '<a href="javascript:void(0)" class="showData" data-id="' + data.id + '">表示</a>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<textarea class="form-control" placeholder="" disabled="" rows="1">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea>'
+                    return '<textarea class="form-control" placeholder="" disabled="" cols="4" rows="1">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea>'
                         + '<a href="javascript:void(0)" class="showExecutionResults" data-id="' + data.id + '">表示</a>';
                 }
             }
@@ -91,6 +97,10 @@ $(function () {
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
+    });
+
+    $(document).on('click', '.btn.search,a.search', function () {
+        $('form.search').submit();
     });
 
     $(document).on('click', '.showData', function () {

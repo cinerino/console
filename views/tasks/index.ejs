@@ -30,16 +30,19 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-default">
-                    <!-- <div class="card-header">
-                        <h3 class="card-title">Select2</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
                         </div>
-                    </div> -->
-                    <form role="form" method="get">
-                        <div class="card-body">
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label>実行日時</label>
@@ -86,48 +89,32 @@
                                         name="data[agent][id]" placeholder="data.agent.id" value="">
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-secondary float-right">検索</button>
+                        <div class="table-responsive">
+                            <table id="tasks-table" class="table table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>残試行回数</th>
+                                        <th>試行回数</th>
+                                        <th>実行日時</th>
+                                        <th>最終試行日時</th>
+                                        <th>Data</th>
+                                        <th>実行結果</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
             </div>
             <!--/.col (left) -->
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Results</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive">
-                        <table id="tasks-table" class="table table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>残試行回数 / 試行回数</th>
-                                    <th>実行日時</th>
-                                    <th>最終試行日時</th>
-                                    <th>Data</th>
-                                    <th>実行結果</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </div>

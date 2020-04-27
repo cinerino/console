@@ -242,8 +242,15 @@ function searchProgramMemberships(page, cb) {
             var programMembership = ownershipInfo.typeOfGood;
             programMemberships.push(programMembership);
 
-            var html = '<td>' + '<a href="#">' + programMembership.id + '</a>' + '</td>'
-                + '<td>' + programMembership.programName + '</td>'
+            var name = programMembership.name;
+            if (typeof name !== 'string') {
+                name = programMembership.name.ja;
+            }
+
+            var membershipServiceId = programMembership.membershipFor.id;
+
+            var html = '<td>' + name + '</td>'
+                + '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/programMemberships/' + membershipServiceId + '">' + membershipServiceId + '</a>' + '</td>'
                 + '<td>' + moment(ownershipInfo.ownedFrom).format('lllZ') + '</td>'
                 + '<td>' + moment(ownershipInfo.ownedThrough).format('lllZ') + '</td>';
             $('<tr>').html(html).appendTo("#programMemberships tbody");
