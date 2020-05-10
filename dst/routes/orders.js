@@ -330,13 +330,30 @@ ordersRouter.get('',
             stream.pipe(res);
         }
         else {
+            // 決済カードを検索
+            const productService = new cinerinoapi.service.Product({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
+            let paymentCards = [];
+            try {
+                const searchPaymentCardsResult = yield productService.search({
+                    typeOf: { $eq: 'PaymentCard' }
+                });
+                paymentCards = searchPaymentCardsResult.data;
+            }
+            catch (error) {
+                // no op
+            }
             res.render('orders/index', {
                 moment: moment,
                 sellers: searchSellersResult.data,
                 applications: applications,
                 searchConditions: searchConditions,
                 OrderStatus: cinerinoapi.factory.orderStatus,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType
+                PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                paymentCards: paymentCards
             });
         }
     }

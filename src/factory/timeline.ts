@@ -301,7 +301,7 @@ export function createFromAction(params: {
     }
 
     if (a.typeOf === cinerinoapi.factory.actionType.MoneyTransfer) {
-        const amount = (<cinerinoapi.factory.action.transfer.moneyTransfer.IAction<any>>a).amount;
+        const amount = (<cinerinoapi.factory.action.transfer.moneyTransfer.IAction>a).amount;
         if (typeof amount === 'number') {
             object = { name: String(amount) };
         } else {

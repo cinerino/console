@@ -20,8 +20,7 @@ movieTicketPaymentMethodRouter.get(
                 endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
                 auth: req.user.authClient
             });
-            const searchConditions:
-                cinerinoapi.factory.paymentMethod.ISearchConditions<cinerinoapi.factory.paymentMethodType.MovieTicket> = {
+            const searchConditions: any = {
                 limit: req.query.limit,
                 page: req.query.page,
                 identifiers: (req.query.identifiers !== undefined && req.query.identifiers !== '')

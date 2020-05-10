@@ -17,6 +17,7 @@ import invoicesRouter from './invoices';
 import ordersRouter from './orders';
 import ownershipInfosRouter from './ownershipInfos';
 import movieTicketPaymentMethodRouter from './paymentMethods/movieTicket';
+import prepaidCardPaymentMethodRouter from './paymentMethods/prepaidCard';
 import peopleRouter from './people';
 import programMembershipsRouter from './programMemberships';
 import reservationsRouter from './reservations';
@@ -98,8 +99,6 @@ projectsRouter.all(
 async function createProjectFromBody(params: {
     req: express.Request;
 }): Promise<cinerinoapi.factory.project.IProject> {
-    const useEventRepo: boolean = params.req.body.settings?.useEventRepo === 'on';
-
     return {
         typeOf: cinerinoapi.factory.organizationType.Project,
         id: params.req.body.id,
@@ -107,8 +106,7 @@ async function createProjectFromBody(params: {
         logo: params.req.body.logo,
         parentOrganization: params.req.body.parentOrganization,
         settings: {
-            ...params.req.body.settings,
-            useEventRepo: useEventRepo
+            ...params.req.body.settings
         }
     };
 }
@@ -204,6 +202,7 @@ projectsRouter.use('/:id/invoices', invoicesRouter);
 projectsRouter.use('/:id/orders', ordersRouter);
 projectsRouter.use('/:id/ownershipInfos', ownershipInfosRouter);
 projectsRouter.use('/:id/paymentMethods/movieTicket', movieTicketPaymentMethodRouter);
+projectsRouter.use('/:id/paymentMethods/prepaidCard', prepaidCardPaymentMethodRouter);
 projectsRouter.use('/:id/people', peopleRouter);
 projectsRouter.use('/:id/programMemberships', programMembershipsRouter);
 projectsRouter.use('/:id/reservations', reservationsRouter);

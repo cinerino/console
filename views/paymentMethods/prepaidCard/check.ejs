@@ -1,0 +1,127 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">ムビチケ認証</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/projects/<%= req.project.id %>/home">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">ムビチケ認証</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <!-- <div class="card-header">
+                        <h3 class="card-title">Quick Example</h3>
+                    </div> -->
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form role="form" method="post">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>販売者</label>
+                                <select class="form-control" name="seller[id]">
+                                    <% sellers.forEach(function (seller) { %>
+                                    <% 
+                                        var selected = false;
+                                        selected = searchConditions.seller.id === seller.id;
+                                         %>
+                                    <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                        <%= seller.name.ja %>
+                                    </option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="serviceOutput[reservationFor][id]">イベントID</label>
+                                <input type="text" class="form-control" id="serviceOutput[reservationFor][id]"
+                                    name="serviceOutput[reservationFor][id]" placeholder=""
+                                    value="<%= searchConditions.serviceOutput.reservationFor.id %>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="identifier">購入管理番号</label>
+                                <input type="text" class="form-control" id="identifier" name="identifier"
+                                    placeholder="8559919013" value="<%= searchConditions.identifier %>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="accessCode">PINコード</label>
+                                <input type="text" class="form-control" id="accessCode" name="accessCode"
+                                    placeholder="1234" value="<%= searchConditions.accessCode %>">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer clearfix">
+                            <button type="submit" class="btn btn-secondary float-right">認証</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Results</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive">
+                        <table id="paymentMethods-table" class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>購入管理番号</th>
+                                    <th>券種区分</th>
+                                    <th>有効期間</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>購入管理番号</th>
+                                    <th>券種区分</th>
+                                    <th>有効期間</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<!-- DataTables -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+
+<script src="/js/paymentMethods/movieTicket/check.js"></script>

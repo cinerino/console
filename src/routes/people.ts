@@ -289,7 +289,7 @@ peopleRouter.get(
                     id: req.params.id,
                     typeOfGood: {
                         typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                        accountType: cinerinoapi.factory.accountType.Coin
+                        accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
                     }
                 });
 
@@ -298,7 +298,7 @@ peopleRouter.get(
                     id: req.params.id,
                     typeOfGood: {
                         typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                        accountType: cinerinoapi.factory.accountType.Point
+                        accountType: 'Point'
                     }
                 });
 

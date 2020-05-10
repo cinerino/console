@@ -247,14 +247,14 @@ peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, 
             id: req.params.id,
             typeOfGood: {
                 typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                accountType: cinerinoapi.factory.accountType.Coin
+                accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
             }
         });
         const searchPointAccountsResult = yield personOwnershipInfoService.search({
             id: req.params.id,
             typeOfGood: {
                 typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                accountType: cinerinoapi.factory.accountType.Point
+                accountType: 'Point'
             }
         });
         coinAccounts = searchCoinAccountsResult.data;

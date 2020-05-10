@@ -125,6 +125,19 @@
                                             <%= paymentMethod %>
                                         </option>
                                         <% }) %>
+
+                                        <% paymentCards.forEach(function (paymentCard) { %>
+                                        <%
+                                            var selected = false;
+                                            if (searchConditions.paymentMethods !== undefined && searchConditions.paymentMethods.typeOfs !== undefined) {
+                                                selected = searchConditions.paymentMethods.typeOfs.indexOf(paymentCard.serviceOutput.typeOf) >= 0;
+                                            }
+                                            %>
+                                        <option value="<%= paymentCard.serviceOutput.typeOf %>" <% if (selected) { %>
+                                            selected <% } %>>
+                                            <%= paymentCard.name.ja %>
+                                        </option>
+                                        <% }) %>
                                     </select>
                                 </div>
                             </div>

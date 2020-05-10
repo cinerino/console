@@ -26,6 +26,7 @@ const invoices_1 = require("./invoices");
 const orders_1 = require("./orders");
 const ownershipInfos_1 = require("./ownershipInfos");
 const movieTicket_1 = require("./paymentMethods/movieTicket");
+const prepaidCard_1 = require("./paymentMethods/prepaidCard");
 const people_1 = require("./people");
 const programMemberships_1 = require("./programMemberships");
 const reservations_1 = require("./reservations");
@@ -96,16 +97,14 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 }));
 function createProjectFromBody(params) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const useEventRepo = ((_a = params.req.body.settings) === null || _a === void 0 ? void 0 : _a.useEventRepo) === 'on';
         return {
             typeOf: cinerinoapi.factory.organizationType.Project,
             id: params.req.body.id,
             name: params.req.body.name,
             logo: params.req.body.logo,
             parentOrganization: params.req.body.parentOrganization,
-            settings: Object.assign(Object.assign({}, params.req.body.settings), { useEventRepo: useEventRepo })
+            settings: Object.assign({}, params.req.body.settings)
         };
     });
 }
@@ -182,6 +181,7 @@ projectsRouter.use('/:id/invoices', invoices_1.default);
 projectsRouter.use('/:id/orders', orders_1.default);
 projectsRouter.use('/:id/ownershipInfos', ownershipInfos_1.default);
 projectsRouter.use('/:id/paymentMethods/movieTicket', movieTicket_1.default);
+projectsRouter.use('/:id/paymentMethods/prepaidCard', prepaidCard_1.default);
 projectsRouter.use('/:id/people', people_1.default);
 projectsRouter.use('/:id/programMemberships', programMemberships_1.default);
 projectsRouter.use('/:id/reservations', reservations_1.default);

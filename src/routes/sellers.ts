@@ -314,20 +314,20 @@ async function createAttributesFromBody(params: {
                 auth: params.req.user.authClient
             });
             const account = await accountService.open({
-                accountType: cinerinoapi.factory.accountType.Coin,
+                accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
                 name: (body.name.ja !== '') ? body.name.ja : initialName
             });
             debug('account opened');
 
-            paymentAccepted.push({
-                paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
-                accountType: account.accountType,
+            paymentAccepted.push(<any>{
+                paymentMethodType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
+                accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
                 accountNumber: account.accountNumber
             });
         } else {
-            paymentAccepted.push({
-                paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
-                accountType: cinerinoapi.factory.accountType.Coin,
+            paymentAccepted.push(<any>{
+                paymentMethodType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
+                accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
                 accountNumber: body.coinAccountPayment.accountNumber
             });
         }
@@ -342,7 +342,7 @@ async function createAttributesFromBody(params: {
                 auth: params.req.user.authClient
             });
             const account = await accountService.open({
-                accountType: cinerinoapi.factory.accountType.Point,
+                accountType: 'Point',
                 name: (body.name.ja !== '') ? body.name.ja : initialName
             });
             debug('account opened');
@@ -355,7 +355,7 @@ async function createAttributesFromBody(params: {
         } else {
             paymentAccepted.push({
                 paymentMethodType: cinerinoapi.factory.paymentMethodType.Account,
-                accountType: cinerinoapi.factory.accountType.Point,
+                accountType: 'Point',
                 accountNumber: body.pointAccountPayment.accountNumber
             });
         }

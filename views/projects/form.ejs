@@ -121,9 +121,3 @@
         placeholder="https://example.com"
         value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.transactionWebhookUrl : '' %>">
 </div>
-
-<div class="form-check">
-    <input type="checkbox" class="form-check-input" id="settings[useEventRepo]" name="settings[useEventRepo]"
-        <%=(project !== undefined && project.settings !== undefined && project.settings.useEventRepo === true) ? ' checked' : '' %>>
-    <label class="form-check-label" for="settings[useEventRepo]">イベントリポジトリを使用</label>
-</div>
