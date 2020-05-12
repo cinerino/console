@@ -68,7 +68,7 @@ resourcesRouter.get(
 
                 // 口座
                 case cinerinoapi.factory.pecorino.account.TypeOf.Account:
-                    let accountType = cinerinoapi.factory.paymentMethodType.PrepaidCard;
+                    let accountType = 'Point';
                     if (typeof req.query.accountType === 'string' && req.query.accountType !== '') {
                         accountType = req.query.accountType;
                     }

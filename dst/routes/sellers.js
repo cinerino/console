@@ -279,32 +279,29 @@ function createAttributesFromBody(params) {
         //     movieTheater.paymentAccepted = [];
         // }
         // コイン口座決済を有効にする場合、口座未開設であれば開設する
-        if (body.coinAccountPaymentAccepted === 'on') {
-            if (body.coinAccountPayment.accountNumber === '') {
-                // 口座番号の指定がなければ自動開設
-                const accountService = new cinerinoapi.service.Account({
-                    endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
-                    auth: params.req.user.authClient
-                });
-                const account = yield accountService.open({
-                    accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-                    name: (body.name.ja !== '') ? body.name.ja : initialName
-                });
-                debug('account opened');
-                paymentAccepted.push({
-                    paymentMethodType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-                    accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-                    accountNumber: account.accountNumber
-                });
-            }
-            else {
-                paymentAccepted.push({
-                    paymentMethodType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-                    accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-                    accountNumber: body.coinAccountPayment.accountNumber
-                });
-            }
-        }
+        // if (body.coinAccountPaymentAccepted === 'on') {
+        //     if (body.coinAccountPayment.accountNumber === '') {
+        //         // 口座番号の指定がなければ自動開設
+        //         const accountService = new cinerinoapi.service.Account({
+        //             endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
+        //             auth: params.req.user.authClient
+        //         });
+        //         const account = await accountService.open({
+        //             accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
+        //             name: (body.name.ja !== '') ? body.name.ja : initialName
+        //         });
+        //         debug('account opened');
+        //         paymentAccepted.push(<any>{
+        //             paymentMethodType: cinerinoapi.factory.paymentMethodType.PaymentCard,
+        //             identifier: account.accountNumber
+        //         });
+        //     } else {
+        //         paymentAccepted.push(<any>{
+        //             paymentMethodType: cinerinoapi.factory.paymentMethodType.PaymentCard,
+        //             identifier: body.coinAccountPayment.accountNumber
+        //         });
+        //     }
+        // }
         // ポイント口座決済を有効にする場合
         if (body.pointAccountPaymentAccepted === 'on') {
             if (body.pointAccountPayment.accountNumber === '') {

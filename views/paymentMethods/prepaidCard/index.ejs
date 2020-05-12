@@ -48,7 +48,27 @@
                         <form role="form" method="get" class="search">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
-                                    <label for="name">口座番号</label>
+                                    <label for="name">カードタイプ</label>
+                                    <select class="form-control form-control-sm" id="typeOf[$eq]" name="typeOf[$eq]">
+
+                                        <% paymentCards.forEach(function (paymentCard) { %>
+                                        <%
+                                        var selected = false;
+                                        if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
+                                            selected = searchConditions.typeOf.$eq === paymentCard.serviceOutput.typeOf
+                                        }
+                                        %>
+                                        <option value="<%= paymentCard.serviceOutput.typeOf %>" <% if (selected) { %>
+                                            selected <% } %>>
+                                            <%= paymentCard.name.ja %>
+                                        </option>
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="name">カード番号</label>
                                     <input type="text" class="form-control form-control-sm" id="identifier"
                                         name="identifier" placeholder="8559919013"
                                         value="<%= (searchConditions.identifier !== undefined) ? searchConditions.identifier.$eq : '' %>">
@@ -60,11 +80,13 @@
                             <table id="paymentMethods-table" class="table table-sm table-sm table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th>口座番号</th>
+                                        <th>タイプ</th>
+                                        <th>カード番号</th>
                                         <th>名称</th>
                                         <th>アクセスコード</th>
                                         <th>validFrom</th>
                                         <th>validThrough</th>
+                                        <th>amount</th>
                                     </tr>
                                 </thead>
                             </table>

@@ -241,15 +241,16 @@ peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, 
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
         });
-        let coinAccounts = [];
+        const coinAccounts = [];
         let pointAccounts = [];
-        const searchCoinAccountsResult = yield personOwnershipInfoService.search({
-            id: req.params.id,
-            typeOfGood: {
-                typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
-            }
-        });
+        // const searchCoinAccountsResult =
+        //     await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+        //         id: req.params.id,
+        //         typeOfGood: {
+        //             typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+        //             accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
+        //         }
+        //     });
         const searchPointAccountsResult = yield personOwnershipInfoService.search({
             id: req.params.id,
             typeOfGood: {
@@ -257,7 +258,7 @@ peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, 
                 accountType: 'Point'
             }
         });
-        coinAccounts = searchCoinAccountsResult.data;
+        // coinAccounts = searchCoinAccountsResult.data;
         pointAccounts = searchPointAccountsResult.data;
         res.json([...coinAccounts, ...pointAccounts]);
     }

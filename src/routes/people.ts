@@ -281,17 +281,17 @@ peopleRouter.get(
                 auth: req.user.authClient
             });
 
-            let coinAccounts: IAccountOwnershipInfo[] = [];
+            const coinAccounts: IAccountOwnershipInfo[] = [];
             let pointAccounts: IAccountOwnershipInfo[] = [];
 
-            const searchCoinAccountsResult =
-                await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
-                    id: req.params.id,
-                    typeOfGood: {
-                        typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                        accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
-                    }
-                });
+            // const searchCoinAccountsResult =
+            //     await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+            //         id: req.params.id,
+            //         typeOfGood: {
+            //             typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+            //             accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
+            //         }
+            //     });
 
             const searchPointAccountsResult =
                 await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
@@ -302,7 +302,7 @@ peopleRouter.get(
                     }
                 });
 
-            coinAccounts = searchCoinAccountsResult.data;
+            // coinAccounts = searchCoinAccountsResult.data;
             pointAccounts = searchPointAccountsResult.data;
 
             res.json([...coinAccounts, ...pointAccounts]);

@@ -60,44 +60,63 @@ const prepaidCardPaymentMethodRouter = express.Router();
 /**
  * 検索
  */
-// prepaidCardPaymentMethodRouter.get(
-//     '',
-//     async (req, res, next) => {
-//         try {
-//             const paymentMethodService = new cinerinoapi.service.PaymentMethod({
-//                 endpoint: req.project.settings.API_ENDPOINT,
-//                 auth: req.user.authClient,
-//                 project: { id: req.project.id }
-//             });
-//             const searchConditions:
-//                 cinerinoapi.factory.paymentMethod.ISearchConditions<cinerinoapi.factory.paymentMethodType.PrepaidCard> = {
-//                 limit: req.query.limit,
-//                 page: req.query.page,
-//                 ...{
-//                     identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
-//                         ? { $eq: req.query.identifier }
-//                         : undefined
-//                 }
-//             };
+prepaidCardPaymentMethodRouter.get(
+    '',
+    async (req, res, next) => {
+        try {
+            const serviceOutputService = new cinerinoapi.service.ServiceOutput({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
+            const searchConditions: any = {
+                limit: req.query.limit,
+                page: req.query.page,
+                typeOf: { $eq: req.query?.typeOf?.$eq },
+                ...{
+                    identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
+                        ? { $eq: req.query.identifier }
+                        : undefined
+                }
+            };
 
-//             if (req.query.format === 'datatable') {
-//                 const { totalCount, data } = await paymentMethodService.searchPrepaidCards(searchConditions);
-//                 res.json({
-//                     draw: req.query.draw,
-//                     recordsTotal: totalCount,
-//                     recordsFiltered: totalCount,
-//                     data: data
-//                 });
-//             } else {
-//                 res.render('paymentMethods/prepaidCard', {
-//                     searchConditions: searchConditions
-//                 });
-//             }
-//         } catch (error) {
-//             next(error);
-//         }
-//     }
-// );
+            if (req.query.format === 'datatable') {
+                const { data } = await serviceOutputService.search(searchConditions);
+                res.json({
+                    draw: req.query.draw,
+                    // recordsTotal: searchOrdersResult.totalCount,
+                    recordsFiltered: (data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(data.length),
+                    data: data
+                });
+            } else {
+                // 決済カードを検索
+                const productService = new cinerinoapi.service.Product({
+                    endpoint: req.project.settings.API_ENDPOINT,
+                    auth: req.user.authClient,
+                    project: { id: req.project.id }
+                });
+                let paymentCards: any[] = [];
+                try {
+                    const searchPaymentCardsResult = await productService.search({
+                        typeOf: { $eq: 'PaymentCard' }
+                    });
+                    paymentCards = searchPaymentCardsResult.data;
+                } catch (error) {
+                    // no op
+                }
+
+                res.render('paymentMethods/prepaidCard', {
+                    searchConditions: searchConditions,
+                    paymentCards: paymentCards
+                });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 // function createAttributesFromBody(params: {

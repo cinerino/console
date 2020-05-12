@@ -24,6 +24,12 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    return data.typeOf;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     return '<a target="_blank" href="/projects/' + PROJECT_ID + '/paymentMethods/prepaidCard/' + data.identifier + '">' + data.identifier + '</a>';
                 }
             },
@@ -44,8 +50,8 @@ $(function () {
                 render: function (data, type, row) {
                     var html = ''
 
-                    if (data.amount !== undefined && typeof data.amount.validFrom === 'string') {
-                        html += moment(data.amount.validFrom).utc().format();
+                    if (typeof data.validFrom === 'string') {
+                        html += moment(data.validFrom).utc().format();
                     }
 
                     return html;
@@ -56,8 +62,20 @@ $(function () {
                 render: function (data, type, row) {
                     var html = ''
 
-                    if (data.amount !== undefined && typeof data.amount.validThrough === 'string') {
-                        html += moment(data.amount.validThrough).utc().format();
+                    if (typeof data.validThrough === 'string') {
+                        html += moment(data.validThrough).utc().format();
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = ''
+
+                    if (data.amount !== undefined) {
+                        html += String(data.amount.value)
                     }
 
                     return html;
