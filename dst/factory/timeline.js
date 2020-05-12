@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cinerinoapi = require("../cinerinoapi");
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createFromAction(params) {
+    var _a, _b;
     const a = params.action;
     let agent = {
         id: '',
@@ -175,6 +176,9 @@ function createFromAction(params) {
             }
             if (Array.isArray(a.object)) {
                 switch (a.object[0].typeOf) {
+                    case cinerinoapi.factory.chevre.offerType.Offer:
+                        object = { name: `${(_b = (_a = a.object[0]) === null || _a === void 0 ? void 0 : _a.itemOffered) === null || _b === void 0 ? void 0 : _b.typeOf} オファー` };
+                        break;
                     case 'PaymentMethod':
                         object = { name: a.object[0].paymentMethod.name };
                         break;
@@ -182,7 +186,7 @@ function createFromAction(params) {
                         object = { name: a.object[0].object.paymentMethod.typeOf };
                         break;
                     default:
-                        object = a.object[0].typeOf;
+                        object = { name: a.object[0].typeOf };
                 }
             }
             else {

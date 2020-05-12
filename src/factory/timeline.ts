@@ -237,6 +237,9 @@ export function createFromAction(params: {
 
             if (Array.isArray(a.object)) {
                 switch (a.object[0].typeOf) {
+                    case cinerinoapi.factory.chevre.offerType.Offer:
+                        object = { name: `${a.object[0]?.itemOffered?.typeOf} オファー` };
+                        break;
                     case 'PaymentMethod':
                         object = { name: a.object[0].paymentMethod.name };
                         break;
@@ -244,7 +247,7 @@ export function createFromAction(params: {
                         object = { name: a.object[0].object.paymentMethod.typeOf };
                         break;
                     default:
-                        object = a.object[0].typeOf;
+                        object = { name: a.object[0].typeOf };
                 }
             } else {
                 switch (a.object.typeOf) {
