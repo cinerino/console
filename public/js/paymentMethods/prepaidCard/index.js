@@ -62,8 +62,8 @@ $(function () {
                 render: function (data, type, row) {
                     var html = ''
 
-                    if (typeof data.validThrough === 'string') {
-                        html += moment(data.validThrough).utc().format();
+                    if (typeof data.validUntil === 'string') {
+                        html += moment(data.validUntil).utc().format();
                     }
 
                     return html;
@@ -74,8 +74,35 @@ $(function () {
                 render: function (data, type, row) {
                     var html = ''
 
-                    if (data.amount !== undefined) {
-                        html += String(data.amount.value)
+                    if (data.amount !== undefined && data.amount !== null) {
+                        html += String(data.amount.value);
+                        html += '<br>' + data.amount.minValue + '~' + data.amount.maxValue;
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = ''
+
+                    if (data.depositAmount !== undefined && data.depositAmount !== null) {
+                        html += String(data.depositAmount.value);
+                        html += '<br>' + data.depositAmount.minValue + '~' + data.depositAmount.maxValue;
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = ''
+
+                    if (data.paymentAmount !== undefined && data.paymentAmount !== null) {
+                        html += String(data.paymentAmount.value);
+                        html += '<br>' + data.paymentAmount.minValue + '~' + data.paymentAmount.maxValue;
                     }
 
                     return html;
