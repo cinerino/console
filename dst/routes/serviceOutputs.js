@@ -10,17 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * プリペイドカードルーター
+ * サービスアウトプットルーター
  */
 // import * as createDebug from 'debug';
 const express = require("express");
-const cinerinoapi = require("../../cinerinoapi");
+const cinerinoapi = require("../cinerinoapi");
 // const debug = createDebug('cinerino-console:routes');
-const prepaidCardPaymentMethodRouter = express.Router();
+const serviceOutputsRouter = express.Router();
 /**
  * カード追加
  */
-// prepaidCardPaymentMethodRouter.all(
+// serviceOutputsRouter.all(
 //     '/new',
 //     async (req, res, next) => {
 //         try {
@@ -63,7 +63,7 @@ const prepaidCardPaymentMethodRouter = express.Router();
 /**
  * 検索
  */
-prepaidCardPaymentMethodRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
         const serviceOutputService = new cinerinoapi.service.ServiceOutput({
@@ -104,7 +104,7 @@ prepaidCardPaymentMethodRouter.get('', (req, res, next) => __awaiter(void 0, voi
             catch (error) {
                 // no op
             }
-            res.render('paymentMethods/prepaidCard', {
+            res.render('serviceOutputs', {
                 searchConditions: searchConditions,
                 paymentCards: paymentCards
             });
@@ -133,7 +133,7 @@ prepaidCardPaymentMethodRouter.get('', (req, res, next) => __awaiter(void 0, voi
 /**
  * カード認証
  */
-prepaidCardPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+serviceOutputsRouter.all('/check', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const paymentService = new cinerinoapi.service.Payment({
             endpoint: req.project.settings.API_ENDPOINT,
@@ -207,7 +207,7 @@ prepaidCardPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
             });
         }
         else {
-            res.render('paymentMethods/prepaidCard/check', {
+            res.render('serviceOutputs/check', {
                 searchConditions: searchConditions,
                 sellers: sellers
             });
@@ -220,7 +220,7 @@ prepaidCardPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
 /**
  * カード詳細
  */
-// prepaidCardPaymentMethodRouter.get(
+// serviceOutputsRouter.get(
 //     '/:identifier',
 //     async (req, res, next) => {
 //         try {
@@ -250,7 +250,7 @@ prepaidCardPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
 /**
  * カードの注文検索
  */
-// prepaidCardPaymentMethodRouter.get(
+// serviceOutputsRouter.get(
 //     '/:identifier/orders',
 //     async (req, res, next) => {
 //         try {
@@ -274,4 +274,4 @@ prepaidCardPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
 //         }
 //     }
 // );
-exports.default = prepaidCardPaymentMethodRouter;
+exports.default = serviceOutputsRouter;

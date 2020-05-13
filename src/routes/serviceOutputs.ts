@@ -1,18 +1,18 @@
 /**
- * プリペイドカードルーター
+ * サービスアウトプットルーター
  */
 // import * as createDebug from 'debug';
 import * as express from 'express';
 
-import * as cinerinoapi from '../../cinerinoapi';
+import * as cinerinoapi from '../cinerinoapi';
 
 // const debug = createDebug('cinerino-console:routes');
-const prepaidCardPaymentMethodRouter = express.Router();
+const serviceOutputsRouter = express.Router();
 
 /**
  * カード追加
  */
-// prepaidCardPaymentMethodRouter.all(
+// serviceOutputsRouter.all(
 //     '/new',
 //     async (req, res, next) => {
 //         try {
@@ -60,7 +60,7 @@ const prepaidCardPaymentMethodRouter = express.Router();
 /**
  * 検索
  */
-prepaidCardPaymentMethodRouter.get(
+serviceOutputsRouter.get(
     '',
     async (req, res, next) => {
         try {
@@ -107,7 +107,7 @@ prepaidCardPaymentMethodRouter.get(
                     // no op
                 }
 
-                res.render('paymentMethods/prepaidCard', {
+                res.render('serviceOutputs', {
                     searchConditions: searchConditions,
                     paymentCards: paymentCards
                 });
@@ -138,7 +138,7 @@ prepaidCardPaymentMethodRouter.get(
 /**
  * カード認証
  */
-prepaidCardPaymentMethodRouter.all(
+serviceOutputsRouter.all(
     '/check',
     async (req, res, next) => {
         try {
@@ -220,7 +220,7 @@ prepaidCardPaymentMethodRouter.all(
                     data: result.movieTickets
                 });
             } else {
-                res.render('paymentMethods/prepaidCard/check', {
+                res.render('serviceOutputs/check', {
                     searchConditions: searchConditions,
                     sellers: sellers
                 });
@@ -234,7 +234,7 @@ prepaidCardPaymentMethodRouter.all(
 /**
  * カード詳細
  */
-// prepaidCardPaymentMethodRouter.get(
+// serviceOutputsRouter.get(
 //     '/:identifier',
 //     async (req, res, next) => {
 //         try {
@@ -267,7 +267,7 @@ prepaidCardPaymentMethodRouter.all(
 /**
  * カードの注文検索
  */
-// prepaidCardPaymentMethodRouter.get(
+// serviceOutputsRouter.get(
 //     '/:identifier/orders',
 //     async (req, res, next) => {
 //         try {
@@ -292,4 +292,4 @@ prepaidCardPaymentMethodRouter.all(
 //     }
 // );
 
-export default prepaidCardPaymentMethodRouter;
+export default serviceOutputsRouter;

@@ -1,5 +1,7 @@
+var table;
+
 $(function () {
-    $("#paymentMethods-table").DataTable({
+    table = $("#paymentMethods-table").DataTable({
         processing: true,
         serverSide: true,
         pagingType: 'simple',
@@ -24,25 +26,40 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.typeOf;
+                    return '<a href="javascript:void(0)" class="showServiceOutput" data-id="' + data.id + '">' + data.typeOf + '</a>';
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/paymentMethods/prepaidCard/' + data.identifier + '">' + data.identifier + '</a>';
+                    var html = '';
+                    if (typeof data.identifier === 'string') {
+                        html += data.identifier;
+                    }
+
+                    return html;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.name;
+                    var html = '';
+                    if (typeof data.name === 'string') {
+                        html += data.name;
+                    }
+
+                    return html;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.accessCode;
+                    var html = '';
+                    if (typeof data.accessCode === 'string') {
+                        html += data.accessCode;
+                    }
+
+                    return html;
                 }
             },
             {
@@ -115,4 +132,26 @@ $(function () {
         $('form.search').submit();
     });
 
+    $(document).on('click', '.showServiceOutput', function () {
+        showServiceOutput($(this).data('id'));
+    });
 });
+
+function showServiceOutput(id) {
+    var outputs = table
+        .rows()
+        .data()
+        .toArray();
+    var output = outputs.find(function (s) {
+        return s.id === id
+    })
+
+    var modal = $('#modal-serviceOutput');
+    var title = 'serviceOutput `' + output.id + '`';
+    var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+        + JSON.stringify(output, null, '\t')
+        + '</textarea>';
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}

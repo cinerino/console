@@ -1,0 +1,137 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">サービスアウトプット検索</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/projects/<%= req.project.id %>/home">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">サービスアウトプット検索</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <!-- <h3 class="card-title">Quick Example</h3> -->
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <!-- <a class="btn btn-default btn-sm"
+                                href="/projects/<%= req.project.id %>/paymentMethods/prepaidCard/new">
+                                <i class="fa fa-plus"></i>&nbsp;&nbsp;作成</a> -->
+                            <a class="btn btn-default btn-sm search" href="#">
+                                <i class="fa fa-redo"></i>&nbsp;&nbsp;更新</a>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+
+                    <div class="card-body">
+                        <!-- form start -->
+                        <form role="form" method="get" class="search">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="name">タイプ</label>
+                                    <select class="form-control form-control-sm" id="typeOf[$eq]" name="typeOf[$eq]">
+
+                                        <% paymentCards.forEach(function (paymentCard) { %>
+                                        <%
+                                        var selected = false;
+                                        if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
+                                            selected = searchConditions.typeOf.$eq === paymentCard.serviceOutput.typeOf
+                                        }
+                                        %>
+                                        <option value="<%= paymentCard.serviceOutput.typeOf %>" <% if (selected) { %>
+                                            selected <% } %>>
+                                            <%= paymentCard.name.ja %>
+                                        </option>
+                                        <% }) %>
+
+                                        <option value="MoneyTransfer"
+                                            <% if (searchConditions.typeOf.$eq === 'MoneyTransfer') { %> selected
+                                            <% } %>>
+                                            MoneyTransfer
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="name">identifier</label>
+                                    <input type="text" class="form-control form-control-sm" id="identifier"
+                                        name="identifier" placeholder="8559919013"
+                                        value="<%= (searchConditions.identifier !== undefined) ? searchConditions.identifier.$eq : '' %>">
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="paymentMethods-table" class="table table-sm table-sm table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>タイプ</th>
+                                        <th>identifier</th>
+                                        <th>name</th>
+                                        <th>accessCode</th>
+                                        <th>validFrom</th>
+                                        <th>validThrough</th>
+                                        <th>amount</th>
+                                        <th>depositAmount</th>
+                                        <th>paymentAmount</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="modal" id="modal-serviceOutput" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<!-- DataTables -->
+<link rel="stylesheet" href="/node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+
+<script src="/js/serviceOutputs/index.js"></script>
