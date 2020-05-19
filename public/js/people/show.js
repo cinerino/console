@@ -244,7 +244,7 @@ function searchProgramMemberships(page, cb) {
 
             var name = programMembership.name;
             if (typeof name !== 'string') {
-                name = programMembership.name.ja;
+                name = programMembership.programName;
             }
 
             var membershipServiceId = programMembership.membershipFor.id;
