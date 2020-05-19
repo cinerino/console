@@ -330,8 +330,8 @@
                                             </div>
                                             <input type="text" class="form-control form-control-sm"
                                                 name="reservationForInSessionRange" id="reservationForInSessionRange"
-                                                value="<%= (searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom !== undefined)
-                                                ? `${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.inSessionThrough).format('YYYY-MM-DDTHH:mm:ssZ')}`
+                                                value="<%= (searchConditions.acceptedOffers.itemOffered.reservationFor.startFrom !== undefined)
+                                                ? `${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.startFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.acceptedOffers.itemOffered.reservationFor.startThrough).format('YYYY-MM-DDTHH:mm:ssZ')}`
                                                 : '' %>">
                                         </div>
                                         <!-- /.input group -->
