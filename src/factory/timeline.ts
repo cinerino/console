@@ -84,7 +84,7 @@ export function createFromAction(params: {
             case cinerinoapi.factory.organizationType.Corporation:
                 agent = {
                     id: a.agent.id,
-                    name: (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja,
+                    name: (typeof a.agent.name === 'string') ? a.agent.name : String(a.agent.name?.ja),
                     url: `/projects/${params.project.id}/sellers/${a.agent.id}`
                 };
                 break;
@@ -143,7 +143,7 @@ export function createFromAction(params: {
             case cinerinoapi.factory.organizationType.Corporation:
                 recipient = {
                     id: a.recipient.id,
-                    name: (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja,
+                    name: (typeof a.recipient.name === 'string') ? a.recipient.name : String(a.recipient.name?.ja),
                     url: (typeof a.recipient.url === 'string') ? a.recipient.url : `/projects/${params.project.id}/sellers/${a.recipient.id}`
 
                 };

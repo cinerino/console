@@ -1,5 +1,7 @@
+var table;
+
 $(function () {
-    $("#transactions-table").DataTable({
+    table = $("#transactions-table").DataTable({
         processing: true,
         serverSide: true,
         pagingType: 'simple',
@@ -24,7 +26,9 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/returnOrder/' + data.id + '">' + data.id + '</a>';
+                    return '<a target="_blank" href="/projects/' + PROJECT_ID + '/transactions/returnOrder/' + data.id + '">'
+                        + '表示<i class="fa fa-external-link-alt ml-1"></i>'
+                        + '</a>';
                 }
             },
             {
@@ -36,19 +40,29 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.startDate;
+                    return moment(data.startDate).utc().format();
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.endDate;
+                    var endDate = '';
+                    if (typeof data.endDate === 'string') {
+                        endDate = moment(data.endDate).utc().format();
+                    }
+
+                    return endDate;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.expires;
+                    var expires = '';
+                    if (typeof data.expires === 'string') {
+                        expires = moment(data.expires).utc().format();
+                    }
+
+                    return expires;
                 }
             },
             {
@@ -70,12 +84,16 @@ $(function () {
                     }
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.agent.typeOf + '/' + data.agent.id + '?userPoolId=' + userPoolId;
+                    var agentName = String(data.agent.familyName) + ' ' + String(data.agent.givenName);
+                    if (agentName.length > 8) {
+                        agentName = agentName.slice(0, 8) + '...';
+                    }
 
-                    var html = '<span class="badge badge-light ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span>'
-                        + ' <span class="badge badge-light">' + ((data.agent.memberOf !== undefined) ? data.agent.memberOf.membershipNumber : '') + '</span>'
+                    var html = '<a target="_blank" href="' + url + '"><span class="badge badge-light ' + data.agent.typeOf + '">' + data.agent.typeOf + '</span></a>'
                         + ' <a target="_blank" href="/projects/' + PROJECT_ID + '/applications/' + clientId + '"><span class="badge badge-light">Application</span></a>'
-                        + '<br><a target="_blank" href="' + url + '">' + data.agent.id + '</a>'
-                        + '<br>' + String(data.agent.familyName) + ' ' + String(data.agent.givenName);
+                        + '<br><a href="javscript:void(0);" class="showAgent" data-id="' + data.id + '">' + agentName + '</a>';
+
+                    html += '';
 
                     return html;
                 }
@@ -83,15 +101,14 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var seller = {};
-                    if (data.object.order !== undefined) {
-                        seller = data.object.order.seller;
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.seller.typeOf + '/' + data.seller.id;
+                    var sellerName = data.seller.name.ja;
+                    if (sellerName.length > 8) {
+                        sellerName = sellerName.slice(0, 8) + '...';
                     }
 
-                    var url = '/projects/' + PROJECT_ID + '/resources/' + seller.typeOf + '/' + seller.id;
-
-                    var html = '<span class="badge badge-light ' + seller.typeOf + '">' + seller.typeOf + '</span>'
-                        + '<br><a target="_blank" href="' + url + '">' + seller.name + '</a>';
+                    var html = '<span class="badge badge-light ' + data.seller.typeOf + '">' + data.seller.typeOf + '</span>'
+                        + '<br><a target="_blank" href="' + url + '">' + sellerName + '</a>';
 
                     return html;
                 }
@@ -99,15 +116,19 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var html = '';
+
                     if (data.object !== undefined && data.object.order !== undefined) {
-                        return '<ul class="list-unstyled">'
-                            + '<li><a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.object.order.orderNumber + '">' + data.object.order.orderNumber + '</a></li>'
-                            + '</ul>';
-                    } else {
-                        return '<ul class="list-unstyled">'
-                            + '<li>No Object</li>'
-                            + '</ul>';
+                        if (Array.isArray(data.object.order)) {
+                            data.object.order.forEach(function (o) {
+                                html += '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + o.orderNumber + '">' + o.orderNumber + '</a><br>';
+                            });
+                        } else {
+                            html += '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + data.object.order.orderNumber + '">' + data.object.order.orderNumber + '</a>';
+                        }
                     }
+
+                    return html;
                 }
             },
             {
@@ -119,7 +140,13 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return data.tasksExportedAt;
+                    var html = '';
+
+                    if (typeof data.endDate === 'string') {
+                        html += moment.duration(moment(data.tasksExportedAt).diff(data.endDate)).asMilliseconds() + ' ms';
+                    }
+
+                    return html;
                 }
             }
         ]
@@ -141,4 +168,27 @@ $(function () {
         var url = '/projects/' + PROJECT_ID + '/transactions/returnOrder?' + $('form').serialize() + '&format=text/csv';
         window.open(url, '_blank');
     });
+
+    $(document).on('click', '.showAgent', function () {
+        showDetails($(this).data('id'), 'agent');
+    });
 });
+
+function showDetails(id, propertyName) {
+    var transactions = table
+        .rows()
+        .data()
+        .toArray();
+    var transaction = transactions.find(function (t) {
+        return t.id === id
+    })
+
+    var modal = $('#modal-transaction');
+    var title = 'Transaction `' + transaction.id + '`';
+    var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+        + JSON.stringify(transaction[propertyName], null, '\t')
+        + '</textarea>';
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html(body);
+    modal.modal();
+}

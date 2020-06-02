@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cinerinoapi = require("../cinerinoapi");
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createFromAction(params) {
-    var _a, _b;
+    var _a, _b, _c, _d;
     const a = params.action;
     let agent = {
         id: '',
@@ -42,7 +42,7 @@ function createFromAction(params) {
             case cinerinoapi.factory.organizationType.Corporation:
                 agent = {
                     id: a.agent.id,
-                    name: (typeof a.agent.name === 'string') ? a.agent.name : a.agent.name.ja,
+                    name: (typeof a.agent.name === 'string') ? a.agent.name : String((_a = a.agent.name) === null || _a === void 0 ? void 0 : _a.ja),
                     url: `/projects/${params.project.id}/sellers/${a.agent.id}`
                 };
                 break;
@@ -90,7 +90,7 @@ function createFromAction(params) {
             case cinerinoapi.factory.organizationType.Corporation:
                 recipient = {
                     id: a.recipient.id,
-                    name: (typeof a.recipient.name === 'string') ? a.recipient.name : a.recipient.name.ja,
+                    name: (typeof a.recipient.name === 'string') ? a.recipient.name : String((_b = a.recipient.name) === null || _b === void 0 ? void 0 : _b.ja),
                     url: (typeof a.recipient.url === 'string') ? a.recipient.url : `/projects/${params.project.id}/sellers/${a.recipient.id}`
                 };
                 break;
@@ -177,7 +177,7 @@ function createFromAction(params) {
             if (Array.isArray(a.object)) {
                 switch (a.object[0].typeOf) {
                     case cinerinoapi.factory.chevre.offerType.Offer:
-                        object = { name: `${(_b = (_a = a.object[0]) === null || _a === void 0 ? void 0 : _a.itemOffered) === null || _b === void 0 ? void 0 : _b.typeOf} オファー` };
+                        object = { name: `${(_d = (_c = a.object[0]) === null || _c === void 0 ? void 0 : _c.itemOffered) === null || _d === void 0 ? void 0 : _d.typeOf} オファー` };
                         break;
                     case 'PaymentMethod':
                         object = { name: a.object[0].paymentMethod.name };

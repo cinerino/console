@@ -39,8 +39,7 @@ accountsRouter.get(
                 auth: req.user.authClient
             });
 
-            const searchConditions:
-                cinerinoapi.factory.pecorino.action.transfer.moneyTransfer.ISearchConditions<string> = {
+            const searchConditions: cinerinoapi.factory.pecorino.action.transfer.moneyTransfer.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { startDate: cinerinoapi.factory.pecorino.sortType.Descending },
