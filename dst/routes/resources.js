@@ -60,7 +60,7 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
                     throw new Error('Cognito settings undefined');
                 }
                 break;
-            // 会員プログラム
+            // メンバーシップ
             case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
                 res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
                 break;
