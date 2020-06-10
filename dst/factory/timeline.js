@@ -246,7 +246,7 @@ function createFromAction(params) {
                         object = { name: '通貨転送取引' };
                         break;
                     case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
-                        object = { name: '会員プログラム' };
+                        object = { name: 'メンバーシップ' };
                         break;
                     default:
                         object = { name: a.object.typeOf };

@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 会員プログラムルーター
+ * メンバーシップサービスルーター
  */
 const express = require("express");
 const cinerinoapi = require("../cinerinoapi");

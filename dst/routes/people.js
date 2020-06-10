@@ -168,7 +168,7 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void
     }
 }));
 /**
- * 会員プログラム検索
+ * メンバーシップ検索
  */
 peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
