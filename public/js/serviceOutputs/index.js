@@ -33,6 +33,18 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '';
+                    if (data.issuedThrough !== undefined) {
+                        html += data.issuedThrough.typeOf
+                            + '<br>' + data.issuedThrough.id;
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
                     if (typeof data.identifier === 'string') {
                         html += data.identifier;
                     }
@@ -57,6 +69,31 @@ $(function () {
                     var html = '';
                     if (typeof data.accessCode === 'string') {
                         html += data.accessCode;
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = ''
+
+                    if (typeof data.dateIssued === 'string') {
+                        html += moment(data.dateIssued).utc().format();
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = ''
+
+                    if (typeof data.validFor === 'string') {
+                        html += moment.duration(data.validFor)
+                            .humanize();
                     }
 
                     return html;
@@ -92,8 +129,7 @@ $(function () {
                     var html = ''
 
                     if (data.amount !== undefined && data.amount !== null) {
-                        html += String(data.amount.value);
-                        html += '<br>' + data.amount.minValue + '~' + data.amount.maxValue;
+                        html += String(data.amount.typeOf);
                     }
 
                     return html;
@@ -105,8 +141,7 @@ $(function () {
                     var html = ''
 
                     if (data.depositAmount !== undefined && data.depositAmount !== null) {
-                        html += String(data.depositAmount.value);
-                        html += '<br>' + data.depositAmount.minValue + '~' + data.depositAmount.maxValue;
+                        html += String(data.depositAmount.typeOf);
                     }
 
                     return html;
@@ -118,8 +153,7 @@ $(function () {
                     var html = ''
 
                     if (data.paymentAmount !== undefined && data.paymentAmount !== null) {
-                        html += String(data.paymentAmount.value);
-                        html += '<br>' + data.paymentAmount.minValue + '~' + data.paymentAmount.maxValue;
+                        html += String(data.paymentAmount.typeOf);
                     }
 
                     return html;
