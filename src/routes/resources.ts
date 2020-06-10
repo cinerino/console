@@ -61,7 +61,7 @@ resourcesRouter.get(
 
                     break;
 
-                // 会員プログラム
+                // メンバーシップ
                 case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
                     res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
                     break;

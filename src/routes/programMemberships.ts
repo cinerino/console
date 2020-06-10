@@ -1,5 +1,5 @@
 /**
- * 会員プログラムルーター
+ * メンバーシップサービスルーター
  */
 import * as express from 'express';
 

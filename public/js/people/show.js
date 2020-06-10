@@ -19,7 +19,7 @@ $(function () {
     searchReservations(1, function () {
     });
 
-    // 会員プログラム検索
+    // メンバーシップ検索
     console.log('searching programMemberships...');
     searchProgramMemberships(1, function () {
     });
@@ -261,7 +261,7 @@ function searchProgramMemberships(page, cb) {
             cb();
         }
     }).fail(function () {
-        console.error('会員プログラムを検索できませんでした')
+        console.error('メンバーシップを検索できませんでした')
     });
 }
 

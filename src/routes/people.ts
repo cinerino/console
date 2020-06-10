@@ -192,7 +192,7 @@ peopleRouter.get(
 );
 
 /**
- * 会員プログラム検索
+ * メンバーシップ検索
  */
 peopleRouter.get(
     '/:id/programMemberships',

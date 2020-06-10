@@ -64,6 +64,12 @@
                                         </option>
                                         <% }) %>
 
+                                        <option value="ProgramMembership"
+                                            <% if (searchConditions.typeOf.$eq === 'ProgramMembership') { %> selected
+                                            <% } %>>
+                                            ProgramMembership
+                                        </option>
+
                                         <option value="MoneyTransfer"
                                             <% if (searchConditions.typeOf.$eq === 'MoneyTransfer') { %> selected
                                             <% } %>>
