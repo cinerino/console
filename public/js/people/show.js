@@ -172,7 +172,7 @@ function searchOrders(page, cb) {
 
             $('<tr>').html(
                 '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/orders/' + order.orderNumber + '">' + order.orderNumber + '</a>' + '</td>'
-                + '<td>' + moment(order.orderDate).format('lllZ') + '</td>'
+                + '<td>' + moment(order.orderDate).utc().format() + '</td>'
                 + '<td>'
                 + order.acceptedOffers.slice(0, numDisplayItems).map(function (o) {
                     if (o.itemOffered.reservedTicket !== undefined && o.itemOffered.reservedTicket.ticketedSeat !== undefined) {
@@ -183,9 +183,9 @@ function searchOrders(page, cb) {
                 + order.acceptedOffers.slice(numDisplayItems, numDisplayItems + 1).map(() => '<br>...').join('')
                 + '</td>'
                 + '<td>' + order.paymentMethods.map(function (paymentMethod) {
-                    return '<span class="badge badge-secondary ' + paymentMethod.typeOf + '">' + paymentMethod.typeOf + '</span>';
+                    return '<span class="badge badge-light ' + paymentMethod.typeOf + '">' + paymentMethod.typeOf + '</span>';
                 }).join('&nbsp;') + '</td>'
-                + '<td>' + '<span class="badge badge-secondary  ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
+                + '<td>' + '<span class="badge badge-light ' + order.orderStatus + '">' + order.orderStatus + '</span>' + '</td>'
             ).appendTo("#orders tbody");
         });
         if (!searchedAllOrders) {
@@ -211,14 +211,19 @@ function searchReservations(page, cb) {
             var reservation = ownershipInfo.typeOfGood;
             reservations.push(reservation);
 
+            var bookingTimeStr = '';
+            if (typeof reservation.bookingTime === 'string') {
+                bookingTimeStr = moment(reservation.bookingTime).utc().format();
+            }
+
             var html = '<td>' + '<a href="#">' + reservation.reservationNumber + '</a>' + '</td>'
-                + '<td>' + moment(reservation.modifiedTime).format('lllZ') + '</td>';
+                + '<td>' + bookingTimeStr + '</td>';
             if (reservation.reservationFor !== undefined) {
                 html += '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/events/' + reservation.reservationFor.typeOf + '/' + reservation.reservationFor.id + '">' + reservation.reservationFor.name.ja + '</a>' + '</td>';
             } else {
                 html += '<td></td>';
             }
-            html += '<td>' + '<span class="badge badge-secondary  ' + reservation.reservationStatus + '">' + reservation.reservationStatus + '</span>' + '</td>';
+            html += '<td>' + '<span class="badge badge-light ' + reservation.reservationStatus + '">' + reservation.reservationStatus + '</span>' + '</td>';
             $('<tr>').html(html).appendTo("#reservations tbody");
         });
         if (!searchedAllReservations) {
@@ -242,17 +247,18 @@ function searchProgramMemberships(page, cb) {
             var programMembership = ownershipInfo.typeOfGood;
             programMemberships.push(programMembership);
 
-            var name = programMembership.name;
-            if (typeof name !== 'string') {
-                name = programMembership.programName;
+            var nameStr = programMembership.name;
+            if (typeof nameStr !== 'string' && nameStr !== undefined && nameStr !== null) {
+                nameStr = nameStr.ja;
             }
 
             var membershipServiceId = programMembership.membershipFor.id;
 
-            var html = '<td>' + name + '</td>'
+            var html = '<td>' + programMembership.identifier + '</td>'
+                + '<td>' + nameStr + '</td>'
                 + '<td>' + '<a target="_blank" href="/projects/' + PROJECT_ID + '/programMemberships/' + membershipServiceId + '">' + membershipServiceId + '</a>' + '</td>'
-                + '<td>' + moment(ownershipInfo.ownedFrom).format('lllZ') + '</td>'
-                + '<td>' + moment(ownershipInfo.ownedThrough).format('lllZ') + '</td>';
+                + '<td>' + moment(ownershipInfo.ownedFrom).utc().format() + '</td>'
+                + '<td>' + moment(ownershipInfo.ownedThrough).utc().format() + '</td>';
             $('<tr>').html(html).appendTo("#programMemberships tbody");
         });
         if (!searchedAllProgramMemberships) {
