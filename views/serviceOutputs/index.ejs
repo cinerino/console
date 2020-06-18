@@ -64,17 +64,18 @@
                                         </option>
                                         <% }) %>
 
-                                        <option value="ProgramMembership"
-                                            <% if (searchConditions.typeOf.$eq === 'ProgramMembership') { %> selected
-                                            <% } %>>
-                                            ProgramMembership
+                                        <% membershipServices.forEach(function (membershipService) { %>
+                                        <%
+                                            var selected = false;
+                                            if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
+                                                selected = searchConditions.typeOf.$eq === membershipService.serviceOutput.typeOf
+                                            }
+                                            %>
+                                        <option value="<%= membershipService.serviceOutput.typeOf %>"
+                                            <% if (selected) { %> selected <% } %>>
+                                            <%= membershipService.name.ja %>
                                         </option>
-
-                                        <option value="MoneyTransfer"
-                                            <% if (searchConditions.typeOf.$eq === 'MoneyTransfer') { %> selected
-                                            <% } %>>
-                                            MoneyTransfer
-                                        </option>
+                                        <% }) %>
                                     </select>
                                 </div>
 

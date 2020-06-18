@@ -104,9 +104,20 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             catch (error) {
                 // no op
             }
+            let membershipServices = [];
+            try {
+                const searchMembershipServicesResult = yield productService.search({
+                    typeOf: { $eq: 'MembershipService' }
+                });
+                membershipServices = searchMembershipServicesResult.data;
+            }
+            catch (error) {
+                // no op
+            }
             res.render('serviceOutputs', {
                 searchConditions: searchConditions,
-                paymentCards: paymentCards
+                paymentCards: paymentCards,
+                membershipServices: membershipServices
             });
         }
     }

@@ -97,6 +97,7 @@ serviceOutputsRouter.get(
                     auth: req.user.authClient,
                     project: { id: req.project.id }
                 });
+
                 let paymentCards: any[] = [];
                 try {
                     const searchPaymentCardsResult = await productService.search({
@@ -107,9 +108,20 @@ serviceOutputsRouter.get(
                     // no op
                 }
 
+                let membershipServices: any[] = [];
+                try {
+                    const searchMembershipServicesResult = await productService.search({
+                        typeOf: { $eq: 'MembershipService' }
+                    });
+                    membershipServices = searchMembershipServicesResult.data;
+                } catch (error) {
+                    // no op
+                }
+
                 res.render('serviceOutputs', {
                     searchConditions: searchConditions,
-                    paymentCards: paymentCards
+                    paymentCards: paymentCards,
+                    membershipServices: membershipServices
                 });
             }
         } catch (error) {

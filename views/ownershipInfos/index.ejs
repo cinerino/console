@@ -76,20 +76,9 @@
 
                                 <div class="form-group col-md-2">
                                     <label>所有物タイプ</label>
-                                    <select class="form-control form-control-sm" name="typeOfGood[typeOf]">
-                                        <option value="">---</option>
-                                        <% GoodTypeChoices.forEach(function (GoodTypeChoice) { %>
-                                        <%
-                                        var selected = false;
-                                        if (searchConditions.typeOfGood !== undefined && searchConditions.typeOfGood.typeOf !== undefined) {
-                                            selected = searchConditions.typeOfGood.typeOf === GoodTypeChoice;
-                                        }
-                                        %>
-                                        <option value="<%= GoodTypeChoice %>" <% if (selected) { %> selected <% } %>>
-                                            <%= GoodTypeChoice %>
-                                        </option>
-                                        <% }) %>
-                                    </select>
+                                    <input type="text" class="form-control form-control-sm" id="typeOfGood[typeOf]"
+                                        name="typeOfGood[typeOf]" placeholder="EventReservation"
+                                        value="<%= (searchConditions.typeOfGood !== undefined && searchConditions.typeOfGood.typeOf !== undefined) ? searchConditions.typeOfGood.typeOf : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">

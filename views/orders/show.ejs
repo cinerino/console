@@ -135,10 +135,14 @@
                                                 <%= acceptedOffer.itemOffered.reservationFor.location.name.ja %>
                                             </a>
                                             <% } %>
-                                            <% } else if (acceptedOffer.itemOffered.typeOf === 'ProgramMembership') { %>
-                                            <%= acceptedOffer.itemOffered.name.ja %>
                                             <% } else { %>
-                                            <%= `${acceptedOffer.itemOffered.typeOf} ${acceptedOffer.itemOffered.name}` %>
+                                            <%
+                                            var itemName = acceptedOffer.itemOffered.name;
+                                            if (typeof itemName !== 'string' && itemName !== undefined && itemName !== null) {
+                                                itemName = itemName.ja;
+                                            }
+                                            %>
+                                            <%= `${acceptedOffer.itemOffered.typeOf} ${itemName}` %>
                                             <% } %>
                                         </td>
                                         <td>
@@ -181,7 +185,8 @@
                                             }
                                             %>
                                             <%= priceComponent.price %><% if (priceComponent.referenceQuantity !== undefined && priceComponent.referenceQuantity !== null) { %>
-                                            / <%= priceComponent.referenceQuantity.value %><% } %>
+                                            / <%= priceComponent.referenceQuantity.value %>
+                                            <%= priceComponent.referenceQuantity.unitCode %><% } %>
                                             <%= priceComponent.priceCurrency %>(<%= name %>)
                                             <br>
                                             <% }) %>
