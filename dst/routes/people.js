@@ -17,6 +17,7 @@ const express = require("express");
 const http_status_1 = require("http-status");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
+const TimelineFactory = require("../factory/timeline");
 const debug = createDebug('cinerino-console:routes');
 const peopleRouter = express.Router();
 /**
@@ -64,9 +65,15 @@ peopleRouter.get('',
 /**
  * 会員編集
  */
-peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+peopleRouter.all('/:id', 
+// tslint:disable-next-line:max-func-body-length
+(req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let message = '';
+        const actionService = new cinerinoapi.service.Action({
+            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
+            auth: req.user.authClient
+        });
         const personService = new cinerinoapi.service.Person({
             endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
             auth: req.user.authClient
@@ -99,10 +106,47 @@ peopleRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, f
                 message = error.message;
             }
         }
+        const timelines = [];
+        try {
+            const searchDeleteActionsResult = yield actionService.search({
+                limit: 100,
+                sort: { startDate: cinerinoapi.factory.sortType.Descending },
+                typeOf: cinerinoapi.factory.actionType.DeleteAction,
+                object: { id: { $in: [person.id] } }
+            });
+            timelines.push(...searchDeleteActionsResult.data.map((a) => {
+                return TimelineFactory.createFromAction({
+                    project: req.project,
+                    action: a
+                });
+            }));
+            timelines.push({
+                action: {},
+                agent: {
+                    id: person.id,
+                    name: `${person.givenName} ${person.familyName}`,
+                    url: req.originalUrl
+                },
+                actionName: '作成',
+                object: {
+                    name: `${person.givenName} ${person.familyName}`,
+                    url: req.originalUrl
+                },
+                startDate: moment(person.UserCreateDate)
+                    .toDate(),
+                actionStatus: cinerinoapi.factory.actionStatusType.CompletedActionStatus,
+                actionStatusDescription: 'しました',
+                result: {}
+            });
+        }
+        catch (error) {
+            // no op
+        }
         res.render('people/show', {
             message: message,
             moment: moment,
-            person: person
+            person: person,
+            timelines
         });
     }
     catch (error) {

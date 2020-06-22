@@ -109,7 +109,11 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#orders" data-toggle="tab">
+                            <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">
+                                    <i class="nav-icon fa fa-clock"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#orders" data-toggle="tab">
                                     <i class="nav-icon fa fa-shopping-cart"></i>
                                 </a>
                             </li>
@@ -135,7 +139,11 @@
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="active tab-pane" id="orders">
+                            <div class="active tab-pane" id="timeline">
+                                <%- include('../parts/timelines', {timelines: timelines}) %>
+                            </div>
+
+                            <div class="tab-pane" id="orders">
                                 <div class="table-responsive">
                                     <table class="table m-0">
                                         <thead>
