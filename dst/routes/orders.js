@@ -29,7 +29,7 @@ const ordersRouter = express.Router();
 ordersRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
     try {
         debug('req.query:', req.query);
         const iamService = new cinerinoapi.service.IAM({
@@ -211,6 +211,18 @@ ordersRouter.get('',
                     .map((v) => v.trim())
                 : undefined, acceptedOffers: {
                 itemOffered: {
+                    typeOf: {
+                        $in: (typeof ((_d = (_c = req.query.acceptedOffers) === null || _c === void 0 ? void 0 : _c.itemOffered) === null || _d === void 0 ? void 0 : _d.typeOf) === 'string'
+                            && ((_f = (_e = req.query.acceptedOffers) === null || _e === void 0 ? void 0 : _e.itemOffered) === null || _f === void 0 ? void 0 : _f.typeOf.length) > 0)
+                            ? [(_h = (_g = req.query.acceptedOffers) === null || _g === void 0 ? void 0 : _g.itemOffered) === null || _h === void 0 ? void 0 : _h.typeOf]
+                            : undefined
+                    },
+                    identifier: {
+                        $in: (typeof ((_k = (_j = req.query.acceptedOffers) === null || _j === void 0 ? void 0 : _j.itemOffered) === null || _k === void 0 ? void 0 : _k.identifier) === 'string'
+                            && ((_m = (_l = req.query.acceptedOffers) === null || _l === void 0 ? void 0 : _l.itemOffered) === null || _m === void 0 ? void 0 : _m.identifier.length) > 0)
+                            ? [(_p = (_o = req.query.acceptedOffers) === null || _o === void 0 ? void 0 : _o.itemOffered) === null || _p === void 0 ? void 0 : _p.identifier]
+                            : undefined
+                    },
                     ids: (req.query.acceptedOffers !== undefined
                         && req.query.acceptedOffers.itemOffered !== undefined
                         && req.query.acceptedOffers.itemOffered.ids !== undefined
@@ -218,6 +230,14 @@ ordersRouter.get('',
                         ? req.query.acceptedOffers.itemOffered.ids.split(',')
                             .map((v) => v.trim())
                         : undefined,
+                    issuedThrough: {
+                        id: {
+                            $in: (typeof ((_s = (_r = (_q = req.query.acceptedOffers) === null || _q === void 0 ? void 0 : _q.itemOffered) === null || _r === void 0 ? void 0 : _r.issuedThrough) === null || _s === void 0 ? void 0 : _s.id) === 'string'
+                                && ((_v = (_u = (_t = req.query.acceptedOffers) === null || _t === void 0 ? void 0 : _t.itemOffered) === null || _u === void 0 ? void 0 : _u.issuedThrough) === null || _v === void 0 ? void 0 : _v.id.length) > 0)
+                                ? [(_y = (_x = (_w = req.query.acceptedOffers) === null || _w === void 0 ? void 0 : _w.itemOffered) === null || _x === void 0 ? void 0 : _x.issuedThrough) === null || _y === void 0 ? void 0 : _y.id]
+                                : undefined
+                        }
+                    },
                     reservationNumbers: (req.query.acceptedOffers !== undefined
                         && req.query.acceptedOffers.itemOffered !== undefined
                         && req.query.acceptedOffers.itemOffered.reservationNumbers !== undefined
@@ -288,8 +308,8 @@ ordersRouter.get('',
                     && req.query.paymentMethods.paymentMethodIds !== '')
                     ? req.query.paymentMethods.paymentMethodIds.split(',')
                         .map((v) => v.trim())
-                    : undefined, typeOfs: (typeof ((_c = req.query.paymentMethods) === null || _c === void 0 ? void 0 : _c.typeOf) === 'string' && ((_d = req.query.paymentMethods) === null || _d === void 0 ? void 0 : _d.typeOf.length) > 0)
-                    ? [(_e = req.query.paymentMethods) === null || _e === void 0 ? void 0 : _e.typeOf]
+                    : undefined, typeOfs: (typeof ((_z = req.query.paymentMethods) === null || _z === void 0 ? void 0 : _z.typeOf) === 'string' && ((_0 = req.query.paymentMethods) === null || _0 === void 0 ? void 0 : _0.typeOf.length) > 0)
+                    ? [(_1 = req.query.paymentMethods) === null || _1 === void 0 ? void 0 : _1.typeOf]
                     : undefined }) }, {
             price: {
                 $gte: (req.query.price !== undefined

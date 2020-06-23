@@ -222,6 +222,18 @@ ordersRouter.get(
                     : undefined,
                 acceptedOffers: {
                     itemOffered: {
+                        typeOf: {
+                            $in: (typeof req.query.acceptedOffers?.itemOffered?.typeOf === 'string'
+                                && req.query.acceptedOffers?.itemOffered?.typeOf.length > 0)
+                                ? [req.query.acceptedOffers?.itemOffered?.typeOf]
+                                : undefined
+                        },
+                        identifier: {
+                            $in: (typeof req.query.acceptedOffers?.itemOffered?.identifier === 'string'
+                                && req.query.acceptedOffers?.itemOffered?.identifier.length > 0)
+                                ? [req.query.acceptedOffers?.itemOffered?.identifier]
+                                : undefined
+                        },
                         ids: (req.query.acceptedOffers !== undefined
                             && req.query.acceptedOffers.itemOffered !== undefined
                             && req.query.acceptedOffers.itemOffered.ids !== undefined
@@ -229,6 +241,14 @@ ordersRouter.get(
                             ? (<string>req.query.acceptedOffers.itemOffered.ids).split(',')
                                 .map((v) => v.trim())
                             : undefined,
+                        issuedThrough: {
+                            id: {
+                                $in: (typeof req.query.acceptedOffers?.itemOffered?.issuedThrough?.id === 'string'
+                                    && req.query.acceptedOffers?.itemOffered?.issuedThrough?.id.length > 0)
+                                    ? [req.query.acceptedOffers?.itemOffered?.issuedThrough?.id]
+                                    : undefined
+                            }
+                        },
                         reservationNumbers: (req.query.acceptedOffers !== undefined
                             && req.query.acceptedOffers.itemOffered !== undefined
                             && req.query.acceptedOffers.itemOffered.reservationNumbers !== undefined

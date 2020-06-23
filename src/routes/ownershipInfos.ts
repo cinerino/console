@@ -86,12 +86,7 @@ ownershipInfosRouter.get(
                 res.render('ownershipInfos/index', {
                     moment: moment,
                     searchConditions: searchConditions,
-                    OrderStatus: cinerinoapi.factory.orderStatus,
-                    GoodTypeChoices: [
-                        cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-                        cinerinoapi.factory.chevre.reservationType.EventReservation,
-                        cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership
-                    ]
+                    OrderStatus: cinerinoapi.factory.orderStatus
                 });
             }
         } catch (error) {

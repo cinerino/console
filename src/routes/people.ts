@@ -258,7 +258,7 @@ peopleRouter.get(
                     page: req.query.page,
                     id: req.params.id,
                     typeOfGood: {
-                        typeOf: cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership
+                        typeOf: cinerinoapi.factory.chevre.programMembership.ProgramMembershipType.ProgramMembership
                     },
                     ownedFrom: moment(now)
                         .add(-1, 'month')

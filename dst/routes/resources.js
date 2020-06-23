@@ -61,9 +61,9 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
                 }
                 break;
             // メンバーシップ
-            case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
-                res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
-                break;
+            // case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
+            //     res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
+            //     break;
             // 口座
             case cinerinoapi.factory.pecorino.account.TypeOf.Account:
                 let accountType = 'Point';

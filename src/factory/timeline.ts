@@ -303,9 +303,6 @@ export function createFromAction(params: {
                     case cinerinoapi.factory.chevre.transactionType.MoneyTransfer:
                         object = { name: '通貨転送取引' };
                         break;
-                    case cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership:
-                        object = { name: 'メンバーシップ' };
-                        break;
                     default:
                         object = { name: a.object.typeOf };
                 }

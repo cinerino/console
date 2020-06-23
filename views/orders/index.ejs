@@ -48,7 +48,7 @@
                         <!-- form start -->
                         <form role="form" method="get" class="search">
                             <div class="form-row">
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-1">
                                     <label for="confirmationNumbers">確認番号</label>
                                     <input type="text" class="form-control form-control-sm" id="confirmationNumbers"
                                         name="confirmationNumbers" placeholder="確認番号"
@@ -60,8 +60,8 @@
                                         name="orderNumbers" placeholder="注文番号"
                                         value="<%= (Array.isArray(searchConditions.orderNumbers)) ? searchConditions.orderNumbers.join(',') : '' %>">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label>注文ステータス</label>
+                                <div class="form-group col-md-1">
+                                    <label>ステータス</label>
                                     <select class="form-control form-control-sm" name="orderStatus">
                                         <option value="">---</option>
                                         <% Object.values(OrderStatus).forEach(function (orderStatus) { %>
@@ -110,7 +110,7 @@
                                         <% }) %>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-1">
                                     <label>決済方法</label>
                                     <select class="form-control form-control-sm" name="paymentMethods[typeOf]">
                                         <option value="">---</option>
@@ -140,6 +140,15 @@
                                         <% }) %>
                                     </select>
                                 </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="acceptedOffers[itemOffered][typeOf]">アイテムタイプ</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="acceptedOffers[itemOffered][typeOf]"
+                                        name="acceptedOffers[itemOffered][typeOf]" placeholder=""
+                                        value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.typeOf.$in)) ? searchConditions.acceptedOffers.itemOffered.typeOf.$in.join(',') : '' %>">
+                                </div>
+
                             </div>
 
                             <div class="text-center"><a class="" data-toggle="collapse" href=".advanced" role="button"
@@ -201,7 +210,7 @@
                                             placeholder="************1111、口座番号、購入管理番号"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.accountIds)) ? searchConditions.paymentMethods.accountIds.join(',') : '' %>">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group col-md-2">
                                         <label for="paymentMethods[paymentMethodIds]">決済ID</label>
                                         <input type="text" class="form-control form-control-sm"
                                             id="paymentMethods[paymentMethodIds]"
@@ -209,14 +218,35 @@
                                             placeholder="GMOオーダーID、購入管理番号など(カンマ区切り)"
                                             value="<%= (Array.isArray(searchConditions.paymentMethods.paymentMethodIds)) ? searchConditions.paymentMethods.paymentMethodIds.join(',') : '' %>">
                                     </div>
+                                </div>
+
+                                <div class="form-row">
                                     <div class="form-group col-md-2">
-                                        <label for="acceptedOffers[itemOffered][ids]">注文アイテムID</label>
+                                        <label for="acceptedOffers[itemOffered][ids]">アイテムID</label>
                                         <input type="text" class="form-control form-control-sm"
                                             id="acceptedOffers[itemOffered][ids]"
                                             name="acceptedOffers[itemOffered][ids]" placeholder="アイテムID(予約IDなど)"
                                             value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.ids)) ? searchConditions.acceptedOffers.itemOffered.ids.join(',') : '' %>">
                                     </div>
+
+                                    <div class="form-group col-md-2">
+                                        <label for="acceptedOffers[itemOffered][identifier]">アイテム識別子</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="acceptedOffers[itemOffered][identifier]"
+                                            name="acceptedOffers[itemOffered][identifier]" placeholder=""
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.identifier.$in)) ? searchConditions.acceptedOffers.itemOffered.identifier.$in.join(',') : '' %>">
+                                    </div>
+
+                                    <div class="form-group col-md-2">
+                                        <label for="acceptedOffers[itemOffered][issuedThrough][id]">アイテム発行サービスID</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="acceptedOffers[itemOffered][issuedThrough][id]"
+                                            name="acceptedOffers[itemOffered][issuedThrough][id]" placeholder=""
+                                            value="<%= (Array.isArray(searchConditions.acceptedOffers.itemOffered.issuedThrough.id.$in)) ? searchConditions.acceptedOffers.itemOffered.issuedThrough.id.$in.join(',') : '' %>">
+                                    </div>
+
                                 </div>
+
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <label for="customer[membershipNumbers]">Username</label>

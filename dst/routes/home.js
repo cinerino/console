@@ -152,7 +152,7 @@ homeRouter.get('/countNewUser', (req, res, next) => __awaiter(void 0, void 0, vo
             page: 1,
             typeOf: cinerinoapi.factory.actionType.RegisterAction,
             object: {
-                typeOf: { $in: [cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership] }
+                typeOf: { $in: [cinerinoapi.factory.chevre.programMembership.ProgramMembershipType.ProgramMembership] }
                 // id: { $in: [''] }
             },
             actionStatusTypes: [cinerinoapi.factory.actionStatusType.CompletedActionStatus],

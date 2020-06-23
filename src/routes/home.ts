@@ -163,7 +163,7 @@ homeRouter.get(
                 page: 1,
                 typeOf: cinerinoapi.factory.actionType.RegisterAction,
                 object: {
-                    typeOf: { $in: [cinerinoapi.factory.programMembership.ProgramMembershipType.ProgramMembership] }
+                    typeOf: { $in: [cinerinoapi.factory.chevre.programMembership.ProgramMembershipType.ProgramMembership] }
                     // id: { $in: [''] }
                 },
                 actionStatusTypes: [cinerinoapi.factory.actionStatusType.CompletedActionStatus],
