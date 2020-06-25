@@ -64,18 +64,33 @@ const serviceOutputsRouter = express.Router();
  * 検索
  */
 serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     try {
         const serviceOutputService = new cinerinoapi.service.ServiceOutput({
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
-        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, typeOf: { $eq: (_b = (_a = req.query) === null || _a === void 0 ? void 0 : _a.typeOf) === null || _b === void 0 ? void 0 : _b.$eq } }, {
+        const searchConditions = {
+            limit: req.query.limit,
+            page: req.query.page,
+            typeOf: Object.assign({}, (typeof ((_b = (_a = req.query) === null || _a === void 0 ? void 0 : _a.typeOf) === null || _b === void 0 ? void 0 : _b.$eq) === 'string')
+                ? { $eq: (_d = (_c = req.query) === null || _c === void 0 ? void 0 : _c.typeOf) === null || _d === void 0 ? void 0 : _d.$eq }
+                : { $exists: true }),
             identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
                 ? { $eq: req.query.identifier }
-                : undefined
-        });
+                : undefined,
+            issuedBy: {
+                id: (typeof ((_f = (_e = req.query.issuedBy) === null || _e === void 0 ? void 0 : _e.id) === null || _f === void 0 ? void 0 : _f.$eq) === 'string' && req.query.issuedBy.id.$eq.length > 0)
+                    ? { $eq: req.query.issuedBy.id.$eq }
+                    : undefined
+            },
+            issuedThrough: {
+                id: (typeof ((_h = (_g = req.query.issuedThrough) === null || _g === void 0 ? void 0 : _g.id) === null || _h === void 0 ? void 0 : _h.$eq) === 'string' && req.query.issuedThrough.id.$eq.length > 0)
+                    ? { $eq: req.query.issuedThrough.id.$eq }
+                    : undefined
+            }
+        };
         if (req.query.format === 'datatable') {
             const { data } = yield serviceOutputService.search(searchConditions);
             res.json({
@@ -124,11 +139,19 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             catch (error) {
                 // no op
             }
+            // 販売者検索
+            const sellerService = new cinerinoapi.service.Seller({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
+            const searchSellersResult = yield sellerService.search({ limit: 100 });
             res.render('serviceOutputs', {
                 searchConditions: searchConditions,
                 paymentCards: paymentCards,
                 membershipServices: membershipServices,
-                accountServices: accountServices
+                accountServices: accountServices,
+                sellers: searchSellersResult.data
             });
         }
     }

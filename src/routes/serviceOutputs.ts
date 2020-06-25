@@ -69,13 +69,26 @@ serviceOutputsRouter.get(
                 auth: req.user.authClient,
                 project: { id: req.project.id }
             });
+
             const searchConditions: any = {
                 limit: req.query.limit,
                 page: req.query.page,
-                typeOf: { $eq: req.query?.typeOf?.$eq },
-                ...{
-                    identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
-                        ? { $eq: req.query.identifier }
+                typeOf: {
+                    ...(typeof req.query?.typeOf?.$eq === 'string')
+                        ? { $eq: req.query?.typeOf?.$eq }
+                        : { $exists: true }
+                },
+                identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
+                    ? { $eq: req.query.identifier }
+                    : undefined,
+                issuedBy: {
+                    id: (typeof req.query.issuedBy?.id?.$eq === 'string' && req.query.issuedBy.id.$eq.length > 0)
+                        ? { $eq: req.query.issuedBy.id.$eq }
+                        : undefined
+                },
+                issuedThrough: {
+                    id: (typeof req.query.issuedThrough?.id?.$eq === 'string' && req.query.issuedThrough.id.$eq.length > 0)
+                        ? { $eq: req.query.issuedThrough.id.$eq }
                         : undefined
                 }
             };
@@ -128,11 +141,20 @@ serviceOutputsRouter.get(
                     // no op
                 }
 
+                // 販売者検索
+                const sellerService = new cinerinoapi.service.Seller({
+                    endpoint: req.project.settings.API_ENDPOINT,
+                    auth: req.user.authClient,
+                    project: { id: req.project.id }
+                });
+                const searchSellersResult = await sellerService.search({ limit: 100 });
+
                 res.render('serviceOutputs', {
                     searchConditions: searchConditions,
                     paymentCards: paymentCards,
                     membershipServices: membershipServices,
-                    accountServices: accountServices
+                    accountServices: accountServices,
+                    sellers: searchSellersResult.data
                 });
             }
         } catch (error) {

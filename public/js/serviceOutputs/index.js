@@ -33,18 +33,6 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '';
-                    if (data.issuedThrough !== undefined) {
-                        html += data.issuedThrough.typeOf
-                            + '<br>' + data.issuedThrough.id;
-                    }
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var html = '';
                     if (typeof data.identifier === 'string') {
                         html += data.identifier;
                     }
@@ -77,10 +65,34 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var html = '';
+                    if (data.issuedThrough !== undefined) {
+                        html += data.issuedThrough.typeOf
+                            + '<br>' + data.issuedThrough.id;
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     var html = ''
 
                     if (typeof data.dateIssued === 'string') {
                         html += moment(data.dateIssued).utc().format();
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+                    if (data.issuedBy !== undefined) {
+                        html += data.issuedBy.typeOf
+                            + '<br>' + data.issuedBy.id;
                     }
 
                     return html;

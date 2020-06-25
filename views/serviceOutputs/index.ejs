@@ -47,56 +47,73 @@
                         <!-- form start -->
                         <form role="form" method="get" class="search">
                             <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <label for="name">タイプ</label>
-                                    <select class="form-control form-control-sm" id="typeOf[$eq]" name="typeOf[$eq]">
-
-                                        <% paymentCards.forEach(function (paymentCard) { %>
-                                        <%
-                                        var selected = false;
-                                        if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
-                                            selected = searchConditions.typeOf.$eq === paymentCard.serviceOutput.typeOf
-                                        }
-                                        %>
-                                        <option value="<%= paymentCard.serviceOutput.typeOf %>" <% if (selected) { %>
-                                            selected <% } %>>
-                                            <%= paymentCard.name.ja %>
-                                        </option>
-                                        <% }) %>
-
-                                        <% membershipServices.forEach(function (membershipService) { %>
-                                        <%
-                                            var selected = false;
-                                            if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
-                                                selected = searchConditions.typeOf.$eq === membershipService.serviceOutput.typeOf
-                                            }
-                                            %>
-                                        <option value="<%= membershipService.serviceOutput.typeOf %>"
-                                            <% if (selected) { %> selected <% } %>>
-                                            <%= membershipService.name.ja %>
-                                        </option>
-                                        <% }) %>
-
-                                        <% accountServices.forEach(function (account) { %>
-                                        <%
-                                            var selected = false;
-                                            if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
-                                                selected = searchConditions.typeOf.$eq === account.serviceOutput.typeOf
-                                            }
-                                            %>
-                                        <option value="<%= account.serviceOutput.typeOf %>" <% if (selected) { %>
-                                            selected <% } %>>
-                                            <%= account.name.ja %>
-                                        </option>
-                                        <% }) %>
-                                    </select>
-                                </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="name">identifier</label>
                                     <input type="text" class="form-control form-control-sm" id="identifier"
                                         name="identifier" placeholder="8559919013"
                                         value="<%= (searchConditions.identifier !== undefined) ? searchConditions.identifier.$eq : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="issuedThrough[id][$eq]">サービス</label>
+                                    <select class="form-control form-control-sm" id="issuedThrough[id][$eq]"
+                                        name="issuedThrough[id][$eq]">
+                                        <% paymentCards.forEach(function (product) { %>
+                                        <%
+                                        var selected = false;
+                                        if (searchConditions.issuedThrough !== undefined && searchConditions.issuedThrough.id !== undefined && searchConditions.issuedThrough.id.$eq !== undefined) {
+                                            selected = searchConditions.issuedThrough.id.$eq === product.id
+                                        }
+                                        %>
+                                        <option value="<%= product.id %>" <% if (selected) { %> selected <% } %>>
+                                            <%= product.name.ja %>
+                                        </option>
+                                        <% }) %>
+
+                                        <% membershipServices.forEach(function (product) { %>
+                                        <%
+                                            var selected = false;
+                                            if (searchConditions.issuedThrough !== undefined && searchConditions.issuedThrough.id !== undefined && searchConditions.issuedThrough.id.$eq !== undefined) {
+                                                selected = searchConditions.issuedThrough.id.$eq === product.id
+                                            }
+                                            %>
+                                        <option value="<%= product.id %>" <% if (selected) { %> selected <% } %>>
+                                            <%= product.name.ja %>
+                                        </option>
+                                        <% }) %>
+
+                                        <% accountServices.forEach(function (product) { %>
+                                        <%
+                                            var selected = false;
+                                            if (searchConditions.issuedThrough !== undefined && searchConditions.issuedThrough.id !== undefined && searchConditions.issuedThrough.id.$eq !== undefined) {
+                                                selected = searchConditions.issuedThrough.id.$eq === product.id
+                                            }
+                                            %>
+                                        <option value="<%= product.id %>" <% if (selected) { %> selected <% } %>>
+                                            <%= product.name.ja %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="issuedBy[id][$eq]">発行者</label>
+                                    <select class="form-control form-control-sm" id="issuedBy[id][$eq]"
+                                        name="issuedBy[id][$eq]">
+                                        <option value="">---</option>
+                                        <% sellers.forEach(function (seller) { %>
+                                        <%
+                                        var selected = false;
+                                        if (searchConditions.issuedBy !== undefined && searchConditions.issuedBy.id !== undefined && searchConditions.issuedBy.id.$eq !== undefined) {
+                                            selected = searchConditions.issuedBy.id.$eq === seller.id
+                                        }
+                                        %>
+                                        <option value="<%= seller.id %>" <% if (selected) { %> selected <% } %>>
+                                            <%= seller.name.ja %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
                                 </div>
                             </div>
                         </form>
@@ -106,11 +123,12 @@
                                 <thead>
                                     <tr>
                                         <th>タイプ</th>
-                                        <th>発行サービス</th>
                                         <th>識別子</th>
                                         <th>名称</th>
-                                        <th>アクセスコード</th>
+                                        <th><i class="fa fa-key"></i></th>
+                                        <th>サービス</th>
                                         <th>発行日時</th>
+                                        <th>発行者</th>
                                         <th>validFor</th>
                                         <th>validFrom</th>
                                         <th>validThrough</th>
