@@ -88,7 +88,7 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             });
         }
         else {
-            // 決済カードを検索
+            // ペイメントカードを検索
             const productService = new cinerinoapi.service.Product({
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient,
@@ -97,7 +97,7 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             let paymentCards = [];
             try {
                 const searchPaymentCardsResult = yield productService.search({
-                    typeOf: { $eq: 'PaymentCard' }
+                    typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
                 });
                 paymentCards = searchPaymentCardsResult.data;
             }
@@ -114,10 +114,21 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             catch (error) {
                 // no op
             }
+            let accountServices = [];
+            try {
+                const searchAccountServicesResult = yield productService.search({
+                    typeOf: { $eq: 'Account' }
+                });
+                accountServices = searchAccountServicesResult.data;
+            }
+            catch (error) {
+                // no op
+            }
             res.render('serviceOutputs', {
                 searchConditions: searchConditions,
                 paymentCards: paymentCards,
-                membershipServices: membershipServices
+                membershipServices: membershipServices,
+                accountServices: accountServices
             });
         }
     }

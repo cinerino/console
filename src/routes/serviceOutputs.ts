@@ -91,7 +91,7 @@ serviceOutputsRouter.get(
                     data: data
                 });
             } else {
-                // 決済カードを検索
+                // ペイメントカードを検索
                 const productService = new cinerinoapi.service.Product({
                     endpoint: req.project.settings.API_ENDPOINT,
                     auth: req.user.authClient,
@@ -101,7 +101,7 @@ serviceOutputsRouter.get(
                 let paymentCards: any[] = [];
                 try {
                     const searchPaymentCardsResult = await productService.search({
-                        typeOf: { $eq: 'PaymentCard' }
+                        typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
                     });
                     paymentCards = searchPaymentCardsResult.data;
                 } catch (error) {
@@ -118,10 +118,21 @@ serviceOutputsRouter.get(
                     // no op
                 }
 
+                let accountServices: any[] = [];
+                try {
+                    const searchAccountServicesResult = await productService.search({
+                        typeOf: { $eq: 'Account' }
+                    });
+                    accountServices = searchAccountServicesResult.data;
+                } catch (error) {
+                    // no op
+                }
+
                 res.render('serviceOutputs', {
                     searchConditions: searchConditions,
                     paymentCards: paymentCards,
-                    membershipServices: membershipServices
+                    membershipServices: membershipServices,
+                    accountServices: accountServices
                 });
             }
         } catch (error) {

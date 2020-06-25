@@ -25,6 +25,7 @@ const actionsRouter = express.Router();
 actionsRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
     try {
         debug('req.query:', req.query);
         const actionService = new cinerinoapi.service.Action({
@@ -49,6 +50,20 @@ actionsRouter.get('',
                 ? moment(req.query.startRange.split(' - ')[1])
                     .toDate()
                 : undefined,
+            agent: {
+                typeOf: {
+                    $in: (typeof ((_b = (_a = req.query.agent) === null || _a === void 0 ? void 0 : _a.typeOf) === null || _b === void 0 ? void 0 : _b.$in) === 'string' && req.query.agent.typeOf.$in.length > 0)
+                        ? req.query.agent.typeOf.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                },
+                id: {
+                    $in: (typeof ((_d = (_c = req.query.agent) === null || _c === void 0 ? void 0 : _c.id) === null || _d === void 0 ? void 0 : _d.$in) === 'string' && req.query.agent.id.$in.length > 0)
+                        ? req.query.agent.id.$in.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                }
+            },
             object: {
                 typeOf: {
                     $in: (req.query.object !== undefined

@@ -43,6 +43,20 @@ actionsRouter.get(
                     ? moment(req.query.startRange.split(' - ')[1])
                         .toDate()
                     : undefined,
+                agent: {
+                    typeOf: {
+                        $in: (typeof req.query.agent?.typeOf?.$in === 'string' && req.query.agent.typeOf.$in.length > 0)
+                            ? (<string>req.query.agent.typeOf.$in).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    },
+                    id: {
+                        $in: (typeof req.query.agent?.id?.$in === 'string' && req.query.agent.id.$in.length > 0)
+                            ? (<string>req.query.agent.id.$in).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    }
+                },
                 object: {
                     typeOf: {
                         $in: (req.query.object !== undefined

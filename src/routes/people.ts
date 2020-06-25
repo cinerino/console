@@ -138,6 +138,20 @@ peopleRouter.all(
                     });
                 }));
 
+                const searchActionsResult = await actionService.search({
+                    limit: 10,
+                    sort: { startDate: cinerinoapi.factory.sortType.Descending },
+                    typeOf: cinerinoapi.factory.actionType.OrderAction,
+                    agent: { id: { $in: [person.id] } }
+                });
+
+                timelines.push(...searchActionsResult.data.map((a) => {
+                    return TimelineFactory.createFromAction({
+                        project: req.project,
+                        action: a
+                    });
+                }));
+
                 timelines.push({
                     action: {},
                     agent: {

@@ -93,6 +93,22 @@
                                 </div>
 
                                 <div class="form-group col-md-2">
+                                    <label for="agent[typeOf][$in]">Agent Type</label>
+                                    <input type="text" class="form-control form-control-sm" id="agent[typeOf][$in]"
+                                        name="agent[typeOf][$in]" placeholder="Agent Type"
+                                        value="<%= (searchConditions.object !== undefined && searchConditions.agent.typeOf !== undefined && Array.isArray(searchConditions.agent.typeOf.$in)) ? searchConditions.agent.typeOf.$in.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="agent[id][$in]">Agent ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="agent[id][$in]"
+                                        name="agent[id][$in]" placeholder="Agent ID"
+                                        value="<%= (searchConditions.object !== undefined && searchConditions.agent.id !== undefined && Array.isArray(searchConditions.agent.id.$in)) ? searchConditions.agent.id.$in.join(',') : '' %>">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
                                     <label for="object[typeOf][$in]">Object Type</label>
                                     <input type="text" class="form-control form-control-sm" id="object[typeOf][$in]"
                                         name="object[typeOf][$in]" placeholder="Object Type"

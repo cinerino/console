@@ -379,7 +379,7 @@ ordersRouter.get(
                 res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Application.json}; charset=UTF-8`);
                 stream.pipe(res);
             } else {
-                // 決済カードを検索
+                // ペイメントカードを検索
                 const productService = new cinerinoapi.service.Product({
                     endpoint: req.project.settings.API_ENDPOINT,
                     auth: req.user.authClient,
@@ -388,7 +388,7 @@ ordersRouter.get(
                 let paymentCards: any[] = [];
                 try {
                     const searchPaymentCardsResult = await productService.search({
-                        typeOf: { $eq: 'PaymentCard' }
+                        typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
                     });
                     paymentCards = searchPaymentCardsResult.data;
                 } catch (error) {

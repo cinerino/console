@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cinerinoapi = require("../cinerinoapi");
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createFromAction(params) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     const a = params.action;
     let agent = {
         id: '',
@@ -174,19 +174,22 @@ function createFromAction(params) {
             if (typeof a.object.typeOf === 'string' && typeof a.object.id === 'string') {
                 url = `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}`;
             }
+            object = { name: String(typeof a.object) };
             if (Array.isArray(a.object)) {
-                switch (a.object[0].typeOf) {
-                    case cinerinoapi.factory.chevre.offerType.Offer:
-                        object = { name: `${(_d = (_c = a.object[0]) === null || _c === void 0 ? void 0 : _c.itemOffered) === null || _d === void 0 ? void 0 : _d.typeOf} オファー` };
-                        break;
-                    case 'PaymentMethod':
-                        object = { name: a.object[0].paymentMethod.name };
-                        break;
-                    case cinerinoapi.factory.actionType.PayAction:
-                        object = { name: a.object[0].object.paymentMethod.typeOf };
-                        break;
-                    default:
-                        object = { name: a.object[0].typeOf };
+                if (typeof ((_c = a.object[0]) === null || _c === void 0 ? void 0 : _c.typeOf) === 'string') {
+                    switch (a.object[0].typeOf) {
+                        case cinerinoapi.factory.chevre.offerType.Offer:
+                            object = { name: `${(_e = (_d = a.object[0]) === null || _d === void 0 ? void 0 : _d.itemOffered) === null || _e === void 0 ? void 0 : _e.typeOf} オファー` };
+                            break;
+                        case 'PaymentMethod':
+                            object = { name: a.object[0].paymentMethod.name };
+                            break;
+                        case cinerinoapi.factory.actionType.PayAction:
+                            object = { name: a.object[0].object.paymentMethod.typeOf };
+                            break;
+                        default:
+                            object = { name: a.object[0].typeOf };
+                    }
                 }
             }
             else {
@@ -195,7 +198,7 @@ function createFromAction(params) {
                         object = { name: 'オファー' };
                         break;
                     case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
-                        object = { name: '座席予約' };
+                        object = { name: '予約' };
                         break;
                     case cinerinoapi.factory.paymentMethodType.CreditCard:
                         object = { name: 'クレジットカード決済' };
@@ -203,11 +206,12 @@ function createFromAction(params) {
                     case cinerinoapi.factory.paymentMethodType.Account:
                         object = { name: '口座決済' };
                         break;
-                    case 'PaymentCard':
-                        object = { name: '決済カード' };
+                    case cinerinoapi.factory.paymentMethodType.PaymentCard:
+                        object = { name: 'ペイメントカード' };
                         break;
+                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
                     case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
-                        object = { name: 'ポイントインセンティブ' };
+                        object = { name: 'ポイント特典' };
                         break;
                     case 'Order':
                         url = `/projects/${params.project.id}/orders/${a.object.orderNumber}`;
@@ -215,20 +219,6 @@ function createFromAction(params) {
                         break;
                     case 'OwnershipInfo':
                         object = { name: '所有権' };
-                        break;
-                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                        object = { name: 'ポイント' };
-                        break;
-                    case cinerinoapi.factory.actionType.SendAction:
-                        if (a.object.typeOf === 'Order') {
-                            object = { name: '配送' };
-                        }
-                        else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                            object = { name: '送信' };
-                        }
-                        else {
-                            object = { name: '送信' };
-                        }
                         break;
                     case cinerinoapi.factory.creativeWorkType.EmailMessage:
                         object = { name: 'Eメール' };

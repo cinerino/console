@@ -235,19 +235,23 @@ export function createFromAction(params: {
                 url = `/projects/${params.project.id}/resources/${a.object.typeOf}/${a.object.id}`;
             }
 
+            object = { name: String(typeof a.object) };
+
             if (Array.isArray(a.object)) {
-                switch (a.object[0].typeOf) {
-                    case cinerinoapi.factory.chevre.offerType.Offer:
-                        object = { name: `${a.object[0]?.itemOffered?.typeOf} オファー` };
-                        break;
-                    case 'PaymentMethod':
-                        object = { name: a.object[0].paymentMethod.name };
-                        break;
-                    case cinerinoapi.factory.actionType.PayAction:
-                        object = { name: a.object[0].object.paymentMethod.typeOf };
-                        break;
-                    default:
-                        object = { name: a.object[0].typeOf };
+                if (typeof a.object[0]?.typeOf === 'string') {
+                    switch (a.object[0].typeOf) {
+                        case cinerinoapi.factory.chevre.offerType.Offer:
+                            object = { name: `${a.object[0]?.itemOffered?.typeOf} オファー` };
+                            break;
+                        case 'PaymentMethod':
+                            object = { name: a.object[0].paymentMethod.name };
+                            break;
+                        case cinerinoapi.factory.actionType.PayAction:
+                            object = { name: a.object[0].object.paymentMethod.typeOf };
+                            break;
+                        default:
+                            object = { name: a.object[0].typeOf };
+                    }
                 }
             } else {
                 switch (a.object.typeOf) {
@@ -255,7 +259,7 @@ export function createFromAction(params: {
                         object = { name: 'オファー' };
                         break;
                     case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
-                        object = { name: '座席予約' };
+                        object = { name: '予約' };
                         break;
                     case cinerinoapi.factory.paymentMethodType.CreditCard:
                         object = { name: 'クレジットカード決済' };
@@ -263,11 +267,12 @@ export function createFromAction(params: {
                     case cinerinoapi.factory.paymentMethodType.Account:
                         object = { name: '口座決済' };
                         break;
-                    case 'PaymentCard':
-                        object = { name: '決済カード' };
+                    case cinerinoapi.factory.paymentMethodType.PaymentCard:
+                        object = { name: 'ペイメントカード' };
                         break;
+                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
                     case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
-                        object = { name: 'ポイントインセンティブ' };
+                        object = { name: 'ポイント特典' };
                         break;
                     case 'Order':
                         url = `/projects/${params.project.id}/orders/${a.object.orderNumber}`;
@@ -275,18 +280,6 @@ export function createFromAction(params: {
                         break;
                     case 'OwnershipInfo':
                         object = { name: '所有権' };
-                        break;
-                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                        object = { name: 'ポイント' };
-                        break;
-                    case cinerinoapi.factory.actionType.SendAction:
-                        if (a.object.typeOf === 'Order') {
-                            object = { name: '配送' };
-                        } else if (a.object.typeOf === cinerinoapi.factory.creativeWorkType.EmailMessage) {
-                            object = { name: '送信' };
-                        } else {
-                            object = { name: '送信' };
-                        }
                         break;
                     case cinerinoapi.factory.creativeWorkType.EmailMessage:
                         object = { name: 'Eメール' };

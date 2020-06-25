@@ -76,6 +76,19 @@
                                             <%= membershipService.name.ja %>
                                         </option>
                                         <% }) %>
+
+                                        <% accountServices.forEach(function (account) { %>
+                                        <%
+                                            var selected = false;
+                                            if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
+                                                selected = searchConditions.typeOf.$eq === account.serviceOutput.typeOf
+                                            }
+                                            %>
+                                        <option value="<%= account.serviceOutput.typeOf %>" <% if (selected) { %>
+                                            selected <% } %>>
+                                            <%= account.name.ja %>
+                                        </option>
+                                        <% }) %>
                                     </select>
                                 </div>
 
