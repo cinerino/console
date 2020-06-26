@@ -79,7 +79,7 @@ ownershipInfosRouter.get('',
                             && req.query.typeOfGood.issuedThrough.id.$eq.length > 0)
                             ? req.query.typeOfGood.issuedThrough.id.$eq
                             : undefined
-                    },
+                    }
                 },
                 accountNumbers: (req.query.typeOfGood !== undefined
                     && req.query.typeOfGood.accountNumbers !== undefined
