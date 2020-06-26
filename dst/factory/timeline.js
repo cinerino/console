@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createFromAction = void 0;
 const cinerinoapi = require("../cinerinoapi");
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createFromAction(params) {

@@ -32,8 +32,8 @@ actionsRouter.get(
                 typeOf: (req.query.typeOf !== undefined && req.query.typeOf !== '')
                     ? <string>req.query.typeOf
                     : undefined,
-                actionStatusTypes: (req.query.actionStatusTypes !== undefined)
-                    ? req.query.actionStatusTypes
+                actionStatusTypes: (typeof req.query.actionStatusType === 'string' && req.query.actionStatusType.length > 0)
+                    ? [req.query.actionStatusType]
                     : undefined,
                 startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                     ? moment(req.query.startRange.split(' - ')[0])

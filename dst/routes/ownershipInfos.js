@@ -27,6 +27,7 @@ ownershipInfosRouter.get('',
 // tslint:disable-next-line:cyclomatic-complexity
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f, _g;
     try {
         debug('req.query:', req.query);
         const ownershipInfoService = new cinerinoapi.service.OwnershipInfo({
@@ -61,12 +62,25 @@ ownershipInfosRouter.get('',
                     && req.query.typeOfGood.typeOf !== '')
                     ? req.query.typeOfGood.typeOf
                     : undefined,
+                identifier: {
+                    $eq: (typeof ((_c = (_b = (_a = req.query) === null || _a === void 0 ? void 0 : _a.typeOfGood) === null || _b === void 0 ? void 0 : _b.identifier) === null || _c === void 0 ? void 0 : _c.$eq) === 'string' && req.query.typeOfGood.identifier.$eq.length > 0)
+                        ? req.query.typeOfGood.identifier.$eq
+                        : undefined
+                },
                 ids: (req.query.typeOfGood !== undefined
                     && req.query.typeOfGood.ids !== undefined
                     && req.query.typeOfGood.ids !== '')
                     ? req.query.typeOfGood.ids.split(',')
                         .map((v) => v.trim())
                     : undefined,
+                issuedThrough: {
+                    id: {
+                        $eq: (typeof ((_g = (_f = (_e = (_d = req.query) === null || _d === void 0 ? void 0 : _d.typeOfGood) === null || _e === void 0 ? void 0 : _e.issuedThrough) === null || _f === void 0 ? void 0 : _f.id) === null || _g === void 0 ? void 0 : _g.$eq) === 'string'
+                            && req.query.typeOfGood.issuedThrough.id.$eq.length > 0)
+                            ? req.query.typeOfGood.issuedThrough.id.$eq
+                            : undefined
+                    },
+                },
                 accountNumbers: (req.query.typeOfGood !== undefined
                     && req.query.typeOfGood.accountNumbers !== undefined
                     && req.query.typeOfGood.accountNumbers !== '')
@@ -88,10 +102,48 @@ ownershipInfosRouter.get('',
             });
         }
         else {
+            // ペイメントカードを検索
+            const productService = new cinerinoapi.service.Product({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
+            let paymentCards = [];
+            try {
+                const searchPaymentCardsResult = yield productService.search({
+                    typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
+                });
+                paymentCards = searchPaymentCardsResult.data;
+            }
+            catch (error) {
+                // no op
+            }
+            let membershipServices = [];
+            try {
+                const searchMembershipServicesResult = yield productService.search({
+                    typeOf: { $eq: 'MembershipService' }
+                });
+                membershipServices = searchMembershipServicesResult.data;
+            }
+            catch (error) {
+                // no op
+            }
+            let accountServices = [];
+            try {
+                const searchAccountServicesResult = yield productService.search({
+                    typeOf: { $eq: 'Account' }
+                });
+                accountServices = searchAccountServicesResult.data;
+            }
+            catch (error) {
+                // no op
+            }
+            const products = [...paymentCards, ...membershipServices, ...accountServices];
             res.render('ownershipInfos/index', {
                 moment: moment,
                 searchConditions: searchConditions,
-                OrderStatus: cinerinoapi.factory.orderStatus
+                OrderStatus: cinerinoapi.factory.orderStatus,
+                products
             });
         }
     }

@@ -41,8 +41,8 @@ eventsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         const searchConditions = {
             limit: req.query.limit,
             page: req.query.page,
-            eventStatuses: (req.query.eventStatuses !== undefined)
-                ? req.query.eventStatuses
+            eventStatuses: (typeof req.query.eventStatus === 'string' && req.query.eventStatus.length > 0)
+                ? [req.query.eventStatus]
                 : undefined,
             typeOf: cinerinoapi.factory.chevre.eventType.ScreeningEvent,
             superEvent: {

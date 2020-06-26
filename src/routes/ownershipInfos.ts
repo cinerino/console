@@ -56,12 +56,25 @@ ownershipInfosRouter.get(
                         && req.query.typeOfGood.typeOf !== '')
                         ? req.query.typeOfGood.typeOf
                         : undefined,
+                    identifier: {
+                        $eq: (typeof req.query?.typeOfGood?.identifier?.$eq === 'string' && req.query.typeOfGood.identifier.$eq.length > 0)
+                            ? req.query.typeOfGood.identifier.$eq
+                            : undefined
+                    },
                     ids: (req.query.typeOfGood !== undefined
                         && req.query.typeOfGood.ids !== undefined
                         && req.query.typeOfGood.ids !== '')
                         ? (<string>req.query.typeOfGood.ids).split(',')
                             .map((v) => v.trim())
                         : undefined,
+                    issuedThrough: {
+                        id: {
+                            $eq: (typeof req.query?.typeOfGood?.issuedThrough?.id?.$eq === 'string'
+                                && req.query.typeOfGood.issuedThrough.id.$eq.length > 0)
+                                ? req.query.typeOfGood.issuedThrough.id.$eq
+                                : undefined
+                        }
+                    },
                     accountNumbers: (req.query.typeOfGood !== undefined
                         && req.query.typeOfGood.accountNumbers !== undefined
                         && req.query.typeOfGood.accountNumbers !== '')
@@ -83,10 +96,50 @@ ownershipInfosRouter.get(
                     data: searchResult.data
                 });
             } else {
+                // ペイメントカードを検索
+                const productService = new cinerinoapi.service.Product({
+                    endpoint: req.project.settings.API_ENDPOINT,
+                    auth: req.user.authClient,
+                    project: { id: req.project.id }
+                });
+
+                let paymentCards: any[] = [];
+                try {
+                    const searchPaymentCardsResult = await productService.search({
+                        typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
+                    });
+                    paymentCards = searchPaymentCardsResult.data;
+                } catch (error) {
+                    // no op
+                }
+
+                let membershipServices: any[] = [];
+                try {
+                    const searchMembershipServicesResult = await productService.search({
+                        typeOf: { $eq: 'MembershipService' }
+                    });
+                    membershipServices = searchMembershipServicesResult.data;
+                } catch (error) {
+                    // no op
+                }
+
+                let accountServices: any[] = [];
+                try {
+                    const searchAccountServicesResult = await productService.search({
+                        typeOf: { $eq: 'Account' }
+                    });
+                    accountServices = searchAccountServicesResult.data;
+                } catch (error) {
+                    // no op
+                }
+
+                const products = [...paymentCards, ...membershipServices, ...accountServices];
+
                 res.render('ownershipInfos/index', {
                     moment: moment,
                     searchConditions: searchConditions,
-                    OrderStatus: cinerinoapi.factory.orderStatus
+                    OrderStatus: cinerinoapi.factory.orderStatus,
+                    products
                 });
             }
         } catch (error) {

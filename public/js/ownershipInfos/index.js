@@ -88,8 +88,11 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var resourceId = data.typeOfGood.id;
-                    if (data.typeOfGood.typeOf === 'Account') {
+                    if (typeof data.typeOfGood.accountNumber === 'string') {
                         resourceId = data.typeOfGood.accountNumber;
+                    }
+                    if (typeof data.typeOfGood.identifier === 'string') {
+                        resourceId = data.typeOfGood.identifier;
                     }
 
                     var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOfGood.typeOf + '/' + resourceId + '?accountType=' + data.typeOfGood.accountType;

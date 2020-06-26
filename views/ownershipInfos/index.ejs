@@ -45,20 +45,6 @@
                         <form role="form" method="get" class="search">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
-                                    <label for="ids">所有権ID</label>
-                                    <input type="text" class="form-control form-control-sm" id="ids" name="ids"
-                                        placeholder="所有権ID"
-                                        value="<%= (Array.isArray(searchConditions.ids)) ? searchConditions.ids.join(',') : '' %>">
-                                </div>
-
-                                <div class="form-group col-md-2">
-                                    <label for="ownedBy[id]">所有者ID</label>
-                                    <input type="text" class="form-control form-control-sm" id="ownedBy[id]"
-                                        name="ownedBy[id]" placeholder="ユーザーID,アプリケーションIDなど"
-                                        value="<%= (searchConditions.ownedBy !== undefined) ? searchConditions.ownedBy.id : '' %>">
-                                </div>
-
-                                <div class="form-group col-md-2">
                                     <label>所有期間</label>
 
                                     <div class="input-group">
@@ -72,6 +58,20 @@
                                             value="<%= (searchConditions.ownedFrom !== undefined) ? `${moment(searchConditions.ownedFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.ownedThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                     </div>
                                     <!-- /.input group -->
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="ids">所有権ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="ids" name="ids"
+                                        placeholder="所有権ID"
+                                        value="<%= (Array.isArray(searchConditions.ids)) ? searchConditions.ids.join(',') : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="ownedBy[id]">所有者ID</label>
+                                    <input type="text" class="form-control form-control-sm" id="ownedBy[id]"
+                                        name="ownedBy[id]" placeholder="ユーザーID"
+                                        value="<%= (searchConditions.ownedBy !== undefined) ? searchConditions.ownedBy.id : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
@@ -89,10 +89,40 @@
                                 </div>
 
                                 <div class="form-group col-md-2">
+                                    <label for="typeOfGood[identifier][$eq]">所有物識別子</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="typeOfGood[identifier][$eq]" name="typeOfGood[identifier][$eq]"
+                                        placeholder="281428189354818"
+                                        value="<%= (searchConditions.typeOfGood !== undefined && searchConditions.typeOfGood.identifier !== undefined) ? searchConditions.typeOfGood.identifier.$eq : '' %>">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="typeOfGood[issuedThrough][id][$eq]">発行サービス</label>
+                                    <select class="form-control form-control-sm" id="typeOfGood[issuedThrough][id][$eq]"
+                                        name="typeOfGood[issuedThrough][id][$eq]">
+                                        <option value="">---</option>
+
+                                        <% products.forEach(function (product) { %>
+                                        <%
+                                        var selected = false;
+                                        if (searchConditions.typeOfGood.issuedThrough !== undefined && searchConditions.typeOfGood.issuedThrough.id !== undefined && searchConditions.typeOfGood.issuedThrough.id.$eq !== undefined) {
+                                            selected = searchConditions.typeOfGood.issuedThrough.id.$eq === product.id
+                                        }
+                                        %>
+                                        <option value="<%= product.id %>" <% if (selected) { %> selected <% } %>>
+                                            <%= product.name.ja %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-2">
                                     <label for="typeOfGood[accountNumbers]">口座番号</label>
                                     <input type="text" class="form-control form-control-sm"
                                         id="typeOfGood[accountNumbers]" name="typeOfGood[accountNumbers]"
-                                        placeholder="1234567"
+                                        placeholder="135614901831073"
                                         value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.accountNumbers)) ? searchConditions.typeOfGood.accountNumbers.join(',') : '' %>">
                                 </div>
                             </div>

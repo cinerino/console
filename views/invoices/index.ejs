@@ -43,31 +43,31 @@
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="customer[ids]">Customer ID</label>
-                                    <input type="text" class="form-control" id="customer[ids]" name="customer[ids]"
-                                        placeholder="Customer ID"
+                                    <input type="text" class="form-control form-control-sm" id="customer[ids]"
+                                        name="customer[ids]" placeholder="Customer ID"
                                         value="<%= (Array.isArray(searchConditions.customer.ids)) ? searchConditions.customer.ids.join(',') : '' %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="customer[ids]">Customer Email</label>
-                                    <input type="text" class="form-control" id="customer[email]" name="customer[email]"
-                                        placeholder="cinerino@example.com(正規表現使用可)"
+                                    <input type="text" class="form-control form-control-sm" id="customer[email]"
+                                        name="customer[email]" placeholder="cinerino@example.com(正規表現使用可)"
                                         value="<%= searchConditions.customer.email %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="customer[ids]">Customer Telephone</label>
-                                    <input type="text" class="form-control" id="customer[telephone]"
+                                    <input type="text" class="form-control form-control-sm" id="customer[telephone]"
                                         name="customer[telephone]" placeholder="0312345678(正規表現使用可)"
                                         value="<%= searchConditions.customer.telephone %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="customer[identifiers]">Customer Identifier</label>
-                                    <input type="text" class="form-control" id="customer[identifiers]"
+                                    <input type="text" class="form-control form-control-sm" id="customer[identifiers]"
                                         name="customer[identifiers]" placeholder="username:cinerino"
                                         value="<%= (Array.isArray(searchConditions.customer.identifiers)) ? `${searchConditions.customer.identifiers[0].name}:${searchConditions.customer.identifiers[0].value}` : '' %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>決済方法</label>
-                                    <select multiple class="form-control" name="paymentMethods[]">
+                                    <select multiple class="form-control form-control-sm" name="paymentMethods[]">
                                         <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
                                         <%
                                         var selected = false;
@@ -83,21 +83,22 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="paymentMethodIds">決済ID</label>
-                                    <input type="text" class="form-control" id="paymentMethodIds"
+                                    <input type="text" class="form-control form-control-sm" id="paymentMethodIds"
                                         name="paymentMethodIds" placeholder="GMO取引ID、口座番号、ムビチケ購入管理番号など(カンマ区切り)"
                                         value="<%= (Array.isArray(searchConditions.paymentMethodIds)) ? searchConditions.paymentMethodIds.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="confirmationNumbers">確認番号</label>
-                                    <input type="text" class="form-control" id="confirmationNumbers"
+                                    <input type="text" class="form-control form-control-sm" id="confirmationNumbers"
                                         name="confirmationNumbers" placeholder="確認番号"
                                         value="<%= (Array.isArray(searchConditions.confirmationNumbers)) ? searchConditions.confirmationNumbers.join(',') : '' %>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="referencesOrder[orderNumbers]">注文番号</label>
-                                    <input type="text" class="form-control" id="referencesOrder[orderNumbers]"
-                                        name="referencesOrder[orderNumbers]" placeholder="注文番号"
+                                    <input type="text" class="form-control form-control-sm"
+                                        id="referencesOrder[orderNumbers]" name="referencesOrder[orderNumbers]"
+                                        placeholder="注文番号"
                                         value="<%= (Array.isArray(searchConditions.referencesOrder.orderNumbers)) ? searchConditions.referencesOrder.orderNumbers.join(',') : '' %>">
                                 </div>
                                 <div class="form-group col-md-2">
@@ -109,7 +110,7 @@
                                                 <i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control" name="createdAtRange"
+                                        <input type="text" class="form-control form-control-sm" name="createdAtRange"
                                             id="createdAtRange"
                                             value="<%= moment(searchConditions.createdFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.createdThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
                                     </div>
@@ -117,7 +118,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>決済ステータス</label>
-                                    <select multiple class="form-control" name="paymentStatuses[]">
+                                    <select multiple class="form-control form-control-sm" name="paymentStatuses[]">
                                         <% Object.values(PaymentStatusType).forEach(function (paymentStatus) { %>
                                         <% 
                                         var selected = false;
