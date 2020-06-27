@@ -44,23 +44,12 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
+                    var name = data.name.ja;
+                    if (typeof name === 'string' && name.length > 10) {
+                        name = String(name).slice(0, 10) + '...';
+                    }
 
-                    var html = ''
-                        + '<span>' + data.name.ja + '</span>';
-
-                    html += '';
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var projectId = (data.project !== undefined && data.project !== null) ? data.project.id : 'undefined';
-
-                    var html = ''
-                        + '<span>' + data.telephone + '</span>';
+                    var html = name;
 
                     return html;
                 }
@@ -68,8 +57,19 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = ''
-                        + '<a target="_blank" href="' + data.url + '">' + data.url + '</a>';
+                    var html = data.telephone;
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
+                    if (typeof data.url === 'string') {
+                        html += '<a target="_blank" href="' + data.url + '">' + data.url.slice(0, 10) + '...<i class="fa fa-external-link-alt ml-1"></i></a>';
+                    }
 
                     html += '';
 
@@ -94,9 +94,15 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '';
+
                     if (data.location !== undefined && data.location !== null) {
-                        html += '<span class="badge badge-light ' + data.location.typeOf + '">' + data.location.typeOf + '</span>'
-                            + '<br><span>' + data.location.name.ja + '</span>';
+                        var name = data.location.name.ja;
+                        if (typeof name === 'string' && name.length > 10) {
+                            name = String(name).slice(0, 10) + '...';
+                        }
+
+                        html += '<span class="badge badge-light">' + data.location.typeOf + '</span>'
+                            + '<br>' + name;
                     }
                     html += '';
 
