@@ -28,7 +28,7 @@ ownershipInfosRouter.get(
                 auth: req.user.authClient
             });
 
-            const searchConditions: cinerinoapi.factory.ownershipInfo.ISearchConditions<cinerinoapi.factory.ownershipInfo.IGoodType> = {
+            const searchConditions: cinerinoapi.factory.ownershipInfo.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
                 sort: { ownedFrom: cinerinoapi.factory.sortType.Descending },
