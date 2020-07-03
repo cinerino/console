@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 口座ルーター
  */
-const cinerinoapi = require("@cinerino/api-nodejs-client");
 // import * as createDebug from 'debug';
 const express = require("express");
+const cinerinoapi = require("../cinerinoapi");
 // const debug = createDebug('cinerino-console:routes:account');
 const accountsRouter = express.Router();
 /**

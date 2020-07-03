@@ -1,9 +1,10 @@
 /**
  * 口座ルーター
  */
-import * as cinerinoapi from '@cinerino/api-nodejs-client';
 // import * as createDebug from 'debug';
 import * as express from 'express';
+
+import * as cinerinoapi from '../cinerinoapi';
 
 // const debug = createDebug('cinerino-console:routes:account');
 const accountsRouter = express.Router();

@@ -1,8 +1,7 @@
 /**
  * アプリケーション固有の型定義
  */
-import * as cinerino from '@cinerino/api-nodejs-client';
-import * as express from 'express';
+import * as cinerino from '@cinerino/sdk';
 
 export interface ISettings {
     id: string;
