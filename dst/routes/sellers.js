@@ -174,14 +174,9 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
 }));
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createAttributesFromBody(params) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        if (params.project.settings === undefined) {
-            throw new Error('Project settings undefined');
-        }
-        if (params.project.settings.chevre === undefined) {
-            throw new Error('Project chevre settings undefined');
-        }
-        if (params.project.settings.gmo === undefined) {
+        if (((_a = params.project.settings) === null || _a === void 0 ? void 0 : _a.gmo) === undefined) {
             throw new Error('Project gmo settings undefined');
         }
         const body = params.req.body;
@@ -237,7 +232,7 @@ function createAttributesFromBody(params) {
                 case cinerinoapi.factory.service.webAPI.Identifier.Chevre:
                     // Chevreから情報取得
                     const placeService = new chevreapi.service.Place({
-                        endpoint: params.project.settings.chevre.endpoint,
+                        endpoint: process.env.DEFAULT_CHEVRE_API_ENDPOINT,
                         auth: authClient
                     });
                     const searchMovieTheatersResult = yield placeService.searchMovieTheaters({

@@ -191,13 +191,7 @@ async function createAttributesFromBody(params: {
     project: cinerinoapi.factory.project.IProject;
     req: express.Request;
 }): Promise<cinerinoapi.factory.seller.IAttributes<cinerinoapi.factory.organizationType>> {
-    if (params.project.settings === undefined) {
-        throw new Error('Project settings undefined');
-    }
-    if (params.project.settings.chevre === undefined) {
-        throw new Error('Project chevre settings undefined');
-    }
-    if (params.project.settings.gmo === undefined) {
+    if (params.project.settings?.gmo === undefined) {
         throw new Error('Project gmo settings undefined');
     }
 
@@ -259,7 +253,7 @@ async function createAttributesFromBody(params: {
             case cinerinoapi.factory.service.webAPI.Identifier.Chevre:
                 // Chevreから情報取得
                 const placeService = new chevreapi.service.Place({
-                    endpoint: params.project.settings.chevre.endpoint,
+                    endpoint: <string>process.env.DEFAULT_CHEVRE_API_ENDPOINT,
                     auth: authClient
                 });
                 const searchMovieTheatersResult = await placeService.searchMovieTheaters({
