@@ -51,7 +51,6 @@ projectsRouter.all(
                 },
                 // デフォルト設定をセット
                 settings: {
-                    chevre: { endpoint: <string>process.env.DEFAULT_CHEVRE_API_ENDPOINT },
                     gmo: {
                         endpoint: <string>process.env.DEFAULT_GMO_ENDPOINT,
                         siteId: '',
@@ -60,8 +59,7 @@ projectsRouter.all(
                     mvtkReserve: {
                         companyCode: '',
                         endpoint: <string>process.env.DEFAULT_MVTK_RESERVE_ENDPOINT
-                    },
-                    pecorino: { endpoint: <string>process.env.DEFAULT_PECORINO_API_ENDPOINT }
+                    }
                 }
             };
 
