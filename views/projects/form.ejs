@@ -77,22 +77,6 @@
     </div>
 </div>
 
-<div class="form-row">
-    <div class="form-group col-md-4">
-        <label for="settings[mvtkReserve][endpoint]">ムビチケ着券エンドポイント</label>
-        <input readonly type="text" class="form-control" id="settings[mvtkReserve][endpoint]"
-            name="settings[mvtkReserve][endpoint]" placeholder="https://example.com"
-            value="<%= (project !== undefined && project.settings.mvtkReserve !== undefined) ? project.settings.mvtkReserve.endpoint : '' %>">
-    </div>
-
-    <div class="form-group col-md-4">
-        <label for="settings[mvtkReserve][companyCode]">ムビチケ興行会社コード</label>
-        <input type="text" class="form-control" id="settings[mvtkReserve][companyCode]"
-            name="settings[mvtkReserve][companyCode]"
-            value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.mvtkReserve.companyCode : '' %>">
-    </div>
-</div>
-
 <div class="form-group">
     <label for="settings[sendgridApiKey]">Sendgrid API Key</label>
     <input type="text" class="form-control" id="settings[sendgridApiKey]" name="settings[sendgridApiKey]"

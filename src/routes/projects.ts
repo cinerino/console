@@ -55,10 +55,6 @@ projectsRouter.all(
                         endpoint: <string>process.env.DEFAULT_GMO_ENDPOINT,
                         siteId: '',
                         sitePass: ''
-                    },
-                    mvtkReserve: {
-                        companyCode: '',
-                        endpoint: <string>process.env.DEFAULT_MVTK_RESERVE_ENDPOINT
                     }
                 }
             };

@@ -59,10 +59,6 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
                     endpoint: process.env.DEFAULT_GMO_ENDPOINT,
                     siteId: '',
                     sitePass: ''
-                },
-                mvtkReserve: {
-                    companyCode: '',
-                    endpoint: process.env.DEFAULT_MVTK_RESERVE_ENDPOINT
                 }
             }
         };
