@@ -296,35 +296,6 @@ async function createAttributesFromBody(params: {
         });
     }
 
-    // if (!Array.isArray(movieTheater.paymentAccepted)) {
-    //     movieTheater.paymentAccepted = [];
-    // }
-    // コイン口座決済を有効にする場合、口座未開設であれば開設する
-    // if (body.coinAccountPaymentAccepted === 'on') {
-    //     if (body.coinAccountPayment.accountNumber === '') {
-    //         // 口座番号の指定がなければ自動開設
-    //         const accountService = new cinerinoapi.service.Account({
-    //             endpoint: `${params.req.project.settings.API_ENDPOINT}/projects/${params.req.project.id}`,
-    //             auth: params.req.user.authClient
-    //         });
-    //         const account = await accountService.open({
-    //             accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-    //             name: (body.name.ja !== '') ? body.name.ja : initialName
-    //         });
-    //         debug('account opened');
-
-    //         paymentAccepted.push(<any>{
-    //             paymentMethodType: cinerinoapi.factory.paymentMethodType.PaymentCard,
-    //             identifier: account.accountNumber
-    //         });
-    //     } else {
-    //         paymentAccepted.push(<any>{
-    //             paymentMethodType: cinerinoapi.factory.paymentMethodType.PaymentCard,
-    //             identifier: body.coinAccountPayment.accountNumber
-    //         });
-    //     }
-    // }
-
     // ポイント口座決済を有効にする場合
     if (body.pointAccountPaymentAccepted === 'on') {
         if (body.pointAccountPayment.accountNumber === '') {
@@ -374,32 +345,9 @@ async function createAttributesFromBody(params: {
         });
     }
 
-    let hasPOS: any[] = [];
-    if (Array.isArray(body.hasPOS)) {
-        body.hasPOS.forEach((pos: any) => {
-            if (pos.id !== '') {
-                hasPOS.push({
-                    typeOf: 'POS',
-                    id: pos.id,
-                    name: pos.name
-                });
-            }
-        });
-    }
-    hasPOS = hasPOS.sort((a, b) => (String(a.id) < String(b.id)) ? -1 : 1);
+    const hasPOS: any[] = [];
 
     const areaServed: cinerinoapi.factory.seller.IAreaServed[] = [];
-    if (Array.isArray(body.areaServed)) {
-        body.areaServed.forEach((area: any) => {
-            if (area.id !== '') {
-                areaServed.push({
-                    typeOf: area.typeOf,
-                    id: area.id,
-                    name: area.name
-                });
-            }
-        });
-    }
 
     const makesOffer: cinerinoapi.factory.seller.IMakesOffer[] = [];
     if (movieTheaterFromChevre !== undefined) {

@@ -136,20 +136,6 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '';
 
-                    var numAreaServed = 0;
-                    if (Array.isArray(data.areaServed)) {
-                        numAreaServed = data.areaServed.length;
-                    }
-                    html += '<a href="javascript:void(0)" class="showAreaServed" data-id="' + data.id + '">' + numAreaServed + '</a>';
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var html = '';
-
                     var numPolicy = 0;
                     if (Array.isArray(data.hasMerchantReturnPolicy)) {
                         numPolicy = data.hasMerchantReturnPolicy.length;
@@ -193,11 +179,6 @@ $(function () {
     $(document).on('click', '.showMakesOffer', function () {
         var id = $(this).data('id');
         showMakesOffer(id);
-    });
-
-    $(document).on('click', '.showAreaServed', function () {
-        var id = $(this).data('id');
-        showAreaServed(id);
     });
 
     $(document).on('click', '.showReturnPolicy', function () {
@@ -256,25 +237,6 @@ $(function () {
         var title = 'Seller `' + seller.id + '` Payment Accepted';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(seller.paymentAccepted, null, '\t')
-            + '</textarea>';
-        modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(body);
-        modal.modal();
-    }
-
-    function showAreaServed(id) {
-        var sellers = table
-            .rows()
-            .data()
-            .toArray();
-        var seller = sellers.find(function (s) {
-            return s.id === id
-        })
-
-        var modal = $('#modal-seller');
-        var title = 'Seller `' + seller.id + '` Area Served';
-        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
-            + JSON.stringify(seller.areaServed, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
