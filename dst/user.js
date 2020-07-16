@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const createDebug = require("debug");
 const jwt = require("jsonwebtoken");
-const chevreapi = require("./chevreapi");
 const cinerinoapi = require("./cinerinoapi");
 const debug = createDebug('cinerino-console:user');
 /**
@@ -28,15 +27,7 @@ class User {
             redirectUri: `https://${configurations.host}/signIn`,
             logoutUri: `https://${configurations.host}/logout`
         });
-        this.chevreAuthClient = new chevreapi.auth.OAuth2({
-            domain: process.env.API_AUTHORIZE_SERVER_DOMAIN,
-            clientId: process.env.API_CLIENT_ID,
-            clientSecret: process.env.API_CLIENT_SECRET,
-            redirectUri: `https://${configurations.host}/signIn`,
-            logoutUri: `https://${configurations.host}/logout`
-        });
         this.authClient.setCredentials({ refresh_token: this.getRefreshToken() });
-        this.chevreAuthClient.setCredentials({ refresh_token: this.getRefreshToken() });
     }
     generateAuthUrl() {
         return this.authClient.generateAuthUrl({

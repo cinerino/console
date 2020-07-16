@@ -250,7 +250,10 @@ serviceOutputsRouter.all(
                             }
                         }
                     }],
-                    seller: seller
+                    seller: {
+                        typeOf: seller.typeOf,
+                        id: String(seller.id)
+                    }
                 });
 
                 const result = checkAction.result;

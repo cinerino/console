@@ -118,7 +118,10 @@ movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
                             }
                         }
                     }],
-                seller: seller
+                seller: {
+                    typeOf: seller.typeOf,
+                    id: String(seller.id)
+                }
             });
             const result = checkAction.result;
             if (result === undefined) {

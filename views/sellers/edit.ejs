@@ -112,22 +112,6 @@
                             </span>
                             <% }) %>
                         </p>
-                        <hr>
-
-                        <strong><i class="fa fa-piggy-bank mr-1"></i> 口座</strong>
-                        <p class="text-muted">
-                            <% const coinAccounts = seller.paymentAccepted.filter((p) => p.paymentMethodType === 'Account') %>
-                            <% coinAccounts.forEach((account) => { %>
-                            <span class="badge badge-secondary <%= account.accountType %>">
-                                <%= account.accountType %>
-                            </span>
-                            <a target="_blank"
-                                href="/projects/<%= req.project.id %>/accounts/<%= account.accountType %>/<%= account.accountNumber %>">
-                                <%= account.accountNumber %>
-                            </a>
-                            <br>
-                            <% }) %>
-                        </p>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -185,7 +169,6 @@
                                     <!-- /.card-body -->
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">更新</button>
                                     </div>
                                 </form>
                             </div>
@@ -200,7 +183,7 @@
                                     <!-- /.card-header -->
 
                                     <div class="card-body">
-                                        <button type="button" class="delete btn btn-danger">削除する</button>
+                                        <!-- <button type="button" class="delete btn btn-danger">削除する</button> -->
                                     </div>
                                     <!-- /.card-body -->
                                     <!-- <div class="card-footer">

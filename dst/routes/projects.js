@@ -50,6 +50,7 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
             id: '',
             name: '新しいプロジェクト名称',
             parentOrganization: {
+                project: { typeOf: cinerinoapi.factory.organizationType.Project, id: '' },
                 typeOf: cinerinoapi.factory.organizationType.Corporation,
                 name: { ja: '', en: '' }
             },

@@ -1,7 +1,6 @@
 import * as createDebug from 'debug';
 import * as jwt from 'jsonwebtoken';
 
-import * as chevreapi from './chevreapi';
 import * as cinerinoapi from './cinerinoapi';
 
 const debug = createDebug('cinerino-console:user');
@@ -30,7 +29,6 @@ export default class User {
     public session: Express.Session;
     public state: string;
     public authClient: cinerinoapi.auth.OAuth2;
-    public chevreAuthClient: chevreapi.auth.OAuth2;
     public profile: IProfile;
 
     constructor(configurations: IConfigurations) {
@@ -44,15 +42,7 @@ export default class User {
             redirectUri: `https://${configurations.host}/signIn`,
             logoutUri: `https://${configurations.host}/logout`
         });
-        this.chevreAuthClient = new chevreapi.auth.OAuth2({
-            domain: <string>process.env.API_AUTHORIZE_SERVER_DOMAIN,
-            clientId: <string>process.env.API_CLIENT_ID,
-            clientSecret: <string>process.env.API_CLIENT_SECRET,
-            redirectUri: `https://${configurations.host}/signIn`,
-            logoutUri: `https://${configurations.host}/logout`
-        });
         this.authClient.setCredentials({ refresh_token: this.getRefreshToken() });
-        this.chevreAuthClient.setCredentials({ refresh_token: this.getRefreshToken() });
     }
 
     public generateAuthUrl() {

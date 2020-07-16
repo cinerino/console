@@ -34,7 +34,7 @@ function createFromAction(params) {
                     }
                 }
                 agent = {
-                    id: a.agent.id,
+                    id: String(a.agent.id),
                     name: agentName,
                     url: url
                 };
@@ -42,7 +42,7 @@ function createFromAction(params) {
             case cinerinoapi.factory.organizationType.MovieTheater:
             case cinerinoapi.factory.organizationType.Corporation:
                 agent = {
-                    id: a.agent.id,
+                    id: String(a.agent.id),
                     name: (typeof a.agent.name === 'string') ? a.agent.name : String((_a = a.agent.name) === null || _a === void 0 ? void 0 : _a.ja),
                     url: `/projects/${params.project.id}/sellers/${a.agent.id}`
                 };
@@ -82,7 +82,7 @@ function createFromAction(params) {
                     }
                 }
                 recipient = {
-                    id: a.recipient.id,
+                    id: String(a.recipient.id),
                     name: recipientName,
                     url: url
                 };
@@ -90,7 +90,7 @@ function createFromAction(params) {
             case cinerinoapi.factory.organizationType.MovieTheater:
             case cinerinoapi.factory.organizationType.Corporation:
                 recipient = {
-                    id: a.recipient.id,
+                    id: String(a.recipient.id),
                     name: (typeof a.recipient.name === 'string') ? a.recipient.name : String((_b = a.recipient.name) === null || _b === void 0 ? void 0 : _b.ja),
                     url: (typeof a.recipient.url === 'string') ? a.recipient.url : `/projects/${params.project.id}/sellers/${a.recipient.id}`
                 };

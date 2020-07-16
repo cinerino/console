@@ -238,7 +238,10 @@ serviceOutputsRouter.all('/check', (req, res, next) => __awaiter(void 0, void 0,
                             }
                         }
                     }],
-                seller: seller
+                seller: {
+                    typeOf: seller.typeOf,
+                    id: String(seller.id)
+                }
             });
             const result = checkAction.result;
             if (result === undefined) {
