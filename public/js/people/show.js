@@ -79,7 +79,7 @@ $(function () {
         // クレジットカード所有確認
         searchCreditCards(function (creditCards) {
             // if (Array.isArray(creditCards) && creditCards.length > 0) {
-            //     alert('会員を削除する前にクレジットカードを削除してください');
+            //     alert('カスタマーを削除する前にクレジットカードを削除してください');
 
             //     return;
             // }
@@ -142,7 +142,7 @@ $(function () {
     $('.nav-link.settings')
         .popover({
             title: '設定',
-            content: '会員の基本情報を編集することができます',
+            content: 'カスタマーの基本情報を編集することができます',
             placement: 'bottom',
             trigger: 'hover'
         });
@@ -151,7 +151,7 @@ $(function () {
         .popover({
             html: true,
             title: '<span class="badge badge-danger right">New</span>',
-            content: '会員の削除が可能になりました',
+            content: 'カスタマーの削除が可能になりました',
             placement: 'bottom',
             trigger: 'hover'
         })

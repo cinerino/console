@@ -1,5 +1,5 @@
 /**
- * 会員ルーター
+ * カスタマールーター
  */
 import * as createDebug from 'debug';
 import * as express from 'express';
@@ -18,7 +18,7 @@ type IAccountOwnershipInfo =
     cinerinoapi.factory.ownershipInfo.IOwnershipInfo<cinerinoapi.factory.ownershipInfo.IGoodWithDetail<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>>;
 
 /**
- * 会員検索
+ * カスタマー検索
  */
 peopleRouter.get(
     '',
@@ -61,7 +61,7 @@ peopleRouter.get(
 );
 
 /**
- * 会員編集
+ * カスタマー編集
  */
 peopleRouter.all(
     '/:id',
@@ -187,7 +187,7 @@ peopleRouter.all(
 );
 
 /**
- * 会員注文検索
+ * カスタマー注文検索
  */
 peopleRouter.get(
     '/:id/orders',

@@ -134,14 +134,72 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/events" class="nav-link">
-                                <i class="nav-icon fa fa-film"></i>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-credit-card"></i>
                                 <p>
-                                    イベント
-                                    <span class="badge badge-info right"></span>
+                                    プロダクト
+                                    <i class="right fa fa-angle-left"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/events" class="nav-link">
+                                        <i class="nav-icon fa fa-film"></i>
+                                        <p>
+                                            イベント
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/programMemberships" class="nav-link">
+                                        <i class="nav-icon fa fa-award"></i>
+                                        <p>
+                                            メンバーシップサービス
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/products" class="nav-link">
+                                        <i class="nav-icon fa fa-credit-card"></i>
+                                        <p>
+                                            その他
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-ticket-alt"></i>
+                                <p>
+                                    サービスアウトプット
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/reservations" class="nav-link">
+                                        <i class="nav-icon fa fa-ticket-alt"></i>
+                                        <p>
+                                            予約
+                                            <span class="badge badge-danger right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/serviceOutputs" class="nav-link">
+                                        <i class="nav-icon fa fa-credit-card"></i>
+                                        <p>
+                                            その他
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
@@ -172,73 +230,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-credit-card"></i>
-                                <p>
-                                    決済方法
-                                    <i class="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/projects/<%= req.project.id %>/paymentMethods/movieTicket"
-                                        class="nav-link">
-                                        <i class="nav-icon fa fa-credit-card"></i>
-                                        <p>
-                                            ムビチケ検索 & 認証
-                                            <span class="badge badge-info right"></span>
-                                        </p>
-                                    </a>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <a href="/projects/<%= req.project.id %>/accounts/point" class="nav-link">
-                                        <i class="nav-icon fa fa-piggy-bank"></i>
-                                        <p>
-                                            ポイント口座
-                                            <span class="badge badge-info right"></span>
-                                        </p>
-                                    </a>
-                                </li> -->
-                                <li class="nav-item">
-                                    <a href="/projects/<%= req.project.id %>/accounts" class="nav-link">
-                                        <i class="nav-icon fa fa-piggy-bank"></i>
-                                        <p>
-                                            口座
-                                            <span class="badge badge-info right"></span>
-                                        </p>
-                                    </a>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <a href="/projects/<%= req.project.id %>/accounts/actions/MoneyTransfer"
-                                        class="nav-link">
-                                        <i class="nav-icon fa fa-exchange-alt"></i>
-                                        <p>
-                                            口座転送履歴
-                                            <span class="badge badge-info right"></span>
-                                        </p>
-                                    </a>
-                                </li> -->
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/reservations" class="nav-link">
-                                <i class="nav-icon fa fa-ticket-alt"></i>
-                                <p>
-                                    予約
-                                    <span class="badge badge-danger right"></span>
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/people" class="nav-link">
-                                <i class="nav-icon fa fa-user"></i>
-                                <p>
-                                    ユーザー
-                                    <span class="badge badge-info right"></span>
-                                </p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="/projects/<%= req.project.id %>/ownershipInfos" class="nav-link">
                                 <i class="nav-icon fa fa-hands"></i>
@@ -257,35 +248,17 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/programMemberships" class="nav-link">
-                                <i class="nav-icon fa fa-award"></i>
-                                <p>
-                                    メンバーシップサービス
-                                    <span class="badge badge-info right"></span>
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/products" class="nav-link">
-                                <i class="nav-icon fa fa-credit-card"></i>
-                                <p>
-                                    プロダクト
-                                    <span class="badge badge-info right"></span>
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/projects/<%= req.project.id %>/serviceOutputs" class="nav-link">
-                                <i class="nav-icon fa fa-credit-card"></i>
-                                <p>
-                                    サービスアウトプット
-                                    <span class="badge badge-info right"></span>
-                                </p>
-                            </a>
-                        </li>
 
                         <li class="nav-header">高度なリソース検索</li>
+                        <li class="nav-item">
+                            <a href="/projects/<%= req.project.id %>/people" class="nav-link">
+                                <i class="nav-icon fa fa-user"></i>
+                                <p>
+                                    カスタマー
+                                    <span class="badge badge-info right"></span>
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-table"></i>
@@ -342,6 +315,55 @@
                                     <span class="badge badge-info right"></span>
                                 </p>
                             </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-credit-card"></i>
+                                <p>
+                                    決済方法
+                                    <i class="right fa fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/paymentMethods/movieTicket"
+                                        class="nav-link">
+                                        <i class="nav-icon fa fa-credit-card"></i>
+                                        <p>
+                                            ムビチケ検索 & 認証
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/accounts/point" class="nav-link">
+                                        <i class="nav-icon fa fa-piggy-bank"></i>
+                                        <p>
+                                            ポイント口座
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/accounts" class="nav-link">
+                                        <i class="nav-icon fa fa-piggy-bank"></i>
+                                        <p>
+                                            口座
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a href="/projects/<%= req.project.id %>/accounts/actions/MoneyTransfer"
+                                        class="nav-link">
+                                        <i class="nav-icon fa fa-exchange-alt"></i>
+                                        <p>
+                                            口座転送履歴
+                                            <span class="badge badge-info right"></span>
+                                        </p>
+                                    </a>
+                                </li> -->
+                            </ul>
                         </li>
 
                         <li class="nav-header">プロジェクト</li>

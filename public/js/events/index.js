@@ -179,10 +179,4 @@ $(function () {
         modal.find('.modal-body').html(body);
         modal.modal();
     }
-
-    // イベント管理
-    $('a.updateEvents').click(function () {
-        var url = $('input[name="chevreBackendEndpoint"]').val()
-        window.open(url);
-    });
 });

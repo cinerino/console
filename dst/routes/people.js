@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 会員ルーター
+ * カスタマールーター
  */
 const createDebug = require("debug");
 const express = require("express");
@@ -21,7 +21,7 @@ const TimelineFactory = require("../factory/timeline");
 const debug = createDebug('cinerino-console:routes');
 const peopleRouter = express.Router();
 /**
- * 会員検索
+ * カスタマー検索
  */
 peopleRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity
@@ -63,7 +63,7 @@ peopleRouter.get('',
     }
 }));
 /**
- * 会員編集
+ * カスタマー編集
  */
 peopleRouter.all('/:id', 
 // tslint:disable-next-line:max-func-body-length
@@ -166,7 +166,7 @@ peopleRouter.all('/:id',
     }
 }));
 /**
- * 会員注文検索
+ * カスタマー注文検索
  */
 peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
