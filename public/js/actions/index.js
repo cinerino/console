@@ -189,6 +189,19 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '';
 
+                    if (data.instrument !== undefined && data.instrument !== null) {
+                        html += '<span class="badge badge-light">' + data.instrument.typeOf + '</span>'
+                            + '<br><a href="javascript:void(0)" class="showInstrument" data-id="' + data.id + '">表示</a>';
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    var html = '';
+
                     if (data.amount !== undefined && data.amount !== null) {
                         if (typeof data.amount === 'number') {
                             html += data.amount;
@@ -327,6 +340,13 @@ $(function () {
         showPurpose(id);
     });
 
+    $(document).on('click', '.showInstrument', function () {
+        var id = $(this).data('id');
+        console.log('showing... id:', id);
+
+        showInstrument(id);
+    });
+
     $(document).on('click', '.showResult', function () {
         var id = $(this).data('id');
         console.log('showing... id:', id);
@@ -430,6 +450,25 @@ $(function () {
         var title = 'Action `' + action.id + '` Purpose';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(action.purpose, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+
+    function showInstrument(id) {
+        var actions = table
+            .rows()
+            .data()
+            .toArray();
+        var action = actions.find(function (o) {
+            return o.id === id
+        })
+
+        var modal = $('#modal-action');
+        var title = 'Action `' + action.id + '` Instrument';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(action.instrument, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);

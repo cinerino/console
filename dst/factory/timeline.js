@@ -4,7 +4,7 @@ exports.createFromAction = void 0;
 const cinerinoapi = require("../cinerinoapi");
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 function createFromAction(params) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c;
     const a = params.action;
     let agent = {
         id: '',
@@ -144,7 +144,7 @@ function createFromAction(params) {
             actionName = '登録';
             break;
         case cinerinoapi.factory.actionType.ReturnAction:
-            if (a.object.typeOf === 'Order') {
+            if (a.object.typeOf === cinerinoapi.factory.order.OrderType.Order) {
                 actionName = '返品';
             }
             else {
@@ -155,7 +155,7 @@ function createFromAction(params) {
             actionName = '返金';
             break;
         case cinerinoapi.factory.actionType.SendAction:
-            if (a.object.typeOf === 'Order') {
+            if (a.object.typeOf === cinerinoapi.factory.order.OrderType.Order) {
                 actionName = '配送';
             }
             else {
@@ -178,66 +178,67 @@ function createFromAction(params) {
             object = { name: String(typeof a.object) };
             if (Array.isArray(a.object)) {
                 if (typeof ((_c = a.object[0]) === null || _c === void 0 ? void 0 : _c.typeOf) === 'string') {
+                    object = { name: a.object[0].typeOf };
                     switch (a.object[0].typeOf) {
-                        case cinerinoapi.factory.chevre.offerType.Offer:
-                            object = { name: `${(_e = (_d = a.object[0]) === null || _d === void 0 ? void 0 : _d.itemOffered) === null || _e === void 0 ? void 0 : _e.typeOf} オファー` };
-                            break;
-                        case 'PaymentMethod':
-                            object = { name: a.object[0].paymentMethod.name };
-                            break;
-                        case cinerinoapi.factory.actionType.PayAction:
-                            object = { name: a.object[0].object.paymentMethod.typeOf };
-                            break;
+                        // case cinerinoapi.factory.chevre.offerType.Offer:
+                        //     object = { name: `${a.object[0]?.itemOffered?.typeOf} オファー` };
+                        //     break;
+                        // case 'PaymentMethod':
+                        //     object = { name: a.object[0].paymentMethod.name };
+                        //     break;
+                        // case cinerinoapi.factory.actionType.PayAction:
+                        //     object = { name: a.object[0].object.paymentMethod.typeOf };
+                        //     break;
                         default:
-                            object = { name: a.object[0].typeOf };
                     }
                 }
             }
             else {
+                object = { name: a.object.typeOf };
                 switch (a.object.typeOf) {
-                    case cinerinoapi.factory.chevre.offerType.Offer:
-                        object = { name: 'オファー' };
-                        break;
-                    case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
-                        object = { name: '予約' };
-                        break;
-                    case cinerinoapi.factory.paymentMethodType.CreditCard:
-                        object = { name: 'クレジットカード決済' };
-                        break;
-                    case cinerinoapi.factory.paymentMethodType.Account:
-                        object = { name: '口座決済' };
-                        break;
-                    case cinerinoapi.factory.paymentMethodType.PaymentCard:
-                        object = { name: 'ペイメントカード' };
-                        break;
-                    case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
-                    case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
-                        object = { name: 'ポイント特典' };
-                        break;
-                    case 'Order':
+                    // case cinerinoapi.factory.chevre.offerType.Offer:
+                    //     object = { name: 'オファー' };
+                    //     break;
+                    // case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
+                    //     object = { name: '予約' };
+                    //     break;
+                    // case cinerinoapi.factory.paymentMethodType.CreditCard:
+                    //     object = { name: 'クレジットカード決済' };
+                    //     break;
+                    // case cinerinoapi.factory.paymentMethodType.Account:
+                    //     object = { name: '口座決済' };
+                    //     break;
+                    // case cinerinoapi.factory.paymentMethodType.PaymentCard:
+                    //     object = { name: 'ペイメントカード' };
+                    //     break;
+                    // case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
+                    // case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
+                    //     object = { name: 'ポイント特典' };
+                    //     break;
+                    case cinerinoapi.factory.order.OrderType.Order:
                         url = `/projects/${params.project.id}/orders/${a.object.orderNumber}`;
-                        object = { name: '注文' };
+                        // object = { name: '注文' };
                         break;
-                    case 'OwnershipInfo':
-                        object = { name: '所有権' };
-                        break;
-                    case cinerinoapi.factory.creativeWorkType.EmailMessage:
-                        object = { name: 'Eメール' };
-                        break;
-                    case 'PaymentMethod':
-                        object = { name: a.object.object[0].paymentMethod.name };
-                        break;
-                    case cinerinoapi.factory.actionType.PayAction:
-                        object = { name: a.object.object[0].paymentMethod.typeOf };
-                        break;
-                    case cinerinoapi.factory.chevre.transactionType.Reserve:
-                        object = { name: '予約取引' };
-                        break;
-                    case cinerinoapi.factory.chevre.transactionType.MoneyTransfer:
-                        object = { name: '通貨転送取引' };
-                        break;
+                    // case 'OwnershipInfo':
+                    //     object = { name: '所有権' };
+                    //     break;
+                    // case cinerinoapi.factory.creativeWorkType.EmailMessage:
+                    //     object = { name: 'Eメール' };
+                    //     break;
+                    // case 'PaymentMethod':
+                    //     object = { name: a.object.object[0].paymentMethod.name };
+                    //     break;
+                    // case cinerinoapi.factory.actionType.PayAction:
+                    //     object = { name: a.object.object[0].paymentMethod.typeOf };
+                    //     break;
+                    // case cinerinoapi.factory.chevre.transactionType.Reserve:
+                    //     object = { name: '予約取引' };
+                    //     break;
+                    // case cinerinoapi.factory.chevre.transactionType.MoneyTransfer:
+                    //     object = { name: '通貨転送取引' };
+                    //     break;
                     default:
-                        object = { name: a.object.typeOf };
+                    // object = { name: a.object.typeOf };
                 }
             }
             object.url = url;
@@ -260,30 +261,32 @@ function createFromAction(params) {
         purpose = { name: 'Array' };
     }
     else if (a.purpose !== undefined && a.purpose !== null) {
+        purpose = { name: a.purpose.typeOf };
         switch (a.purpose.typeOf) {
-            case 'Order':
-                purpose = {
-                    name: '注文',
-                    url: `/projects/${params.project.id}/orders/${a.purpose.orderNumber}`
-                };
+            case cinerinoapi.factory.order.OrderType.Order:
+                purpose.url = `/projects/${params.project.id}/orders/${a.purpose.orderNumber}`;
+                // purpose = {
+                //     name: '注文',
+                //     url: `/projects/${params.project.id}/orders/${(<any>a.purpose).orderNumber}`
+                // };
                 break;
             case cinerinoapi.factory.transactionType.MoneyTransfer:
             case cinerinoapi.factory.transactionType.PlaceOrder:
             case cinerinoapi.factory.transactionType.ReturnOrder:
-                purpose = {
-                    name: '取引',
-                    url: `/projects/${params.project.id}/transactions/${a.purpose.typeOf}/${a.purpose.id}`
-                };
+                purpose.url = `/projects/${params.project.id}/transactions/${a.purpose.typeOf}/${a.purpose.id}`;
+                // purpose = {
+                //     name: '取引',
+                //     url: `/projects/${params.project.id}/transactions/${a.purpose.typeOf}/${(<any>a.purpose).id}`
+                // };
                 break;
             default:
-                purpose = { name: a.purpose.typeOf };
         }
     }
     let result;
     if (a.result !== undefined && a.result !== null) {
         switch (a.typeOf) {
             case cinerinoapi.factory.actionType.SendAction:
-                if (a.object.typeOf === 'Order') {
+                if (a.object.typeOf === cinerinoapi.factory.order.OrderType.Order) {
                     if (Array.isArray(a.result)) {
                         result = a.result.map((o) => {
                             return {
@@ -303,7 +306,7 @@ function createFromAction(params) {
                 }
                 break;
             case cinerinoapi.factory.actionType.ReturnAction:
-                if (a.object.typeOf === 'Order') {
+                if (a.object.typeOf === cinerinoapi.factory.order.OrderType.Order) {
                     if (Array.isArray(a.result)) {
                         result = a.result.map((o) => {
                             return {

@@ -506,7 +506,7 @@ ordersRouter.post(
                                 }
                             },
                             object: {
-                                typeOf: 'Order'
+                                typeOf: cinerinoapi.factory.order.OrderType.Order
                             }
                         },
                         encodingFormat: req.body.format,

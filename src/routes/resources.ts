@@ -19,7 +19,7 @@ resourcesRouter.get(
 
             switch (req.params.resourceType) {
                 // 注文
-                case 'Order':
+                case cinerinoapi.factory.order.OrderType.Order:
                     res.redirect(`/projects/${req.project.id}/orders/${req.params.resourceId}`);
                     break;
 

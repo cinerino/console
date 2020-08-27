@@ -24,7 +24,7 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
         const project = yield projectService.findById({ id: req.project.id });
         switch (req.params.resourceType) {
             // 注文
-            case 'Order':
+            case cinerinoapi.factory.order.OrderType.Order:
                 res.redirect(`/projects/${req.project.id}/orders/${req.params.resourceId}`);
                 break;
             // 取引

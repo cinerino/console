@@ -462,7 +462,7 @@ ordersRouter.post('/createOrderReport', ...[
                                 }
                             } }),
                         object: {
-                            typeOf: 'Order'
+                            typeOf: cinerinoapi.factory.order.OrderType.Order
                         }
                     },
                     encodingFormat: req.body.format,
