@@ -54,13 +54,7 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
                 name: { ja: '', en: '' }
             },
             // デフォルト設定をセット
-            settings: {
-                gmo: {
-                    endpoint: process.env.DEFAULT_GMO_ENDPOINT,
-                    siteId: '',
-                    sitePass: ''
-                }
-            }
+            settings: {}
         };
         const projectService = new cinerinoapi.service.Project({
             endpoint: process.env.API_ENDPOINT,

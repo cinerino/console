@@ -54,29 +54,6 @@
     </div>
 </div>
 
-<div class="form-row">
-    <div class="form-group col-md-4">
-        <label for="settings[gmo][endpoint]">GMOエンドポイント</label>
-        <input readonly type="text" class="form-control" id="settings[gmo][endpoint]" name="settings[gmo][endpoint]"
-            placeholder="https://example.com"
-            value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.endpoint : '' %>">
-    </div>
-
-    <div class="form-group col-md-4">
-        <label for="settings[gmo][siteId]">GMOサイトID</label>
-        <input type="text" class="form-control" id="settings[gmo][siteId]" name="settings[gmo][siteId]"
-            placeholder="GMOサイトID"
-            value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.siteId : '' %>">
-    </div>
-
-    <div class="form-group col-md-4">
-        <label for="settings[gmo][sitePass]">GMOサイトPASS</label>
-        <input type="text" class="form-control" id="settings[gmo][sitePass]" name="settings[gmo][sitePass]"
-            name="settings[gmo][sitePass]" placeholder="GMOサイトPASS"
-            value="<%= (project !== undefined && project.settings.gmo !== undefined) ? project.settings.gmo.sitePass : '' %>">
-    </div>
-</div>
-
 <div class="form-group">
     <label for="settings[sendgridApiKey]">Sendgrid API Key</label>
     <input type="text" class="form-control" id="settings[sendgridApiKey]" name="settings[sendgridApiKey]"

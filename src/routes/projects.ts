@@ -51,11 +51,6 @@ projectsRouter.all(
                 },
                 // デフォルト設定をセット
                 settings: {
-                    gmo: {
-                        endpoint: <string>process.env.DEFAULT_GMO_ENDPOINT,
-                        siteId: '',
-                        sitePass: ''
-                    }
                 }
             };
 
