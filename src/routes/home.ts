@@ -50,7 +50,7 @@ homeRouter.get(
                     });
 
                     adminUserPool = await userPoolService.findById({
-                        userPoolId: project.settings.cognito.adminUserPool.id
+                        userPoolId: (<any>project).settings.cognito.adminUserPool.id
                     });
                 }
 

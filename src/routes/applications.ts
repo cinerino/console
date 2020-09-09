@@ -90,7 +90,7 @@ applicationsRouter.get(
             }
 
             const customerUserPoolId = project.settings.cognito.customerUserPool.id;
-            const adminUserPoolId = project.settings.cognito.adminUserPool.id;
+            const adminUserPoolId = (<any>project).settings.cognito.adminUserPool.id;
 
             // IAMメンバー検索
             const member = await iamService.findMemberById({

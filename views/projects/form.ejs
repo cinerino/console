@@ -40,13 +40,6 @@
 
 <div class="form-row">
     <div class="form-group col-md-4">
-        <label for="settings[cognito][adminUserPool][id]">Cognito 管理ユーザープールID</label>
-        <input type="text" class="form-control" id="settings[cognito][adminUserPool][id]"
-            name="settings[cognito][adminUserPool][id]"
-            value="<%= (project !== undefined && project.settings !== undefined && project.settings.cognito !== undefined) ?  project.settings.cognito.adminUserPool.id : '' %>">
-    </div>
-
-    <div class="form-group col-md-4">
         <label for="settings[cognito][customerUserPool][id]">Cognito カスタマーユーザープールID</label>
         <input type="text" class="form-control" id="settings[cognito][customerUserPool][id]"
             name="settings[cognito][customerUserPool][id]"

@@ -32,7 +32,7 @@ userPoolsRouter.get(
                         name: 'Customerユーザープール'
                     },
                     {
-                        id: settings.cognito.adminUserPool.id,
+                        id: (<any>settings).cognito.adminUserPool.id,
                         name: 'Adminユーザープール'
                     }
                 ] : [];
@@ -190,7 +190,7 @@ userPoolsRouter.get(
                     case settings.cognito.customerUserPool.id:
                         res.redirect(`/projects/${req.project.id}/people/${req.params.id}`);
                         break;
-                    case settings.cognito.adminUserPool.id:
+                    case (<any>settings).cognito.adminUserPool.id:
                         res.redirect(`/projects/${req.project.id}/iam/users/${req.params.id}`);
                         break;
                     default:
