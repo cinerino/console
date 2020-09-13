@@ -41,12 +41,12 @@ projectsRouter.all(
         try {
             let message;
             let attributes: cinerinoapi.factory.project.IProject = {
-                typeOf: cinerinoapi.factory.organizationType.Project,
+                typeOf: cinerinoapi.factory.chevre.organizationType.Project,
                 id: '',
                 name: '新しいプロジェクト名称',
                 parentOrganization: {
-                    project: { typeOf: cinerinoapi.factory.organizationType.Project, id: '' },
-                    typeOf: cinerinoapi.factory.organizationType.Corporation,
+                    project: { typeOf: cinerinoapi.factory.chevre.organizationType.Project, id: '' },
+                    typeOf: cinerinoapi.factory.chevre.organizationType.Corporation,
                     name: { ja: '', en: '' }
                 },
                 // デフォルト設定をセット
@@ -78,7 +78,7 @@ projectsRouter.all(
                 layout: 'layouts/dashboard',
                 message: message,
                 attributes: attributes,
-                OrganizationType: cinerinoapi.factory.organizationType
+                OrganizationType: cinerinoapi.factory.chevre.organizationType
             });
         } catch (error) {
             next(error);
@@ -90,7 +90,7 @@ async function createProjectFromBody(params: {
     req: express.Request;
 }): Promise<cinerinoapi.factory.project.IProject> {
     return {
-        typeOf: cinerinoapi.factory.organizationType.Project,
+        typeOf: cinerinoapi.factory.chevre.organizationType.Project,
         id: params.req.body.id,
         name: params.req.body.name,
         logo: params.req.body.logo,
@@ -149,7 +149,7 @@ projectsRouter.all(
     '/:id/*',
     async (req, _, next) => {
         req.project = {
-            typeOf: cinerinoapi.factory.organizationType.Project,
+            typeOf: cinerinoapi.factory.chevre.organizationType.Project,
             id: req.params.id,
             settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
         };

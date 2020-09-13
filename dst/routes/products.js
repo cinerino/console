@@ -28,7 +28,11 @@ productsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             auth: req.user.authClient,
             project: { id: req.project.id }
         });
-        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, typeOf: { $eq: (_b = (_a = req.query) === null || _a === void 0 ? void 0 : _a.typeOf) === null || _b === void 0 ? void 0 : _b.$eq } }, {
+        const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, typeOf: {
+                $eq: (typeof ((_b = (_a = req.query) === null || _a === void 0 ? void 0 : _a.typeOf) === null || _b === void 0 ? void 0 : _b.$eq) === 'string' && req.query.typeOf.$eq.length > 0)
+                    ? req.query.typeOf.$eq
+                    : undefined
+            } }, {
             identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
                 ? { $eq: req.query.identifier }
                 : undefined
@@ -46,7 +50,8 @@ productsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
         else {
             res.render('products', {
-                searchConditions: searchConditions
+                searchConditions: searchConditions,
+                ProductType: cinerinoapi.factory.chevre.product.ProductType
             });
         }
     }

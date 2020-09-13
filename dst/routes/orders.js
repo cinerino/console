@@ -57,7 +57,7 @@ ordersRouter.get('',
         try {
             // IAMメンバー検索(アプリケーション)
             const searchMembersResult = yield iamService.searchMembers({
-                member: { typeOf: { $eq: cinerinoapi.factory.creativeWorkType.WebApplication } }
+                member: { typeOf: { $eq: cinerinoapi.factory.chevre.creativeWorkType.WebApplication } }
             });
             applications = searchMembersResult.data.map((m) => m.member);
         }

@@ -268,7 +268,7 @@ iamRouter.all(
 
             const member = await iamService.findMemberById({ member: { id: req.params.id } });
 
-            if (member.member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
+            if (member.member.typeOf === cinerinoapi.factory.chevre.creativeWorkType.WebApplication) {
                 res.redirect(`/projects/${req.project.id}/applications/${member.member.id}`);
 
                 return;

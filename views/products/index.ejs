@@ -49,19 +49,19 @@
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <%
-                                    const productTypes = ['Product', 'MembershipService', 'PaymentCard', 'MoneyTransfer'];
+                                    const productTypes = ['Account', 'Product', 'MembershipService', 'PaymentCard', 'MoneyTransfer'];
                                     %>
                                     <label for="name">タイプ</label>
                                     <select class="form-control form-control-sm" id="typeOf[$eq]" name="typeOf[$eq]">
-                                        <% productTypes.forEach(function (productType) { %>
+                                        <% Object.keys(ProductType).forEach(function (key) { %>
                                         <%
                                         var selected = false;
                                         if (searchConditions.typeOf !== undefined && searchConditions.typeOf.$eq !== undefined) {
-                                            selected = searchConditions.typeOf.$eq === productType
+                                            selected = searchConditions.typeOf.$eq === ProductType[key]
                                         }
                                         %>
-                                        <option value="<%= productType %>" <% if (selected) { %> selected <% } %>>
-                                            <%= productType %>
+                                        <option value="<%= ProductType[key] %>" <% if (selected) { %> selected <% } %>>
+                                            <%= ProductType[key] %>
                                         </option>
                                         <% }) %>
                                     </select>

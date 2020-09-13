@@ -229,7 +229,7 @@ iamRouter.all('/members/:id', (req, res, next) => __awaiter(void 0, void 0, void
             return;
         }
         const member = yield iamService.findMemberById({ member: { id: req.params.id } });
-        if (member.member.typeOf === cinerinoapi.factory.creativeWorkType.WebApplication) {
+        if (member.member.typeOf === cinerinoapi.factory.chevre.creativeWorkType.WebApplication) {
             res.redirect(`/projects/${req.project.id}/applications/${member.member.id}`);
             return;
         }

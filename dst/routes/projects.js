@@ -45,12 +45,12 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
     try {
         let message;
         let attributes = {
-            typeOf: cinerinoapi.factory.organizationType.Project,
+            typeOf: cinerinoapi.factory.chevre.organizationType.Project,
             id: '',
             name: '新しいプロジェクト名称',
             parentOrganization: {
-                project: { typeOf: cinerinoapi.factory.organizationType.Project, id: '' },
-                typeOf: cinerinoapi.factory.organizationType.Corporation,
+                project: { typeOf: cinerinoapi.factory.chevre.organizationType.Project, id: '' },
+                typeOf: cinerinoapi.factory.chevre.organizationType.Corporation,
                 name: { ja: '', en: '' }
             },
             // デフォルト設定をセット
@@ -78,7 +78,7 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
             layout: 'layouts/dashboard',
             message: message,
             attributes: attributes,
-            OrganizationType: cinerinoapi.factory.organizationType
+            OrganizationType: cinerinoapi.factory.chevre.organizationType
         });
     }
     catch (error) {
@@ -88,7 +88,7 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
 function createProjectFromBody(params) {
     return __awaiter(this, void 0, void 0, function* () {
         return {
-            typeOf: cinerinoapi.factory.organizationType.Project,
+            typeOf: cinerinoapi.factory.chevre.organizationType.Project,
             id: params.req.body.id,
             name: params.req.body.name,
             logo: params.req.body.logo,
@@ -136,7 +136,7 @@ projectsRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0,
 }));
 projectsRouter.all('/:id/*', (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
     req.project = {
-        typeOf: cinerinoapi.factory.organizationType.Project,
+        typeOf: cinerinoapi.factory.chevre.organizationType.Project,
         id: req.params.id,
         settings: { id: req.params.id, API_ENDPOINT: API_ENDPOINT }
     };

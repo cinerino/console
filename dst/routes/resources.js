@@ -34,8 +34,8 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
                 res.redirect(`/projects/${req.project.id}/transactions/${req.params.resourceType}/${req.params.resourceId}`);
                 break;
             // 販売者
-            case cinerinoapi.factory.organizationType.Corporation:
-            case cinerinoapi.factory.organizationType.MovieTheater:
+            case cinerinoapi.factory.chevre.organizationType.Corporation:
+            case cinerinoapi.factory.chevre.organizationType.MovieTheater:
                 res.redirect(`/projects/${req.project.id}/sellers/${req.params.resourceId}`);
                 break;
             // アプリケーション

@@ -39,8 +39,8 @@ function createFromAction(params) {
                     url: url
                 };
                 break;
-            case cinerinoapi.factory.organizationType.MovieTheater:
-            case cinerinoapi.factory.organizationType.Corporation:
+            case cinerinoapi.factory.chevre.organizationType.MovieTheater:
+            case cinerinoapi.factory.chevre.organizationType.Corporation:
                 agent = {
                     id: String(a.agent.id),
                     name: (typeof a.agent.name === 'string') ? a.agent.name : String((_a = a.agent.name) === null || _a === void 0 ? void 0 : _a.ja),
@@ -87,8 +87,8 @@ function createFromAction(params) {
                     url: url
                 };
                 break;
-            case cinerinoapi.factory.organizationType.MovieTheater:
-            case cinerinoapi.factory.organizationType.Corporation:
+            case cinerinoapi.factory.chevre.organizationType.MovieTheater:
+            case cinerinoapi.factory.chevre.organizationType.Corporation:
                 recipient = {
                     id: String(a.recipient.id),
                     name: (typeof a.recipient.name === 'string') ? a.recipient.name : String((_b = a.recipient.name) === null || _b === void 0 ? void 0 : _b.ja),

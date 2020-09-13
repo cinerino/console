@@ -24,7 +24,11 @@ productsRouter.get(
             const searchConditions: any = {
                 limit: req.query.limit,
                 page: req.query.page,
-                typeOf: { $eq: req.query?.typeOf?.$eq },
+                typeOf: {
+                    $eq: (typeof req.query?.typeOf?.$eq === 'string' && req.query.typeOf.$eq.length > 0)
+                        ? req.query.typeOf.$eq
+                        : undefined
+                },
                 ...{
                     identifier: (typeof req.query.identifier === 'string' && req.query.identifier.length > 0)
                         ? { $eq: req.query.identifier }
@@ -44,7 +48,8 @@ productsRouter.get(
                 });
             } else {
                 res.render('products', {
-                    searchConditions: searchConditions
+                    searchConditions: searchConditions,
+                    ProductType: cinerinoapi.factory.chevre.product.ProductType
                 });
             }
         } catch (error) {

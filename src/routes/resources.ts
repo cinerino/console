@@ -31,8 +31,8 @@ resourcesRouter.get(
                     break;
 
                 // 販売者
-                case cinerinoapi.factory.organizationType.Corporation:
-                case cinerinoapi.factory.organizationType.MovieTheater:
+                case cinerinoapi.factory.chevre.organizationType.Corporation:
+                case cinerinoapi.factory.chevre.organizationType.MovieTheater:
                     res.redirect(`/projects/${req.project.id}/sellers/${req.params.resourceId}`);
                     break;
 

@@ -18,7 +18,7 @@ declare global {
             //     settings: ISettings;
             // };
             project: {
-                typeOf: cinerino.factory.organizationType.Project;
+                typeOf: cinerino.factory.chevre.organizationType.Project;
                 id: string;
                 settings: ISettings;
             };

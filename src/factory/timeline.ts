@@ -80,8 +80,8 @@ export function createFromAction(params: {
 
                 break;
 
-            case cinerinoapi.factory.organizationType.MovieTheater:
-            case cinerinoapi.factory.organizationType.Corporation:
+            case cinerinoapi.factory.chevre.organizationType.MovieTheater:
+            case cinerinoapi.factory.chevre.organizationType.Corporation:
                 agent = {
                     id: String(a.agent.id),
                     name: (typeof a.agent.name === 'string') ? a.agent.name : String(a.agent.name?.ja),
@@ -139,8 +139,8 @@ export function createFromAction(params: {
 
                 break;
 
-            case cinerinoapi.factory.organizationType.MovieTheater:
-            case cinerinoapi.factory.organizationType.Corporation:
+            case cinerinoapi.factory.chevre.organizationType.MovieTheater:
+            case cinerinoapi.factory.chevre.organizationType.Corporation:
                 recipient = {
                     id: String(a.recipient.id),
                     name: (typeof a.recipient.name === 'string') ? a.recipient.name : String(a.recipient.name?.ja),
