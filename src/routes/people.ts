@@ -13,9 +13,7 @@ import * as TimelineFactory from '../factory/timeline';
 const debug = createDebug('cinerino-console:routes');
 const peopleRouter = express.Router();
 
-type IAccountOwnershipInfo =
-    // tslint:disable-next-line:max-line-length
-    cinerinoapi.factory.ownershipInfo.IOwnershipInfo<cinerinoapi.factory.ownershipInfo.IGoodWithDetail<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>>;
+type IAccountOwnershipInfo = cinerinoapi.factory.ownershipInfo.IOwnershipInfo<cinerinoapi.factory.ownershipInfo.IGoodWithDetail>;
 
 /**
  * カスタマー検索
@@ -233,7 +231,7 @@ peopleRouter.get(
                 auth: req.user.authClient
             });
             const searchResult =
-                await personOwnershipInfoService.search<cinerinoapi.factory.chevre.reservationType.EventReservation>({
+                await personOwnershipInfoService.search({
                     limit: req.query.limit,
                     page: req.query.page,
                     id: req.params.id,
@@ -356,10 +354,10 @@ peopleRouter.get(
             //     });
 
             const searchPointAccountsResult =
-                await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
+                await personOwnershipInfoService.search({
                     id: req.params.id,
                     typeOfGood: {
-                        typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account,
                         accountType: 'Point'
                     }
                 });

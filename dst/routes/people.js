@@ -310,7 +310,7 @@ peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, 
         const searchPointAccountsResult = yield personOwnershipInfoService.search({
             id: req.params.id,
             typeOfGood: {
-                typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
+                typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account,
                 accountType: 'Point'
             }
         });

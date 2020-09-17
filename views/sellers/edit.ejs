@@ -107,7 +107,7 @@
                         <strong><i class="fa fa-shopping-cart mr-1"></i> 対応決済方法</strong>
                         <p class="text-muted">
                             <% seller.paymentAccepted.forEach((payment) => { %>
-                            <span class="badge badge-secondary <%= payment.paymentMethodType %>">
+                            <span class="badge badge-light <%= payment.paymentMethodType %>">
                                 <%= payment.paymentMethodType %>
                             </span>
                             <% }) %>
@@ -164,7 +164,6 @@
                                 <!-- form start -->
                                 <form role="form" method="post">
                                     <div class="card-body">
-                                        <%- include('./form', {project: project, seller: seller, PaymentMethodType: PaymentMethodType}) %>
                                     </div>
                                     <!-- /.card-body -->
 
