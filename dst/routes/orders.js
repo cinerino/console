@@ -29,7 +29,7 @@ const ordersRouter = express.Router();
 ordersRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
     try {
         debug('req.query:', req.query);
         const iamService = new cinerinoapi.service.IAM({
@@ -66,6 +66,7 @@ ordersRouter.get('',
         }
         let identifiers;
         let customerIdentifiers;
+        let customerAdditionalPropertyIn;
         if (req.query.identifier !== undefined) {
             if (req.query.identifier.$in !== '') {
                 const splitted = req.query.identifier.$in.split(':');
@@ -100,8 +101,19 @@ ordersRouter.get('',
                 }
             }
         }
+        if (typeof ((_b = (_a = req.query.customer) === null || _a === void 0 ? void 0 : _a.additionalProperty) === null || _b === void 0 ? void 0 : _b.$in) === 'string' && req.query.customer.additionalProperty.$in.length > 0) {
+            const splitted = req.query.customer.additionalProperty.$in.split(':');
+            if (splitted.length > 1) {
+                customerAdditionalPropertyIn = [
+                    {
+                        name: splitted[0],
+                        value: splitted[1]
+                    }
+                ];
+            }
+        }
         const searchConditions = Object.assign({ limit: req.query.limit, page: req.query.page, sort: { orderDate: cinerinoapi.factory.sortType.Descending }, seller: {
-                ids: (typeof ((_a = req.query.seller) === null || _a === void 0 ? void 0 : _a.id) === 'string' && ((_b = req.query.seller) === null || _b === void 0 ? void 0 : _b.id.length) > 0)
+                ids: (typeof ((_c = req.query.seller) === null || _c === void 0 ? void 0 : _c.id) === 'string' && ((_d = req.query.seller) === null || _d === void 0 ? void 0 : _d.id.length) > 0)
                     ? [req.query.seller.id]
                     : undefined
             }, identifier: { $in: identifiers }, customer: {
@@ -118,6 +130,9 @@ ordersRouter.get('',
                                 .map((v) => v.trim())
                             : undefined
                     }
+                },
+                additionalProperty: {
+                    $in: customerAdditionalPropertyIn
                 },
                 identifiers: customerIdentifiers,
                 // : [
@@ -212,15 +227,15 @@ ordersRouter.get('',
                 : undefined, acceptedOffers: {
                 itemOffered: {
                     typeOf: {
-                        $in: (typeof ((_d = (_c = req.query.acceptedOffers) === null || _c === void 0 ? void 0 : _c.itemOffered) === null || _d === void 0 ? void 0 : _d.typeOf) === 'string'
-                            && ((_f = (_e = req.query.acceptedOffers) === null || _e === void 0 ? void 0 : _e.itemOffered) === null || _f === void 0 ? void 0 : _f.typeOf.length) > 0)
-                            ? [(_h = (_g = req.query.acceptedOffers) === null || _g === void 0 ? void 0 : _g.itemOffered) === null || _h === void 0 ? void 0 : _h.typeOf]
+                        $in: (typeof ((_f = (_e = req.query.acceptedOffers) === null || _e === void 0 ? void 0 : _e.itemOffered) === null || _f === void 0 ? void 0 : _f.typeOf) === 'string'
+                            && ((_h = (_g = req.query.acceptedOffers) === null || _g === void 0 ? void 0 : _g.itemOffered) === null || _h === void 0 ? void 0 : _h.typeOf.length) > 0)
+                            ? [(_k = (_j = req.query.acceptedOffers) === null || _j === void 0 ? void 0 : _j.itemOffered) === null || _k === void 0 ? void 0 : _k.typeOf]
                             : undefined
                     },
                     identifier: {
-                        $in: (typeof ((_k = (_j = req.query.acceptedOffers) === null || _j === void 0 ? void 0 : _j.itemOffered) === null || _k === void 0 ? void 0 : _k.identifier) === 'string'
-                            && ((_m = (_l = req.query.acceptedOffers) === null || _l === void 0 ? void 0 : _l.itemOffered) === null || _m === void 0 ? void 0 : _m.identifier.length) > 0)
-                            ? [(_p = (_o = req.query.acceptedOffers) === null || _o === void 0 ? void 0 : _o.itemOffered) === null || _p === void 0 ? void 0 : _p.identifier]
+                        $in: (typeof ((_m = (_l = req.query.acceptedOffers) === null || _l === void 0 ? void 0 : _l.itemOffered) === null || _m === void 0 ? void 0 : _m.identifier) === 'string'
+                            && ((_p = (_o = req.query.acceptedOffers) === null || _o === void 0 ? void 0 : _o.itemOffered) === null || _p === void 0 ? void 0 : _p.identifier.length) > 0)
+                            ? [(_r = (_q = req.query.acceptedOffers) === null || _q === void 0 ? void 0 : _q.itemOffered) === null || _r === void 0 ? void 0 : _r.identifier]
                             : undefined
                     },
                     ids: (req.query.acceptedOffers !== undefined
@@ -232,9 +247,9 @@ ordersRouter.get('',
                         : undefined,
                     issuedThrough: {
                         id: {
-                            $in: (typeof ((_s = (_r = (_q = req.query.acceptedOffers) === null || _q === void 0 ? void 0 : _q.itemOffered) === null || _r === void 0 ? void 0 : _r.issuedThrough) === null || _s === void 0 ? void 0 : _s.id) === 'string'
-                                && ((_v = (_u = (_t = req.query.acceptedOffers) === null || _t === void 0 ? void 0 : _t.itemOffered) === null || _u === void 0 ? void 0 : _u.issuedThrough) === null || _v === void 0 ? void 0 : _v.id.length) > 0)
-                                ? [(_y = (_x = (_w = req.query.acceptedOffers) === null || _w === void 0 ? void 0 : _w.itemOffered) === null || _x === void 0 ? void 0 : _x.issuedThrough) === null || _y === void 0 ? void 0 : _y.id]
+                            $in: (typeof ((_u = (_t = (_s = req.query.acceptedOffers) === null || _s === void 0 ? void 0 : _s.itemOffered) === null || _t === void 0 ? void 0 : _t.issuedThrough) === null || _u === void 0 ? void 0 : _u.id) === 'string'
+                                && ((_x = (_w = (_v = req.query.acceptedOffers) === null || _v === void 0 ? void 0 : _v.itemOffered) === null || _w === void 0 ? void 0 : _w.issuedThrough) === null || _x === void 0 ? void 0 : _x.id.length) > 0)
+                                ? [(_0 = (_z = (_y = req.query.acceptedOffers) === null || _y === void 0 ? void 0 : _y.itemOffered) === null || _z === void 0 ? void 0 : _z.issuedThrough) === null || _0 === void 0 ? void 0 : _0.id]
                                 : undefined
                         }
                     },
@@ -308,8 +323,8 @@ ordersRouter.get('',
                     && req.query.paymentMethods.paymentMethodIds !== '')
                     ? req.query.paymentMethods.paymentMethodIds.split(',')
                         .map((v) => v.trim())
-                    : undefined, typeOfs: (typeof ((_z = req.query.paymentMethods) === null || _z === void 0 ? void 0 : _z.typeOf) === 'string' && ((_0 = req.query.paymentMethods) === null || _0 === void 0 ? void 0 : _0.typeOf.length) > 0)
-                    ? [(_1 = req.query.paymentMethods) === null || _1 === void 0 ? void 0 : _1.typeOf]
+                    : undefined, typeOfs: (typeof ((_1 = req.query.paymentMethods) === null || _1 === void 0 ? void 0 : _1.typeOf) === 'string' && ((_2 = req.query.paymentMethods) === null || _2 === void 0 ? void 0 : _2.typeOf.length) > 0)
+                    ? [(_3 = req.query.paymentMethods) === null || _3 === void 0 ? void 0 : _3.typeOf]
                     : undefined }) }, {
             price: {
                 $gte: (req.query.price !== undefined

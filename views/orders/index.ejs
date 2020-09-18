@@ -254,7 +254,7 @@
                                             placeholder="username1234"
                                             value="<%= (Array.isArray(searchConditions.customer.memberOf.membershipNumber.$in)) ? searchConditions.customer.memberOf.membershipNumber.$in.join(',') : '' %>">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group col-md-2">
                                         <label for="customer[ids]">User ID</label>
                                         <input type="text" class="form-control form-control-sm" id="customer[ids]"
                                             name="customer[ids]" placeholder="Customer ID"
@@ -315,11 +315,27 @@
                                             customerIdentifiers = searchConditions.customer.identifiers.filter((p) => p.name !== 'clientId');
                                         }
                                         %>
-                                        <label for="customer[identifiers]">ユーザー識別子</label>
+                                        <label for="customer[identifiers]">カスタマー識別子</label>
                                         <input type="text" class="form-control form-control-sm"
                                             id="customer[identifiers]" name="customer[identifiers]"
                                             placeholder="username:cinerino"
                                             value="<%= (customerIdentifiers.length > 0) ? `${customerIdentifiers[0].name}:${customerIdentifiers[0].value}` : '' %>">
+                                    </div>
+
+                                    <div class="form-group col-md-2">
+                                        <%
+                                        let customerAdditionalProperty = [];
+                                        if (searchConditions.customer !== undefined 
+                                        && searchConditions.customer.additionalProperty !== undefined
+                                        && Array.isArray(searchConditions.customer.additionalProperty.$in)) {
+                                            customerAdditionalProperty = searchConditions.customer.additionalProperty.$in;
+                                        }
+                                        %>
+                                        <label for="customer[additionalProperty][$in]">カスタマー追加特性</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="customer[additionalProperty][$in]"
+                                            name="customer[additionalProperty][$in]" placeholder="name:value"
+                                            value="<%= (customerAdditionalProperty.length > 0) ? `${customerAdditionalProperty[0].name}:${customerAdditionalProperty[0].value}` : '' %>">
                                     </div>
 
                                 </div>

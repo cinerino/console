@@ -63,6 +63,7 @@ ordersRouter.get(
 
             let identifiers: cinerinoapi.factory.order.IIdentifier | undefined;
             let customerIdentifiers: cinerinoapi.factory.person.IIdentifier | undefined;
+            let customerAdditionalPropertyIn: cinerinoapi.factory.person.IIdentifier | undefined;
 
             if (req.query.identifier !== undefined) {
                 if (req.query.identifier.$in !== '') {
@@ -99,6 +100,18 @@ ordersRouter.get(
                 }
             }
 
+            if (typeof req.query.customer?.additionalProperty?.$in === 'string' && req.query.customer.additionalProperty.$in.length > 0) {
+                const splitted = (<string>req.query.customer.additionalProperty.$in).split(':');
+                if (splitted.length > 1) {
+                    customerAdditionalPropertyIn = [
+                        {
+                            name: splitted[0],
+                            value: splitted[1]
+                        }
+                    ];
+                }
+            }
+
             const searchConditions: cinerinoapi.factory.order.ISearchConditions = {
                 limit: req.query.limit,
                 page: req.query.page,
@@ -123,6 +136,9 @@ ordersRouter.get(
                                     .map((v) => v.trim())
                                 : undefined
                         }
+                    },
+                    additionalProperty: {
+                        $in: customerAdditionalPropertyIn
                     },
                     identifiers: customerIdentifiers,
                     // : [
