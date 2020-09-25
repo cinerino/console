@@ -65,12 +65,8 @@ resourcesRouter.get('/:resourceType/:resourceId', (req, res, next) => __awaiter(
             //     res.redirect(`/projects/${req.project.id}/programMemberships/${req.params.resourceId}`);
             //     break;
             // 口座
-            case cinerinoapi.factory.pecorino.account.TypeOf.Account:
-                let accountType = 'Point';
-                if (typeof req.query.accountType === 'string' && req.query.accountType !== '') {
-                    accountType = req.query.accountType;
-                }
-                res.redirect(`/projects/${req.project.id}/accounts/${accountType}/${req.params.resourceId}`);
+            case cinerinoapi.factory.chevre.paymentMethodType.Account:
+                res.redirect(`/projects/${req.project.id}/accounts/${req.params.resourceId}`);
                 break;
             // 所有権
             case 'OwnershipInfo':

@@ -107,7 +107,7 @@ userPoolsRouter.get('/:userPoolId/orders', (req, res, next) => __awaiter(void 0,
                 ]
             }
         });
-        debug(searchOrdersResult.totalCount, 'orders found.');
+        debug('orders found.');
         res.json(searchOrdersResult);
     }
     catch (error) {
@@ -161,7 +161,7 @@ userPoolsRouter.get('/:userPoolId/clients/:clientId/orders', (req, res, next) =>
                 ]
             }
         });
-        debug(searchOrdersResult.totalCount, 'orders found.');
+        debug('orders found.');
         res.json(searchOrdersResult);
     }
     catch (error) {

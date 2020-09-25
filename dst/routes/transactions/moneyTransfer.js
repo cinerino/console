@@ -102,12 +102,14 @@ moneyTransferTransactionsRouter.get('',
         };
         debug('searchConditions:', searchConditions);
         if (req.query.format === 'datatable') {
-            const searchScreeningEventsResult = yield moneyTransferService.search(searchConditions);
+            const searchResult = yield moneyTransferService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchScreeningEventsResult.totalCount,
-                recordsFiltered: searchScreeningEventsResult.totalCount,
-                data: searchScreeningEventsResult.data
+                // recordsTotal: searchScreeningEventsResult.totalCount,
+                recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
+                data: searchResult.data
             });
         }
         else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {

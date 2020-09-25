@@ -1,13 +1,11 @@
 /**
  * アプリケーションルーター
  */
-import * as createDebug from 'debug';
 import * as express from 'express';
 import * as moment from 'moment';
 
 import * as cinerinoapi from '../cinerinoapi';
 
-const debug = createDebug('cinerino-console:routes');
 const applicationsRouter = express.Router();
 
 /**
@@ -162,7 +160,7 @@ applicationsRouter.get(
                     ]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);

@@ -34,12 +34,14 @@ movieTicketPaymentMethodRouter.get(
             };
 
             if (req.query.format === 'datatable') {
-                const { totalCount, data } = await paymentMethodService.searchMovieTickets(searchConditions);
+                const searchResult = await paymentMethodService.searchMovieTickets(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: totalCount,
-                    recordsFiltered: totalCount,
-                    data: data
+                    // recordsTotal: totalCount,
+                    recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
+                    data: searchResult.data
                 });
             } else {
                 res.render('paymentMethods/movieTicket', {

@@ -42,8 +42,10 @@ iamRouter.get('/roles', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             const searchResult = yield iamService.searchRoles(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchResult.totalCount,
-                recordsFiltered: searchResult.totalCount,
+                // recordsTotal: searchResult.totalCount,
+                recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
                 data: searchResult.data
             });
         }
@@ -296,7 +298,6 @@ iamRouter.get('/members/:id/orders', (req, res, next) => __awaiter(void 0, void 
                 ids: [req.params.id]
             }
         });
-        debug(searchOrdersResult.totalCount, 'orders found.');
         res.json(searchOrdersResult);
     }
     catch (error) {
@@ -328,8 +329,8 @@ iamRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             const searchResult = yield iamService.searchUsers(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchResult.totalCount,
-                recordsFiltered: searchResult.totalCount,
+                // recordsTotal: searchResult.totalCount,
+                recordsFiltered: searchResult.data.length,
                 data: searchResult.data
             });
         }
@@ -415,7 +416,6 @@ iamRouter.get('/users/:id/orders', (req, res, next) => __awaiter(void 0, void 0,
                 ids: [req.params.id]
             }
         });
-        debug(searchOrdersResult.totalCount, 'orders found.');
         res.json(searchOrdersResult);
     }
     catch (error) {

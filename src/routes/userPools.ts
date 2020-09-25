@@ -106,7 +106,7 @@ userPoolsRouter.get(
                     ]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+            debug('orders found.');
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);
@@ -165,7 +165,7 @@ userPoolsRouter.get(
                     ]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+            debug('orders found.');
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);

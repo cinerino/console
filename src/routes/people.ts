@@ -42,8 +42,8 @@ peopleRouter.get(
                 const searchResult = await personService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchResult.totalCount,
-                    recordsFiltered: searchResult.totalCount,
+                    // recordsTotal: searchResult.totalCount,
+                    recordsFiltered: searchResult.data.length,
                     data: searchResult.data
                 });
             } else {
@@ -209,7 +209,7 @@ peopleRouter.get(
                     ids: [req.params.id]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);
@@ -243,7 +243,7 @@ peopleRouter.get(
                         .toDate(),
                     ownedThrough: now
                 });
-            debug(searchResult.totalCount, 'reservations found.');
+
             res.json(searchResult);
         } catch (error) {
             next(error);
@@ -277,7 +277,7 @@ peopleRouter.get(
                         .toDate(),
                     ownedThrough: now
                 });
-            debug(searchResult.totalCount, 'programMemberships found.');
+
             res.json(searchResult);
         } catch (error) {
             next(error);
@@ -344,25 +344,14 @@ peopleRouter.get(
             const coinAccounts: IAccountOwnershipInfo[] = [];
             let pointAccounts: IAccountOwnershipInfo[] = [];
 
-            // const searchCoinAccountsResult =
-            //     await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
-            //         id: req.params.id,
-            //         typeOfGood: {
-            //             typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-            //             accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
-            //         }
-            //     });
-
             const searchPointAccountsResult =
                 await personOwnershipInfoService.search({
                     id: req.params.id,
                     typeOfGood: {
-                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account,
-                        accountType: 'Point'
+                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account
                     }
                 });
 
-            // coinAccounts = searchCoinAccountsResult.data;
             pointAccounts = searchPointAccountsResult.data;
 
             res.json([...coinAccounts, ...pointAccounts]);

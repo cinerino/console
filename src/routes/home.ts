@@ -136,11 +136,11 @@ homeRouter.get(
             ];
             const searchExitResult = await placeOrderService.search(searchConditions);
             res.json({
-                rate: (typeof searchExitResult.totalCount === 'number'
-                    && typeof searchResult.totalCount === 'number'
-                    && searchResult.totalCount > 0)
+                rate: (typeof (<any>searchExitResult).totalCount === 'number'
+                    && typeof (<any>searchResult).totalCount === 'number'
+                    && (<any>searchResult).totalCount > 0)
                     // tslint:disable-next-line:no-magic-numbers
-                    ? Math.floor(searchExitResult.totalCount / searchResult.totalCount * 100)
+                    ? Math.floor((<any>searchExitResult).totalCount / (<any>searchResult).totalCount * 100)
                     : 0
             });
         } catch (error) {

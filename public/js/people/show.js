@@ -299,7 +299,7 @@ function searchAccounts(cb) {
         $.each(data, function (key, ownershipInfo) {
             var account = ownershipInfo.typeOfGood;
 
-            var href = '/projects/' + PROJECT_ID + '/accounts/' + account.accountType + '/' + account.accountNumber;
+            var href = '/projects/' + PROJECT_ID + '/accounts/' + account.accountNumber;
             var html = '<td>'
                 + '<span class="badge badge-secondary ' + account.accountType + '">'
                 + account.accountType

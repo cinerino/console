@@ -12,11 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * アプリケーションルーター
  */
-const createDebug = require("debug");
 const express = require("express");
 const moment = require("moment");
 const cinerinoapi = require("../cinerinoapi");
-const debug = createDebug('cinerino-console:routes');
 const applicationsRouter = express.Router();
 /**
  * アプリケーション検索
@@ -154,7 +152,6 @@ applicationsRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void
                 ]
             }
         });
-        debug(searchOrdersResult.totalCount, 'orders found.');
         res.json(searchOrdersResult);
     }
     catch (error) {

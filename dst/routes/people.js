@@ -46,8 +46,8 @@ peopleRouter.get('',
             const searchResult = yield personService.search(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: searchResult.totalCount,
-                recordsFiltered: searchResult.totalCount,
+                // recordsTotal: searchResult.totalCount,
+                recordsFiltered: searchResult.data.length,
                 data: searchResult.data
             });
         }
@@ -187,7 +187,6 @@ peopleRouter.get('/:id/orders', (req, res, next) => __awaiter(void 0, void 0, vo
                 ids: [req.params.id]
             }
         });
-        debug(searchOrdersResult.totalCount, 'orders found.');
         res.json(searchOrdersResult);
     }
     catch (error) {
@@ -216,7 +215,6 @@ peopleRouter.get('/:id/reservations', (req, res, next) => __awaiter(void 0, void
                 .toDate(),
             ownedThrough: now
         });
-        debug(searchResult.totalCount, 'reservations found.');
         res.json(searchResult);
     }
     catch (error) {
@@ -245,7 +243,6 @@ peopleRouter.get('/:id/programMemberships', (req, res, next) => __awaiter(void 0
                 .toDate(),
             ownedThrough: now
         });
-        debug(searchResult.totalCount, 'programMemberships found.');
         res.json(searchResult);
     }
     catch (error) {
@@ -299,22 +296,12 @@ peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, 
         });
         const coinAccounts = [];
         let pointAccounts = [];
-        // const searchCoinAccountsResult =
-        //     await personOwnershipInfoService.search<cinerinoapi.factory.ownershipInfo.AccountGoodType.Account>({
-        //         id: req.params.id,
-        //         typeOfGood: {
-        //             typeOf: cinerinoapi.factory.ownershipInfo.AccountGoodType.Account,
-        //             accountType: cinerinoapi.factory.paymentMethodType.PrepaidCard
-        //         }
-        //     });
         const searchPointAccountsResult = yield personOwnershipInfoService.search({
             id: req.params.id,
             typeOfGood: {
-                typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account,
-                accountType: 'Point'
+                typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account
             }
         });
-        // coinAccounts = searchCoinAccountsResult.data;
         pointAccounts = searchPointAccountsResult.data;
         res.json([...coinAccounts, ...pointAccounts]);
     }

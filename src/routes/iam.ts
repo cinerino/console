@@ -37,8 +37,10 @@ iamRouter.get(
                 const searchResult = await iamService.searchRoles(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchResult.totalCount,
-                    recordsFiltered: searchResult.totalCount,
+                    // recordsTotal: searchResult.totalCount,
+                    recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
                     data: searchResult.data
                 });
             } else {
@@ -354,7 +356,7 @@ iamRouter.get(
                     ids: [req.params.id]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);
@@ -389,8 +391,8 @@ iamRouter.get(
                 const searchResult = await iamService.searchUsers(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchResult.totalCount,
-                    recordsFiltered: searchResult.totalCount,
+                    // recordsTotal: searchResult.totalCount,
+                    recordsFiltered: searchResult.data.length,
                     data: searchResult.data
                 });
             } else {
@@ -491,7 +493,7 @@ iamRouter.get(
                     ids: [req.params.id]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);

@@ -1,13 +1,11 @@
 /**
  * 販売者ルーター
  */
-import * as createDebug from 'debug';
 import * as express from 'express';
 import * as moment from 'moment';
 
 import * as cinerinoapi from '../cinerinoapi';
 
-const debug = createDebug('cinerino-console:routes');
 const sellersRouter = express.Router();
 
 /**
@@ -112,7 +110,7 @@ sellersRouter.get(
                     ids: [req.params.id]
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);

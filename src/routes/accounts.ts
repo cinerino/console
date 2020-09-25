@@ -4,8 +4,6 @@
 // import * as createDebug from 'debug';
 import * as express from 'express';
 
-import * as cinerinoapi from '../cinerinoapi';
-
 // const debug = createDebug('cinerino-console:routes:account');
 const accountsRouter = express.Router();
 
@@ -29,51 +27,10 @@ accountsRouter.get(
 );
 
 /**
- * 口座に対する転送アクション検索
- */
-accountsRouter.get(
-    '/actions/MoneyTransfer',
-    async (req, res, next) => {
-        try {
-            const accountService = new cinerinoapi.service.Account({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
-            });
-
-            const searchConditions: cinerinoapi.factory.pecorino.action.transfer.moneyTransfer.ISearchConditions = {
-                limit: req.query.limit,
-                page: req.query.page,
-                sort: { startDate: cinerinoapi.factory.pecorino.sortType.Descending },
-                accountType: req.query.accountType,
-                accountNumber: (typeof req.query.accountNumber === 'string' && req.query.accountNumber.length > 0) ?
-                    <string>req.query.accountNumber :
-                    undefined
-            };
-
-            if (req.query.format === 'datatable') {
-                const { totalCount, data } = await accountService.searchMoneyTransferActions(searchConditions);
-                res.json({
-                    draw: req.query.draw,
-                    recordsTotal: totalCount,
-                    recordsFiltered: totalCount,
-                    data: data
-                });
-            } else {
-                res.render('accounts/actions/moneyTransfer/index', {
-                    query: req.query
-                });
-            }
-        } catch (error) {
-            next(error);
-        }
-    }
-);
-
-/**
  * 口座詳細
  */
 accountsRouter.get(
-    '/:accountType/:accountNumber',
+    '/:accountNumber',
     async (req, res, next) => {
         try {
             const consoleUrl = <string>process.env.PECORINO_CONSOLE_URL;

@@ -39,12 +39,14 @@ movieTicketPaymentMethodRouter.get('', (req, res, next) => __awaiter(void 0, voi
                 : undefined
         };
         if (req.query.format === 'datatable') {
-            const { totalCount, data } = yield paymentMethodService.searchMovieTickets(searchConditions);
+            const searchResult = yield paymentMethodService.searchMovieTickets(searchConditions);
             res.json({
                 draw: req.query.draw,
-                recordsTotal: totalCount,
-                recordsFiltered: totalCount,
-                data: data
+                // recordsTotal: totalCount,
+                recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                    ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                    : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
+                data: searchResult.data
             });
         }
         else {

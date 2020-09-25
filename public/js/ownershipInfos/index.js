@@ -95,7 +95,7 @@ $(function () {
                         resourceId = data.typeOfGood.identifier;
                     }
 
-                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOfGood.typeOf + '/' + resourceId + '?accountType=' + data.typeOfGood.accountType;
+                    var url = '/projects/' + PROJECT_ID + '/resources/' + data.typeOfGood.typeOf + '/' + resourceId;
 
                     var html = '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.typeOfGood.typeOf + '</span></a>';
 

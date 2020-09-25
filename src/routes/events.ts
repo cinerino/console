@@ -60,12 +60,14 @@ eventsRouter.get(
                 name: req.query.name
             };
             if (req.query.format === 'datatable') {
-                const searchScreeningEventsResult = await eventService.search(searchConditions);
+                const searchResult = await eventService.search(searchConditions);
                 res.json({
                     draw: req.query.draw,
-                    recordsTotal: searchScreeningEventsResult.totalCount,
-                    recordsFiltered: searchScreeningEventsResult.totalCount,
-                    data: searchScreeningEventsResult.data
+                    // recordsTotal: searchScreeningEventsResult.totalCount,
+                    recordsFiltered: (searchResult.data.length === Number(searchConditions.limit))
+                        ? (Number(searchConditions.page) * Number(searchConditions.limit)) + 1
+                        : ((Number(searchConditions.page) - 1) * Number(searchConditions.limit)) + Number(searchResult.data.length),
+                    data: searchResult.data
                 });
             } else {
                 res.render('events/index', {
@@ -164,7 +166,7 @@ eventsRouter.get(
                     }
                 }
             });
-            debug(searchOrdersResult.totalCount, 'orders found.');
+
             res.json(searchOrdersResult);
         } catch (error) {
             next(error);

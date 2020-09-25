@@ -661,7 +661,7 @@ ordersRouter.post(
                 typeOf: cinerinoapi.factory.transactionType.PlaceOrder,
                 result: { order: { orderNumbers: [req.params.orderNumber] } }
             });
-            if (searchTransactionsResult.totalCount === 0) {
+            if (searchTransactionsResult.data.length === 0) {
                 throw new cinerinoapi.factory.errors.NotFound('Order');
             }
             const placeOrderTransaction = searchTransactionsResult.data[0];

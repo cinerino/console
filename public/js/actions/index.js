@@ -223,7 +223,7 @@ $(function () {
                             + '<br><span class="font-weight-light font-italic">' + data.fromLocation.name + '</span>';
 
                         if (data.fromLocation.typeOf === 'Account') {
-                            var url = '/projects/' + PROJECT_ID + '/accounts/' + data.fromLocation.accountType + '/' + data.fromLocation.accountNumber;
+                            var url = '/projects/' + PROJECT_ID + '/accounts/' + data.fromLocation.accountNumber;
                             html += '<br><span class="badge badge-pill badge-dark">' + data.fromLocation.accountType + '</span>'
                                 + '<br><a target="_blank" href="' + url + '"><span class="">' + data.fromLocation.accountNumber + '</span></a>';
                         }
@@ -242,7 +242,7 @@ $(function () {
                             + '<br><span class="font-weight-light font-italic">' + data.toLocation.name + '</span>';
 
                         if (data.toLocation.typeOf === 'Account') {
-                            var url = '/projects/' + PROJECT_ID + '/accounts/' + data.toLocation.accountType + '/' + data.toLocation.accountNumber;
+                            var url = '/projects/' + PROJECT_ID + '/accounts/' + data.toLocation.accountNumber;
                             html += '<br><span class="badge badge-pill badge-dark">' + data.toLocation.accountType + '</span>'
                                 + '<br><a target="_blank" href="' + url + '"><span class="">' + data.toLocation.accountNumber + '</span></a>';
                         }
