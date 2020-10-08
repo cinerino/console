@@ -57,7 +57,11 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = data.telephone;
+                    var html = '';
+
+                    if (typeof data.telephone === 'string') {
+                        html += data.telephone;
+                    }
 
                     return html;
                 }
