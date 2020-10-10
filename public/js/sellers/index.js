@@ -98,25 +98,6 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '';
-
-                    if (data.location !== undefined && data.location !== null) {
-                        var name = data.location.name.ja;
-                        if (typeof name === 'string' && name.length > 10) {
-                            name = String(name).slice(0, 10) + '...';
-                        }
-
-                        html += '<span class="badge badge-light">' + data.location.typeOf + '</span>'
-                            + '<br>' + name;
-                    }
-                    html += '';
-
-                    return html;
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    var html = '';
                     if (Array.isArray(data.makesOffer)) {
                         html += data.makesOffer.map(function (offer) {
                             var branchCode = '';
