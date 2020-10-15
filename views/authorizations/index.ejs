@@ -91,7 +91,7 @@
                                         </div>
                                         <input type="text" class="form-control form-control-sm" name="validRange"
                                             id="validRange"
-                                            value="<%= moment(searchConditions.validFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.validThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                            value="<%= (searchConditions.validFrom !== undefined) ? `${moment(searchConditions.validFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.validThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                     </div>
                                     <!-- /.input group -->
                                 </div>

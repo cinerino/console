@@ -58,13 +58,27 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = '<a target="_blank" href="/projects/' + PROJECT_ID + '/ownershipInfos?ids=' + data.object.id + '"><span class="badge badge-light">' + data.object.typeOf + '</span></a>';
+                    var html = '';
+
+                    // data.object = [{}, {}];
 
                     var objectType = 'undefined';
-                    if (data.object.typeOfGood !== undefined) {
-                        objectType = data.object.typeOfGood.typeOf;
-                        // html += '<br><span class="badge badge-success">' + data.object.typeOfGood.typeOf + '</span>'
-                        //     + ' <a href="javascript:void(0)" class="showObject" data-id="' + data.id + '">' + data.object.typeOfGood.id + '</a>';
+
+                    if (Array.isArray(data.object)) {
+                        html += '<span class="badge badge-light">Array(' + data.object.length + ')</span></a>';
+                        objectType = 'Array';
+                    } else {
+                        var objectId = data.object.id;
+                        if (data.object.typeOf === 'Order') {
+                            objectId = data.object.orderNumber;
+                        }
+                        var url = '/projects/' + PROJECT_ID + '/resources/' + data.object.typeOf + '/' + objectId;
+
+                        html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.object.typeOf + '</span></a>';
+
+                        if (data.object.typeOfGood !== undefined) {
+                            objectType = data.object.typeOfGood.typeOf;
+                        }
                     }
 
                     html += '<br><a href="javascript:void(0)" class="showObject" data-id="' + data.id + '">' + objectType + '</a>';
@@ -77,12 +91,19 @@ $(function () {
 
     // Date range picker
     $('#validRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
     })
+    $('#validRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+    });
+    $('#validRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
 
     $(document).on('click', '.btn.search,a.search', function () {
         $('form.search').submit();

@@ -76,15 +76,25 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<textarea class="form-control" placeholder="" disabled="" cols="4" rows="1">' + JSON.stringify(data.data, null, '\t') + '</textarea>'
-                        + '<a href="javascript:void(0)" class="showData" data-id="' + data.id + '">表示</a>';
+                    var dataType = data.data.typeOf;
+                    if (Array.isArray(data.data)) {
+                        dataType = 'Array(' + data.data.length + ')';
+
+                    }
+
+                    var html = '<span class="badge badge-light">' + dataType + '</span>';
+
+                    // return '<textarea class="form-control" placeholder="" disabled="" cols="4" rows="1">' + JSON.stringify(data.data, null, '\t') + '</textarea>'
+                    html += '<br><a href="javascript:void(0)" class="showData" data-id="' + data.id + '">表示</a>';
+
+                    return html;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<textarea class="form-control" placeholder="" disabled="" cols="4" rows="1">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea>'
-                        + '<a href="javascript:void(0)" class="showExecutionResults" data-id="' + data.id + '">表示</a>';
+                    // return '<textarea class="form-control" placeholder="" disabled="" cols="4" rows="1">' + JSON.stringify(data.executionResults, null, '\t') + '</textarea>'
+                    return '<a href="javascript:void(0)" class="showExecutionResults" data-id="' + data.id + '">表示</a>';
                 }
             }
         ]
@@ -92,11 +102,18 @@ $(function () {
 
     // Date range picker
     $('#runsRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDTHH:mm:ssZ'
         }
+    });
+    $('#runsRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+    });
+    $('#runsRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
     });
 
     $(document).on('click', '.btn.search,a.search', function () {

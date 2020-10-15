@@ -140,7 +140,13 @@ $(function () {
                     if (data.object !== undefined && data.object !== null) {
                         if (Array.isArray(data.object)) {
                             data.object.forEach(function (o) {
-                                html += '<span class="badge badge-light">' + o.typeOf + '</span>';
+                                var objectId = o.id;
+                                if (o.typeOf === 'Order') {
+                                    objectId = o.orderNumber;
+                                }
+                                var url = '/projects/' + PROJECT_ID + '/resources/' + o.typeOf + '/' + objectId;
+
+                                html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + o.typeOf + '</span></a>';
                             });
                         } else {
                             var userPoolId = '';
@@ -256,10 +262,14 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '';
 
-                    if (data.result !== undefined && data.result !== null && Object.keys(data.result).length > 0) {
-                        html += '<span class="badge badge-light">' + data.result.typeOf + '</span>';
+                    if (data.result !== undefined && data.result !== undefined) {
+                        if (Array.isArray(data.result)) {
+                            html += '<span class="badge badge-light">Array(' + data.result.length + ')</span>';
+                        } else {
+                            html += '<span class="badge badge-light">' + data.result.typeOf + '</span>';
+                        }
+
                         html += '<br><a href="javascript:void(0)" class="showResult" data-id="' + data.id + '">表示</a>';
-                    } else {
                     }
 
                     return html;

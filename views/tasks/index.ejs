@@ -54,7 +54,7 @@
                                         </div>
                                         <input type="text" class="form-control form-control-sm" name="runsRange"
                                             id="runsRange"
-                                            value="<%= moment(searchConditions.runsFrom).format('YYYY-MM-DDTHH:mm:ssZ') %> - <%= moment(searchConditions.runsThrough).format('YYYY-MM-DDTHH:mm:ssZ') %>">
+                                            value="<%= (searchConditions.runsFrom !== undefined) ? `${moment(searchConditions.runsFrom).format('YYYY-MM-DDTHH:mm:ssZ')} - ${moment(searchConditions.runsThrough).format('YYYY-MM-DDTHH:mm:ssZ')}` : '' %>">
                                     </div>
                                     <!-- /.input group -->
                                 </div>

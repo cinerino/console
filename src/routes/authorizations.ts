@@ -39,14 +39,11 @@ authorizationsRouter.get(
                 validFrom: (req.query.validRange !== undefined && req.query.validRange !== '')
                     ? moment(req.query.validRange.split(' - ')[0])
                         .toDate()
-                    : moment()
-                        .add(-1, 'day')
-                        .toDate(),
+                    : undefined,
                 validThrough: (req.query.validRange !== undefined && req.query.validRange !== '')
                     ? moment(req.query.validRange.split(' - ')[1])
                         .toDate()
-                    : moment()
-                        .toDate(),
+                    : undefined,
                 object: {
                     typeOfs: (req.query.object !== undefined
                         && req.query.object.typeOfs !== undefined

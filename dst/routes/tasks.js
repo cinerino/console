@@ -47,14 +47,11 @@ tasksRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             runsFrom: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                 ? moment(req.query.runsRange.split(' - ')[0])
                     .toDate()
-                : moment()
-                    .add(-1, 'hour')
-                    .toDate(),
+                : undefined,
             runsThrough: (req.query.runsRange !== undefined && req.query.runsRange !== '')
                 ? moment(req.query.runsRange.split(' - ')[1])
                     .toDate()
-                : moment()
-                    .toDate()
+                : undefined
         };
         if (req.query.format === 'datatable') {
             const searchResult = yield taskService.search(searchConditions);
