@@ -262,7 +262,7 @@ $(function () {
                 render: function (data, type, row) {
                     var html = '';
 
-                    if (data.result !== undefined && data.result !== undefined) {
+                    if (data.result !== undefined && data.result !== null) {
                         if (Array.isArray(data.result)) {
                             html += '<span class="badge badge-light">Array(' + data.result.length + ')</span>';
                         } else {
