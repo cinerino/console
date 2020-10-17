@@ -131,11 +131,11 @@ authorizationsRouter.all('/:id',
             const searchAuthorizeActionsResult = yield actionService.search({
                 limit: 100,
                 sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                project: { id: { $eq: req.project.id } },
                 typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
-                result: {
-                    typeOf: { $in: ['Authorization'] },
-                    id: { $in: [authorization.id] }
-                }
+                result: Object.assign({ typeOf: { $in: ['Authorization'] } }, {
+                    code: { $in: [authorization.code] }
+                })
             });
             actionsOnAuthorizations.push(...searchAuthorizeActionsResult.data);
             timelines.push(...actionsOnAuthorizations.map((a) => {

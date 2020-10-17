@@ -132,10 +132,14 @@ authorizationsRouter.all(
                 const searchAuthorizeActionsResult = await actionService.search({
                     limit: 100,
                     sort: { startDate: cinerinoapi.factory.sortType.Ascending },
+                    project: { id: { $eq: req.project.id } },
                     typeOf: cinerinoapi.factory.actionType.AuthorizeAction,
                     result: {
                         typeOf: { $in: ['Authorization'] },
-                        id: { $in: [(<any>authorization).id] }
+                        // id: { $in: [(<any>authorization).id] }
+                        ...{
+                            code: { $in: [authorization.code] }
+                        }
                     }
                 });
                 actionsOnAuthorizations.push(...searchAuthorizeActionsResult.data);
