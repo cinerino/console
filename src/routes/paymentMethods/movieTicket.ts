@@ -98,11 +98,10 @@ movieTicketPaymentMethodRouter.all(
                 }
 
                 const checkAction = await paymentService.checkMovieTicket({
-                    typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                    typeOf: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.MovieTicket,
                     movieTickets: [{
                         project: { typeOf: req.project.typeOf, id: req.project.id },
-                        typeOf: <cinerinoapi.factory.chevre.paymentMethodType.MovieTicket>
-                            cinerinoapi.factory.chevre.paymentMethodType.MovieTicket,
+                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.MovieTicket,
                         identifier: searchConditions.identifier,
                         accessCode: searchConditions.accessCode,
                         serviceType: '',
@@ -176,7 +175,6 @@ movieTicketPaymentMethodRouter.get(
             res.render('paymentMethods/movieTicket/show', {
                 message: message,
                 movieTicket: movieTicket,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType,
                 PlaceType: { Online: 'Online', Store: 'Store' }
             });
         } catch (error) {

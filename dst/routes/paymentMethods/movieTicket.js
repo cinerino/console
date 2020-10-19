@@ -97,7 +97,7 @@ movieTicketPaymentMethodRouter.all('/check', (req, res, next) => __awaiter(void 
                 throw new Error(`Seller ${searchConditions.seller.id} not found`);
             }
             const checkAction = yield paymentService.checkMovieTicket({
-                typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                typeOf: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.MovieTicket,
                 movieTickets: [{
                         project: { typeOf: req.project.typeOf, id: req.project.id },
                         typeOf: cinerinoapi.factory.chevre.paymentMethodType.MovieTicket,
@@ -168,7 +168,6 @@ movieTicketPaymentMethodRouter.get('/:identifier', (req, res, next) => __awaiter
         res.render('paymentMethods/movieTicket/show', {
             message: message,
             movieTicket: movieTicket,
-            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             PlaceType: { Online: 'Online', Store: 'Store' }
         });
     }

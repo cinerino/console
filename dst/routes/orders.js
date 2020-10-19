@@ -316,9 +316,7 @@ ordersRouter.get('',
                     ? req.query.paymentMethods.accountIds.split(',')
                         .map((v) => v.trim())
                     : undefined
-            }, { 
-                // : Object.values(cinerinoapi.factory.paymentMethodType),
-                paymentMethodIds: (req.query.paymentMethods !== undefined
+            }, { paymentMethodIds: (req.query.paymentMethods !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== undefined
                     && req.query.paymentMethods.paymentMethodIds !== '')
                     ? req.query.paymentMethods.paymentMethodIds.split(',')
@@ -381,13 +379,21 @@ ordersRouter.get('',
             catch (error) {
                 // no op
             }
+            const categoryCodeService = new cinerinoapi.service.CategoryCode({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
+            const searchPaymentMethodTypesResult = yield categoryCodeService.search({
+                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
+            });
             res.render('orders/index', {
                 moment: moment,
                 sellers: searchSellersResult.data,
                 applications: applications,
                 searchConditions: searchConditions,
                 OrderStatus: cinerinoapi.factory.orderStatus,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                paymentMethodTypes: searchPaymentMethodTypesResult.data,
                 paymentCards: paymentCards
             });
         }

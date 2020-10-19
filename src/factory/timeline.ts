@@ -264,15 +264,6 @@ export function createFromAction(params: {
                     // case cinerinoapi.factory.action.authorize.offer.seatReservation.ObjectType.SeatReservation:
                     //     object = { name: '予約' };
                     //     break;
-                    // case cinerinoapi.factory.paymentMethodType.CreditCard:
-                    //     object = { name: 'クレジットカード決済' };
-                    //     break;
-                    // case cinerinoapi.factory.paymentMethodType.Account:
-                    //     object = { name: '口座決済' };
-                    //     break;
-                    // case cinerinoapi.factory.paymentMethodType.PaymentCard:
-                    //     object = { name: 'ペイメントカード' };
-                    //     break;
                     // case cinerinoapi.factory.action.transfer.give.pointAward.ObjectType.PointAward:
                     // case cinerinoapi.factory.action.authorize.award.point.ObjectType.PointAward:
                     //     object = { name: 'ポイント特典' };

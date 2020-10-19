@@ -198,8 +198,7 @@ reservationsRouter.get('',
                 moment: moment,
                 consoleUrl: consoleUrl,
                 searchConditions: searchConditions,
-                ReservationStatusType: cinerinoapi.factory.chevre.reservationStatusType,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType
+                ReservationStatusType: cinerinoapi.factory.chevre.reservationStatusType
             });
         }
     }

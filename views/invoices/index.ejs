@@ -68,15 +68,16 @@
                                 <div class="form-group col-md-2">
                                     <label>決済方法</label>
                                     <select multiple class="form-control form-control-sm" name="paymentMethods[]">
-                                        <% Object.values(PaymentMethodType).forEach(function (paymentMethod) { %>
+                                        <% paymentMethodTypes.forEach(function (paymentMethodType) { %>
                                         <%
                                         var selected = false;
                                         if (searchConditions.paymentMethods !== undefined) {
-                                            selected = searchConditions.paymentMethods.indexOf(paymentMethod) >= 0;
+                                            selected = searchConditions.paymentMethods.indexOf(paymentMethodType.codeValue) >= 0;
                                         }
                                         %>
-                                        <option value="<%= paymentMethod %>" <% if (selected) { %> selected <% } %>>
-                                            <%= paymentMethod %>
+                                        <option value="<%= paymentMethodType.codeValue %>" <% if (selected) { %>
+                                            selected <% } %>>
+                                            <%= paymentMethodType.name.ja %>
                                         </option>
                                         <% }) %>
                                     </select>

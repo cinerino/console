@@ -70,7 +70,7 @@ homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         }
         const searchSellersResult = yield sellerService.search({});
         const searchPaymentMethodTypesResult = yield categoryCodeService.search({
-            inCodeSet: { identifier: { $eq: 'PaymentMethodType' } }
+            inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
         });
         res.render('home', {
             message: 'Welcome to Cinerino Console!',

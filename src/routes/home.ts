@@ -71,7 +71,7 @@ homeRouter.get(
             const searchSellersResult = await sellerService.search({});
 
             const searchPaymentMethodTypesResult = await categoryCodeService.search({
-                inCodeSet: { identifier: { $eq: 'PaymentMethodType' } }
+                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
             });
 
             res.render('home', {

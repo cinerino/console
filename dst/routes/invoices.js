@@ -118,11 +118,19 @@ invoicesRouter.get('',
             });
         }
         else {
+            const categoryCodeService = new cinerinoapi.service.CategoryCode({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
+            const searchPaymentMethodTypesResult = yield categoryCodeService.search({
+                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
+            });
             res.render('invoices/index', {
                 moment: moment,
                 searchConditions: searchConditions,
                 PaymentStatusType: cinerinoapi.factory.paymentStatusType,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType
+                paymentMethodTypes: searchPaymentMethodTypesResult.data
             });
         }
     }

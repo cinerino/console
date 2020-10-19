@@ -75,7 +75,6 @@ sellersRouter.all('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.render('sellers/edit', {
             message: undefined,
             seller: seller,
-            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
             OrganizationType: cinerinoapi.factory.chevre.organizationType,
             PlaceType: { Online: 'Online', Store: 'Store' },
             WebAPIIdentifier: cinerinoapi.factory.service.webAPI.Identifier,

@@ -163,23 +163,6 @@ serviceOutputsRouter.get(
     }
 );
 
-// tslint:disable-next-line:cyclomatic-complexity max-func-body-length
-// function createAttributesFromBody(params: {
-//     project: cinerinoapi.factory.project.IProject;
-//     req: express.Request;
-// }): cinerinoapi.factory.paymentMethod.paymentCard.prepaidCard.IPrepaidCard {
-//     return {
-//         project: { typeOf: params.project.typeOf, id: params.project.id },
-//         typeOf: cinerinoapi.factory.paymentMethodType.PrepaidCard,
-//         identifier: '',
-//         accessCode: params.req.body.accessCode,
-//         serviceOutput: {},
-//         ...{
-//             name: params.req.body.name
-//         }
-//     };
-// }
-
 /**
  * カード認証
  */
@@ -226,11 +209,10 @@ serviceOutputsRouter.all(
                 }
 
                 const checkAction = await paymentService.checkMovieTicket({
-                    typeOf: cinerinoapi.factory.paymentMethodType.MovieTicket,
+                    typeOf: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.MovieTicket,
                     movieTickets: [{
                         project: { typeOf: req.project.typeOf, id: req.project.id },
-                        typeOf: <cinerinoapi.factory.chevre.paymentMethodType.MovieTicket>
-                            cinerinoapi.factory.chevre.paymentMethodType.MovieTicket,
+                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.MovieTicket,
                         identifier: searchConditions.identifier,
                         accessCode: searchConditions.accessCode,
                         serviceType: '',
@@ -329,7 +311,7 @@ serviceOutputsRouter.all(
 //                 page: req.query.page,
 //                 sort: { orderDate: cinerinoapi.factory.sortType.Descending },
 //                 paymentMethods: {
-//                     typeOfs: [cinerinoapi.factory.paymentMethodType.PrepaidCard],
+//                     typeOfs: [''],
 //                     paymentMethodIds: [req.params.identifier]
 //                 }
 //             });
