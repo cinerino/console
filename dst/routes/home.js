@@ -41,6 +41,11 @@ homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             endpoint: req.project.settings.API_ENDPOINT,
             auth: req.user.authClient
         });
+        const categoryCodeService = new cinerinoapi.service.CategoryCode({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
         const project = yield projectService.findById({ id: req.project.id });
         let userPool;
         let adminUserPool;
@@ -64,12 +69,15 @@ homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             // no op
         }
         const searchSellersResult = yield sellerService.search({});
+        const searchPaymentMethodTypesResult = yield categoryCodeService.search({
+            inCodeSet: { identifier: { $eq: 'PaymentMethodType' } }
+        });
         res.render('home', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
             applications: applications,
             adminUserPool: adminUserPool,
-            PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+            paymentMethodTypes: searchPaymentMethodTypesResult.data,
             sellers: searchSellersResult.data,
             moment: moment,
             timelines: []

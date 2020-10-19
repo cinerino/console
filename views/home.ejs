@@ -211,13 +211,14 @@
                                 <!-- Morris chart - Sales -->
                                 <div class="chart tab-pane" id="salesAmountByPaymentMethod">
                                     <div class="row">
-                                        <% Object.values(PaymentMethodType).forEach(function(paymentMethod) { %>
+                                        <% Object.values(paymentMethodTypes).forEach(function(paymentMethodType) { %>
                                         <div class="col-4 text-center">
                                             <input type="text" class="knob byPaymentMethod"
-                                                data-paymentMethod="<%= paymentMethod %>" data-readonly="true" value="0"
-                                                data-width="60" data-height="60" data-fgColor="#6c757d">
+                                                data-paymentMethod="<%= paymentMethodType.codeValue %>"
+                                                data-readonly="true" value="0" data-width="60" data-height="60"
+                                                data-fgColor="#6c757d">
                                             <div class="">
-                                                <%= paymentMethod %>
+                                                <%= paymentMethodType.name.ja %>
                                             </div>
                                         </div>
                                         <!-- ./col -->
@@ -313,13 +314,14 @@
                                 <!-- Morris chart - Sales -->
                                 <div class="chart tab-pane" id="numOrderItemsByPaymentMethod">
                                     <div class="row">
-                                        <% Object.values(PaymentMethodType).forEach(function(paymentMethod) { %>
+                                        <% Object.values(paymentMethodTypes).forEach(function(paymentMethodType) { %>
                                         <div class="col-4 text-center">
                                             <input type="text" class="knob byPaymentMethod"
-                                                data-paymentMethod="<%= paymentMethod %>" data-readonly="true" value="0"
-                                                data-width="60" data-height="60" data-fgColor="#6c757d">
+                                                data-paymentMethod="<%= paymentMethodType.codeValue %>"
+                                                data-readonly="true" value="0" data-width="60" data-height="60"
+                                                data-fgColor="#6c757d">
                                             <div class="">
-                                                <%= paymentMethod %>
+                                                <%= paymentMethodType.name.ja %>
                                             </div>
                                         </div>
                                         <!-- ./col -->

@@ -112,7 +112,7 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             let paymentCards = [];
             try {
                 const searchPaymentCardsResult = yield productService.search({
-                    typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
+                    typeOf: { $eq: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.PaymentCard }
                 });
                 paymentCards = searchPaymentCardsResult.data;
             }

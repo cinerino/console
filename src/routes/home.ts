@@ -36,6 +36,11 @@ homeRouter.get(
                 endpoint: req.project.settings.API_ENDPOINT,
                 auth: req.user.authClient
             });
+            const categoryCodeService = new cinerinoapi.service.CategoryCode({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
 
             const project = await projectService.findById({ id: req.project.id });
 
@@ -65,12 +70,16 @@ homeRouter.get(
 
             const searchSellersResult = await sellerService.search({});
 
+            const searchPaymentMethodTypesResult = await categoryCodeService.search({
+                inCodeSet: { identifier: { $eq: 'PaymentMethodType' } }
+            });
+
             res.render('home', {
                 message: 'Welcome to Cinerino Console!',
                 userPool: userPool,
                 applications: applications,
                 adminUserPool: adminUserPool,
-                PaymentMethodType: cinerinoapi.factory.paymentMethodType,
+                paymentMethodTypes: searchPaymentMethodTypesResult.data,
                 sellers: searchSellersResult.data,
                 moment: moment,
                 timelines: []

@@ -114,7 +114,7 @@ serviceOutputsRouter.get(
                 let paymentCards: any[] = [];
                 try {
                     const searchPaymentCardsResult = await productService.search({
-                        typeOf: { $eq: cinerinoapi.factory.paymentMethodType.PaymentCard }
+                        typeOf: { $eq: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.PaymentCard }
                     });
                     paymentCards = searchPaymentCardsResult.data;
                 } catch (error) {
