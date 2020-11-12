@@ -25,7 +25,7 @@ const actionsRouter = express.Router();
 actionsRouter.get('', 
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12;
     try {
         debug('req.query:', req.query);
         const actionService = new cinerinoapi.service.Action({
@@ -36,7 +36,7 @@ actionsRouter.get('',
             limit: req.query.limit,
             page: req.query.page,
             sort: { startDate: cinerinoapi.factory.sortType.Descending },
-            typeOf: (req.query.typeOf !== undefined && req.query.typeOf !== '')
+            typeOf: (typeof req.query.typeOf === 'string' && req.query.typeOf.length > 0)
                 ? req.query.typeOf
                 : undefined,
             actionStatusTypes: (typeof req.query.actionStatusType === 'string' && req.query.actionStatusType.length > 0)
@@ -66,51 +66,38 @@ actionsRouter.get('',
             },
             object: {
                 typeOf: {
-                    $in: (req.query.object !== undefined
-                        && req.query.object.typeOf !== undefined
-                        && req.query.object.typeOf.$in !== undefined
-                        && req.query.object.typeOf.$in !== '')
+                    $in: (typeof ((_f = (_e = req.query.object) === null || _e === void 0 ? void 0 : _e.typeOf) === null || _f === void 0 ? void 0 : _f.$in) === 'string' && req.query.object.typeOf.$in.length > 0)
                         ? req.query.object.typeOf.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 id: {
-                    $in: (req.query.object !== undefined
-                        && req.query.object.id !== undefined
-                        && req.query.object.id.$in !== undefined
-                        && req.query.object.id.$in !== '')
+                    $in: (typeof ((_h = (_g = req.query.object) === null || _g === void 0 ? void 0 : _g.id) === null || _h === void 0 ? void 0 : _h.$in) === 'string' && req.query.object.id.$in.length > 0)
                         ? req.query.object.id.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 orderNumber: {
-                    $in: (req.query.object !== undefined
-                        && req.query.object.orderNumber !== undefined
-                        && req.query.object.orderNumber.$in !== undefined
-                        && req.query.object.orderNumber.$in !== '')
+                    $in: (typeof ((_k = (_j = req.query.object) === null || _j === void 0 ? void 0 : _j.orderNumber) === null || _k === void 0 ? void 0 : _k.$in) === 'string' && req.query.object.orderNumber.$in.length > 0)
                         ? req.query.object.orderNumber.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 paymentMethod: {
-                    paymentMethodId: {
-                        $in: (req.query.object !== undefined
-                            && req.query.object.paymentMethod !== undefined
-                            && req.query.object.paymentMethod.paymentMethodId !== undefined
-                            && req.query.object.paymentMethod.paymentMethodId.$in !== undefined
-                            && req.query.object.paymentMethod.paymentMethodId.$in !== '')
-                            ? req.query.object.paymentMethod.paymentMethodId.$in.split(',')
-                                .map((v) => v.trim())
-                            : undefined
-                    }
+                    $eq: (typeof ((_m = (_l = req.query.object) === null || _l === void 0 ? void 0 : _l.paymentMethod) === null || _m === void 0 ? void 0 : _m.$eq) === 'string'
+                        && req.query.object.paymentMethod.$eq.length > 0)
+                        ? req.query.object.paymentMethod.$eq
+                        : undefined
+                },
+                paymentMethodId: {
+                    $eq: (typeof ((_p = (_o = req.query.object) === null || _o === void 0 ? void 0 : _o.paymentMethodId) === null || _p === void 0 ? void 0 : _p.$eq) === 'string'
+                        && req.query.object.paymentMethodId.$eq.length > 0)
+                        ? req.query.object.paymentMethodId.$eq
+                        : undefined
                 },
                 event: {
                     id: {
-                        $in: (req.query.object !== undefined
-                            && req.query.object.event !== undefined
-                            && req.query.object.event.id !== undefined
-                            && req.query.object.event.id.$in !== undefined
-                            && req.query.object.event.id.$in !== '')
+                        $in: (typeof ((_s = (_r = (_q = req.query.object) === null || _q === void 0 ? void 0 : _q.event) === null || _r === void 0 ? void 0 : _r.id) === null || _s === void 0 ? void 0 : _s.$in) === 'string' && req.query.object.event.id.$in.length > 0)
                             ? req.query.object.event.id.$in.split(',')
                                 .map((v) => v.trim())
                             : undefined
@@ -119,12 +106,8 @@ actionsRouter.get('',
                 acceptedOffer: {
                     ticketedSeat: {
                         seatNumber: {
-                            $in: (req.query.object !== undefined
-                                && req.query.object.acceptedOffer !== undefined
-                                && req.query.object.acceptedOffer.ticketedSeat !== undefined
-                                && req.query.object.acceptedOffer.ticketedSeat.seatNumber !== undefined
-                                && req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in !== undefined
-                                && req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in !== '')
+                            $in: (typeof ((_w = (_v = (_u = (_t = req.query.object) === null || _t === void 0 ? void 0 : _t.acceptedOffer) === null || _u === void 0 ? void 0 : _u.ticketedSeat) === null || _v === void 0 ? void 0 : _v.seatNumber) === null || _w === void 0 ? void 0 : _w.$in) === 'string'
+                                && req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in.length > 0)
                                 ? req.query.object.acceptedOffer.ticketedSeat.seatNumber.$in.split(',')
                                     .map((v) => v.trim())
                                 : undefined
@@ -134,28 +117,19 @@ actionsRouter.get('',
             },
             purpose: {
                 typeOf: {
-                    $in: (req.query.purpose !== undefined
-                        && req.query.purpose.typeOf !== undefined
-                        && req.query.purpose.typeOf.$in !== undefined
-                        && req.query.purpose.typeOf.$in !== '')
+                    $in: (typeof ((_y = (_x = req.query.purpose) === null || _x === void 0 ? void 0 : _x.typeOf) === null || _y === void 0 ? void 0 : _y.$in) === 'string' && req.query.purpose.typeOf.$in.length > 0)
                         ? req.query.purpose.typeOf.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 id: {
-                    $in: (req.query.purpose !== undefined
-                        && req.query.purpose.id !== undefined
-                        && req.query.purpose.id.$in !== undefined
-                        && req.query.purpose.id.$in !== '')
+                    $in: (typeof ((_0 = (_z = req.query.purpose) === null || _z === void 0 ? void 0 : _z.id) === null || _0 === void 0 ? void 0 : _0.$in) === 'string' && req.query.purpose.id.$in.length > 0)
                         ? req.query.purpose.id.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 orderNumber: {
-                    $in: (req.query.purpose !== undefined
-                        && req.query.purpose.orderNumber !== undefined
-                        && req.query.purpose.orderNumber.$in !== undefined
-                        && req.query.purpose.orderNumber.$in !== '')
+                    $in: (typeof ((_2 = (_1 = req.query.purpose) === null || _1 === void 0 ? void 0 : _1.orderNumber) === null || _2 === void 0 ? void 0 : _2.$in) === 'string' && req.query.purpose.orderNumber.$in.length > 0)
                         ? req.query.purpose.orderNumber.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
@@ -163,28 +137,19 @@ actionsRouter.get('',
             },
             result: {
                 typeOf: {
-                    $in: (req.query.result !== undefined
-                        && req.query.result.typeOf !== undefined
-                        && req.query.result.typeOf.$in !== undefined
-                        && req.query.result.typeOf.$in !== '')
+                    $in: (typeof ((_4 = (_3 = req.query.result) === null || _3 === void 0 ? void 0 : _3.typeOf) === null || _4 === void 0 ? void 0 : _4.$in) === 'string' && req.query.result.typeOf.$in.length > 0)
                         ? req.query.result.typeOf.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 id: {
-                    $in: (req.query.result !== undefined
-                        && req.query.result.id !== undefined
-                        && req.query.result.id.$in !== undefined
-                        && req.query.result.id.$in !== '')
+                    $in: (typeof ((_6 = (_5 = req.query.result) === null || _5 === void 0 ? void 0 : _5.id) === null || _6 === void 0 ? void 0 : _6.$in) === 'string' && req.query.result.id.$in.length > 0)
                         ? req.query.result.id.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
                 },
                 orderNumber: {
-                    $in: (req.query.result !== undefined
-                        && req.query.result.orderNumber !== undefined
-                        && req.query.result.orderNumber.$in !== undefined
-                        && req.query.result.orderNumber.$in !== '')
+                    $in: (typeof ((_8 = (_7 = req.query.result) === null || _7 === void 0 ? void 0 : _7.orderNumber) === null || _8 === void 0 ? void 0 : _8.$in) === 'string' && req.query.result.orderNumber.$in.length > 0)
                         ? req.query.result.orderNumber.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
@@ -192,10 +157,8 @@ actionsRouter.get('',
             },
             fromLocation: {
                 accountNumber: {
-                    $in: (req.query.fromLocation !== undefined
-                        && req.query.fromLocation.accountNumber !== undefined
-                        && req.query.fromLocation.accountNumber.$in !== undefined
-                        && req.query.fromLocation.accountNumber.$in !== '')
+                    $in: (typeof ((_10 = (_9 = req.query.fromLocation) === null || _9 === void 0 ? void 0 : _9.accountNumber) === null || _10 === void 0 ? void 0 : _10.$in) === 'string'
+                        && req.query.fromLocation.accountNumber.$in.length > 0)
                         ? req.query.fromLocation.accountNumber.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
@@ -203,10 +166,8 @@ actionsRouter.get('',
             },
             toLocation: {
                 accountNumber: {
-                    $in: (req.query.toLocation !== undefined
-                        && req.query.toLocation.accountNumber !== undefined
-                        && req.query.toLocation.accountNumber.$in !== undefined
-                        && req.query.toLocation.accountNumber.$in !== '')
+                    $in: (typeof ((_12 = (_11 = req.query.toLocation) === null || _11 === void 0 ? void 0 : _11.accountNumber) === null || _12 === void 0 ? void 0 : _12.$in) === 'string'
+                        && req.query.toLocation.accountNumber.$in.length > 0)
                         ? req.query.toLocation.accountNumber.$in.split(',')
                             .map((v) => v.trim())
                         : undefined
