@@ -336,25 +336,37 @@ peopleRouter.get(
     '/:id/accounts',
     async (req, res, next) => {
         try {
-            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-                endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-                auth: req.user.authClient
+            const productService = new cinerinoapi.service.Product({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
             });
 
-            const coinAccounts: IAccountOwnershipInfo[] = [];
-            let pointAccounts: IAccountOwnershipInfo[] = [];
+            const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
+                endpoint: req.project.settings.API_ENDPOINT,
+                auth: req.user.authClient,
+                project: { id: req.project.id }
+            });
 
-            const searchPointAccountsResult =
-                await personOwnershipInfoService.search({
+            const paymentCards: IAccountOwnershipInfo[] = [];
+
+            // ペイメントカードを検索
+            const searchPaymentCardsResult = await productService.search({
+                typeOf: { $eq: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.PaymentCard }
+            });
+            const paymentCardProducts = searchPaymentCardsResult.data;
+
+            for (const paymentCardProduct of paymentCardProducts) {
+                const searchOwnershipInfosResult = await personOwnershipInfoService.search({
                     id: req.params.id,
                     typeOfGood: {
-                        typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account
+                        typeOf: String(paymentCardProduct.serviceOutput?.typeOf)
                     }
                 });
+                paymentCards.push(...searchOwnershipInfosResult.data);
+            }
 
-            pointAccounts = searchPointAccountsResult.data;
-
-            res.json([...coinAccounts, ...pointAccounts]);
+            res.json(paymentCards);
         } catch (error) {
             next(error);
         }

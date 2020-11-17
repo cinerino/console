@@ -289,21 +289,34 @@ peopleRouter.delete('/:id/creditCards/:cardSeq', (req, res, next) => __awaiter(v
  * 口座検索
  */
 peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
+        const productService = new cinerinoapi.service.Product({
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
+        });
         const personOwnershipInfoService = new cinerinoapi.service.person.OwnershipInfo({
-            endpoint: `${req.project.settings.API_ENDPOINT}/projects/${req.project.id}`,
-            auth: req.user.authClient
+            endpoint: req.project.settings.API_ENDPOINT,
+            auth: req.user.authClient,
+            project: { id: req.project.id }
         });
-        const coinAccounts = [];
-        let pointAccounts = [];
-        const searchPointAccountsResult = yield personOwnershipInfoService.search({
-            id: req.params.id,
-            typeOfGood: {
-                typeOf: cinerinoapi.factory.chevre.paymentMethodType.Account
-            }
+        const paymentCards = [];
+        // ペイメントカードを検索
+        const searchPaymentCardsResult = yield productService.search({
+            typeOf: { $eq: cinerinoapi.factory.chevre.service.paymentService.PaymentServiceType.PaymentCard }
         });
-        pointAccounts = searchPointAccountsResult.data;
-        res.json([...coinAccounts, ...pointAccounts]);
+        const paymentCardProducts = searchPaymentCardsResult.data;
+        for (const paymentCardProduct of paymentCardProducts) {
+            const searchOwnershipInfosResult = yield personOwnershipInfoService.search({
+                id: req.params.id,
+                typeOfGood: {
+                    typeOf: String((_a = paymentCardProduct.serviceOutput) === null || _a === void 0 ? void 0 : _a.typeOf)
+                }
+            });
+            paymentCards.push(...searchOwnershipInfosResult.data);
+        }
+        res.json(paymentCards);
     }
     catch (error) {
         next(error);

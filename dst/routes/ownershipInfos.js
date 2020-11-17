@@ -121,7 +121,7 @@ ownershipInfosRouter.get('',
             let membershipServices = [];
             try {
                 const searchMembershipServicesResult = yield productService.search({
-                    typeOf: { $eq: 'MembershipService' }
+                    typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.MembershipService }
                 });
                 membershipServices = searchMembershipServicesResult.data;
             }
@@ -131,7 +131,7 @@ ownershipInfosRouter.get('',
             let accountServices = [];
             try {
                 const searchAccountServicesResult = yield productService.search({
-                    typeOf: { $eq: 'Account' }
+                    typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.PaymentCard }
                 });
                 accountServices = searchAccountServicesResult.data;
             }

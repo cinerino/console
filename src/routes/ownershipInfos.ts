@@ -116,7 +116,7 @@ ownershipInfosRouter.get(
                 let membershipServices: any[] = [];
                 try {
                     const searchMembershipServicesResult = await productService.search({
-                        typeOf: { $eq: 'MembershipService' }
+                        typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.MembershipService }
                     });
                     membershipServices = searchMembershipServicesResult.data;
                 } catch (error) {
@@ -126,7 +126,7 @@ ownershipInfosRouter.get(
                 let accountServices: any[] = [];
                 try {
                     const searchAccountServicesResult = await productService.search({
-                        typeOf: { $eq: 'Account' }
+                        typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.PaymentCard }
                     });
                     accountServices = searchAccountServicesResult.data;
                 } catch (error) {

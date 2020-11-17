@@ -122,7 +122,7 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             let membershipServices = [];
             try {
                 const searchMembershipServicesResult = yield productService.search({
-                    typeOf: { $eq: 'MembershipService' }
+                    typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.MembershipService }
                 });
                 membershipServices = searchMembershipServicesResult.data;
             }
@@ -132,7 +132,7 @@ serviceOutputsRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 
             let accountServices = [];
             try {
                 const searchAccountServicesResult = yield productService.search({
-                    typeOf: { $eq: 'Account' }
+                    typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.PaymentCard }
                 });
                 accountServices = searchAccountServicesResult.data;
             }
