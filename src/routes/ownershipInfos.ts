@@ -61,12 +61,12 @@ ownershipInfosRouter.get(
                             ? req.query.typeOfGood.identifier.$eq
                             : undefined
                     },
-                    ids: (req.query.typeOfGood !== undefined
-                        && req.query.typeOfGood.ids !== undefined
-                        && req.query.typeOfGood.ids !== '')
-                        ? (<string>req.query.typeOfGood.ids).split(',')
-                            .map((v) => v.trim())
-                        : undefined,
+                    id: {
+                        $in: (typeof req.query.typeOfGood?.ids === 'string' && req.query.typeOfGood.ids.length > 0)
+                            ? (<string>req.query.typeOfGood.ids).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    },
                     issuedThrough: {
                         id: {
                             $eq: (typeof req.query?.typeOfGood?.issuedThrough?.id?.$eq === 'string'
@@ -75,12 +75,12 @@ ownershipInfosRouter.get(
                                 : undefined
                         }
                     },
-                    accountNumbers: (req.query.typeOfGood !== undefined
-                        && req.query.typeOfGood.accountNumbers !== undefined
-                        && req.query.typeOfGood.accountNumbers !== '')
-                        ? (<string>req.query.typeOfGood.accountNumbers).split(',')
-                            .map((v) => v.trim())
-                        : undefined
+                    accountNumber: {
+                        $in: (typeof req.query.typeOfGood?.accountNumbers === 'string' && req.query.typeOfGood.accountNumbers.length > 0)
+                            ? (<string>req.query.typeOfGood.accountNumbers).split(',')
+                                .map((v) => v.trim())
+                            : undefined
+                    }
                 }
             };
 

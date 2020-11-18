@@ -67,7 +67,7 @@ resourcesRouter.get(
                 //     break;
 
                 // 口座
-                case cinerinoapi.factory.chevre.paymentMethodType.Account:
+                case 'Account':
                     res.redirect(`/projects/${req.project.id}/accounts/${req.params.resourceId}`);
                     break;
 

@@ -85,7 +85,7 @@
                                     <label for="typeOfGood[ids]">所有物ID</label>
                                     <input type="text" class="form-control form-control-sm" id="typeOfGood[ids]"
                                         name="typeOfGood[ids]" placeholder="予約IDなど"
-                                        value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.ids)) ? searchConditions.typeOfGood.ids.join(',') : '' %>">
+                                        value="<%= (searchConditions.typeOfGood !== undefined && searchConditions.typeOfGood.id !== undefined && Array.isArray(searchConditions.typeOfGood.id.$in)) ? searchConditions.typeOfGood.id.$in.join(',') : '' %>">
                                 </div>
 
                                 <div class="form-group col-md-2">
@@ -123,7 +123,7 @@
                                     <input type="text" class="form-control form-control-sm"
                                         id="typeOfGood[accountNumbers]" name="typeOfGood[accountNumbers]"
                                         placeholder="135614901831073"
-                                        value="<%= (searchConditions.typeOfGood !== undefined && Array.isArray(searchConditions.typeOfGood.accountNumbers)) ? searchConditions.typeOfGood.accountNumbers.join(',') : '' %>">
+                                        value="<%= (searchConditions.typeOfGood !== undefined && searchConditions.typeOfGood.accountNumber !== undefined && Array.isArray(searchConditions.typeOfGood.accountNumber.$in)) ? searchConditions.typeOfGood.accountNumber.$in.join(',') : '' %>">
                                 </div>
                             </div>
                         </form>

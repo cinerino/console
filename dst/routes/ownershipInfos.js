@@ -27,7 +27,7 @@ ownershipInfosRouter.get('',
 // tslint:disable-next-line:cyclomatic-complexity
 // tslint:disable-next-line:cyclomatic-complexity max-func-body-length
 (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     try {
         debug('req.query:', req.query);
         const ownershipInfoService = new cinerinoapi.service.OwnershipInfo({
@@ -67,26 +67,26 @@ ownershipInfosRouter.get('',
                         ? req.query.typeOfGood.identifier.$eq
                         : undefined
                 },
-                ids: (req.query.typeOfGood !== undefined
-                    && req.query.typeOfGood.ids !== undefined
-                    && req.query.typeOfGood.ids !== '')
-                    ? req.query.typeOfGood.ids.split(',')
-                        .map((v) => v.trim())
-                    : undefined,
+                id: {
+                    $in: (typeof ((_d = req.query.typeOfGood) === null || _d === void 0 ? void 0 : _d.ids) === 'string' && req.query.typeOfGood.ids.length > 0)
+                        ? req.query.typeOfGood.ids.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                },
                 issuedThrough: {
                     id: {
-                        $eq: (typeof ((_g = (_f = (_e = (_d = req.query) === null || _d === void 0 ? void 0 : _d.typeOfGood) === null || _e === void 0 ? void 0 : _e.issuedThrough) === null || _f === void 0 ? void 0 : _f.id) === null || _g === void 0 ? void 0 : _g.$eq) === 'string'
+                        $eq: (typeof ((_h = (_g = (_f = (_e = req.query) === null || _e === void 0 ? void 0 : _e.typeOfGood) === null || _f === void 0 ? void 0 : _f.issuedThrough) === null || _g === void 0 ? void 0 : _g.id) === null || _h === void 0 ? void 0 : _h.$eq) === 'string'
                             && req.query.typeOfGood.issuedThrough.id.$eq.length > 0)
                             ? req.query.typeOfGood.issuedThrough.id.$eq
                             : undefined
                     }
                 },
-                accountNumbers: (req.query.typeOfGood !== undefined
-                    && req.query.typeOfGood.accountNumbers !== undefined
-                    && req.query.typeOfGood.accountNumbers !== '')
-                    ? req.query.typeOfGood.accountNumbers.split(',')
-                        .map((v) => v.trim())
-                    : undefined
+                accountNumber: {
+                    $in: (typeof ((_j = req.query.typeOfGood) === null || _j === void 0 ? void 0 : _j.accountNumbers) === 'string' && req.query.typeOfGood.accountNumbers.length > 0)
+                        ? req.query.typeOfGood.accountNumbers.split(',')
+                            .map((v) => v.trim())
+                        : undefined
+                }
             }
         };
         if (req.query.format === 'datatable') {

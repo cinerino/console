@@ -81,7 +81,7 @@ peopleRouter.all(
 
             if (req.method === 'DELETE') {
                 const physically = req.body.physically === 'on';
-                await personService.deletById({ id: person.id, physically: physically });
+                await personService.deleteById({ id: person.id, physically: physically });
 
                 res.status(NO_CONTENT)
                     .end();
@@ -365,6 +365,14 @@ peopleRouter.get(
                 });
                 paymentCards.push(...searchOwnershipInfosResult.data);
             }
+
+            // const searchOwnershipInfosResult = await personOwnershipInfoService.search({
+            //     id: req.params.id,
+            //     typeOfGood: {
+            //         issuedThrough: { typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.PaymentCard } }
+            //     }
+            // });
+            // paymentCards.push(...searchOwnershipInfosResult.data);
 
             res.json(paymentCards);
         } catch (error) {

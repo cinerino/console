@@ -81,7 +81,7 @@ peopleRouter.all('/:id',
         const person = yield personService.findById({ id: req.params.id });
         if (req.method === 'DELETE') {
             const physically = req.body.physically === 'on';
-            yield personService.deletById({ id: person.id, physically: physically });
+            yield personService.deleteById({ id: person.id, physically: physically });
             res.status(http_status_1.NO_CONTENT)
                 .end();
             return;
@@ -316,6 +316,13 @@ peopleRouter.get('/:id/accounts', (req, res, next) => __awaiter(void 0, void 0, 
             });
             paymentCards.push(...searchOwnershipInfosResult.data);
         }
+        // const searchOwnershipInfosResult = await personOwnershipInfoService.search({
+        //     id: req.params.id,
+        //     typeOfGood: {
+        //         issuedThrough: { typeOf: { $eq: cinerinoapi.factory.chevre.product.ProductType.PaymentCard } }
+        //     }
+        // });
+        // paymentCards.push(...searchOwnershipInfosResult.data);
         res.json(paymentCards);
     }
     catch (error) {
