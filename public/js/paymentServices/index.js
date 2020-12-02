@@ -26,7 +26,7 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '<a href="javascript:void(0)" class="showServiceOutput" data-id="' + data.id + '">' + data.typeOf + '</a>';
+                    return '<a href="javascript:void(0)" class="showProduct" data-id="' + data.id + '">' + data.typeOf + '</a>';
                 }
             },
             {
@@ -50,8 +50,8 @@ $(function () {
                 data: null,
                 render: function (data, type, row) {
                     var html = '';
-                    if (data.hasOfferCatalog !== undefined && typeof data.hasOfferCatalog.id === 'string') {
-                        html += data.hasOfferCatalog.id;
+                    if (data.serviceOutput !== undefined) {
+                        html += data.serviceOutput.typeOf;
                     }
 
                     return html;
@@ -60,7 +60,11 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    var html = ''
+                    var html = '';
+                    if (Array.isArray(data.provider)) {
+                        html += data.provider.length;
+                    }
+
                     return html;
                 }
             }
@@ -71,12 +75,12 @@ $(function () {
         $('form.search').submit();
     });
 
-    $(document).on('click', '.showServiceOutput', function () {
-        showServiceOutput($(this).data('id'));
+    $(document).on('click', '.showProduct', function () {
+        showProduct($(this).data('id'));
     });
 });
 
-function showServiceOutput(id) {
+function showProduct(id) {
     var outputs = table
         .rows()
         .data()
