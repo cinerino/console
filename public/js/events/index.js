@@ -167,8 +167,15 @@ $(function () {
             .data()
             .toArray();
         var event = events.find(function (e) {
-            return e.id === id
+            return e.id === String(id)
         })
+        console.log(events, typeof id, propertyName);
+
+        if (event === undefined) {
+            alert('イベントが見つかりません');
+
+            return;
+        }
 
         var modal = $('#modal-event');
         var title = 'Event `' + event.id + '`';

@@ -46,7 +46,6 @@ projectsRouter.all(
                 id: '',
                 name: '新しいプロジェクト名称',
                 parentOrganization: {
-                    project: { typeOf: cinerinoapi.factory.chevre.organizationType.Project, id: '' },
                     typeOf: cinerinoapi.factory.chevre.organizationType.Corporation,
                     name: { ja: '', en: '' }
                 },
