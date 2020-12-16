@@ -86,14 +86,40 @@ projectsRouter.all('/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 }));
 function createProjectFromBody(params) {
+    var _a, _b, _c, _d, _e, _f, _g;
     return __awaiter(this, void 0, void 0, function* () {
+        let informOrder = [];
+        if (Array.isArray((_b = (_a = params.req.body.settings) === null || _a === void 0 ? void 0 : _a.onOrderStatusChanged) === null || _b === void 0 ? void 0 : _b.informOrder)) {
+            informOrder = params.req.body.settings.onOrderStatusChanged.informOrder
+                .filter((recipient) => {
+                return typeof recipient.name === 'string' && recipient.name.length > 0
+                    && typeof recipient.url === 'string' && recipient.url.length > 0;
+            })
+                .map((recipient) => {
+                return {
+                    recipient: {
+                        typeOf: 'WebAPI',
+                        name: String(recipient.name),
+                        url: String(recipient.url)
+                    }
+                };
+            });
+        }
         return {
             typeOf: cinerinoapi.factory.chevre.organizationType.Project,
             id: params.req.body.id,
             name: params.req.body.name,
             logo: params.req.body.logo,
             parentOrganization: params.req.body.parentOrganization,
-            settings: Object.assign({}, params.req.body.settings)
+            settings: Object.assign({ cognito: {
+                    customerUserPool: {
+                        id: (_e = (_d = (_c = params.req.body.settings) === null || _c === void 0 ? void 0 : _c.cognito) === null || _d === void 0 ? void 0 : _d.customerUserPool) === null || _e === void 0 ? void 0 : _e.id
+                    }
+                }, onOrderStatusChanged: {
+                    informOrder: informOrder
+                }, transactionWebhookUrl: (_f = params.req.body.settings) === null || _f === void 0 ? void 0 : _f.transactionWebhookUrl }, (typeof ((_g = params.req.body.settings) === null || _g === void 0 ? void 0 : _g.sendgridApiKey) === 'string')
+                ? { sendgridApiKey: params.req.body.settings.sendgridApiKey }
+                : undefined)
         };
     });
 }

@@ -89,6 +89,24 @@ projectsRouter.all(
 async function createProjectFromBody(params: {
     req: express.Request;
 }): Promise<cinerinoapi.factory.project.IProject> {
+    let informOrder: cinerinoapi.factory.project.IInformParams[] = [];
+    if (Array.isArray(params.req.body.settings?.onOrderStatusChanged?.informOrder)) {
+        informOrder = (<any[]>params.req.body.settings.onOrderStatusChanged.informOrder)
+            .filter((recipient) => {
+                return typeof recipient.name === 'string' && recipient.name.length > 0
+                    && typeof recipient.url === 'string' && recipient.url.length > 0;
+            })
+            .map((recipient) => {
+                return {
+                    recipient: {
+                        typeOf: 'WebAPI',
+                        name: String(recipient.name),
+                        url: String(recipient.url)
+                    }
+                };
+            });
+    }
+
     return {
         typeOf: cinerinoapi.factory.chevre.organizationType.Project,
         id: params.req.body.id,
@@ -96,7 +114,18 @@ async function createProjectFromBody(params: {
         logo: params.req.body.logo,
         parentOrganization: params.req.body.parentOrganization,
         settings: {
-            ...params.req.body.settings
+            cognito: {
+                customerUserPool: {
+                    id: params.req.body.settings?.cognito?.customerUserPool?.id
+                }
+            },
+            onOrderStatusChanged: {
+                informOrder: informOrder
+            },
+            transactionWebhookUrl: params.req.body.settings?.transactionWebhookUrl,
+            ...(typeof params.req.body.settings?.sendgridApiKey === 'string')
+                ? { sendgridApiKey: params.req.body.settings.sendgridApiKey }
+                : undefined
         }
     };
 }

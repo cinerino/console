@@ -59,3 +59,49 @@
         placeholder="https://example.com"
         value="<%= (project !== undefined && project.settings !== undefined) ? project.settings.transactionWebhookUrl : '' %>">
 </div>
+
+<%
+let informOrderName1 = '';
+let informOrderUrl1 = '';
+let informOrderName2 = '';
+let informOrderUrl2 = '';
+if (project !== undefined && project.settings !== undefined && project.settings.onOrderStatusChanged !== undefined
+&& Array.isArray(project.settings.onOrderStatusChanged.informOrder)) {
+    if (project.settings.onOrderStatusChanged.informOrder.length > 0) {
+        informOrderName1 = project.settings.onOrderStatusChanged.informOrder[0].recipient.name;
+        informOrderUrl1 = project.settings.onOrderStatusChanged.informOrder[0].recipient.url;
+    
+        if (project.settings.onOrderStatusChanged.informOrder.length > 1) {
+            informOrderName2 = project.settings.onOrderStatusChanged.informOrder[1].recipient.name;
+            informOrderUrl2 = project.settings.onOrderStatusChanged.informOrder[1].recipient.url;
+        }
+    }
+}
+%>
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label for="settings[onOrderStatusChanged][informOrder][0][name]">注文ウェブフック名称</label>
+        <input type="text" class="form-control" id="settings[onOrderStatusChanged][informOrder][0][name]"
+            name="settings[onOrderStatusChanged][informOrder][0][name]" value="<%= informOrderName1 %>">
+    </div>
+
+    <div class="form-group col-md-9">
+        <label for="settings[onOrderStatusChanged][informOrder][0][url]">注文ウェブフックURL</label>
+        <input type="text" class="form-control" id="settings[onOrderStatusChanged][informOrder][0][url]"
+            name="settings[onOrderStatusChanged][informOrder][0][url]" value="<%= informOrderUrl1 %>">
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label for="settings[onOrderStatusChanged][informOrder][1][name]">注文ウェブフック名称2</label>
+        <input type="text" class="form-control" id="settings[onOrderStatusChanged][informOrder][1][name]"
+            name="settings[onOrderStatusChanged][informOrder][1][name]" value="<%= informOrderName2 %>">
+    </div>
+
+    <div class="form-group col-md-9">
+        <label for="settings[onOrderStatusChanged][informOrder][1][url]">注文ウェブフックURL2</label>
+        <input type="text" class="form-control" id="settings[onOrderStatusChanged][informOrder][1][url]"
+            name="settings[onOrderStatusChanged][informOrder][1][url]" value="<%= informOrderUrl2 %>">
+    </div>
+</div>
