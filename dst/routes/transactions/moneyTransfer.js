@@ -46,14 +46,11 @@ moneyTransferTransactionsRouter.get('',
             startFrom: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[0])
                     .toDate()
-                : moment()
-                    .add(-1, 'days')
-                    .toDate(),
+                : undefined,
             startThrough: (req.query.startRange !== undefined && req.query.startRange !== '')
                 ? moment(req.query.startRange.split(' - ')[1])
                     .toDate()
-                : moment()
-                    .toDate(),
+                : undefined,
             endFrom: (req.query.endFrom !== undefined)
                 ? moment(req.query.endFrom)
                     .toDate()
@@ -86,16 +83,7 @@ moneyTransferTransactionsRouter.get('',
                     : undefined
             },
             object: {},
-            result: {
-            // order: {
-            //     orderNumbers: (req.query.result !== undefined
-            //         && req.query.result.order !== undefined
-            //         && req.query.result.order.orderNumbers !== '')
-            //         ? (<string>req.query.result.order.orderNumbers).split(',')
-            //             .map((v) => v.trim())
-            //         : undefined
-            // }
-            },
+            result: {},
             tasksExportationStatuses: (req.query.tasksExportationStatuses !== undefined)
                 ? req.query.tasksExportationStatuses
                 : undefined
@@ -112,7 +100,7 @@ moneyTransferTransactionsRouter.get('',
                 data: searchResult.data
             });
         }
-        else if (req.query.format === cinerinoapi.factory.encodingFormat.Text.csv) {
+        else if (req.query.format === cinerinoapi.factory.chevre.encodingFormat.Text.csv) {
             throw new cinerinoapi.factory.errors.NotImplemented();
             // const stream = <NodeJS.ReadableStream>await moneyTransferService.stream({
             //     ...searchConditions,
@@ -123,7 +111,7 @@ moneyTransferTransactionsRouter.get('',
             // res.setHeader('Content-Type', `${cinerinoapi.factory.encodingFormat.Text.csv}; charset=UTF-8`);
             // stream.pipe(res);
         }
-        else if (req.query.format === cinerinoapi.factory.encodingFormat.Application.json) {
+        else if (req.query.format === cinerinoapi.factory.chevre.encodingFormat.Application.json) {
             throw new cinerinoapi.factory.errors.NotImplemented();
             // const stream = <NodeJS.ReadableStream>await moneyTransferService.stream({
             //     ...searchConditions,

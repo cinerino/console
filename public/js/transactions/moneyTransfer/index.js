@@ -137,12 +137,19 @@ $(function () {
 
     // Date range picker
     $('#startRange').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
         // timePickerIncrement: 30,
         locale: {
             format: 'YYYY-MM-DDThh:mm:ssZ'
         }
-    });
+    })
+        .on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DDTHH:mm:ssZ') + ' - ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ssZ'));
+        })
+        .on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
     $('.search').click(function () {
         $('form').submit();
