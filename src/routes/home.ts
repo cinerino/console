@@ -47,6 +47,8 @@ homeRouter.get(
             let userPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
             let adminUserPool: cinerinoapi.factory.cognito.UserPoolType | undefined;
             let applications: any[] = [];
+            let sellers: cinerinoapi.factory.seller.ISeller[] = [];
+            let paymentMethodTypes: cinerinoapi.factory.chevre.categoryCode.ICategoryCode[] = [];
 
             try {
                 if (project.settings !== undefined && project.settings.cognito !== undefined) {
@@ -68,19 +70,29 @@ homeRouter.get(
                 // no op
             }
 
-            const searchSellersResult = await sellerService.search({});
+            try {
+                const searchSellersResult = await sellerService.search({});
+                sellers = searchSellersResult.data;
+            } catch (error) {
+                // no op
+            }
 
-            const searchPaymentMethodTypesResult = await categoryCodeService.search({
-                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
-            });
+            try {
+                const searchPaymentMethodTypesResult = await categoryCodeService.search({
+                    inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
+                });
+                paymentMethodTypes = searchPaymentMethodTypesResult.data;
+            } catch (error) {
+                // no op
+            }
 
             res.render('home', {
                 message: 'Welcome to Cinerino Console!',
                 userPool: userPool,
                 applications: applications,
                 adminUserPool: adminUserPool,
-                paymentMethodTypes: searchPaymentMethodTypesResult.data,
-                sellers: searchSellersResult.data,
+                paymentMethodTypes,
+                sellers,
                 moment: moment,
                 timelines: []
             });

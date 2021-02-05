@@ -4,6 +4,7 @@ npm-debug.log*
 .vscode/
 .env*
 app.yaml*
+dispatch.yaml*
 **/*.log
 coverage/
 .nyc_output/

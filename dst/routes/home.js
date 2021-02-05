@@ -50,6 +50,8 @@ homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         let userPool;
         let adminUserPool;
         let applications = [];
+        let sellers = [];
+        let paymentMethodTypes = [];
         try {
             if (project.settings !== undefined && project.settings.cognito !== undefined) {
                 userPool = yield userPoolService.findById({
@@ -68,17 +70,29 @@ homeRouter.get('', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         catch (error) {
             // no op
         }
-        const searchSellersResult = yield sellerService.search({});
-        const searchPaymentMethodTypesResult = yield categoryCodeService.search({
-            inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
-        });
+        try {
+            const searchSellersResult = yield sellerService.search({});
+            sellers = searchSellersResult.data;
+        }
+        catch (error) {
+            // no op
+        }
+        try {
+            const searchPaymentMethodTypesResult = yield categoryCodeService.search({
+                inCodeSet: { identifier: { $eq: cinerinoapi.factory.chevre.categoryCode.CategorySetIdentifier.PaymentMethodType } }
+            });
+            paymentMethodTypes = searchPaymentMethodTypesResult.data;
+        }
+        catch (error) {
+            // no op
+        }
         res.render('home', {
             message: 'Welcome to Cinerino Console!',
             userPool: userPool,
             applications: applications,
             adminUserPool: adminUserPool,
-            paymentMethodTypes: searchPaymentMethodTypesResult.data,
-            sellers: searchSellersResult.data,
+            paymentMethodTypes,
+            sellers,
             moment: moment,
             timelines: []
         });
