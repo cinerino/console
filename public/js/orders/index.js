@@ -130,6 +130,35 @@ $(function () {
             {
                 data: null,
                 render: function (data, type, row) {
+                    var html = '';
+
+                    if (data.broker !== undefined && data.broker !== null) {
+                        var userPoolId = '';
+                        var tokenIssuer = '';
+                        var clientId = '';
+                        if (Array.isArray(data.broker.identifier)) {
+                            var tokenIssuerIdentifier = data.broker.identifier.find((i) => i.name === 'tokenIssuer');
+                            var clienIdIdentifier = data.broker.identifier.find((i) => i.name === 'clientId');
+                            if (tokenIssuerIdentifier !== undefined) {
+                                tokenIssuer = tokenIssuerIdentifier.value;
+                                userPoolId = tokenIssuer.replace('https://cognito-idp.ap-northeast-1.amazonaws.com/', '');
+                            }
+                            if (clienIdIdentifier !== undefined) {
+                                clientId = clienIdIdentifier.value;
+                            }
+                        }
+
+                        var url = '/projects/' + PROJECT_ID + '/resources/' + data.broker.typeOf + '/' + data.broker.id + '?userPoolId=' + userPoolId;
+                        html += '<a target="_blank" href="' + url + '"><span class="badge badge-light">' + data.broker.typeOf + '</span></a>';
+                        html += '<br><a href="javascript:void(0)" class="showBroker" data-orderNumber="' + data.orderNumber + '"><span>' + data.broker.id + '</span></a>';
+                    }
+
+                    return html;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
                     return '<span>' + data.price + ' ' + data.priceCurrency + '</span>';
                 }
             },
@@ -274,6 +303,9 @@ $(function () {
     $(document).on('click', '.showSeller', function () {
         showSeller($(this).data('ordernumber'));
     });
+    $(document).on('click', '.showBroker', function () {
+        showBroker($(this).data('ordernumber'));
+    });
     $(document).on('click', '.showPaymentMethods', function () {
         showPaymentMethods($(this).data('ordernumber'));
     });
@@ -375,6 +407,24 @@ $(function () {
         var title = 'Order `' + order.orderNumber + '` Seller';
         var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
             + JSON.stringify(order.seller, null, '\t')
+            + '</textarea>';
+        modal.find('.modal-title').html(title);
+        modal.find('.modal-body').html(body);
+        modal.modal();
+    }
+    function showBroker(orderNumber) {
+        var orders = table
+            .rows()
+            .data()
+            .toArray();
+        var order = orders.find(function (order) {
+            return order.orderNumber === orderNumber
+        })
+
+        var modal = $('#modal-order');
+        var title = 'Order `' + order.orderNumber + '` Customer';
+        var body = '<textarea rows="25" class="form-control" placeholder="" disabled="">'
+            + JSON.stringify(order.broker, null, '\t')
             + '</textarea>';
         modal.find('.modal-title').html(title);
         modal.find('.modal-body').html(body);
